@@ -1,0 +1,71 @@
+<% content_for :title, "Our Mentors" %>
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 font-gotham mb-4">Our Expert Mentors</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Connect with experienced mentors who can guide your startup journey and help you succeed in the African entrepreneurial ecosystem.
+      </p>
+    </div>
+    <!-- CTA Section -->
+    <div class="bg-gradient-to-r from-nailab-teal to-nailab-purple rounded-lg p-8 mb-12 text-center text-white">
+      <h2 class="text-2xl font-bold mb-4 font-gotham">Want to Become a Mentor?</h2>
+      <p class="text-lg mb-6 opacity-90">Share your expertise and help the next generation of African entrepreneurs.</p>
+      <%= link_to "Apply to be a Mentor", new_mentor_application_path, class: "bg-white text-nailab-purple px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block" %>
+    </div>
+    <!-- Mentors Grid -->
+    <% if @mentors.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <% @mentors.each do |mentor| %>
+          <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+            <div class="p-6">
+              <!-- Mentor Avatar/Initials -->
+              <div class="w-20 h-20 bg-gradient-to-r from-nailab-teal to-nailab-purple rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <%= mentor.name.split.map(&:first).join.upcase %>
+              </div>
+              <!-- Mentor Info -->
+              <div class="text-center">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2"><%= mentor.name %></h3>
+                <p class="text-nailab-teal font-medium mb-2"><%= mentor.expertise %></p>
+                <% if mentor.current_affiliation.present? %>
+                  <p class="text-sm text-gray-600 mb-2"><%= mentor.current_affiliation %></p>
+                <% end %>
+                <% if mentor.years_experience.present? %>
+                  <p class="text-sm text-gray-500 mb-2"><%= mentor.years_experience %> years experience</p>
+                <% end %>
+                <p class="text-gray-600 text-sm line-clamp-3 mb-4"><%= mentor.bio %></p>
+                <!-- Status Indicator -->
+                <% if mentor.available %>
+                  <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium mb-4">
+                    Available for Mentoring
+                  </span>
+                <% else %>
+                  <span class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full font-medium mb-4">
+                    Currently Unavailable
+                  </span>
+                <% end %>
+                <!-- Action Button -->
+                <div class="flex justify-center">
+                  <%= link_to "View Profile", mentor, class: "bg-nailab-purple text-white px-6 py-2 rounded-lg hover:bg-nailab-purple-dark transition-colors font-medium" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-16">
+        <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No mentors available yet</h3>
+        <p class="text-gray-600 mb-6">We're working on building our mentor community. Check back soon!</p>
+        <%= link_to "Be the first to apply", new_mentor_application_path, class: "bg-nailab-teal text-white px-6 py-3 rounded-lg hover:bg-nailab-purple transition-colors font-medium" %>
+      </div>
+    <% end %>
+  </div>
+</div>

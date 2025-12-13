@@ -1,0 +1,134 @@
+<% content_for :title, "Apply to be a Mentor" %>
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 text-center">Apply to be a NAILAB Mentor</h1>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Join our community of experienced mentors helping African startups succeed.
+        </p>
+      </div>
+      <% if notice.present? %>
+        <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          <%= notice %>
+        </div>
+      <% end %>
+      <%= form_with model: @mentor_application, class: "space-y-6" do |f| %>
+        <% if @mentor_application.errors.any? %>
+          <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <h3 class="font-medium">Please fix the following errors:</h3>
+            <ul class="mt-1 list-disc list-inside">
+              <% @mentor_application.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <%= f.label :full_name, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_field :full_name, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+          <div>
+            <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.email_field :email, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :short_bio, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_area :short_bio, rows: 3, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+        </div>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <%= f.label :current_role, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_field :current_role, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+          <div>
+            <%= f.label :organization, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_field :organization, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :experience_years, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.select :experience_years, MentorApplication.experience_years.keys.map { |k| [k.to_s.humanize, k] }, { include_blank: "Select experience level" }, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+        </div>
+        <div>
+          <%= f.label :has_advisory_experience, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.check_box :has_advisory_experience, class: "rounded" %>
+          <%= f.label :has_advisory_experience, "I have previous advisory or mentoring experience", class: "ml-2" %>
+        </div>
+        <div>
+          <%= f.label :industries, "Industries of Expertise", class: "block text-sm font-medium text-gray-700" %>
+          <p class="text-xs text-gray-500 mb-2">Select all that apply</p>
+          <div class="grid grid-cols-2 gap-2">
+            <% ["Technology", "SaaS", "FinTech", "E-commerce", "Agriculture", "Healthcare", "Education", "Energy", "Manufacturing", "Other"].each do |industry| %>
+              <label class="flex items-center">
+                <%= check_box_tag "mentor_application[industries][]", industry, @mentor_application.industries&.include?(industry), class: "rounded" %>
+                <span class="ml-2 text-sm"><%= industry %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :mentorship_topics, "Mentorship Topics", class: "block text-sm font-medium text-gray-700" %>
+          <p class="text-xs text-gray-500 mb-2">Select all that apply</p>
+          <div class="grid grid-cols-2 gap-2">
+            <% ["Product Development", "Fundraising", "Team Building", "Go-to-Market", "Operations", "Legal", "Marketing", "Scaling", "Strategy", "Other"].each do |topic| %>
+              <label class="flex items-center">
+                <%= check_box_tag "mentor_application[mentorship_topics][]", topic, @mentor_application.mentorship_topics&.include?(topic), class: "rounded" %>
+                <span class="ml-2 text-sm"><%= topic %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div>
+            <%= f.label :preferred_stages, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :preferred_stages, MentorApplication.preferred_stages.keys.map { |k| [k.to_s.humanize, k] }, { include_blank: "Select stage" }, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+          <div>
+            <%= f.label :availability_hours, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :availability_hours, MentorApplication.availability_hours.keys.map { |k| [k.to_s.humanize, k] }, { include_blank: "Select availability" }, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+          <div>
+            <%= f.label :mode, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :mode, MentorApplication.modes.keys.map { |k| [k.to_s.humanize, k] }, { include_blank: "Select mode" }, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :approach, "Your Mentoring Approach", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_area :approach, rows: 4, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+        </div>
+        <div>
+          <%= f.label :motivation, "Why do you want to mentor?", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_area :motivation, rows: 4, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+        </div>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <%= f.label :rate, "Hourly Rate (USD, optional)", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.number_field :rate, min: 0, step: 0.01, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+          <div>
+            <%= f.label :linkedin_url, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.url_field :linkedin_url, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-nailab-teal focus:border-nailab-teal" %>
+          </div>
+        </div>
+        <div class="flex justify-between items-center pt-6">
+          <%= link_to "Cancel", root_path, class: "bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition-colors" %>
+          <%= f.submit "Submit Application", class: "bg-nailab-teal text-white px-6 py-2 rounded-md hover:bg-nailab-purple transition-colors font-medium" %>
+        </div>
+      <% end %>
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <div class="text-center">
+          <p class="text-sm text-gray-600 mb-4">Or apply faster with LinkedIn</p>
+          <%= link_to "/auth/linkedin", class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" do %>
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            Apply with LinkedIn
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

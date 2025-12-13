@@ -1,0 +1,42 @@
+<%= form_with(model: mentor, class: "contents") do |form| %>
+  <% if mentor.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(mentor.errors.count, "error") %> prohibited this mentor from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% mentor.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": mentor.errors[:name].none?, "border-red-400 focus:outline-red-600": mentor.errors[:name].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :bio %>
+    <%= form.textarea :bio, rows: 4, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": mentor.errors[:bio].none?, "border-red-400 focus:outline-red-600": mentor.errors[:bio].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :expertise %>
+    <%= form.text_field :expertise, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": mentor.errors[:expertise].none?, "border-red-400 focus:outline-red-600": mentor.errors[:expertise].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email %>
+    <%= form.text_field :email, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": mentor.errors[:email].none?, "border-red-400 focus:outline-red-600": mentor.errors[:email].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :approved %>
+    <%= form.checkbox :approved, class: ["block shadow rounded-md border outline-none mt-2 h-5 w-5", {"border-gray-400 focus:outline-blue-600": mentor.errors[:approved].none?, "border-red-400 focus:outline-red-600": mentor.errors[:approved].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

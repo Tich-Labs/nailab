@@ -1,0 +1,214 @@
+<% content_for :title, "#{@mentor.name} - Mentor Profile" %>
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-8">
+      <%= link_to mentors_path, class: "inline-flex items-center text-nailab-purple hover:text-nailab-purple-dark transition-colors" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Mentors
+      <% end %>
+    </div>
+    <!-- Mentor Profile Card -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <!-- Header Section -->
+      <div class="bg-gradient-to-r from-nailab-purple to-nailab-purple-dark px-8 py-12 text-white">
+        <div class="flex flex-col md:flex-row items-center md:items-start">
+          <!-- Avatar -->
+          <div class="w-32 h-32 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-white text-4xl font-bold mb-6 md:mb-0 md:mr-8">
+            <%= @mentor.name.split.map(&:first).join.upcase %>
+          </div>
+          <!-- Info -->
+          <div class="text-center md:text-left">
+            <h1 class="text-3xl font-bold font-gotham mb-2"><%= @mentor.name %></h1>
+            <p class="text-xl text-nailab-teal mb-4"><%= @mentor.expertise %></p>
+            <!-- Status Badge -->
+            <% if @mentor.available %>
+              <span class="inline-block bg-green-500 bg-opacity-20 text-green-100 text-sm px-3 py-1 rounded-full font-medium border border-green-400 border-opacity-30">
+                ✓ Available for Mentoring
+              </span>
+            <% else %>
+              <span class="inline-block bg-gray-500 bg-opacity-20 text-gray-100 text-sm px-3 py-1 rounded-full font-medium border border-gray-400 border-opacity-30">
+                Currently Unavailable
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <!-- Content Section -->
+      <div class="px-8 py-8">
+        <!-- Bio Section -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4 font-gotham">About <%= @mentor.name.split.first %></h2>
+          <p class="text-gray-700 text-lg leading-relaxed"><%= @mentor.bio %></p>
+        </div>
+        <!-- Expertise Section -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Expertise</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-nailab-teal bg-opacity-10 text-nailab-teal px-3 py-1 rounded-full text-sm font-medium">
+              <%= @mentor.expertise %>
+            </span>
+          </div>
+        </div>
+        <!-- Experience & Affiliation -->
+        <% if @mentor.years_experience.present? || @mentor.current_affiliation.present? %>
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Experience & Background</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <% if @mentor.years_experience.present? %>
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <div class="text-sm text-gray-600">Years of Experience</div>
+                  <div class="text-2xl font-bold text-nailab-purple"><%= @mentor.years_experience %></div>
+                </div>
+              <% end %>
+              <% if @mentor.current_affiliation.present? %>
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <div class="text-sm text-gray-600">Current Affiliation</div>
+                  <div class="text-lg font-semibold text-gray-900"><%= @mentor.current_affiliation %></div>
+                </div>
+              <% end %>
+            </div>
+            <% if @mentor.advisor_or_investor %>
+              <div class="mt-4">
+                <span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-medium">
+                  ✓ Also serves as Advisor or Investor
+                </span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <!-- Mentorship Focus -->
+        <% if @mentor.mentorship_industries.present? || @mentor.mentorship_areas.present? || @mentor.preferred_stage.present? %>
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Mentorship Focus</h3>
+            <% if @mentor.mentorship_industries.present? %>
+              <div class="mb-4">
+                <div class="text-sm font-medium text-gray-700 mb-2">Industries</div>
+                <div class="flex flex-wrap gap-2">
+                  <% @mentor.mentorship_industries.split(',').each do |industry| %>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                      <%= industry.strip %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            <% if @mentor.mentorship_areas.present? %>
+              <div class="mb-4">
+                <div class="text-sm font-medium text-gray-700 mb-2">Areas of Expertise</div>
+                <div class="flex flex-wrap gap-2">
+                  <% @mentor.mentorship_areas.split(',').each do |area| %>
+                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                      <%= area.strip %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            <% if @mentor.preferred_stage.present? %>
+              <div>
+                <div class="text-sm font-medium text-gray-700 mb-2">Preferred Startup Stage</div>
+                <span class="bg-nailab-teal bg-opacity-10 text-nailab-teal px-3 py-1 rounded-full text-sm font-medium">
+                  <%= @mentor.preferred_stage %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <!-- Availability & Approach -->
+        <% if @mentor.availability_hours_per_month.present? || @mentor.mentorship_mode.present? || @mentor.mentorship_approach.present? %>
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Availability & Approach</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <% if @mentor.availability_hours_per_month.present? %>
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <div class="text-sm text-gray-600">Monthly Availability</div>
+                  <div class="text-lg font-semibold text-gray-900"><%= @mentor.availability_hours_per_month %> hours</div>
+                </div>
+              <% end %>
+              <% if @mentor.mentorship_mode.present? %>
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <div class="text-sm text-gray-600">Preferred Mode</div>
+                  <div class="text-lg font-semibold text-gray-900"><%= @mentor.mentorship_mode %></div>
+                </div>
+              <% end %>
+            </div>
+            <% if @mentor.mentorship_approach.present? %>
+              <div>
+                <div class="text-sm font-medium text-gray-700 mb-2">Mentorship Approach</div>
+                <p class="text-gray-700 leading-relaxed"><%= @mentor.mentorship_approach %></p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <!-- Motivation -->
+        <% if @mentor.motivation.present? %>
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Why I Mentor</h3>
+            <p class="text-gray-700 leading-relaxed"><%= @mentor.motivation %></p>
+          </div>
+        <% end %>
+        <!-- Links -->
+        <% if @mentor.linkedin_url.present? || @mentor.website_url.present? || @mentor.hourly_rate.present? %>
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Connect & Learn More</h3>
+            <div class="flex flex-wrap gap-4">
+              <% if @mentor.linkedin_url.present? %>
+                <a href="<%= @mentor.linkedin_url %>" target="_blank" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  LinkedIn
+                </a>
+              <% end %>
+              <% if @mentor.website_url.present? %>
+                <a href="<%= @mentor.website_url %>" target="_blank" class="inline-flex items-center bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors font-medium">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                  </svg>
+                  Website
+                </a>
+              <% end %>
+            </div>
+            <% if @mentor.hourly_rate.present? %>
+              <div class="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div class="flex items-center">
+                  <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                  </svg>
+                  <span class="text-yellow-800 font-medium">Hourly Rate: $<%= @mentor.hourly_rate %> USD</span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <!-- Contact Section -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Get in Touch</h3>
+          <p class="text-gray-600 mb-4">
+            Interested in connecting with <%= @mentor.name.split.first %>? Reach out via email to discuss mentorship opportunities.
+          </p>
+          <a href="mailto:<%= @mentor.email %>" class="inline-flex items-center bg-nailab-purple text-white px-6 py-3 rounded-lg hover:bg-nailab-purple-dark transition-colors font-medium">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Contact <%= @mentor.name.split.first %>
+          </a>
+        </div>
+        <!-- Call to Action -->
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Ready to Start Your Journey?</h3>
+          <p class="text-gray-600 mb-4">
+            Connect with experienced mentors like <%= @mentor.name.split.first %> to accelerate your startup's growth.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <%= link_to "Request Mentorship", mentorship_select_type_path, class: "bg-nailab-teal text-white px-6 py-3 rounded-lg hover:bg-nailab-purple transition-colors font-medium text-center" %>
+            <%= link_to "View All Mentors", mentors_path, class: "bg-white text-nailab-purple border border-nailab-purple px-6 py-3 rounded-lg hover:bg-nailab-purple hover:text-white transition-colors font-medium text-center" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

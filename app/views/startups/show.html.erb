@@ -1,0 +1,159 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6">
+      <%= link_to startups_path, class: "inline-flex items-center text-gray-600 hover:text-gray-900" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Directory
+      <% end %>
+    </div>
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <h1 class="text-3xl font-bold text-gray-900"><%= @startup.startup_name %></h1>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= @startup.request_type == 'ongoing' ? 'bg-nailab-teal text-white' : 'bg-nailab-purple text-white' %>">
+              <%= @startup.request_type.humanize %> Mentorship
+            </span>
+          </div>
+          <p class="text-xl text-gray-600">Founded by <%= @startup.full_name %></p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 text-gray-800">
+            <%= @startup.startup_stage.humanize %>
+          </span>
+          <span class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 text-gray-800">
+            <%= @startup.startup_industry %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- About the Startup -->
+        <div class="bg-white rounded-lg shadow-sm p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">About the Startup</h2>
+          <p class="text-gray-700 leading-relaxed"><%= @startup.startup_bio %></p>
+        </div>
+        <!-- Target Market -->
+        <% if @startup.target_market.present? %>
+          <div class="bg-white rounded-lg shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Target Market</h2>
+            <p class="text-gray-700 leading-relaxed"><%= @startup.target_market %></p>
+          </div>
+        <% end %>
+        <!-- Mentorship Needs -->
+        <% if @startup.mentorship_needs.present? %>
+          <div class="bg-white rounded-lg shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Mentorship Needs</h2>
+            <p class="text-gray-700 leading-relaxed"><%= @startup.mentorship_needs %></p>
+          </div>
+        <% end %>
+        <!-- Preferred Mentorship Mode -->
+        <% if @startup.preferred_mentorship_mode.present? %>
+          <div class="bg-white rounded-lg shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Preferred Mentorship Mode</h2>
+            <p class="text-gray-700"><%= @startup.preferred_mentorship_mode.humanize %></p>
+          </div>
+        <% end %>
+      </div>
+      <!-- Sidebar -->
+      <div class="space-y-8">
+        <!-- Contact Information -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Founder</p>
+              <p class="text-gray-900"><%= @startup.full_name %></p>
+            </div>
+            <% if @startup.phone_number.present? %>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Phone</p>
+                <p class="text-gray-900"><%= @startup.phone_number %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <!-- Business Details -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Business Details</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Industry</p>
+              <p class="text-gray-900"><%= @startup.startup_industry %></p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Stage</p>
+              <p class="text-gray-900"><%= @startup.startup_stage.humanize %></p>
+            </div>
+            <% if @startup.funding_structure.present? %>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Funding Structure</p>
+                <p class="text-gray-900"><%= @startup.funding_structure %></p>
+              </div>
+            <% end %>
+            <% if @startup.total_funding.present? %>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Total Funding Raised</p>
+                <p class="text-gray-900"><%= @startup.total_funding %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <!-- Mentorship Areas -->
+        <% if @startup.top_mentorship_areas.present? %>
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Mentorship Areas</h3>
+            <div class="flex flex-wrap gap-2">
+              <% @startup.top_mentorship_areas.split(',').each do |area| %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-nailab-purple text-white">
+                  <%= area.strip.humanize %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+        <!-- One-time Specific Info -->
+        <% if @startup.one_time? %>
+          <% if @startup.topic.present? || @startup.date.present? || @startup.goal.present? %>
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Session Details</h3>
+              <div class="space-y-3">
+                <% if @startup.topic.present? %>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Topic</p>
+                    <p class="text-gray-900"><%= @startup.topic %></p>
+                  </div>
+                <% end %>
+                <% if @startup.date.present? %>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Preferred Date</p>
+                    <p class="text-gray-900"><%= @startup.date.strftime('%B %d, %Y') %></p>
+                  </div>
+                <% end %>
+                <% if @startup.goal.present? %>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Goal</p>
+                    <p class="text-gray-900"><%= @startup.goal %></p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+        <!-- Ongoing Specific Info -->
+        <% if @startup.ongoing? && @startup.commitment_length.present? %>
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Partnership Duration</h3>
+            <p class="text-gray-900"><%= @startup.commitment_length.humanize %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

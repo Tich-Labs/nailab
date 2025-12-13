@@ -1,0 +1,91 @@
+<div class="min-h-screen bg-gradient-to-br from-nailab-purple via-nailab-purple-deep to-nailab-purple-dark">
+  <% @sections.each do |section| %>
+    <% case section.section_type %>
+    <% when "hero" %>
+      <section class="relative py-20 px-4">
+        <div class="container mx-auto text-center text-white">
+          <h1 class="text-5xl md:text-7xl font-bold font-gotham mb-6">
+            <%= section.title %>
+          </h1>
+          <% if section.subtitle.present? %>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-200">
+              <%= section.subtitle %>
+            </p>
+          <% end %>
+          <% if section.cta_text.present? && section.cta_url.present? %>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <%= link_to section.cta_text, section.cta_url, class: "bg-nailab-teal text-white px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    <% when "features" %>
+      <section class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+          <h2 class="text-3xl font-bold text-center mb-12 font-gotham text-nailab-purple-dark"><%= section.title %></h2>
+          <div class="max-w-4xl mx-auto">
+            <%= section.content %>
+          </div>
+        </div>
+      </section>
+    <% when "stats" %>
+      <section class="py-16 px-4 bg-nailab-purple-dark text-white">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div class="text-3xl font-bold font-gotham mb-2"><%= Startup.count %></div>
+              <div class="text-nailab-teal">Startups</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold font-gotham mb-2"><%= Mentor.count %></div>
+              <div class="text-nailab-teal">Mentors</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold font-gotham mb-2"><%= Event.count %></div>
+              <div class="text-nailab-teal">Events</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold font-gotham mb-2"><%= Opportunity.count %></div>
+              <div class="text-nailab-teal">Opportunities</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    <% when "about_snapshot" %>
+      <%= render "home/sections/about_snapshot", section: section %>
+    <% when "focus_areas" %>
+      <%= render "home/sections/focus_areas", section: section %>
+    <% when "cta" %>
+      <section class="py-16 px-4 bg-gradient-to-r from-nailab-teal to-nailab-purple">
+        <div class="container mx-auto text-center text-white">
+          <h2 class="text-3xl font-bold mb-4 font-gotham"><%= section.title %></h2>
+          <% if section.subtitle.present? %>
+            <p class="text-xl mb-8"><%= section.subtitle %></p>
+          <% end %>
+          <% if section.cta_text.present? && section.cta_url.present? %>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <%= link_to section.cta_text, section.cta_url, class: "bg-white text-nailab-purple px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  <% end %>
+  <!-- Testimonials Section -->
+  <section class="py-16 px-4 bg-gray-50">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12 font-gotham text-nailab-purple-dark">What Our Community Says</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <% Testimonial.where(visible: true).order(:position).each do |testimonial| %>
+          <div class="p-6 bg-white rounded-lg shadow text-center">
+            <% if testimonial.avatar.attached? %>
+              <%= image_tag testimonial.avatar.variant(resize_to_fill: [80, 80]), class: "rounded-full mx-auto mb-4" %>
+            <% end %>
+            <p class="italic text-gray-700">“<%= testimonial.quote %>”</p>
+            <p class="mt-2 font-semibold text-nailab-purple-dark"><%= testimonial.name %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,115 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Startup Directory</h1>
+      <p class="text-xl text-gray-600">Discover innovative startups seeking mentorship</p>
+    </div>
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+      <%= form_with url: startups_path, method: :get, class: "space-y-4" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Search -->
+          <div>
+            <%= f.label :search, "Search", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= f.text_field :search,
+                             value: params[:search],
+                             placeholder: "Startup or founder name",
+                             class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-nailab-purple focus:border-nailab-purple" %>
+          </div>
+          <!-- Stage Filter -->
+          <div>
+            <%= f.label :startup_stage, "Stage", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= f.select :startup_stage,
+                         [["All Stages", ""]] + [["Idea", "idea"], ["MVP", "mvp"], ["Early traction", "early_traction"], ["Growth", "growth"], ["Scaling", "scaling"]],
+                         { selected: params[:startup_stage] },
+                         { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-nailab-purple focus:border-nailab-purple" } %>
+          </div>
+          <!-- Industry Filter -->
+          <div>
+            <%= f.label :startup_industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= f.text_field :startup_industry,
+                             value: params[:startup_industry],
+                             placeholder: "e.g., Fintech, Healthtech",
+                             class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-nailab-purple focus:border-nailab-purple" %>
+          </div>
+          <!-- Request Type Filter -->
+          <div>
+            <%= f.label :request_type, "Mentorship Type", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= f.select :request_type,
+                         [["All Types", ""]] + [["One-time", "one_time"], ["Ongoing", "ongoing"]],
+                         { selected: params[:request_type] },
+                         { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-nailab-purple focus:border-nailab-purple" } %>
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <%= f.submit "Apply Filters", class: "bg-nailab-purple text-white px-6 py-2 rounded-md hover:bg-nailab-purple-dark transition-colors font-medium" %>
+          <%= link_to "Clear Filters", startups_path, class: "text-gray-600 hover:text-gray-800 font-medium" %>
+        </div>
+      <% end %>
+    </div>
+    <!-- Results Header -->
+    <div class="flex justify-between items-center mb-6">
+      <p class="text-gray-600">
+        <%= pluralize(@startups.total_count, "startup") %> found
+      </p>
+      <!-- View Toggle (for future grid/list implementation) -->
+      <div class="flex space-x-2">
+        <button class="p-2 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+          </svg>
+        </button>
+        <button class="p-2 rounded-md bg-nailab-purple text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Startups Grid -->
+    <% if @startups.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <% @startups.each do |startup| %>
+          <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-xl font-semibold text-gray-900"><%= startup.startup_name %></h3>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= startup.request_type == 'ongoing' ? 'bg-nailab-teal text-white' : 'bg-nailab-purple text-white' %>">
+                <%= startup.request_type.humanize %>
+              </span>
+            </div>
+            <p class="text-gray-600 mb-3">
+              <span class="font-medium">Founder:</span> <%= startup.full_name %>
+            </p>
+            <p class="text-gray-700 mb-4 line-clamp-3">
+              <%= truncate(startup.startup_bio, length: 120) %>
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
+                <%= startup.startup_stage.humanize %>
+              </span>
+              <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
+                <%= startup.startup_industry %>
+              </span>
+            </div>
+            <%= link_to "View Profile",
+                        startup_path(startup),
+                        class: "w-full bg-gray-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors font-medium text-center block" %>
+          </div>
+        <% end %>
+      </div>
+      <!-- Pagination -->
+      <div class="flex justify-center">
+        <%= paginate @startups %>
+      </div>
+    <% else %>
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No startups found</h3>
+        <p class="mt-1 text-sm text-gray-500">Try adjusting your search filters.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

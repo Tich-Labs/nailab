@@ -1,0 +1,35 @@
+<% content_for :title, "Resources Hub" %>
+<section class="py-20 px-4 bg-white">
+  <div class="container mx-auto max-w-6xl">
+    <h1 class="text-4xl font-bold text-center text-nailab-purple-dark mb-8 font-gotham">Resources Hub</h1>
+    <!-- Tabs -->
+    <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <% [["All", "all"], ["Blog Posts", "blog"], ["Guides", "guides"], ["Opportunities", "opportunities"], ["Events", "events"]].each do |label, key| %>
+        <%= link_to label, resources_path(category: key), class: "px-4 py-2 rounded-full border text-sm font-medium #{params[:category] == key ? 'bg-nailab-teal text-white' : 'border-gray-300 text-nailab-purple-dark hover:bg-nailab-teal-light'} focus:outline-none focus:ring-2 focus:ring-nailab-teal" %>
+      <% end %>
+    </div>
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% if @blog_posts %>
+        <% @blog_posts.each do |post| %>
+          <%= render "resources/cards/blog_post", post: post %>
+        <% end %>
+      <% end %>
+      <% if @template_guides %>
+        <% @template_guides.each do |guide| %>
+          <%= render "resources/cards/template_guide", guide: guide %>
+        <% end %>
+      <% end %>
+      <% if @opportunities %>
+        <% @opportunities.each do |opportunity| %>
+          <%= render "resources/cards/opportunity", opportunity: opportunity %>
+        <% end %>
+      <% end %>
+      <% if @events %>
+        <% @events.each do |event| %>
+          <%= render "resources/cards/event", event: event %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

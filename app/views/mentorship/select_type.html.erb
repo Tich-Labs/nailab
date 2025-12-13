@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="text-center mb-10 px-4">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">
+      Choose Your Mentorship Path
+    </h1>
+    <p class="text-lg text-gray-600">
+      Select the type of mentorship that best fits your startup's needs
+    </p>
+  </div>
+  <!-- CONTAINER -->
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- One-time Mentorship -->
+      <div class="rounded-xl shadow bg-white p-8 flex flex-col justify-between hover:shadow-lg transition">
+        <div>
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-nailab-purple rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">One-Time Session</h3>
+            <p class="text-gray-600">
+              Perfect for specific questions or challenges.
+            </p>
+          </div>
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> 1-hour focused session
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> Choose your preferred date
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> Quick approval process
+            </li>
+          </ul>
+        </div>
+        <%= link_to "Request One-Time Session",
+          mentorship_requests_new_one_time_path,
+          class: "w-full text-center bg-nailab-purple text-white py-3 rounded-md hover:bg-nailab-purple-dark transition font-medium" %>
+      </div>
+      <!-- Ongoing Mentorship -->
+      <div class="rounded-xl shadow bg-white p-8 flex flex-col justify-between hover:shadow-lg transition">
+        <div>
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-nailab-teal rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6
+                     a2 2 0 002 2h2a2 2 0 002-2zm0 0V9
+                     a2 2 0 012-2h2a2 2 0 012 2v10
+                     m-6 0a2 2 0 002 2h2a2 2 0 002-2
+                     m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14
+                     a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Ongoing Partnership</h3>
+            <p class="text-gray-600">
+              Build a long-term relationship with an experienced mentor.
+            </p>
+          </div>
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> Multi-month commitment
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> Regular check-ins
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="text-green-500 mr-2">✔</span> Comprehensive startup support
+            </li>
+          </ul>
+        </div>
+        <%= link_to "Start Ongoing Partnership",
+          mentorship_requests_new_ongoing_path,
+          class: "w-full text-center bg-nailab-teal text-white py-3 rounded-md hover:bg-nailab-teal-dark transition font-medium" %>
+      </div>
+    </div>
+  </div>
+</div>

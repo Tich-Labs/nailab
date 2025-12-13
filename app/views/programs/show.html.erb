@@ -1,0 +1,56 @@
+<% content_for :title, @program.title %>
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-nailab-purple to-nailab-teal text-white py-16 px-4">
+    <div class="container mx-auto">
+      <div class="flex flex-col lg:flex-row items-center gap-8">
+        <div class="lg:w-1/2">
+          <span class="inline-block bg-white text-nailab-teal px-3 py-1 rounded-full text-sm font-medium mb-4">
+            <%= @program.category.humanize %>
+          </span>
+          <h1 class="text-4xl lg:text-5xl font-bold font-gotham mb-4"><%= @program.title %></h1>
+          <p class="text-xl text-gray-100 mb-6"><%= @program.summary %></p>
+          <% if @program.apply_link.present? %>
+            <%= link_to "Apply Now", @program.apply_link, target: "_blank", class: "inline-block bg-white text-nailab-teal px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors" %>
+          <% end %>
+        </div>
+        <div class="lg:w-1/2">
+          <% if @program.image.attached? %>
+            <%= image_tag @program.image.variant(resize_to_fill: [600, 400]), class: "rounded-lg shadow-lg w-full", alt: @program.title %>
+          <% else %>
+            <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+              <span class="text-6xl">🚀</span>
+              <p class="mt-4 text-gray-200">Program Image</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Content Section -->
+  <div class="py-16 px-4">
+    <div class="container mx-auto max-w-4xl">
+      <div class="prose prose-lg max-w-none">
+        <%= @program.body.html_safe %>
+      </div>
+      <% if @program.apply_link.present? %>
+        <div class="mt-12 text-center">
+          <%= link_to "Apply for this Program", @program.apply_link, target: "_blank", class: "inline-block bg-nailab-teal text-white px-8 py-4 rounded-lg font-semibold hover:bg-nailab-purple transition-colors text-lg" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <!-- Navigation -->
+  <div class="border-t border-gray-200 py-8 px-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <%= link_to "← Back to Programs", programs_path, class: "text-nailab-teal hover:text-nailab-purple font-medium" %>
+      <div class="flex space-x-4">
+        <%= link_to "Edit", edit_program_path(@program), class: "text-gray-600 hover:text-gray-800" if user_signed_in? && current_user.admin? %>
+        <%= link_to "All Programs", programs_path, class: "text-nailab-teal hover:text-nailab-purple font-medium" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="border rounded-lg p-6 shadow hover:shadow-md transition bg-white">
+  <h2 class="text-lg font-bold text-nailab-purple-dark mb-2"><%= guide.title %></h2>
+  <p class="text-gray-600 mb-3"><%= truncate(guide.description.to_s, length: 90) %></p>
+  <% if guide.file.attached? %>
+    <%= link_to "Download Guide", url_for(guide.file), class: "text-nailab-teal font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-nailab-teal" %>
+  <% else %>
+    <span class="text-gray-500">File not available</span>
+  <% end %>
+</div>

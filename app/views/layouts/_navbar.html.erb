@@ -1,0 +1,22 @@
+<nav class="bg-gradient-to-r from-nailab-purple to-nailab-teal text-white shadow-lg">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <%= link_to "Nailab", root_path, class: "text-2xl font-bold font-gotham" %>
+      </div>
+      <div class="hidden md:flex space-x-6">
+        <% SiteMenuItem.header.visible.each do |item| %>
+          <%= link_to item.title, item.path, class: "hover:text-nailab-yellow transition-colors" %>
+        <% end %>
+      </div>
+      <div class="flex items-center space-x-4">
+        <% if user_signed_in? %>
+          <%= link_to "Admin", avo_root_path, class: "bg-nailab-yellow text-nailab-purple-dark px-4 py-2 rounded font-medium hover:bg-opacity-90 transition-colors" %>
+          <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-white hover:text-nailab-yellow transition-colors" %>
+        <% else %>
+          <%= link_to "Sign In", new_user_session_path, class: "text-white hover:text-nailab-yellow transition-colors" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

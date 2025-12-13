@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+root = File.expand_path("..", __dir__)
+tailwind_script = File.join(root, "bin", "tailwindcss-watch.sh")
+rails_script = File.join(root, "bin", "rails")
+
+pids = []
+
+tailwind_pid = Process.spawn(tailwind_script, chdir: root)
+pids << tailwind_pid
+
+rails_pid = Process.spawn(rails_script, "server", *ARGV, chdir: root)
+pids << rails_pid
+
+shutdown = lambda do
+	pids.each do |pid|
+		begin
+			Process.kill("TERM", pid)
+		rescue StandardError
+			# ignore
+		end
+	end
+end
+
+Signal.trap("INT")  { shutdown.call }
+Signal.trap("TERM") { shutdown.call }
+
+begin
+	Process.wait(rails_pid)
+ensure
+	shutdown.call
+end

@@ -1,0 +1,20 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-lg p-8 shadow-lg">
+      <% if local_assigns[:title].present? %>
+        <h1 class="text-2xl font-bold text-nailab-purple-dark font-gotham"><%= title %></h1>
+      <% end %>
+      <% if local_assigns[:subtitle].present? %>
+        <p class="mt-2 text-sm text-gray-600"><%= subtitle %></p>
+      <% end %>
+      <div class="mt-6">
+        <%= yield %>
+      </div>
+      <% if local_assigns[:footer].present? %>
+        <div class="mt-6 border-t border-gray-100 pt-4">
+          <%= footer %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
