@@ -1,0 +1,29 @@
+<div class="relative h-[28rem] bg-gray-900">
+  <%= image_tag(@program.cover_image_url.presence || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=1200', alt: @program.title, class: 'w-full h-full object-cover opacity-80') %>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+  <div class="absolute bottom-0 left-0 right-0">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <div class="flex flex-col gap-3">
+        <%= link_to programs_path, class: 'inline-flex items-center gap-2 text-white hover:text-gray-200 mb-4 transition-colors' do %>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+          Back to Programs
+        <% end %>
+        <h1 class="text-4xl lg:text-5xl font-bold text-white">
+          <%= @program.title %>
+        </h1>
+        <div class="flex flex-wrap gap-4 text-gray-200">
+          <div class="flex items-center gap-2 text-sm uppercase tracking-wide">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3M16 7V3M4 11h16M5 19h14a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z"/></svg>
+            <span><%= @program.start_date&.strftime('%b %d, %Y') || @program.created_at&.strftime('%b %d, %Y') %></span>
+          </div>
+          <% if @program.category.present? %>
+            <div class="flex items-center gap-2 text-sm uppercase tracking-wide">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7l10 10M17 7l-10 10"/></svg>
+              <span><%= @program.category %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

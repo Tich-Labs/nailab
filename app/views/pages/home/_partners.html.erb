@@ -1,0 +1,13 @@
+<%# _partners.html.erb - Partners %>
+<section class="py-20 bg-gradient-to-br from-teal-50 to-purple-50">
+  <div class="max-w-6xl mx-auto px-4 text-center">
+    <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Partners</h2>
+    <div class="flex flex-wrap justify-center gap-8 items-center">
+      <% @partners.each do |partner| %>
+        <div class="bg-white rounded-xl shadow p-6 flex items-center justify-center w-48 h-24">
+          <img src="<%= partner.logo_url %>" alt="<%= partner.name %>" class="max-h-16 max-w-full mx-auto" />
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,7 @@
+<section class="page-section">
+  <% if @static_page %>
+    <%= @static_page.content.html_safe %>
+  <% else %>
+    <p>Content not found.</p>
+  <% end %>
+</section>

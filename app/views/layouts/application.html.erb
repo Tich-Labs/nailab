@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nailab | Africa's Startup Network</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+  </head>
+  <body class="bg-white text-gray-900">
+    <%= render 'shared/navigation' %>
+    <div class="page-content">
+      <%= yield %>
+    </div>
+    <%= render 'shared/footer' %>
+  </body>
+</html>

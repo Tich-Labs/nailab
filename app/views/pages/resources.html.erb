@@ -1,0 +1,6 @@
+<div class="space-y-16">
+  <%= render partial: 'pages/resources/hero', locals: { categories: @resource_categories, selected_category: @selected_category, query: @search_query } %>
+  <div class="space-y-8">
+    <%= render partial: 'pages/resources/list', locals: { resources: @resources } %>
+  </div>
+</div>

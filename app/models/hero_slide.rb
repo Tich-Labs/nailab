@@ -1,0 +1,2 @@
+class HeroSlide < ApplicationRecord
+end

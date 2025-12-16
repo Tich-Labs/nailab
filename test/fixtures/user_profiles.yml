@@ -1,0 +1,45 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  role: MyString
+  full_name: MyString
+  bio: MyText
+  location: MyString
+  photo_url: MyString
+  title: MyString
+  organization: MyString
+  linkedin_url: MyString
+  years_experience: 1
+  advisory_experience: false
+  sectors: 
+  expertise: 
+  stage_preference: 
+  availability_hours_month: 1
+  rate_per_hour: 9.99
+  pro_bono: false
+  preferred_mentorship_mode: MyString
+  profile_visibility: false
+  onboarding_completed: false
+
+two:
+  user: two
+  role: MyString
+  full_name: MyString
+  bio: MyText
+  location: MyString
+  photo_url: MyString
+  title: MyString
+  organization: MyString
+  linkedin_url: MyString
+  years_experience: 1
+  advisory_experience: false
+  sectors: 
+  expertise: 
+  stage_preference: 
+  availability_hours_month: 1
+  rate_per_hour: 9.99
+  pro_bono: false
+  preferred_mentorship_mode: MyString
+  profile_visibility: false
+  onboarding_completed: false

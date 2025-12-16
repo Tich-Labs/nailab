@@ -1,0 +1,21 @@
+<div class="bg-white">
+  <% hero_slide_struct = Struct.new(:title, :subtitle, :image_url, :cta_text, :cta_link) %>
+  <% fallback_hero_slides = [
+    hero_slide_struct.new(
+      'Build, scale, and impact with Nailab',
+      'A founder-first community pairing bold teams with mentors, programs, and opportunities to serve Africa’s fastest-growing sectors.',
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80',
+      'Discover our programs',
+      programs_path
+    )
+  ] %>
+  <% hero_slides = @hero_slides.presence || fallback_hero_slides %>
+  <%= render 'pages/home/hero', hero_slides: hero_slides %>
+  <%= render 'pages/home/who_we_are' %>
+  <%= render 'pages/home/how_we_support' %>
+  <%= render 'pages/home/focus_areas' %>
+  <%= render 'pages/home/connect_grow_impact' %>
+  <%= render 'pages/home/testimonials' %>
+  <%= render 'pages/home/partners' %>
+  <%= render 'pages/home/bottom_cta' %>
+</div>

@@ -1,0 +1,11 @@
+.page-content {
+  min-height: 100vh;
+}
+
+.hero-slide {
+  transition: opacity 1s ease;
+}
+
+.hero-overlay {
+  background: linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.35) 100%);
+}
