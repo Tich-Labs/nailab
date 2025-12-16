@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  missing_font = lambda do |_env|
+    [204, { 'Content-Type' => 'font/woff2', 'Cache-Control' => 'public, max-age=86400' }, []]
+  end
+  missing_favicon = lambda do |_env|
+    [204, { 'Content-Type' => 'image/x-icon', 'Cache-Control' => 'public, max-age=86400' }, []]
+  end
+
+  get '/favicon.ico', to: missing_favicon
+  get '/assets/fonts/gotham/*font', to: missing_font
+
   devise_for :users
   namespace :api do
     namespace :v1 do
