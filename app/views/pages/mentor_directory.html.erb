@@ -1,0 +1,140 @@
+<div class="bg-gray-50">
+  <% mentor_active_filters = [@filters[:sector], @filters[:location], @filters[:pro_bono]].compact.reject(&:empty?).size %>
+  <%= form_with url: mentors_path, method: :get, local: true, class: 'space-y-6' do |form| %>
+    <section class="py-20 bg-gradient-to-br from-teal-50 to-blue-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Find Your Mentor</h1>
+        <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">
+          Connect with experienced founders, operators, and investors ready to help you scale in Africa.
+        </p>
+        <div class="max-w-2xl mx-auto">
+          <div class="relative">
+            <span class="absolute inset-y-0 left-4 flex items-center text-gray-400">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1016.5 16.5z" />
+              </svg>
+            </span>
+            <%= form.text_field :q, value: @filters[:search], placeholder: 'Search by name, expertise, or organization...', class: 'w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 shadow-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-8 border-b border-gray-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 text-sm font-semibold text-gray-700">
+            Filters
+            <% if mentor_active_filters.positive? %>
+              <span class="px-2 py-0.5 bg-teal-600 text-white text-xs rounded-full"><%= mentor_active_filters %></span>
+            <% end %>
+          </span>
+          <%= link_to 'Clear filters', mentors_path, class: 'text-sm text-gray-600 hover:text-gray-900' if mentor_active_filters.positive? %>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Sector</label>
+            <%= form.select :sector, options_for_select([['All sectors', '']] + @sector_options.map { |sector| [sector, sector] }, @filters[:sector]), {}, class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500' %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+            <%= form.text_field :location, value: @filters[:location], placeholder: 'e.g., Nairobi, Cape Town', class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500' %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Session type</label>
+            <%= form.select :pro_bono, options_for_select([['All mentors', ''], ['Pro bono only', 'true'], ['Paid sessions', 'false']], @filters[:pro_bono]), {}, class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500' %>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="submit" class="px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold shadow-lg hover:bg-teal-700 transition-colors">
+            Apply filters
+          </button>
+          <% if mentor_active_filters.positive? %>
+            <%= link_to 'Reset filters', mentors_path, class: 'text-sm text-gray-600 hover:text-gray-900' %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+        <p class="text-sm text-gray-500"><%= @filtered_mentors.count %> mentor<%= 's' unless @filtered_mentors.count == 1 %> available</p>
+        <% if mentor_active_filters.positive? || @filters[:search].present? %>
+          <%= link_to 'Remove filters', mentors_path, class: 'text-sm text-teal-600 font-semibold hover:text-teal-700' %>
+        <% end %>
+      </div>
+      <% if @filtered_mentors.any? %>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @filtered_mentors.each do |mentor| %>
+            <article class="bg-white rounded-2xl shadow-lg p-6 flex flex-col h-full hover:shadow-2xl transition-shadow">
+              <div class="flex items-start gap-4 mb-4">
+                <div class="w-16 h-16 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+                  <%= image_tag(mentor.photo_url.presence || 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=200&q=80', alt: mentor.full_name, class: 'w-full h-full object-cover') %>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900"><%= mentor.full_name %></h3>
+                  <% if mentor.title.present? %>
+                    <p class="text-sm text-gray-600"><%= mentor.title %></p>
+                  <% end %>
+                  <% if mentor.organization.present? %>
+                    <p class="text-xs text-gray-500"><%= mentor.organization %></p>
+                  <% end %>
+                </div>
+                <% if mentor.pro_bono %>
+                  <span class="inline-flex items-center px-2 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-semibold">Pro bono</span>
+                <% end %>
+              </div>
+              <p class="text-gray-700 text-sm mb-4 line-clamp-3"><%= mentor.bio %></p>
+              <div class="space-y-2 text-sm text-gray-600 mb-4">
+                <% if mentor.location.present? %>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+                    <span><%= mentor.location %></span>
+                  </div>
+                <% end %>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <span><%= mentor.years_experience %> years experience</span>
+                </div>
+                <% if mentor.rate_per_hour.present? && mentor.pro_bono == false %>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                    <span>$<%= number_with_precision(mentor.rate_per_hour, precision: 0) %>/hr</span>
+                  </div>
+                <% end %>
+              </div>
+              <% if mentor.sectors.present? %>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <% mentor.sectors.each do |sector| %>
+                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"><%= sector %></span>
+                  <% end %>
+                </div>
+              <% end %>
+              <% if mentor.expertise.present? %>
+                <div class="text-sm font-semibold text-gray-900 mb-2">Expertise</div>
+                <ul class="space-y-1 text-sm text-gray-600 mb-4">
+                  <% mentor.expertise.first(4).each do |area| %>
+                    <li class="flex items-center gap-2">
+                      <span class="block w-1 h-1 rounded-full bg-teal-600"></span>
+                      <span><%= area %></span>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+              <div class="mt-auto">
+                <%= link_to '#', class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' do %>
+                  Request mentorship
+                <% end %>
+              </div>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-16">
+          <p class="text-xl text-gray-600">No mentors match your criteria.</p>
+          <%= link_to 'Clear filters', mentors_path, class: 'mt-4 inline-block text-teal-600 hover:text-teal-700 font-semibold' %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>

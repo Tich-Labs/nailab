@@ -1,0 +1,71 @@
+<nav class="bg-white shadow-sm sticky top-0 z-50" data-controller="navigation">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-20">
+    <div class="flex items-center gap-4">
+      <%= link_to root_path, class: 'flex items-center' do %>
+        <%= image_tag 'logo-blue.original.png', alt: 'Nailab', class: 'h-12' %>
+      <% end %>
+      <button class="lg:hidden text-gray-700" type="button" data-action="navigation#toggleMenu" aria-label="Toggle navigation">
+        ☰
+      </button>
+    </div>
+    <div class="hidden lg:flex items-center space-x-8">
+      <% network_active = request.path.start_with?(startups_path) || request.path.start_with?(mentors_path) %>
+      <div class="relative group">
+        <span class="inline-flex items-center gap-1 cursor-pointer transition-colors #{network_active ? 'text-purple-600 font-semibold' : 'text-gray-700'}">
+          Our Network
+          <span class="text-xs">▼</span>
+        </span>
+        <div class="absolute top-full left-0 mt-0 translate-y-1 w-48 bg-white rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all z-50">
+          <%= link_to 'Startups', startups_path, class: "block px-4 py-2 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if request.path == startups_path}" %>
+          <%= link_to 'Mentors', mentors_path, class: "block px-4 py-2 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if request.path == mentors_path}" %>
+        </div>
+      </div>
+      <%= link_to 'Programs', programs_path, class: 'text-gray-700 hover:text-purple-600 transition-colors' %>
+      <% current_resource_slug = params[:category].presence || @selected_category.presence || @resource_category_slug.presence || 'all' %>
+      <% resources_active = request.path.start_with?(resources_path) %>
+      <div class="relative group">
+        <%= link_to resources_path, class: "inline-flex items-center gap-1 transition #{resources_active ? 'text-purple-600 font-semibold' : 'text-gray-700 hover:text-purple-600'}" do %>
+          <span>Resources</span>
+          <span class="text-xs">▼</span>
+        <% end %>
+        <div class="absolute top-full left-0 mt-0 w-72 translate-y-1 bg-white rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all z-50">
+          <%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if current_resource_slug == 'blogs'}" %>
+          <%= link_to 'Knowledge hub', resources_category_path(category: 'knowledge-hub'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if current_resource_slug == 'knowledge-hub'}" %>
+          <%= link_to 'Opportunities', resources_category_path(category: 'opportunities'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if current_resource_slug == 'opportunities'}" %>
+          <%= link_to 'Events & Webinars', resources_category_path(category: 'events'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-purple-50 text-purple-600 font-semibold' if current_resource_slug == 'events'}" %>
+        </div>
+      </div>
+      <%= link_to 'Pricing', pricing_path, class: 'text-gray-700 hover:text-purple-600 transition-colors' %>
+    </div>
+    <%= link_to 'Login', login_path, class: 'bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors' %>
+  </div>
+  <div class="hidden lg:hidden border-t border-gray-200" data-navigation-target="mobileMenu">
+    <div class="px-4 py-4 space-y-3">
+      <div>
+        <button class="flex items-center justify-between w-full text-gray-700 hover:text-purple-600 transition-colors" type="button" data-action="navigation#toggleNetwork">
+          <span>Our Network</span>
+          <span class="text-xs">▼</span>
+        </button>
+        <div class="mt-2 space-y-2 hidden" data-navigation-target="network">
+          <%= link_to 'Startups', startups_path, class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+          <%= link_to 'Mentors', mentors_path, class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+        </div>
+      </div>
+      <%= link_to 'Programs', programs_path, class: 'block text-gray-700 hover:text-purple-600 transition-colors' %>
+      <div>
+        <button class="flex items-center justify-between w-full text-gray-700 hover:text-purple-600 transition-colors" type="button" data-action="navigation#toggleResources">
+          <span>Resources</span>
+          <span class="text-xs">▼</span>
+        </button>
+        <div class="mt-2 space-y-2 hidden" data-navigation-target="resources">
+          <%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+          <%= link_to 'Knowledge hub', resources_category_path(category: 'knowledge-hub'), class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+          <%= link_to 'Opportunities', resources_category_path(category: 'opportunities'), class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+          <%= link_to 'Events & Webinars', resources_category_path(category: 'events'), class: 'block pl-4 text-gray-600 hover:text-purple-600 transition-colors' %>
+        </div>
+      </div>
+      <%= link_to 'Pricing', pricing_path, class: 'block text-gray-700 hover:text-purple-600 transition-colors' %>
+      <%= link_to 'Login', login_path, class: 'block text-center bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors' %>
+    </div>
+  </div>
+</nav>
