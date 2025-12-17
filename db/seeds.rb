@@ -3,33 +3,113 @@
 SEED_USER_PASSWORD = ENV.fetch('SEED_USER_PASSWORD', 'Nailab123!')
 
 HERO_SLIDES = [
-	{
-		title: 'Scale faster with Nairobi’s most active mentor network',
-		subtitle: 'Apply to tailored programs, unlock funding readiness clinics, and get matched with mentors who understand Africa.',
-		image_url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80',
-		cta_text: 'Explore Programs',
-		cta_link: '/programs',
-		display_order: 1,
-		active: true
-	},
-	{
-		title: 'Mentorship designed for Africa’s founders',
-		subtitle: 'Get practical guidance on fundraising, product-market fit, and go-to-market plans from founders who have scaled across the continent.',
-		image_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
-		cta_text: 'Meet Mentors',
-		cta_link: '/browse-mentors',
-		display_order: 2,
-		active: true
-	},
-	{
-		title: 'Resources, capital, and community in one place',
-		subtitle: 'From templates to capital readiness checklists, Nailab gives you the tools to launch, iterate, and scale.',
-		image_url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80',
-		cta_text: 'Browse Resources',
-		cta_link: '/resources',
-		display_order: 3,
-		active: true
 	}
+].freeze
+
+HOME_PAGE_CONTENT = {
+	hero: {
+		badge: 'Startup growth, made in Africa',
+		slides: [
+			{
+				title: 'Scale faster with Nairobi’s most active mentor network',
+				subtitle: 'Apply to tailored programs, unlock funding readiness clinics, and get matched with mentors who understand Africa.',
+				image_url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80',
+				cta_text: 'Explore Programs',
+				cta_link: '/programs'
+			},
+			{
+				title: "Mentorship designed for Africa’s founders",
+				subtitle: 'Personalized guidance on fundraising, product-market fit, and go-to-market plans from mentors who have scaled across the continent.',
+				image_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
+				cta_text: 'Meet Mentors',
+				cta_link: '/mentors'
+			},
+			{
+				title: 'Resources, capital, and community in one place',
+				subtitle: 'Templates, playbooks, and investor-ready tools to help you launch, iterate, and scale.',
+				image_url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80',
+				cta_text: 'Browse Resources',
+				cta_link: '/resources'
+			}
+		],
+		secondary_cta: { label: 'Find a Mentor', link: '/mentors' }
+	},
+	who_we_are: {
+		title: 'Who We Are',
+		subheading: 'Empowering African founders with hands-on coaching, capital, and community.',
+		paragraph_one: 'Nailab is a founder-first incubator and accelerator, founded in 2010, dedicated to supporting early-stage and growth-stage startups with mentorship, capital, and the networks they need to solve Africa’s hardest problems.',
+		paragraph_two: 'Through tailored acceleration programs, practical workshops, and investor connections, we have helped founders across the continent build scalable, impact-driven businesses.',
+		cta_label: 'More About Us',
+		cta_link: '/about',
+		image_url: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1200'
+	},
+	how_we_support: [
+		{
+			title: 'Create your founder profile',
+			description: 'Set up your profile to track progress, surface opportunities, and pair with the right mentors and programs.',
+			cta_label: 'Set up profile',
+			cta_link: '/signup'
+		},
+		{
+			title: 'Find mentors',
+			description: 'Book 1-on-1 mentorship sessions with seasoned operators who can help you refine strategy, operations, product, and leadership.',
+			cta_label: 'Book mentorship',
+			cta_link: '/mentors'
+		},
+		{
+			title: 'Peer-to-peer network',
+			description: 'Connect with fellow founders, share insights, and build supportive relationships across the continent.',
+			cta_label: 'Join the community',
+			cta_link: '/startups'
+		},
+		{
+			title: 'Access growth resources',
+			description: 'Browse curated templates, playbooks, funding leads, and invites to pitch days and accelerator opportunities.',
+			cta_label: 'Explore resources',
+			cta_link: '/resources'
+		}
+	],
+	connect_grow_impact: {
+		intro: 'Join a thriving community of African founders, mentors, and partners. Share knowledge, access opportunities, and drive innovation together.',
+		stats: [
+			{ value: '1000+', label: 'Startups supported' },
+			{ value: '50+', label: 'Partners' },
+			{ value: '$100M', label: 'Funding facilitated' }
+		],
+		cards: [
+			{
+				title: 'For Founders',
+				description: 'Gain access to mentors, cohorts, and curated resources that help you launch, grow, and scale across Africa.',
+				cta_label: 'Start your journey with us',
+				cta_link: '/programs'
+			},
+			{
+				title: 'For Mentors',
+				description: 'Guide promising founders, share lessons from your journey, and play a role in shaping the next wave of African innovation.',
+				cta_label: 'Become a Mentor',
+				cta_link: '/mentors'
+			},
+			{
+				title: 'For Partners',
+				description: 'Collaborate with Nailab to co-create programs, support startups, and drive inclusive innovation alongside corporates and institutions.',
+				cta_label: 'Partner with us',
+				cta_link: '/partners'
+			}
+		]
+	},
+	bottom_cta: {
+		heading: 'Ready to grow your startup?',
+		body: 'Join Nailab and connect with mentors, programs, and a thriving community of innovators.',
+		primary_cta: { label: 'Browse Programs', link: '/programs' },
+		secondary_cta: { label: 'Find a Mentor', link: '/mentors' }
+	}
+}.freeze
+
+home_page = StaticPage.find_or_initialize_by(slug: 'home')
+home_page.title = 'Home'
+home_page.content = home_page.content.presence || ''
+home_page.structured_content = HOME_PAGE_CONTENT
+home_page.save!
 ].freeze
 
 PARTNERS = [

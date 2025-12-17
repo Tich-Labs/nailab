@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class PagesController < ApplicationController
   PROGRAM_CATEGORIES = [
     'Startup Incubation & Acceleration',
@@ -32,7 +34,70 @@ class PagesController < ApplicationController
     'series_b_plus' => 'Series B+'
   }.freeze
 
-  helper_method :startup_stage_label, :funding_stage_label
+  helper_method :startup_stage_label, :funding_stage_label, :home_content_json
+
+  DEFAULT_SUPPORT_ITEMS = [
+    {
+      title: 'Create your founder profile',
+      description: 'Set up your founder profile to unlock tools that track progress, surface opportunities, and pair you with the right mentors and programs.',
+      cta_label: 'Set up profile',
+      cta_link: '/signup'
+    },
+    {
+      title: 'Find mentors',
+      description: 'Book 1-on-1 sessions with experienced operators who help refine strategy, operations, product, and leadership.',
+      cta_label: 'Book mentorship',
+      cta_link: '/mentors'
+    },
+    {
+      title: 'Peer-to-peer network',
+      description: 'Connect with fellow founders facing similar challenges, share insights, and build community across the continent.',
+      cta_label: 'Join the community',
+      cta_link: '/startups'
+    },
+    {
+      title: 'Access growth resources',
+      description: 'Browse curated templates, playbooks, funding leads, and invites to pitch days and accelerator opportunities.',
+      cta_label: 'Explore resources',
+      cta_link: '/resources'
+    }
+  ].freeze
+
+  DEFAULT_CONNECT_STATS = [
+    { value: '1000+', label: 'Startups supported' },
+    { value: '50+', label: 'Partners' },
+    { value: '$100M', label: 'Funding facilitated' }
+  ].freeze
+
+  DEFAULT_CONNECT_CARDS = [
+    {
+      title: 'For Founders',
+      description: 'Nailab is the launchpad for your bold ideas. Gain access to mentors, collaborate with like-minded founders, and access the tools that help you launch, grow, and scale across Africa.',
+      cta_label: 'Start your journey with us',
+      cta_link: '/programs'
+    },
+    {
+      title: 'For Mentors',
+      description: 'Join Nailab’s mentor network to guide promising founders, share expertise, and provide real-world insights that help startups overcome challenges.',
+      cta_label: 'Become a Mentor',
+      cta_link: '/mentors'
+    },
+    {
+      title: 'For Partners',
+      description: 'Collaborate with Nailab to co-create programs, support high-potential startups, and drive inclusive innovation with corporates, governments, and funders.',
+      cta_label: 'Partner with us',
+      cta_link: '/partners'
+    }
+  ].freeze
+
+  DEFAULT_CONNECT_INTRO = 'Join a thriving community of African founders, mentors, and partners. Share knowledge, access opportunities, and drive innovation together.'.freeze
+
+  DEFAULT_BOTTOM_CTA = {
+    heading: 'Ready to grow your startup?',
+    body: 'Join Nailab and connect with mentors, programs, and a thriving community of innovators.',
+    primary_cta: { label: 'Browse Programs', link: '/programs' },
+    secondary_cta: { label: 'Find a Mentor', link: '/mentors' }
+  }.freeze
 
   def home
     @hero_slides = HeroSlide.where(active: true).order(:display_order)
@@ -42,6 +107,7 @@ class PagesController < ApplicationController
     @program_highlights = Program.where(active: true).order(start_date: :desc).limit(3)
     @resources = Resource.where(active: true).order(published_at: :desc).limit(3)
     @startups = StartupProfile.where(active: true).order(:startup_name).limit(4)
+    load_home_content
   end
 
   def login; end
@@ -166,6 +232,10 @@ class PagesController < ApplicationController
     @static_page = StaticPage.find_by(slug: 'contact')
   end
 
+  def home_content_json
+    @home_content_json
+  end
+
   private
 
   def startup_stage_label(stage)
@@ -174,5 +244,41 @@ class PagesController < ApplicationController
 
   def funding_stage_label(stage)
     FUNDING_STAGE_LABELS[stage] || stage.to_s.titleize
+  end
+
+  def load_home_content
+    @home_static_page = StaticPage.find_or_initialize_by(slug: 'home')
+    @home_content_json = (@home_static_page.structured_content || {}).with_indifferent_access
+    hero_json = (@home_content_json[:hero] || {}).with_indifferent_access
+    json_slides = hero_slides_from_json(hero_json)
+    @hero_slides = json_slides.presence || @hero_slides
+    @hero_badge = hero_json[:badge].presence || 'Startup growth, made in Africa'
+    @hero_secondary_cta = (hero_json[:secondary_cta] || default_hero_secondary_cta).with_indifferent_access
+    @who_we_are_content = (@home_content_json[:who_we_are] || {}).with_indifferent_access
+    @how_we_support_items = (@home_content_json[:how_we_support].presence || DEFAULT_SUPPORT_ITEMS).map { |item| item.with_indifferent_access }
+    connect_json = (@home_content_json[:connect_grow_impact] || {}).with_indifferent_access
+    @connect_intro = connect_json[:intro].presence || DEFAULT_CONNECT_INTRO
+    @connect_stats = connect_json[:stats].presence || DEFAULT_CONNECT_STATS
+    @connect_cards = connect_json[:cards].presence ? connect_json[:cards].map { |card| card.with_indifferent_access } : DEFAULT_CONNECT_CARDS
+    bottom_cta_json = (@home_content_json[:bottom_cta] || {}).with_indifferent_access
+    @bottom_cta_content = DEFAULT_BOTTOM_CTA.deep_dup
+    @bottom_cta_content.deep_merge!(bottom_cta_json)
+    @bottom_cta_content = @bottom_cta_content.with_indifferent_access
+    @home_content_json
+  end
+
+  def hero_slides_from_json(hero_json)
+    return unless hero_json.present?
+    slides = hero_json[:slides].presence || hero_json[:slide].presence
+    if slides.blank?
+      single = hero_json.slice(:title, :subtitle, :image_url, :cta_text, :cta_link)
+      slides = [single] if single[:title].present?
+    end
+    return unless slides.present?
+    slides.map { |attrs| OpenStruct.new(attrs) }
+  end
+
+  def default_hero_secondary_cta
+    { 'label' => 'Find a mentor', 'link' => '/mentors' }
   end
 end

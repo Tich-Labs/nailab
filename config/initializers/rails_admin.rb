@@ -1,30 +1,55 @@
+MARKETING_CONTENT_MENU = {
+  'Home • hero slides' => '/admin/hero_slide',
+  'Home • structured content' => '/admin/static_page?f[slug_eq]=home',
+  'Focus areas & support' => '/admin/focus_area',
+  'Testimonials' => '/admin/testimonial',
+  'Partners' => '/admin/partner',
+  'Programs' => '/admin/program',
+  'Resources' => '/admin/resource',
+  'Startup directory' => '/admin/startup_profile',
+  'About Nailab page' => '/admin/static_page?f[slug_eq]=about',
+  'Pricing page' => '/admin/static_page?f[slug_eq]=pricing',
+  'Contact page' => '/admin/static_page?f[slug_eq]=contact'
+}.freeze
+
 RailsAdmin.config do |config|
   config.asset_source = :sprockets
+  config.navigation_static_label = 'Marketing layout'
+  config.navigation_static_links = MARKETING_CONTENT_MENU
 
   # Structure admin navigation
   config.model 'Program' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 5
   end
   config.model 'Resource' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 6
   end
   config.model 'StartupProfile' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 7
   end
   config.model 'Testimonial' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 3
   end
   config.model 'Partner' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 4
   end
   config.model 'FocusArea' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 2
   end
   config.model 'HeroSlide' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    weight 1
   end
   config.model 'StaticPage' do
-    navigation_label 'Content'
+    navigation_label 'Marketing'
+    label_plural 'Landing + page content'
+    weight 0
   end
 
   config.model 'User' do

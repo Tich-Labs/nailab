@@ -1,23 +1,65 @@
 <%# _connect_grow_impact.html.erb - ConnectGrowImpact (community/impact) %>
 <section class="py-20 bg-gradient-to-br from-purple-50 to-teal-50">
-  <div class="max-w-5xl mx-auto px-4 text-center">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Connect. Grow. Impact.</h2>
-    <p class="text-xl text-gray-700 mb-4">
-      Join a thriving community of African founders, mentors, and partners. Share knowledge, access opportunities, and drive innovation together.
-    </p>
-    <div class="flex flex-wrap justify-center gap-6 mt-8">
-      <div class="bg-white rounded-xl shadow p-8 w-64">
-        <h3 class="text-2xl font-bold text-teal-700 mb-2">1000+</h3>
-        <p class="text-gray-700">Startups Supported</p>
-      </div>
-      <div class="bg-white rounded-xl shadow p-8 w-64">
-        <h3 class="text-2xl font-bold text-teal-700 mb-2">50+</h3>
-        <p class="text-gray-700">Partners</p>
-      </div>
-      <div class="bg-white rounded-xl shadow p-8 w-64">
-        <h3 class="text-2xl font-bold text-teal-700 mb-2">$100M</h3>
-        <p class="text-gray-700">Funding Facilitated</p>
-      </div>
+    <p class="text-xl text-gray-700 mb-8 max-w-3xl mx-auto"><%= @connect_intro %></p>
+    <div class="flex flex-wrap justify-center gap-6">
+      <% @connect_stats.each do |stat| %>
+        <div class="bg-white rounded-xl shadow p-8 w-64">
+          <h3 class="text-3xl font-bold text-teal-700 mb-2"><%= stat[:value] %></h3>
+          <p class="text-gray-700"><%= stat[:label] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-3 gap-8">
+      <% @connect_cards.each do |card| %>
+        <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col h-full">
+          <div class="w-14 h-14 bg-gray-100 rounded-full mb-6 flex items-center justify-center">
+            <span class="text-lg font-bold text-purple-600"><%= card[:title].split.first %></span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4"><%= card[:title] %></h3>
+          <p class="text-gray-700 mb-6 leading-relaxed"><%= card[:description] %></p>
+          <%= link_to card[:cta_label], card[:cta_link], class: 'mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all bg-purple-600 text-white hover:bg-purple-700' %>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
+<%# _connect_grow_impact.html.erb - ConnectGrowImpact (community/impact) %>
+<section class="py-20 bg-gradient-to-br from-purple-50 to-teal-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Connect. Grow. Impact.</h2>
+    <p class="text-xl text-gray-700 max-w-3xl mx-auto">
+      Join a thriving community of African founders, mentors, and partners. Share knowledge, access opportunities, and drive innovation together.
+    </p>
+    <div class="flex flex-wrap justify-center gap-6 mt-10">
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-64">
+        <h3 class="text-3xl font-bold text-teal-700 mb-2">1000+</h3>
+        <p class="text-gray-700">Startups supported</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-64">
+        <h3 class="text-3xl font-bold text-teal-700 mb-2">50+</h3>
+        <p class="text-gray-700">Partners</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-64">
+        <h3 class="text-3xl font-bold text-teal-700 mb-2">$100M</h3>
+        <p class="text-gray-700">Funding facilitated</p>
+      </div>
+    </div>
+  </div>
+  <div class="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-3 gap-8">
+      <% @connect_cards.each do |card| %>
+        <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col h-full">
+          <div class="w-14 h-14 bg-gray-100 rounded-full mb-6 flex items-center justify-center">
+            <span class="text-lg font-bold text-purple-600"><%= card[:title].split.first %></span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4"><%= card[:title] %></h3>
+          <p class="text-gray-700 mb-6 leading-relaxed"><%= card[:description] %></p>
+          <%= link_to card[:cta], card[:link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all bg-purple-600 text-white hover:bg-purple-700" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
