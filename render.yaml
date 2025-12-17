@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: "Nailab Backend"
+    env: ruby
+    branch: main
+    plan: starter
+    buildCommand: |
+      bundle install --jobs 4 --retry 3
+      npm install
+      npm run build:css
+      bundle exec rails assets:precompile
+    startCommand: bundle exec puma -C config/puma.rb
+    autoDeploy: true
+    healthCheckPath: "/up"
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RACK_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+    postDeployCommand: bundle exec rails db:migrate
