@@ -31,3 +31,11 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Node
+/node_modules/
+
+# Asset build outputs
+/public/assets/
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
