@@ -1,11 +1,12 @@
 
 	class ApplicationController < ActionController::Base
-		before_action :redirect_to_onboarding_if_needed
+		before_action :redirect_to_onboarding_if_needed, unless: :devise_controller?
 		protect_from_forgery with: :exception
 
 		private
 
 		def redirect_to_onboarding_if_needed
+			return if devise_controller?
 			return unless user_signed_in?
 			return if request.path == founder_onboarding_path || request.path.start_with?('/api')
 			user_profile = current_user.user_profile
