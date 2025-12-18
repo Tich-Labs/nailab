@@ -136,8 +136,6 @@ Rails.application.routes.draw do
     get "support", to: "support#show"
   end
 
-  delete "/logout", to: "sessions#destroy"
-
   # Defines the root path route ("/")
   # root "posts#index"
 end
