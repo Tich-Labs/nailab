@@ -1,5 +1,7 @@
 class CreateHeroSlides < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:hero_slides)
+
     create_table :hero_slides do |t|
       t.string :title
       t.text :subtitle

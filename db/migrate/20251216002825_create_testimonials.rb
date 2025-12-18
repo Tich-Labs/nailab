@@ -1,5 +1,7 @@
 class CreateTestimonials < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:testimonials)
+
     create_table :testimonials do |t|
       t.string :author_name, null: false
       t.string :author_role

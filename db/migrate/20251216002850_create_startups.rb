@@ -1,5 +1,7 @@
 class CreateStartups < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:startups)
+
     create_table :startups do |t|
       t.string :name, null: false
       t.string :sector

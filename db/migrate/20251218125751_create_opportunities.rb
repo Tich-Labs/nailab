@@ -1,5 +1,7 @@
 class CreateOpportunities < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:opportunities)
+
     create_table :opportunities do |t|
       t.string :title
       t.string :organizer

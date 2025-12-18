@@ -1,5 +1,7 @@
 class CreateStartupProfiles < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:startup_profiles)
+
     create_table :startup_profiles do |t|
       t.references :user, null: false, foreign_key: true
       t.string :startup_name, null: false

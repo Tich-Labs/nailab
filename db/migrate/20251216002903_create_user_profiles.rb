@@ -1,5 +1,7 @@
 class CreateUserProfiles < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:user_profiles)
+
     create_table :user_profiles do |t|
       t.references :user, null: false, foreign_key: true, index: { unique: true }
       t.string :role

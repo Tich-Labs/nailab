@@ -1,5 +1,7 @@
 class CreatePartners < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:partners)
+
     create_table :partners do |t|
       t.string :name, null: false
       t.string :logo_url

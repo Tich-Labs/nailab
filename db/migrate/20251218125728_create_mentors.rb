@@ -1,5 +1,7 @@
 class CreateMentors < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:mentors)
+
     create_table :mentors do |t|
       t.string :name
       t.string :title

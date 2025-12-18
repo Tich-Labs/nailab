@@ -1,5 +1,7 @@
 class CreateMentorshipConnections < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:mentorship_connections)
+
     create_table :mentorship_connections do |t|
       t.references :founder, null: false, foreign_key: { to_table: :users }
       t.references :mentor, null: false, foreign_key: { to_table: :users }

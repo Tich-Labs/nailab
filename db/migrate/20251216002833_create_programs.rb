@@ -1,5 +1,7 @@
 class CreatePrograms < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:programs)
+
     create_table :programs do |t|
       t.string :title, null: false
       t.string :slug, null: false
