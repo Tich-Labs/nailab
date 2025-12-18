@@ -9,6 +9,8 @@ services:
       npm install
       npm run build:css
       bundle exec rails assets:precompile
+      bundle exec rails db:migrate
+      bundle exec rails db:seed
     startCommand: bundle exec puma -C config/puma.rb
     autoDeploy: true
     healthCheckPath: "/up"
@@ -21,4 +23,7 @@ services:
         value: "true"
       - key: RAILS_LOG_TO_STDOUT
         value: "true"
-    postDeployCommand: bundle exec rails db:migrate
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: RAILS_MASTER_KEY
+        sync: false
