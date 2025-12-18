@@ -1,0 +1,135 @@
+<%# app/views/founder_onboarding/show.html.erb %>
+<% steps = [
+  { key: 'personal', label: 'Personal' },
+  { key: 'startup', label: 'Startup' },
+  { key: 'professional', label: 'Professional' },
+  { key: 'mentorship', label: 'Mentorship' },
+  { key: 'confirm', label: 'Confirm' }
+] %>
+<div class="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-8">
+  <!-- Step Indicator -->
+  <div class="flex items-center mb-8" role="progressbar" aria-valuenow="<%= steps.index { |s| s[:key] == @step } + 1 %>" aria-valuemin="1" aria-valuemax="<%= steps.size %>" aria-label="Onboarding progress">
+    <% steps.each_with_index do |step, idx| %>
+      <div class="flex items-center">
+        <div class="w-8 h-8 flex items-center justify-center rounded-full <%= @step == step[:key] ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600' %> font-bold" <%= @step == step[:key] ? 'aria-current="step"' : '' %>>
+          <%= idx + 1 %>
+        </div>
+        <% unless idx == steps.size - 1 %>
+          <div class="w-8 h-1 bg-gray-300 mx-1"></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <%= form_with url: founder_onboarding_path(step: @step), method: :put, local: true, scope: 'founder_onboarding' do |f| %>
+    <% if @step == 'personal' %>
+      <h2 class="text-2xl font-semibold mb-6">Founder Personal Information</h2>
+      <%= f.fields_for :user_profile, @user_profile do |up| %>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <%= up.label :full_name, class: 'block text-sm font-medium mb-1' %>
+            <%= up.text_field :full_name, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= label_tag :email, 'Email', class: 'block text-sm font-medium mb-1' %>
+            <%= text_field_tag :email, current_user.email, class: 'input input-bordered w-full', readonly: true, aria: { readonly: true } %>
+          </div>
+          <div>
+            <%= up.label :phone, class: 'block text-sm font-medium mb-1' %>
+            <%= up.telephone_field :phone, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= up.label :country, 'Country', class: 'block text-sm font-medium mb-1' %>
+            <%= up.select :country, country_list, { prompt: 'Select country' }, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= up.label :city, 'City', class: 'block text-sm font-medium mb-1' %>
+            <%= up.text_field :city, aria: { describedby: 'city-help' }, class: 'input input-bordered w-full' %>
+            <small id="city-help" class="text-gray-500">Enter your city name</small>
+          </div>
+        </div>
+      <% end %>
+    <% elsif @step == 'startup' %>
+      <h2 class="text-2xl font-semibold mb-6">Startup Details</h2>
+      <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <%= sp.label :startup_name, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :startup_name, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :logo_url, 'Logo URL', class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :logo_url, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :description, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_area :description, required: true, aria: { required: true }, maxlength: 300, class: 'textarea textarea-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :stage, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.select :stage, ['Idea', 'Early', 'Growth', 'Scaling', 'Other'], {}, { required: true, aria: { required: true }, class: 'select select-bordered w-full' } %>
+          </div>
+          <div>
+            <%= sp.label :target_market, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :target_market, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :value_proposition, 'Unique Value Proposition', class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :value_proposition, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
+          </div>
+        </div>
+      <% end %>
+    <% elsif @step == 'professional' %>
+      <h2 class="text-2xl font-semibold mb-6">Professional Background</h2>
+      <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <%= sp.label :sector, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :sector, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :stage, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :stage, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :funding_stage, 'Funding Stage', class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_field :funding_stage, class: 'input input-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :funding_raised, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.number_field :funding_raised, class: 'input input-bordered w-full' %>
+          </div>
+        </div>
+      <% end %>
+    <% elsif @step == 'mentorship' %>
+      <h2 class="text-2xl font-semibold mb-6">Mentorship & Challenges</h2>
+      <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <%= sp.label :mentorship_areas, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.select :mentorship_areas, ['Product', 'Go-to-market', 'Fundraising', 'Team', 'Other'], {}, { multiple: true, required: true, class: 'select select-bordered w-full' } %>
+          </div>
+          <div>
+            <%= sp.label :challenge_details, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.text_area :challenge_details, class: 'textarea textarea-bordered w-full' %>
+          </div>
+          <div>
+            <%= sp.label :preferred_mentorship_mode, class: 'block text-sm font-medium mb-1' %>
+            <%= sp.select :preferred_mentorship_mode, ['One-on-one', 'Group', 'Virtual', 'In-person', 'Other'], {}, { required: true, class: 'select select-bordered w-full' } %>
+          </div>
+        </div>
+      <% end %>
+    <% elsif @step == 'confirm' %>
+      <h2 class="text-2xl font-semibold mb-6">Review & Confirm</h2>
+      <p class="mb-4">Please review your details before submitting.</p>
+      <%= render partial: 'summary', locals: { user_profile: @user_profile, startup_profile: @startup_profile } %>
+    <% end %>
+    <div class="flex justify-between mt-8">
+      <% if @step != 'personal' %>
+        <%= link_to 'Back', founder_onboarding_path(step: steps[steps.index { |s| s[:key] == @step } - 1][:key]), class: 'btn btn-outline btn-secondary' %>
+      <% else %>
+        <span></span>
+      <% end %>
+      <%= f.submit (@step == 'confirm' ? 'Finish' : 'Next'), class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+    </div>
+  <% end %>
+</div>

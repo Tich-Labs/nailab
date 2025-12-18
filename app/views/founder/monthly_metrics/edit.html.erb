@@ -1,0 +1,39 @@
+<%# app/views/founder/monthly_metrics/edit.html.erb %>
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Monthly Metrics</h1>
+  <div class="bg-white shadow rounded-lg p-6">
+    <form action="<%= founder_monthly_metric_path(@monthly_metric) %>" method="post" class="space-y-6">
+      <input type="hidden" name="_method" value="patch" />
+      <div>
+        <label for="monthly_metric_month" class="block text-sm font-medium text-gray-700">Month</label>
+        <input type="date" name="monthly_metric[month]" id="monthly_metric_month" value="<%= @monthly_metric.month %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="monthly_metric_revenue" class="block text-sm font-medium text-gray-700">Revenue</label>
+          <input type="number" name="monthly_metric[revenue]" id="monthly_metric_revenue" step="0.01" value="<%= @monthly_metric.revenue %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="monthly_metric_users" class="block text-sm font-medium text-gray-700">Users</label>
+          <input type="number" name="monthly_metric[users]" id="monthly_metric_users" value="<%= @monthly_metric.users %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="monthly_metric_growth_rate" class="block text-sm font-medium text-gray-700">Growth rate</label>
+          <input type="number" name="monthly_metric[growth_rate]" id="monthly_metric_growth_rate" step="0.01" value="<%= @monthly_metric.growth_rate %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="monthly_metric_churn_rate" class="block text-sm font-medium text-gray-700">Churn rate</label>
+          <input type="number" name="monthly_metric[churn_rate]" id="monthly_metric_churn_rate" step="0.01" value="<%= @monthly_metric.churn_rate %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+      </div>
+      <div>
+        <label for="monthly_metric_notes" class="block text-sm font-medium text-gray-700">Notes</label>
+        <textarea name="monthly_metric[notes]" id="monthly_metric_notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"><%= @monthly_metric.notes %></textarea>
+      </div>
+      <div class="flex justify-end space-x-4">
+        <a href="<%= founder_monthly_metrics_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Update Metrics</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<%# Dashboard main view %>
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">
+      Welcome back, <%= @user_profile&.full_name || current_user.email %>!
+    </h1>
+    <p class="text-gray-600 mt-2">Here's what's happening with your journey</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <%# Placeholder stats, replace with real data as needed %>
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+      <p class="text-sm text-gray-600 mb-1">Active Connections</p>
+      <p class="text-3xl font-bold text-gray-900">0</p>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+      <p class="text-sm text-gray-600 mb-1">Messages</p>
+      <p class="text-3xl font-bold text-gray-900">0</p>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+      <p class="text-sm text-gray-600 mb-1">Upcoming Sessions</p>
+      <p class="text-3xl font-bold text-gray-900">0</p>
+    </div>
+  </div>
+  <% if @user_profile&.role == 'founder' && @startup_profile %>
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Your Startup</h2>
+        <strong><%= @startup_profile.startup_name %></strong><br>
+        <span class="text-gray-600"><%= @startup_profile.sector %> | <%= @startup_profile.stage %></span><br>
+        <span><%= @startup_profile.description %></span>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Find Mentors</h2>
+        <p class="text-gray-600 mb-4">Connect with experienced entrepreneurs</p>
+        <%= link_to 'Browse Mentors', mentors_path, class: 'inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors' %>
+      </div>
+    </div>
+  <% elsif @user_profile&.role == 'mentor' %>
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">My Mentees</h2>
+        <p class="text-gray-600 mb-4">Track the founders you're mentoring</p>
+        <button class="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">View Mentees</button>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Update Availability</h2>
+        <p class="text-gray-600 mb-4">Keep your profile up to date</p>
+        <button class="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">Edit Profile</button>
+      </div>
+    </div>
+  <% end %>
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Mentorship Requests</h2>
+    <% if @mentorship_requests.any? %>
+      <table class="min-w-full bg-white rounded-xl shadow">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Mentor/Founder</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2">Message</th>
+            <th class="px-4 py-2">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @mentorship_requests.each do |req| %>
+            <tr>
+              <td class="border px-4 py-2">
+                <% if @user_profile.role == 'founder' %>
+                  <%= req.mentor&.user_profile&.full_name || req.mentor&.email %>
+                <% else %>
+                  <%= req.founder&.user_profile&.full_name || req.founder&.email %>
+                <% end %>
+              </td>
+              <td class="border px-4 py-2"><%= req.status.capitalize %></td>
+              <td class="border px-4 py-2"><%= req.message&.truncate(60) %></td>
+              <td class="border px-4 py-2"><%= req.updated_at.strftime('%b %d, %Y') %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="text-gray-600">No mentorship requests yet.</div>
+    <% end %>
+  </div>
+  <div class="bg-gradient-to-br from-teal-600 to-blue-600 rounded-xl p-8 text-white shadow-lg mb-8">
+    <h2 class="text-2xl font-bold mb-2">Explore Resources</h2>
+    <p class="mb-6 opacity-90">Access templates, guides, and opportunities</p>
+    <%= link_to 'Browse Resources', resources_path, class: 'inline-flex items-center px-6 py-3 bg-white text-teal-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors' %>
+  </div>
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Notifications</h2>
+    <% if @notifications.any? %>
+      <ul class="bg-white rounded-xl shadow divide-y">
+        <% @notifications.each do |notif| %>
+          <li class="px-4 py-3">
+            <strong><%= notif.title %></strong><br>
+            <span class="text-gray-700"><%= notif.message %></span>
+            <% if notif.link.present? %>
+              <br>
+              <a href="<%= notif.link %>" class="text-teal-600 underline">View</a>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="text-gray-600">No notifications yet.</div>
+    <% end %>
+  </div>
+</div>

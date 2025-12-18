@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nailab | Mentor Dashboard</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <div class="flex min-h-screen">
+      <%= render 'shared/mentor_sidebar' %>
+      <div class="flex-1 ml-0 md:ml-64">
+        <!-- Topbar -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+          <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+              <div class="flex items-center">
+                <%= link_to mentor_root_path, class: "flex items-center mr-4" do %>
+                  <%= image_tag "logo-blue.original.png", alt: "Nailab", class: "h-10 w-auto" %>
+                <% end %>
+                <h1 class="text-lg font-semibold text-gray-900">Mentor Dashboard</h1>
+              </div>
+              <div class="flex items-center space-x-4">
+                <!-- User Dropdown -->
+                <div class="relative" data-controller="dropdown">
+                  <button data-action="click->dropdown#toggle" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
+                    <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                      <span class="text-sm font-medium text-teal-600">
+                        <%= current_user.user_profile&.full_name&.first || current_user.email.first.upcase %>
+                      </span>
+                    </div>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
+                  <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                    <%= link_to 'Account Settings', mentor_settings_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg" %>
+                    <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- Main Content -->
+        <main class="p-8">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

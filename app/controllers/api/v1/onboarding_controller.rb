@@ -44,7 +44,7 @@ module Api
       private
 
       def founder_profile_params
-        params.permit(:full_name, :bio, :location, sectors: [], :preferred_mentorship_mode)
+        params.permit(:full_name, :bio, :location, :preferred_mentorship_mode, sectors: [])
       end
 
       def startup_profile_params

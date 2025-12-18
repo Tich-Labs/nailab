@@ -1,0 +1,117 @@
+<%# app/views/founder/subscriptions/new.html.erb %>
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Choose Your Plan</h1>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Basic Plan -->
+    <div class="bg-white shadow rounded-lg p-6 border-2 border-gray-200">
+      <h3 class="text-lg font-semibold mb-4">Basic</h3>
+      <div class="text-3xl font-bold mb-4">$29<span class="text-lg font-normal">/month</span></div>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Access to resource library
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Basic mentorship matching
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Community access
+        </li>
+      </ul>
+      <form action="<%= founder_subscription_path %>" method="post" class="text-center">
+        <input type="hidden" name="subscription[plan_name]" value="Basic" />
+        <input type="hidden" name="subscription[price]" value="29" />
+        <input type="hidden" name="subscription[billing_cycle]" value="month" />
+        <input type="hidden" name="subscription[features]" value="Access to resource library\nBasic mentorship matching\nCommunity access" />
+        <button type="submit" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Select Basic Plan</button>
+      </form>
+    </div>
+    <!-- Pro Plan -->
+    <div class="bg-white shadow rounded-lg p-6 border-2 border-purple-500 relative">
+      <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+        <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">Most Popular</span>
+      </div>
+      <h3 class="text-lg font-semibold mb-4">Pro</h3>
+      <div class="text-3xl font-bold mb-4">$79<span class="text-lg font-normal">/month</span></div>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Everything in Basic
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Priority mentorship matching
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Monthly 1-on-1 sessions
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Exclusive opportunities
+        </li>
+      </ul>
+      <form action="<%= founder_subscription_path %>" method="post" class="text-center">
+        <input type="hidden" name="subscription[plan_name]" value="Pro" />
+        <input type="hidden" name="subscription[price]" value="99" />
+        <input type="hidden" name="subscription[billing_cycle]" value="month" />
+        <input type="hidden" name="subscription[features]" value="Everything in Basic\nPriority mentorship matching\n1-on-1 mentorship sessions\nAdvanced analytics\nDedicated support" />
+        <button type="submit" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Select Pro Plan</button>
+      </form>
+    </div>
+    <!-- Enterprise Plan -->
+    <div class="bg-white shadow rounded-lg p-6 border-2 border-gray-200">
+      <h3 class="text-lg font-semibold mb-4">Enterprise</h3>
+      <div class="text-3xl font-bold mb-4">$199<span class="text-lg font-normal">/month</span></div>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Everything in Pro
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Dedicated mentor
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Custom workshops
+        </li>
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          Investor introductions
+        </li>
+      </ul>
+      <form action="<%= founder_subscription_path %>" method="post" class="text-center">
+        <input type="hidden" name="subscription[plan_name]" value="Enterprise" />
+        <input type="hidden" name="subscription[price]" value="199" />
+        <input type="hidden" name="subscription[billing_cycle]" value="month" />
+        <input type="hidden" name="subscription[features]" value="Everything in Pro\nDedicated mentor\nCustom workshops\nInvestor introductions" />
+        <button type="submit" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Select Enterprise Plan</button>
+      </form>
+    </div>
+  </div>
+</div>

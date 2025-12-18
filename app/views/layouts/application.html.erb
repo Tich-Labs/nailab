@@ -11,10 +11,12 @@
     <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
   </head>
   <body class="bg-white text-gray-900">
-    <%= render 'shared/navigation' %>
+    <%= render 'shared/public_header' %>
     <div class="page-content">
       <%= yield %>
     </div>
-    <%= render 'shared/footer' %>
+    <% unless request.path == '/login' || request.path == '/signup' || request.path == founder_onboarding_path || request.path.start_with?('/founder') %>
+      <%= render 'shared/footer' %>
+    <% end %>
   </body>
 </html>

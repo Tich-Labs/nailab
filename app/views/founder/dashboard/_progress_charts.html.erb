@@ -1,0 +1,47 @@
+<div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">Progress Overview</h2>
+    <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+      <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+    </div>
+  </div>
+  <p class="text-gray-600 mb-6">Track your startup's key metrics and milestones</p>
+  <div class="space-y-6">
+    <div class="bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Revenue Growth</h3>
+          <p class="text-2xl font-bold text-teal-600">+23%</p>
+        </div>
+        <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Active Milestones</h3>
+          <p class="text-2xl font-bold text-purple-600"><%= @milestones.where(completed: false).count %></p>
+        </div>
+        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-8">
+    <%= link_to founder_progress_path, class: 'inline-flex items-center space-x-2 text-teal-600 font-semibold hover:text-teal-700 transition-colors group' do %>
+      <span>View Full Progress</span>
+      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  </div>
+</div>

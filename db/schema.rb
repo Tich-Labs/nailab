@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_18_171341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["resource_id"], name: "index_bookmarks_on_resource_id"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "connections", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "peer_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["peer_id"], name: "index_connections_on_peer_id"
+    t.index ["user_id"], name: "index_connections_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "mentor_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["mentor_id"], name: "index_conversations_on_mentor_id"
+    t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
 
   create_table "focus_areas", force: :cascade do |t|
     t.boolean "active", default: true, null: false
@@ -45,6 +72,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "mentors", force: :cascade do |t|
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.string "expertise"
+    t.string "name"
+    t.string "photo"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_mentors_on_user_id"
+  end
+
   create_table "mentorship_connections", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "founder_id", null: false
@@ -71,6 +110,39 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["status"], name: "index_mentorship_requests_on_status"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.text "content"
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "sender_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "milestones", force: :cascade do |t|
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.date "due_date"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_milestones_on_user_id"
+  end
+
+  create_table "monthly_metrics", force: :cascade do |t|
+    t.decimal "burn_rate"
+    t.datetime "created_at", null: false
+    t.integer "customers"
+    t.date "month"
+    t.decimal "revenue"
+    t.integer "runway"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_monthly_metrics_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "link"
@@ -86,6 +158,27 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "opportunities", force: :cascade do |t|
+    t.string "application_url"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.date "deadline"
+    t.text "description"
+    t.string "organizer"
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "opportunity_submissions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "details"
+    t.bigint "opportunity_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["opportunity_id"], name: "index_opportunity_submissions_on_opportunity_id"
+    t.index ["user_id"], name: "index_opportunity_submissions_on_user_id"
+  end
+
   create_table "partners", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -96,6 +189,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.string "website_url"
     t.index ["active"], name: "index_partners_on_active"
     t.index ["display_order"], name: "index_partners_on_display_order"
+  end
+
+  create_table "peer_messages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.bigint "recipient_id", null: false
+    t.bigint "sender_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipient_id"], name: "index_peer_messages_on_recipient_id"
+    t.index ["sender_id"], name: "index_peer_messages_on_sender_id"
   end
 
   create_table "programs", force: :cascade do |t|
@@ -114,17 +217,41 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["slug"], name: "index_programs_on_slug", unique: true
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "resource_id", null: false
+    t.integer "score"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["resource_id"], name: "index_ratings_on_resource_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
   create_table "resources", force: :cascade do |t|
     t.boolean "active", default: true, null: false
+    t.text "content"
     t.datetime "created_at", null: false
     t.text "description"
     t.datetime "published_at"
     t.string "resource_type"
+    t.string "slug"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.string "url"
     t.index ["active"], name: "index_resources_on_active"
     t.index ["published_at"], name: "index_resources_on_published_at"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date"
+    t.bigint "mentor_id", null: false
+    t.time "time"
+    t.string "topic"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["mentor_id"], name: "index_sessions_on_mentor_id"
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "startup_profiles", force: :cascade do |t|
@@ -179,6 +306,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["slug"], name: "index_static_pages_on_slug", unique: true
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "payment_method"
+    t.string "status"
+    t.string "tier"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "testimonials", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.string "author_name", null: false
@@ -195,19 +332,27 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
   end
 
   create_table "user_profiles", force: :cascade do |t|
+    t.text "advisory_description"
     t.boolean "advisory_experience", default: false, null: false
     t.integer "availability_hours_month", default: 0, null: false
     t.text "bio"
+    t.string "city"
+    t.string "country"
     t.datetime "created_at", null: false
+    t.string "currency"
     t.jsonb "expertise"
     t.string "full_name"
     t.string "linkedin_url"
     t.string "location"
+    t.text "mentorship_approach"
+    t.text "motivation"
     t.boolean "onboarding_completed", default: false, null: false
     t.string "organization"
+    t.string "phone"
     t.string "photo_url"
     t.string "preferred_mentorship_mode"
     t.boolean "pro_bono", default: false, null: false
+    t.string "professional_website"
     t.boolean "profile_visibility", default: true, null: false
     t.decimal "rate_per_hour", precision: 10, scale: 2
     t.string "role"
@@ -232,12 +377,32 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_000500) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bookmarks", "resources"
+  add_foreign_key "bookmarks", "users"
+  add_foreign_key "connections", "users"
+  add_foreign_key "connections", "users", column: "peer_id"
+  add_foreign_key "conversations", "mentors"
+  add_foreign_key "conversations", "users"
+  add_foreign_key "mentors", "users"
   add_foreign_key "mentorship_connections", "mentorship_requests"
   add_foreign_key "mentorship_connections", "users", column: "founder_id"
   add_foreign_key "mentorship_connections", "users", column: "mentor_id"
   add_foreign_key "mentorship_requests", "users", column: "founder_id"
   add_foreign_key "mentorship_requests", "users", column: "mentor_id"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "milestones", "users"
+  add_foreign_key "monthly_metrics", "users"
   add_foreign_key "notifications", "users"
+  add_foreign_key "opportunity_submissions", "opportunities"
+  add_foreign_key "opportunity_submissions", "users"
+  add_foreign_key "peer_messages", "users", column: "recipient_id"
+  add_foreign_key "peer_messages", "users", column: "sender_id"
+  add_foreign_key "ratings", "resources"
+  add_foreign_key "ratings", "users"
+  add_foreign_key "sessions", "mentors"
+  add_foreign_key "sessions", "users"
   add_foreign_key "startup_profiles", "users"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "user_profiles", "users"
 end

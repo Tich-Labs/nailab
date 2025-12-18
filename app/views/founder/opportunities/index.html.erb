@@ -1,0 +1,52 @@
+<%# app/views/founder/opportunities/index.html.erb %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Opportunities</h1>
+    <p class="text-xl text-gray-600">Discover funding opportunities, competitions, and partnerships to grow your startup</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <% @opportunities.each do |opportunity| %>
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
+        <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-6 py-4">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full"><%= opportunity.opportunity_type %></span>
+            <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full <%= opportunity.active ? 'bg-green-500/20 text-green-100' : 'bg-red-500/20 text-red-100' %>">
+              <%= opportunity.active ? 'Active' : 'Closed' %>
+            </span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-3"><%= opportunity.title %></h3>
+          <p class="text-gray-600 mb-6"><%= opportunity.description %></p>
+          <div class="bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg p-4 mb-6">
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-600">Deadline:</span>
+              <span class="font-semibold text-gray-900"><%= opportunity.deadline.strftime('%B %d, %Y') %></span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-600">Status:</span>
+              <span class="px-3 py-1 text-xs rounded-full font-semibold <%= opportunity.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                <%= opportunity.active ? 'Active' : 'Closed' %>
+              </span>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <%= link_to 'View Details', founder_opportunity_path(opportunity), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
+            <%= link_to 'Apply Now', apply_founder_opportunity_path(opportunity), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-all" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @opportunities.empty? %>
+    <div class="text-center py-20">
+      <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">No opportunities available</h3>
+      <p class="text-gray-600">We're constantly adding new opportunities. Check back soon!</p>
+    </div>
+  <% end %>
+</div>

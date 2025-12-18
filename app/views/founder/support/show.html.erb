@@ -1,0 +1,112 @@
+<%# app/views/founder/support/show.html.erb %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Support Center</h1>
+    <p class="text-xl text-gray-600">Get help and support for your startup journey</p>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+    <!-- Contact Support -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Contact Support</h2>
+      </div>
+      <div class="p-8">
+        <div class="space-y-6">
+          <div class="flex items-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Phone Support</h3>
+              <p class="text-gray-600">1-800-STARTUP (Mon-Fri, 9AM-6PM EST)</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4 p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+            <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Email Support</h3>
+              <p class="text-gray-600">support@nailab.com</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Live Chat</h3>
+              <p class="text-gray-600">Available 24/7 for premium members</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FAQ -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Frequently Asked Questions</h2>
+      </div>
+      <div class="p-8">
+        <div class="space-y-6">
+          <div class="p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+            <h3 class="font-bold text-gray-900 mb-2">How do I update my startup profile?</h3>
+            <p class="text-gray-600">Go to Startup Profile in your dashboard and click "Edit Profile".</p>
+          </div>
+          <div class="p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+            <h3 class="font-bold text-gray-900 mb-2">How do I schedule a mentorship session?</h3>
+            <p class="text-gray-600">Browse available mentors and send a mentorship request from the Mentorship section.</p>
+          </div>
+          <div class="p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+            <h3 class="font-bold text-gray-900 mb-2">How do I access premium resources?</h3>
+            <p class="text-gray-600">Upgrade to a Pro or Enterprise plan to unlock premium content.</p>
+          </div>
+          <div class="p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+            <h3 class="font-bold text-gray-900 mb-2">How do I connect with other founders?</h3>
+            <p class="text-gray-600">Visit the Community section to find and connect with peers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Submit a Ticket -->
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <h3 class="text-2xl font-bold text-white">Submit a Support Ticket</h3>
+    </div>
+    <div class="p-8">
+      <form class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-900 mb-2">Subject</label>
+            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-900 mb-2">Category</label>
+            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              <option>Technical Issue</option>
+              <option>Account Problem</option>
+              <option>Billing Question</option>
+              <option>Feature Request</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 mb-2">Description</label>
+          <textarea rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Please describe your issue in detail..."></textarea>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="inline-flex items-center px-8 py-4 bg-teal-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-teal-700 transition-all">Submit Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

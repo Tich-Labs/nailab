@@ -1,0 +1,29 @@
+<%# app/views/mentor_onboarding/steps/_mentorship_style.html.erb %>
+<div class="p-8">
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Mentorship Style & Motivation</h2>
+    <p class="text-gray-600">Tell us about your approach and why you want to mentor</p>
+  </div>
+  <%= form_with model: @profile, url: mentor_onboarding_path(step: 'mentorship_style'), method: :put, id: 'mentor-onboarding-form', class: 'space-y-6' do |f| %>
+    <div>
+      <%= f.label :mentorship_approach, 'Explain your approach to mentorship', class: 'block text-sm font-medium text-gray-700 mb-2' %>
+      <%= f.text_area :mentorship_approach, required: true, rows: 6,
+                      class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent',
+                      placeholder: 'Philosophy + how you guide mentees (150–800 characters)' %>
+      <p class="mt-1 text-sm text-gray-500">150–800 characters recommended</p>
+      <% if @profile.errors[:mentorship_approach].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:mentorship_approach].first %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :motivation, 'Why do you want to be a mentor with Nailab?', class: 'block text-sm font-medium text-gray-700 mb-2' %>
+      <%= f.text_area :motivation, required: true, rows: 4,
+                      class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent',
+                      placeholder: 'What motivates you to mentor startups?' %>
+      <p class="mt-1 text-sm text-gray-500">150–500 characters recommended</p>
+      <% if @profile.errors[:motivation].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:motivation].first %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,9 +1,11 @@
 <footer class="bg-slate-900 text-white pt-12 pb-8">
   <div class="max-w-7xl mx-auto px-4 grid gap-10 md:grid-cols-3">
     <div class="space-y-3">
-      <p class="text-2xl font-semibold">Nailab</p>
+      <%= link_to root_path, class: "flex items-center" do %>
+        <%= image_tag "logo-purple.original.png", alt: "Nailab", class: "h-10 w-auto" %>
+      <% end %>
       <p class="text-gray-200 leading-relaxed">
-        Connecting founders with mentors, programs, and capital across Africa’s most promising industries.
+        Connecting founders with mentors, programs, and capital across Africa's most promising industries.
       </p>
     </div>
     <div class="space-y-3">

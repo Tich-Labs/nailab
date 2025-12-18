@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'founder_onboarding', to: 'founder_onboarding#show', as: :founder_onboarding
+  put 'founder_onboarding', to: 'founder_onboarding#update'
+  get 'mentor_onboarding', to: 'mentor_onboarding#show', as: :mentor_onboarding
+  put 'mentor_onboarding', to: 'mentor_onboarding#update'
   missing_font = lambda do |_env|
     [204, { 'Content-Type' => 'font/woff2', 'Cache-Control' => 'public, max-age=86400' }, []]
   end
@@ -9,7 +13,7 @@ Rails.application.routes.draw do
   get '/favicon.ico', to: missing_favicon
   get '/assets/fonts/gotham/*font', to: missing_font
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
   namespace :api do
     namespace :v1 do
       devise_scope :user do
@@ -52,8 +56,77 @@ Rails.application.routes.draw do
   get 'mentors', to: 'pages#mentor_directory'
   get 'pricing', to: 'pages#pricing'
   get 'contact', to: 'pages#contact'
+
+  get 'dashboard', to: redirect('/founder'), constraints: lambda { |req| req.session[:user_id].present? }
+  get 'profile', to: redirect('/founder/account'), constraints: lambda { |req| req.session[:user_id].present? }
   get 'login', to: 'pages#login'
   get 'signup', to: 'pages#signup'
+
+  namespace :founder do
+    root to: "dashboard#show"
+
+    resource  :startup_profile, only: %i[show edit update]
+    resource  :progress, only: %i[show]
+    resources :milestones
+    resources :monthly_metrics, only: %i[new create edit update index]
+
+    get "mentorship", to: "mentorship#index"
+    resources :mentors, only: %i[index show]
+    resources :mentorship_requests, only: %i[index show create]
+    resources :sessions, only: %i[index show new create]
+
+    resources :conversations, path: "messages", only: %i[index show] do
+      resources :messages, only: %i[create]
+    end
+
+    resources :resources, only: %i[index show] do
+      member do
+        post :bookmark
+        post :rate
+        get  :download
+      end
+    end
+
+    resources :opportunities, only: %i[index show] do
+      member { get :apply }
+      resources :submissions, controller: "opportunity_submissions", only: %i[create]
+    end
+
+    get "community", to: "community#index"
+    resources :connections, only: %i[create]
+    resources :peer_messages, only: %i[create]
+
+    resource :account, controller: "account", only: %i[show edit update]
+    resource :subscription, only: %i[show new create]
+
+    get "support", to: "support#show"
+  end
+
+  namespace :mentor do
+    root to: "dashboard#show"
+
+    resources :conversations, path: "messages", only: %i[index show] do
+      resources :messages, only: %i[create]
+    end
+
+    get "schedule", to: "schedule#show"
+    resources :sessions, only: %i[index show] do
+      member do
+        get :join
+        get :add_to_calendar
+      end
+    end
+
+    resources :startups, only: %i[index show] do
+      get :progress, to: "startup_progress#show"
+    end
+
+    resource :profile, controller: "profiles", only: %i[show edit update]
+    resource :settings, only: %i[show update]
+    get "support", to: "support#show"
+  end
+
+  delete "/logout", to: "sessions#destroy"
 
   # Defines the root path route ("/")
   # root "posts#index"

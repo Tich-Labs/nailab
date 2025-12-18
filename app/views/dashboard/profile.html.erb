@@ -1,0 +1,5 @@
+<%# app/views/dashboard/profile.html.erb %>
+<div class="max-w-4xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-8">
+  <h1 class="text-3xl font-bold mb-6">My Profile</h1>
+  <%= render partial: 'founder_onboarding/summary', locals: { user_profile: @user_profile, startup_profile: @startup_profile } %>
+</div>

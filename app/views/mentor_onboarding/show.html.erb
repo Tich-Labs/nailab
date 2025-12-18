@@ -1,0 +1,46 @@
+<%# app/views/mentor_onboarding/show.html.erb %>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Become a Nailab Mentor</h1>
+      <p class="text-gray-600">Join our community of experienced mentors helping startups succeed</p>
+    </div>
+    <!-- Progress Bar -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-sm font-medium text-gray-700">Step <%= @step_index = MentorOnboardingController::STEPS.index(@step) + 1 %> of <%= MentorOnboardingController::STEPS.length %></span>
+        <span class="text-sm text-gray-500"><%= @progress.round %>% complete</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-teal-600 h-2 rounded-full transition-all duration-300" style="width: <%= @progress %>%"></div>
+      </div>
+    </div>
+    <!-- Step Content -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <%= render "mentor_onboarding/steps/#{@step}" %>
+    </div>
+    <!-- Navigation -->
+    <div class="flex justify-between mt-8">
+      <% if @step_index > 1 %>
+        <%= link_to mentor_onboarding_path(step: MentorOnboardingController::STEPS[@step_index - 2]),
+                    class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" do %>
+          <i class="fas fa-arrow-left mr-2"></i> Previous
+        <% end %>
+      <% else %>
+        <div></div>
+      <% end %>
+      <% if @step == 'review' %>
+        <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
+                       class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
+          <i class="fas fa-check mr-2"></i> Complete Onboarding
+        <% end %>
+      <% else %>
+        <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
+                       class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
+          Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

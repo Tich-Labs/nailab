@@ -1,0 +1,51 @@
+<%# app/views/founder/sessions/index.html.erb %>
+<div class="max-w-6xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">My Sessions</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @sessions.each do |session| %>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center space-x-4 mb-4">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+            <span class="text-purple-600 font-semibold"><%= session.mentor.name.first %></span>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold"><%= session.mentor.name %></h3>
+            <p class="text-sm text-gray-600"><%= session.mentor.expertise %></p>
+          </div>
+        </div>
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Date:</span>
+            <span class="text-gray-900"><%= session.scheduled_at.strftime('%B %d, %Y') %></span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Time:</span>
+            <span class="text-gray-900"><%= session.scheduled_at.strftime('%I:%M %p') %></span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Duration:</span>
+            <span class="text-gray-900"><%= session.duration %> minutes</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Status:</span>
+            <span class="px-2 py-1 text-xs rounded-full <%= session.status == 'scheduled' ? 'bg-blue-100 text-blue-800' : session.status == 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+              <%= session.status.titleize %>
+            </span>
+          </div>
+        </div>
+        <div class="flex space-x-2">
+          <%= link_to 'View Details', founder_session_path(session), class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 text-sm" %>
+          <% if session.status == 'scheduled' && session.scheduled_at > Time.current %>
+            <%= link_to 'Join Session', '#', class: "bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @sessions.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 mb-4">No sessions scheduled yet.</p>
+      <%= link_to 'Request a Session', founder_mentorship_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
+    </div>
+  <% end %>
+</div>

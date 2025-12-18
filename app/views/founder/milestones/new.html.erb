@@ -1,0 +1,54 @@
+<%# app/views/founder/milestones/new.html.erb %>
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Add New Milestone</h1>
+  <div class="bg-white shadow rounded-lg p-6">
+    <form action="<%= founder_milestones_path %>" method="post" class="space-y-6">
+      <div>
+        <label for="milestone_title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" name="milestone[title]" id="milestone_title" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+      </div>
+      <div>
+        <label for="milestone_description" class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea name="milestone[description]" id="milestone_description" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"></textarea>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="milestone_due_date" class="block text-sm font-medium text-gray-700">Due date</label>
+          <input type="date" name="milestone[due_date]" id="milestone_due_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="milestone_category" class="block text-sm font-medium text-gray-700">Category</label>
+          <select name="milestone[category]" id="milestone_category" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+            <option value="Product Development">Product Development</option>
+            <option value="Funding">Funding</option>
+            <option value="Team Building">Team Building</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Operations">Operations</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="milestone_priority" class="block text-sm font-medium text-gray-700">Priority</label>
+          <select name="milestone[priority]" id="milestone_priority" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+        <div class="flex items-center">
+          <input type="checkbox" name="milestone[completed]" id="milestone_completed" value="1" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+          <label for="milestone_completed" class="ml-2 block text-sm text-gray-900">Completed</label>
+        </div>
+      </div>
+      <div>
+        <label for="milestone_notes" class="block text-sm font-medium text-gray-700">Notes</label>
+        <textarea name="milestone[notes]" id="milestone_notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"></textarea>
+      </div>
+      <div class="flex justify-end space-x-4">
+        <a href="<%= founder_milestones_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Create Milestone</button>
+      </div>
+    </form>
+  </div>
+</div>
