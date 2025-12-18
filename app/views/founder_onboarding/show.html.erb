@@ -76,6 +76,13 @@
             <%= sp.label :value_proposition, 'Unique Value Proposition', class: 'block text-sm font-medium mb-1' %>
             <%= sp.text_field :value_proposition, required: true, aria: { required: true }, class: 'input input-bordered w-full' %>
           </div>
+          <div class="flex items-start gap-3">
+            <%= sp.check_box :profile_visibility, class: 'checkbox checkbox-primary mt-1' %>
+            <div>
+              <p class="text-sm font-medium text-gray-900">Share this profile with the Nailab community</p>
+              <p class="text-sm text-gray-500">Enabling this lets mentors and partners see the public details you have provided.</p>
+            </div>
+          </div>
         </div>
       <% end %>
     <% elsif @step == 'professional' %>

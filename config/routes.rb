@@ -21,15 +21,15 @@ Rails.application.routes.draw do
         delete 'sign_out', to: 'sessions#destroy'
         post 'sign_up', to: 'registrations#create'
       end
-      resource :me, controller: 'profiles', only: [:show]
-      resources :hero_slides, only: [:index]
-      resources :partners, only: [:index]
-      resources :testimonials, only: [:index]
-      resources :programs, only: [:index, :show], param: :slug
-      resources :resources, only: [:index]
-      resources :startup_profiles, only: [:index]
-      resources :mentor_profiles, only: [:index]
-      resources :mentorship_requests, only: [:index, :create] do
+      resource(:me, controller: 'profiles', only: %i[show])
+      resources(:hero_slides, only: %i[index])
+      resources(:partners, only: %i[index])
+      resources(:testimonials, only: %i[index])
+      resources(:programs, param: :slug, only: %i[index show])
+      resources(:resources, only: %i[index])
+      resources(:startup_profiles, only: %i[index])
+      resources(:mentor_profiles, only: %i[index])
+      resources(:mentorship_requests, only: %i[index create]) do
         patch :respond, on: :member
       end
       get 'matches', to: 'matches#index'
@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   get 'resources/category/:category', to: 'pages#resources', as: :resources_category, constraints: { category: /blogs|knowledge-hub|opportunities|events/ }
   get 'resources/:slug', to: 'pages#resource_detail', as: :resource_detail
   get 'startups', to: 'pages#startup_directory'
+  get 'startups/:id/profile', to: 'pages#startup_profile', as: :public_startup_profile
   get 'mentors', to: 'pages#mentor_directory'
   get 'pricing', to: 'pages#pricing'
   get 'contact', to: 'pages#contact'
@@ -65,21 +66,21 @@ Rails.application.routes.draw do
   namespace :founder do
     root to: "dashboard#show"
 
-    resource  :startup_profile, only: %i[show edit update]
-    resource  :progress, only: %i[show]
-    resources :milestones
-    resources :monthly_metrics, only: %i[new create edit update index]
+    resource(:startup_profile, only: %i[show edit update])
+    resource(:progress, only: %i[show])
+    resources(:milestones)
+    resources(:monthly_metrics, only: %i[new create edit update index])
 
     get "mentorship", to: "mentorship#index"
-    resources :mentors, only: %i[index show]
-    resources :mentorship_requests, only: %i[index show create]
-    resources :sessions, only: %i[index show new create]
+    resources(:mentors, only: %i[index show])
+    resources(:mentorship_requests, only: %i[index show create])
+    resources(:sessions, only: %i[index show new create])
 
-    resources :conversations, path: "messages", only: %i[index show] do
-      resources :messages, only: %i[create]
+    resources(:conversations, path: "messages", only: %i[index show]) do
+      resources(:messages, only: %i[create])
     end
 
-    resources :resources, only: %i[index show] do
+    resources(:resources, only: %i[index show]) do
       member do
         post :bookmark
         post :rate
@@ -87,17 +88,17 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :opportunities, only: %i[index show] do
+    resources(:opportunities, only: %i[index show]) do
       member { get :apply }
-      resources :submissions, controller: "opportunity_submissions", only: %i[create]
+      resources(:submissions, controller: "opportunity_submissions", only: %i[create])
     end
 
     get "community", to: "community#index"
-    resources :connections, only: %i[create]
-    resources :peer_messages, only: %i[create]
+    resources(:connections, only: %i[create])
+    resources(:peer_messages, only: %i[create])
 
-    resource :account, controller: "account", only: %i[show edit update]
-    resource :subscription, only: %i[show new create]
+    resource(:account, controller: "account", only: %i[show edit update])
+    resource(:subscription, only: %i[show new create])
 
     get "support", to: "support#show"
   end
@@ -105,24 +106,32 @@ Rails.application.routes.draw do
   namespace :mentor, module: "mentor_portal" do
     root to: "dashboard#show"
 
-    resources :conversations, path: "messages", only: %i[index show] do
-      resources :messages, only: %i[create]
+    resources(:mentorship_requests, only: %i[index show]) do
+      member do
+        patch :accept
+        patch :decline
+        patch :reschedule
+      end
+    end
+
+    resources(:conversations, path: "messages", only: %i[index show]) do
+      resources(:messages, only: %i[create])
     end
 
     get "schedule", to: "schedule#show"
-    resources :sessions, only: %i[index show] do
+    resources(:sessions, only: %i[index show]) do
       member do
         get :join
         get :add_to_calendar
       end
     end
 
-    resources :startups, only: %i[index show] do
+    resources(:startups, only: %i[index show]) do
       get :progress, to: "startup_progress#show"
     end
 
-    resource :profile, controller: "profiles", only: %i[show edit update]
-    resource :settings, only: %i[show update]
+    resource(:profile, controller: "profiles", only: %i[show edit update])
+    resource(:settings, only: %i[show update])
     get "support", to: "support#show"
   end
 

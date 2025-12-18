@@ -2,7 +2,7 @@
 
 one:
   title: MyString
-  slug: MyString
+  slug: my-string-one
   description: MyText
   cover_image_url: MyString
   category: MyString
@@ -12,7 +12,7 @@ one:
 
 two:
   title: MyString
-  slug: MyString
+  slug: my-string-two
   description: MyText
   cover_image_url: MyString
   category: MyString

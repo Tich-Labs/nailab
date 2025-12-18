@@ -22,6 +22,27 @@ class Founder::StartupProfilesController < Founder::BaseController
   end
 
   def startup_profile_params
-    params.require(:startup_profile).permit(:name, :logo_url, :description, :stage, :target_market, :value_proposition, :sector, :funding_stage, :funding_raised, :visibility)
+    cast_boolean_param(
+      params.require(:startup_profile).permit(
+        :startup_name,
+        :logo_url,
+        :description,
+        :stage,
+        :target_market,
+        :value_proposition,
+        :sector,
+        :funding_stage,
+        :funding_raised,
+        :website_url,
+        :profile_visibility
+      ),
+      :profile_visibility
+    )
+  end
+
+  def cast_boolean_param(attributes, key)
+    return attributes unless attributes.key?(key)
+    attributes[key] = ActiveModel::Type::Boolean.new.cast(attributes[key])
+    attributes
   end
 end

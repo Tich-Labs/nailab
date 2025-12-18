@@ -1,0 +1,40 @@
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-gray-500">Sent <%= request.created_at.strftime('%b %d, %Y') %></p>
+      <h3 class="text-xl font-semibold text-gray-900"><%= request.founder.user_profile&.full_name || request.founder.email %></h3>
+      <p class="text-sm text-gray-500"><%= request.founder.user_profile&.job_title || request.founder.user_profile&.role || 'Founder' %></p>
+    </div>
+    <span class="inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest rounded-full bg-gray-100 text-gray-700">
+      <%= request.status.humanize %>
+    </span>
+  </div>
+  <div>
+    <p class="text-sm text-gray-600"><%= request.message.presence || 'No message provided.' %></p>
+  </div>
+  <% if request.pending? || request.reschedule_requested? %>
+    <div class="grid gap-4 lg:grid-cols-3">
+      <div class="space-y-2">
+        <%= form_with url: accept_mentor_mentorship_request_path(request), method: :patch, local: true do |form| %>
+          <%= form.submit 'Accept', class: 'w-full rounded-lg px-4 py-2 bg-teal-600 text-white font-semibold hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-400' %>
+        <% end %>
+      </div>
+      <div class="space-y-2">
+        <%= form_with url: decline_mentor_mentorship_request_path(request), method: :patch, local: true do |form| %>
+          <%= form.text_area :decline_reason, placeholder: 'Optional reason (e.g., no capacity)', class: 'w-full rounded-lg border-gray-200 focus:ring-teal-300 focus:border-teal-300 h-24', rows: 3 %>
+          <%= form.submit 'Decline', class: 'w-full rounded-lg px-4 py-2 bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-200', data: { confirm: 'Declining will notify the founder. Continue?' } %>
+        <% end %>
+      </div>
+      <div class="space-y-2">
+        <%= form_with url: reschedule_mentor_mentorship_request_path(request), method: :patch, local: true do |form| %>
+          <%= form.label :proposed_time, 'Suggest new date & time', class: 'text-xs font-semibold text-gray-500 uppercase tracking-widest' %>
+          <%= form.datetime_local_field :proposed_time, class: 'w-full rounded-lg border-gray-200 focus:ring-teal-300 focus:border-teal-300' %>
+          <%= form.text_area :reschedule_reason, placeholder: 'Optional note (e.g., prefer afternoons)', class: 'w-full rounded-lg border-gray-200 focus:ring-teal-300 focus:border-teal-300 h-24' %>
+          <%= form.submit 'Request reschedule', class: 'w-full rounded-lg px-4 py-2 bg-white border border-gray-200 text-gray-700 font-semibold hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200' %>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-sm text-gray-500">Response sent on <%= request.responded_at&.strftime('%b %d, %Y %I:%M %p') %>.</div>
+  <% end %>
+</div>

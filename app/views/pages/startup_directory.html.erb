@@ -111,8 +111,12 @@
                 <% end %>
               </div>
               <div class="mt-auto">
-                <%= link_to (startup.website_url.presence || '#'), target: '_blank', rel: 'noreferrer', class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' do %>
-                  View profile
+                <% if startup.public_viewable? %>
+                  <%= link_to public_startup_profile_path(startup), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' do %>
+                    View profile
+                  <% end %>
+                <% else %>
+                  <span class="inline-flex items-center justify-center w-full px-4 py-3 bg-gray-200 text-gray-600 font-semibold rounded-xl">Profile private</span>
                 <% end %>
               </div>
             </article>

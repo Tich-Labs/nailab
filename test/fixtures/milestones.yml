@@ -5,11 +5,11 @@ one:
   description: MyText
   due_date: 2025-12-18
   completed: false
-  startup: one
+  user: one
 
 two:
   title: MyString
   description: MyText
   due_date: 2025-12-18
   completed: false
-  startup: two
+  user: two

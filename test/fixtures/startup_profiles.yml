@@ -11,6 +11,10 @@ one:
   website_url: MyString
   founded_year: 1
   active: false
+  target_market: MyString
+  value_proposition: MyText
+  funding_stage: Seed
+  profile_visibility: false
 
 two:
   user: two
@@ -23,3 +27,7 @@ two:
   website_url: MyString
   founded_year: 1
   active: false
+  target_market: MyString
+  value_proposition: MyText
+  funding_stage: Seed
+  profile_visibility: false

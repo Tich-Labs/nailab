@@ -30,27 +30,32 @@ module Api
       def respond
         request = MentorshipRequest.find(params[:id])
         required_status = params[:status]
-        unless %w[accepted declined].include?(required_status)
-          return render json: { error: 'status must be accepted or declined' }, status: :bad_request
+        unless %w[accepted declined reschedule_requested].include?(required_status)
+          return render json: { error: 'status must be accepted, declined, or reschedule_requested' }, status: :bad_request
         end
 
-        request.update!(status: required_status, responded_at: Time.current)
+        case required_status
+        when 'accepted'
+          request.accept!
+          MentorshipConnection.find_or_create_by!(founder_id: request.founder_id, mentor_id: request.mentor_id, mentorship_request_id: request.id) do |connection|
+            connection.status = 'active'
+          end
+        when 'declined'
+          request.decline!(reason: params[:decline_reason])
+        when 'reschedule_requested'
+          proposed_time = parse_datetime(params[:proposed_time])
+          if proposed_time.nil?
+            return render json: { error: 'proposed_time is required for reschedule' }, status: :bad_request
+          end
+          request.propose_reschedule!(proposed_time: proposed_time, reason: params[:reschedule_reason])
+        end
+
         notify_user(
           user_id: request.founder_id,
           title: "Mentorship Request #{required_status.capitalize}",
           message: "Your request has been #{required_status}",
           link: '/dashboard'
         )
-
-        if required_status == 'accepted'
-          MentorshipConnection.find_or_create_by!(
-            founder_id: request.founder_id,
-            mentor_id: request.mentor_id,
-            mentorship_request_id: request.id
-          ) do |connection|
-            connection.status = 'active'
-          end
-        end
 
         render json: serialize_request(request)
       end
@@ -67,7 +72,14 @@ module Api
       end
 
       def mentorship_request_params
-        params.permit(:founder_id, :mentor_id, :message)
+        params.permit(:founder_id, :mentor_id, :message, :reschedule_reason, :proposed_time)
+      end
+
+      def parse_datetime(value)
+        return if value.blank?
+        Time.zone.parse(value)
+      rescue ArgumentError
+        nil
       end
 
       def notify_user(user_id:, title:, message:, link: nil)

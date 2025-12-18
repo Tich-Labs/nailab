@@ -66,7 +66,10 @@ class FounderOnboardingController < ApplicationController
   end
 
   def startup_params
-    params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo_url, :description, :stage, :target_market, :value_proposition)
+    cast_boolean_param(
+      params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo_url, :description, :stage, :target_market, :value_proposition, :profile_visibility),
+      :profile_visibility
+    )
   end
 
   def professional_params
@@ -75,5 +78,11 @@ class FounderOnboardingController < ApplicationController
 
   def mentorship_params
     params.require(:founder_onboarding).require(:startup_profile).permit(:mentorship_areas, :challenge_details, :preferred_mentorship_mode)
+  end
+
+  def cast_boolean_param(attributes, key)
+    return attributes unless attributes.key?(key)
+    attributes[key] = ActiveModel::Type::Boolean.new.cast(attributes[key])
+    attributes
   end
 end

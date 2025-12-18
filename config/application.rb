@@ -11,10 +11,9 @@ module NailabBackend
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Flash
-    config.middleware.use Rack::MethodOverride
-    config.middleware.use ActionDispatch::Session::CookieStore, key: "_nailab_backend_session"
+    # Rails includes cookies/sessions/flash middleware when `api_only` is false.
+    # Keeping the default stack avoids duplicated middleware which can cause
+    # CSRF/session inconsistencies.
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

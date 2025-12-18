@@ -1,8 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
+         :confirmable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
   has_one :user_profile, dependent: :destroy
   has_one :startup_profile, dependent: :destroy
@@ -10,6 +11,7 @@ class User < ApplicationRecord
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
   has_many :mentorship_requests, foreign_key: :founder_id, dependent: :destroy
+  has_many :received_mentorship_requests, class_name: 'MentorshipRequest', foreign_key: :mentor_id, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :conversations, dependent: :destroy
   has_many :bookmarks, dependent: :destroy

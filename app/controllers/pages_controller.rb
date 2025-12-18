@@ -35,6 +35,7 @@ class PagesController < ApplicationController
   }.freeze
 
   helper_method :startup_stage_label, :funding_stage_label, :home_content_json
+  include PricingPageConcern
 
   DEFAULT_SUPPORT_ITEMS = [
     {
@@ -195,6 +196,12 @@ class PagesController < ApplicationController
     @filtered_startups = scoped
   end
 
+  def startup_profile
+    @startup_profile = StartupProfile.find(params[:id])
+    @owner_viewing = owner_signed_in?
+    return redirect_to startups_path, alert: 'This profile is private.' unless @startup_profile.public_viewable? || @owner_viewing
+  end
+
   def mentor_directory
     base_scope = UserProfile.where(role: 'mentor', profile_visibility: true)
     @filters = {
@@ -225,7 +232,7 @@ class PagesController < ApplicationController
   end
 
   def pricing
-    @static_page = StaticPage.find_by(slug: 'pricing')
+    load_pricing_content
   end
 
   def contact
@@ -237,6 +244,10 @@ class PagesController < ApplicationController
   end
 
   private
+
+  def owner_signed_in?
+    current_user.present? && current_user.id == @startup_profile.user_id
+  end
 
   def startup_stage_label(stage)
     STARTUP_STAGE_OPTIONS.find { |option| option[:value] == stage }&.dig(:label) || stage.to_s.titleize

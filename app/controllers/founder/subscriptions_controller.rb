@@ -1,4 +1,6 @@
 class Founder::SubscriptionsController < Founder::BaseController
+  include PricingPageConcern
+  before_action :load_pricing_content, only: %i[show]
 
   def show
     @subscription = current_user.subscription

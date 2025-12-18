@@ -28,6 +28,9 @@
           <li>
             <%= link_to 'My Schedule', mentor_schedule_path, class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(mentor_schedule_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
+          <li>
+            <%= link_to 'Requests', mentor_mentorship_requests_path, class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?('/mentor/mentorship_requests') ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+          </li>
         </ul>
       </div>
       <!-- STARTUPS -->
