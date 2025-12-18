@@ -16,7 +16,7 @@
 
 ## Week 1 — Mentor Onboarding & Profile
 
-| Feature | Status | Evidence | ❌ Missing pieces | Notes / Risks |
+| Feature | Status | Evidence | Missing pieces | Notes / Risks |
 | --- | --- | --- | --- | --- |
 | LinkedIn social sign-in (auto-fill profile data) | ❌ Missing | `Gemfile` lacks any OmniAuth gem, `config/initializers/devise.rb` does not configure providers, and no callback routes exist in `config/routes.rb`. | OmniAuth provider setup, callback controller, identity table/associations, front-end button. | Without it the "LinkedIn" touchpoint described in the sprint cannot be delivered. |
 | Mentor profile fields (expertise, availability, etc.) | ✅ Implemented | `app/models/user_profile.rb` defines the fields and validations; `app/controllers/mentor_onboarding_controller.rb` / `app/views/mentor_onboarding/steps/*` render the multi-step forms. | — | Fields are wired end-to-end via the mentor onboarding controller. |
