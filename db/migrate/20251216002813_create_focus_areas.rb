@@ -1,5 +1,7 @@
 class CreateFocusAreas < ActiveRecord::Migration[8.1]
   def change
+    return if table_exists?(:focus_areas)
+
     create_table :focus_areas do |t|
       t.string :title, null: false
       t.text :description
