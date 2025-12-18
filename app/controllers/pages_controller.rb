@@ -193,7 +193,7 @@ class PagesController < ApplicationController
   end
 
   def startup_profile
-    @startup_profile = StartupProfile.find(params[:id])
+    @startup_profile = StartupProfile.includes(user: :user_profile).find(params[:id])
     @owner_viewing = owner_signed_in?
     return redirect_to startups_path, alert: 'This profile is private.' unless @startup_profile.public_viewable? || @owner_viewing
   end
