@@ -1,5 +1,5 @@
-module Mentor
-  class SessionsController < Mentor::BaseController
+module MentorPortal
+  class SessionsController < MentorPortal::BaseController
     def index
       @sessions = current_user.sessions.order(date: :desc)
     end

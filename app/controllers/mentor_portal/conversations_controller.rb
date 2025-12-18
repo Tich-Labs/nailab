@@ -1,5 +1,5 @@
-module Mentor
-  class ConversationsController < Mentor::BaseController
+module MentorPortal
+  class ConversationsController < MentorPortal::BaseController
     def index
       @conversations = current_user.conversations
     end

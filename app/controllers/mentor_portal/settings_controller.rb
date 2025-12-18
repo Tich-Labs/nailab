@@ -1,5 +1,5 @@
-module Mentor
-  class SettingsController < Mentor::BaseController
+module MentorPortal
+  class SettingsController < MentorPortal::BaseController
     def show
       # Placeholder for mentor settings
     end

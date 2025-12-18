@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     get "support", to: "support#show"
   end
 
-  namespace :mentor do
+  namespace :mentor, module: "mentor_portal" do
     root to: "dashboard#show"
 
     resources :conversations, path: "messages", only: %i[index show] do

@@ -1,5 +1,5 @@
-module Mentor
-  class ProfilesController < Mentor::BaseController
+module MentorPortal
+  class ProfilesController < MentorPortal::BaseController
     def show
       @mentor = current_mentor
     end
