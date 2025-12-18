@@ -2,9 +2,9 @@
 
 ## Summary Totals
 
-- Implemented: 25
-- Partial: 21
-- Missing: 16
+- Implemented: 29
+- Partial: 20
+- Missing: 14
 
 ---
 
@@ -48,9 +48,9 @@
 | Founder registration & authentication | Implemented | Devise handles registration (pages/signup, user model, `devise_for` routes) and controllers redirect founders to `founder_root_path`. | — | Users can register/login today. |
 | Forgot/reset password + strong password validation | Implemented | Devise’s `:recoverable` plus `config/initializers/devise.rb` `password_length` rule. | — | Works via Devise defaults. |
 | Startup profile wizard: input validation | Implemented | `StartupProfile` now validates required fields plus URL formats, the onboarding wizard exposes a visibility toggle, and founders can update the flag in their profile settings. | — | All startup data is validated and founders can choose whether the profile is published via the new `profile_visibility` flag. |
-| Startup profile wizard: privacy & visibility controls | Missing | Neither the migration nor `startup_profile_params` exposes a visibility flag, despite UI needing privacy controls. | Add `profile_visibility` (boolean/enum), controller permit, and UI toggles. | Founders cannot control discoverability yet. |
+| Startup profile wizard: privacy & visibility controls | Implemented | Added `profile_visibility` boolean column to `startup_profiles` table via migration, `startup_profile_params` permits the field, and UI toggle exists in onboarding wizard. Founders can now control profile discoverability. | — | Founders can choose whether their startup profile is public via the visibility toggle. |
 | Startup profile wizard: save & exit | Missing | Onboarding flow immediately redirects to the next step; there is no persisted wizard state or "Continue later" link. | Persisted step indicator and exit CTA. | Founders must finish the flow in one session. |
-| Email confirmation | Missing | As above (no `:confirmable`). | — | Founders can sign up without confirming email. |
+| Email confirmation | Implemented | `User` model includes `:confirmable` from Devise, and `db/migrate/20251218020000_add_confirmable_to_users.rb` adds confirmation fields. Founders must confirm email before accessing the app. | — | Email confirmation is now required for all user registrations including founders. |
 | Step-by-step startup profile wizard (progress indicator) | Implemented | `FounderOnboardingController::STEPS`, view indicator, and submit flow for each step. | — | Progress tracker works. |
 | Founder personal info fields | Implemented | `founder_onboarding/show` renders `full_name`, `phone`, `country`, `city`; `user_profile` stores them. | — | Fields wired to the model. |
 | Startup details fields | Implemented | Startup step collects `startup_name`, `description`, `stage`, `target_market`, `value_proposition`. | — | Data saved to `StartupProfile`. |
@@ -68,14 +68,14 @@
 | Milestones CRUD | Implemented | `Founder::MilestonesController`, views under `app/views/founder/milestones/*`, and index emphasize creation/editing. | — | CRUD flows complete. |
 | Monthly tracker form (save + display) | Partial | Controller/actions exist, but views reference `users`, `growth_rate`, `churn_rate`, `notes` whereas the table only stores `customers`, `runway`, `burn_rate`. | Either update schema with the referenced fields or align the views/params to the schema. | UI will break once `number_with_delimiter` runs on `nil` or undefined columns. |
 | Progress charts/graphs | Partial | Dashboard progress partial references `milestone.category` (not in schema) and `@milestones`, and there is no charting library. | Add `category` column or adjust view to existing fields; integrate chart component or data. | Displays static content and may crash on missing column. |
-| Logout flow | Implemented | `shared/_founder_sidebar.html.erb` includes `button_to 'Log Out', destroy_user_session_path`. | — | Provided by Devise. |
+| Logout flow | Implemented | `shared/_founder_sidebar.html.erb` includes logout button, and `ApplicationController#after_sign_out_path_for` ensures logout redirects to root path (`/`). | — | Logout properly redirects users to the home page. |
 | Top nav (avatar + bell) | Missing | `layouts/founder_dashboard.html.erb` has no top bar, avatar, or notification bell despite the sprint request. | Add header partial with avatar, bell, and links. | Lacks the requested top navigation. |
 | Welcome banner | Implemented | `founder/dashboard/_welcome_banner.html.erb` renders message with founder name or email. | — | Banner present on dashboard. |
 | Startup profile summary edit | Partial | Summary shows data and links to `edit_founder_startup_profile_path`, but `startup_profile_params` in `Founder::StartupProfilesController` incorrectly permits `:name` instead of `:startup_name`, so updates silently fail. | Rename permitted param to `:startup_name` or update column; add tests. | Profile edits do not persist today. |
 | Help/support links | Partial | Sidebar includes `founder_support_path` and `founder/support` view exists but only shows placeholder text. | Provide real support content and contact methods. | Support page is skeletal. |
 | Recommended mentors display | Partial | Dashboard renders `@recommended_mentors = Mentor.limit(3)` and `app/views/founder/dashboard/_recommended_mentors.html.erb` but uses `mentor.name`, `mentor.expertise`, `mentor.company`, none of which are backed by the `Mentor` model schema. | Add those fields to `mentors` table or surface `user_profile` data. | Leads to `NoMethodError` in production once mentors lack the referenced columns. |
 | View mentor profiles | Partial | `Founder::MentorsController` plus views exist, yet templates rely on `mentor.specialties`, `mentor.industries`, `mentor.availability`, fields missing from `mentors` table. | Align view with actual schema or extend schema. | Unrenderable until schema is adjusted. |
-| Request mentorship + booking flow + sessions display | Partial | `founder/mentorship` view lists mentors and has `Request Session` links, but `Founder::MentorshipRequestsController` exposes only `index/show/create` and no `new`; sessions view placeholders show static text. | Add `new` action/view, real mentor request form, and session listing with real data. | Users cannot create requests via the intended link and session data is missing. |
+| Request mentorship + booking flow + sessions display | Implemented | Added modal-based mentorship request flow with authentication checks. `Founder::MentorshipController#index` handles mentor pre-selection, `app/views/founder/mentorship/index.html.erb` renders modal form, and `Founder::MentorshipRequestsController` processes requests. Modal appears when clicking "Request Session" links. | — | Founders can now request mentorship sessions via modal forms with proper authentication flow. |
 
 ---
 
@@ -117,3 +117,12 @@
 | Content integration (text/images/videos) | Implemented | `Program` model stores `description`, `content`, `cover_image_url`, and the detail page renders text/images; no video field yet (not requested). | — | Content flow is active. |
 | Program categorization (backend categories) | Implemented | `Program` migration includes `category`, and controller filters `PROGRAM_CATEGORIES` list. | — | Backend supports categories. |
 | Filters by category | Implemented | `pages/programs/_category_filter.html.erb` toggles `params[:category]` and the controller filters `@programs`. | — | Filter UI works. |
+
+---
+
+## CI/CD & Deployment Tooling
+
+| Feature | Status | Evidence | Missing pieces | Notes / Risks |
+| --- | --- | --- | --- | --- |
+| Migration audit rake task | Implemented | `lib/tasks/migrations_audit.rake` scans all migration files for duplicate `add_column` and `add_index` operations, returns exit code 1 when duplicates found (perfect for CI/CD failure), and provides detailed output with file names and line numbers. | — | Prevents migration conflicts during deployment by catching duplicates before they cause issues. |
+| Migration existence checks | Implemented | Updated existing migrations to include `unless column_exists?` and `unless index_exists?` checks to prevent duplicate column/index creation errors. | — | Migrations now safely handle re-runs and prevent deployment failures from duplicate operations. |
