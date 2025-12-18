@@ -42,7 +42,7 @@ class PagesController < ApplicationController
       title: 'Create your founder profile',
       description: 'Set up your founder profile to unlock tools that track progress, surface opportunities, and pair you with the right mentors and programs.',
       cta_label: 'Set up profile',
-      cta_link: '/signup'
+      cta_link: '/users/sign_up'
     },
     {
       title: 'Find mentors',

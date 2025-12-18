@@ -15,7 +15,7 @@
     <div class="page-content">
       <%= yield %>
     </div>
-    <% unless request.path == '/login' || request.path == '/signup' || request.path == founder_onboarding_path || request.path.start_with?('/founder') %>
+    <% unless request.path == new_user_session_path || request.path == new_user_registration_path || request.path == founder_onboarding_path || request.path.start_with?('/founder') %>
       <%= render 'shared/footer' %>
     <% end %>
   </body>

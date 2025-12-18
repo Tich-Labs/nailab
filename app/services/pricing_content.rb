@@ -17,7 +17,7 @@ class PricingContent
       ],
       highlight: false,
       cta: 'Get Started',
-      cta_link: '/signup'
+      cta_link: '/users/sign_up'
     },
     {
       name: 'Basic',
@@ -32,7 +32,7 @@ class PricingContent
       ],
       highlight: true,
       cta: 'Start Basic',
-      cta_link: '/signup'
+      cta_link: '/users/sign_up'
     },
     {
       name: 'Premium',
@@ -48,7 +48,7 @@ class PricingContent
       ],
       highlight: false,
       cta: 'Go Premium',
-      cta_link: '/signup'
+      cta_link: '/users/sign_up'
     }
   ].freeze
 

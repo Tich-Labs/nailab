@@ -7,7 +7,7 @@
       <h2 class="text-3xl font-bold text-gray-900">Welcome back</h2>
       <p class="text-sm text-gray-600">
         Don’t have an account?
-        <%= link_to 'Sign up', signup_path, class: 'font-semibold text-teal-600 hover:text-teal-700' %>
+        <%= link_to 'Sign up', new_user_registration_path, class: 'font-semibold text-teal-600 hover:text-teal-700' %>
       </p>
     </div>
     <%= form_with url: user_session_path, scope: :user, local: true, class: 'space-y-6 bg-white p-8 rounded-xl shadow-lg' do |f| %>

@@ -242,7 +242,7 @@ hero_slides_data = [
     subtitle: "Connecting founders with mentors, programs, and capital across Africa's most promising industries.",
     image_url: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1200",
     cta_text: "Join the Network",
-    cta_link: "/signup",
+    cta_link: "/users/sign_up",
     display_order: 1
   },
   {

@@ -16,7 +16,7 @@
           </li>
         <% end %>
       </ul>
-      <a href="<%= tier[:cta_link] || '/signup' %>" class="mt-auto block w-full text-center px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg hover:shadow-xl <%= highlight ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-teal-600 text-white hover:bg-teal-700' %>">
+      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg hover:shadow-xl <%= highlight ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-teal-600 text-white hover:bg-teal-700' %>">
         <%= tier[:cta] || 'Choose Plan' %>
       </a>
     </div>

@@ -60,8 +60,9 @@ Rails.application.routes.draw do
 
   get 'dashboard', to: redirect('/founder'), constraints: lambda { |req| req.session[:user_id].present? }
   get 'profile', to: redirect('/founder/account'), constraints: lambda { |req| req.session[:user_id].present? }
-  get 'login', to: 'pages#login'
-  get 'signup', to: 'pages#signup'
+  # Use Devise pages as the canonical auth UI.
+  get 'login', to: redirect('/users/sign_in')
+  get 'signup', to: redirect('/users/sign_up')
 
   namespace :founder do
     root to: "dashboard#show"
