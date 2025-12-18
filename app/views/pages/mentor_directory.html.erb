@@ -122,8 +122,10 @@
                 </ul>
               <% end %>
               <div class="mt-auto">
-                <%= link_to '#', class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' do %>
-                  Request mentorship
+                <% if current_user %>
+                  <%= link_to 'Request mentorship', new_founder_mentorship_request_path(mentor_id: mentor.user_id), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' %>
+                <% else %>
+                  <%= link_to 'Request mentorship', new_user_session_path, data: { return_to: new_founder_mentorship_request_path(mentor_id: mentor.user_id) }, class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' %>
                 <% end %>
               </div>
             </article>

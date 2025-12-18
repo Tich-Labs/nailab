@@ -74,7 +74,7 @@ Rails.application.routes.draw do
 
     get "mentorship", to: "mentorship#index"
     resources(:mentors, only: %i[index show])
-    resources(:mentorship_requests, only: %i[index show create])
+    resources(:mentorship_requests, only: %i[index show new create])
     resources(:sessions, only: %i[index show new create])
 
     resources(:conversations, path: "messages", only: %i[index show]) do

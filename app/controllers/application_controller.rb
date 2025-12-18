@@ -1,6 +1,7 @@
 
 	class ApplicationController < ActionController::Base
 		before_action :redirect_to_onboarding_if_needed, unless: :devise_controller?
+		before_action :store_return_to, if: :devise_controller?
 		protect_from_forgery with: :exception
 
 		private
@@ -15,14 +16,20 @@
 			end
 		end
 
+		def store_return_to
+			if params[:return_to].present? && (params[:action] == 'new' || params[:action] == 'create')
+				session[:user_return_to] = params[:return_to]
+			end
+		end
+
 		protected
 
 		def after_sign_up_path_for(resource)
-			founder_root_path
+			session.delete(:user_return_to) || stored_location_for(resource) || founder_root_path
 		end
 
 		def after_sign_in_path_for(resource)
-			founder_root_path
+			session.delete(:user_return_to) || stored_location_for(resource) || founder_root_path
 		end
 
 		def after_sign_out_path_for(resource_or_scope)
