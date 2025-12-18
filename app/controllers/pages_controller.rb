@@ -111,10 +111,6 @@ class PagesController < ApplicationController
     load_home_content
   end
 
-  def login; end
-
-  def signup; end
-
   def about
     @static_page = StaticPage.find_by(slug: 'about')
   end
