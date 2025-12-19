@@ -14,7 +14,11 @@ class CreateTestimonials < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :testimonials, :display_order
-    add_index :testimonials, :active
+    unless index_exists?(:testimonials, :display_order)
+      add_index :testimonials, :display_order
+    end
+    unless index_exists?(:testimonials, :active)
+      add_index :testimonials, :active
+    end
   end
 end

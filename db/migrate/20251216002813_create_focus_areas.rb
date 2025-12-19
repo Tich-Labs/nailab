@@ -12,7 +12,11 @@ class CreateFocusAreas < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :focus_areas, :display_order
-    add_index :focus_areas, :active
+    unless index_exists?(:focus_areas, :display_order)
+      add_index :focus_areas, :display_order
+    end
+    unless index_exists?(:focus_areas, :active)
+      add_index :focus_areas, :active
+    end
   end
 end
