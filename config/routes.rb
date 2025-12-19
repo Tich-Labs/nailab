@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   get 'founder_onboarding', to: 'founder_onboarding#show', as: :founder_onboarding
   put 'founder_onboarding', to: 'founder_onboarding#update'
+  patch 'founder_onboarding/save_and_exit', to: 'founder_onboarding#save_and_exit', as: :founder_onboarding_save_and_exit
   get 'mentor_onboarding', to: 'mentor_onboarding#show', as: :mentor_onboarding
   put 'mentor_onboarding', to: 'mentor_onboarding#update'
+  patch 'mentor_onboarding/save_and_exit', to: 'mentor_onboarding#save_and_exit', as: :mentor_onboarding_save_and_exit
   missing_font = lambda do |_env|
     [204, { 'Content-Type' => 'font/woff2', 'Cache-Control' => 'public, max-age=86400' }, []]
   end
@@ -13,7 +15,18 @@ Rails.application.routes.draw do
   get '/favicon.ico', to: missing_favicon
   get '/assets/fonts/gotham/*font', to: missing_font
 
-  devise_for :users, controllers: { registrations: 'registrations' }
+  devise_for :users, controllers: { registrations: 'registrations', omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_scope :user do
+    get 'mentors/sign_up', to: 'registrations#new', as: :new_mentor_registration, defaults: { role: 'mentor' }
+    post 'mentors', to: 'registrations#create', as: :mentor_registration, defaults: { role: 'mentor' }
+    get 'founders/sign_up', to: 'registrations#new', as: :new_founder_registration, defaults: { role: 'founder' }
+    post 'founders', to: 'registrations#create', as: :founder_registration, defaults: { role: 'founder' }
+    post 'sign_in', to: 'sessions#create'
+    delete 'sign_out', to: 'sessions#destroy'
+  end
+  
+  # ActiveStorage routes
+  mount ActiveStorage::Engine => '/rails/active_storage'
   namespace :api do
     namespace :v1 do
       devise_scope :user do
@@ -60,9 +73,12 @@ Rails.application.routes.draw do
 
   get 'dashboard', to: redirect('/founder'), constraints: lambda { |req| req.session[:user_id].present? }
   get 'profile', to: redirect('/founder/account'), constraints: lambda { |req| req.session[:user_id].present? }
+  get 'mentor_dashboard', to: redirect('/mentor'), constraints: lambda { |req| req.session[:user_id].present? }
+  get 'mentor_profile', to: redirect('/mentor/profile'), constraints: lambda { |req| req.session[:user_id].present? }
   # Use Devise pages as the canonical auth UI.
   get 'login', to: redirect('/users/sign_in')
   get 'signup', to: redirect('/users/sign_up')
+  get 'mentors_signup', to: redirect('/mentors/sign_up')
 
   namespace :founder do
     root to: "dashboard#show"
@@ -135,6 +151,9 @@ Rails.application.routes.draw do
     resource(:settings, only: %i[show update])
     get "support", to: "support#show"
   end
+
+  get 'auth/google_oauth2/callback', to: 'google_calendar#callback'
+  get 'auth/google_oauth2', as: 'google_oauth2_auth', to: 'google_calendar#connect'
 
   # Defines the root path route ("/")
   # root "posts#index"

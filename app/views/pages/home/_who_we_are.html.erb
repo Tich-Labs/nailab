@@ -1,5 +1,5 @@
 <section class="py-20 bg-white">
-  <% content = @who_we_are_content %>
+  <% content = @who_we_are_content || {} %>
   <% title = content[:title].presence || 'Who We Are' %>
   <% paragraph_one = content[:paragraph_one].presence || 'Nailab is a startup incubator and accelerator, founded in 2010, dedicated to supporting early-stage and growth-stage startups with the skills, mentorship, networks, and funding they need to turn bold ideas into scalable, tech-enabled businesses solving real challenges in sectors like healthcare, agriculture, fintech, education, and more.' %>
   <% paragraph_two = content[:paragraph_two].presence || 'Through tailored acceleration programs, hands-on guidance, and investor connections, we have helped shape Africa\'s startup ecosystem—driving innovation, creating jobs, and advancing inclusive economic growth across the continent.' %>
