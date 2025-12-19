@@ -5,10 +5,11 @@ class FounderOnboardingController < ApplicationController
   STEPS = %w[personal startup professional mentorship confirm]
 
   def show
-    @step = params[:step] || STEPS.first
+    @user_profile = current_user.user_profile || current_user.build_user_profile
+    @step = params[:step] || @user_profile.onboarding_step || STEPS.first
     case @step
     when 'personal'
-      @user_profile = current_user.user_profile || current_user.build_user_profile
+      # @user_profile already set above
     when 'startup'
       @startup_profile = current_user.startup_profile || current_user.build_startup_profile
     when 'professional'
@@ -16,16 +17,18 @@ class FounderOnboardingController < ApplicationController
     when 'mentorship'
       @startup_profile = current_user.startup_profile || current_user.build_startup_profile
     when 'confirm'
-      @user_profile = current_user.user_profile
       @startup_profile = current_user.startup_profile
     end
+
+    # Save current step for resume later
+    @user_profile.update(onboarding_step: @step) unless @user_profile.onboarding_step == @step
   end
 
   def update
+    @user_profile = current_user.user_profile || current_user.build_user_profile
     @step = params[:step] || STEPS.first
     case @step
     when 'personal'
-      @user_profile = current_user.user_profile || current_user.build_user_profile
       if @user_profile.update(personal_params)
         redirect_to founder_onboarding_path(step: 'startup')
       else
@@ -53,9 +56,37 @@ class FounderOnboardingController < ApplicationController
         render :show, status: :unprocessable_entity
       end
     when 'confirm'
-      @user_profile = current_user.user_profile
       @user_profile.update(onboarding_completed: true)
       redirect_to founder_root_path
+    end
+  end
+
+  def save_and_exit
+    @user_profile = current_user.user_profile || current_user.build_user_profile
+    @step = params[:step] || STEPS.first
+
+    # Save current step data before exiting
+    success = case @step
+    when 'personal'
+      @user_profile.update(personal_params)
+    when 'startup'
+      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
+      @startup_profile.update(startup_params)
+    when 'professional'
+      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
+      @startup_profile.update(professional_params)
+    when 'mentorship'
+      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
+      @startup_profile.update(mentorship_params)
+    else
+      true
+    end
+
+    if success
+      @user_profile.update(onboarding_step: @step)
+      redirect_to founder_root_path, notice: 'Your progress has been saved. You can continue onboarding later.'
+    else
+      render :show, status: :unprocessable_entity
     end
   end
 

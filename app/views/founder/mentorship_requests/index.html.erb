@@ -7,11 +7,11 @@
         <div class="flex justify-between items-start mb-4">
           <div class="flex items-center space-x-4">
             <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-              <span class="text-purple-600 font-semibold"><%= request.mentor.name.first %></span>
+              <span class="text-purple-600 font-semibold"><%= request.mentor&.name&.first || '?' %></span>
             </div>
             <div>
-              <h3 class="text-lg font-semibold"><%= request.mentor.name %></h3>
-              <p class="text-sm text-gray-600"><%= request.mentor.expertise %></p>
+              <h3 class="text-lg font-semibold"><%= request.mentor&.name || 'Unknown Mentor' %></h3>
+              <p class="text-sm text-gray-600"><%= request.mentor&.expertise || 'No expertise specified' %></p>
             </div>
           </div>
           <span class="px-3 py-1 text-sm rounded-full <%= request.status == 'approved' ? 'bg-green-100 text-green-800' : request.status == 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800' %>">

@@ -1,0 +1,17 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900">Upcoming Sessions</h3>
+    <p class="text-sm text-gray-600 mt-2">View and manage your upcoming mentorship sessions.</p>
+    <%= link_to 'View Schedule', mentor_schedule_path, class: 'inline-block mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700' %>
+  </div>
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900">Feedback & Ratings</h3>
+    <p class="text-sm text-gray-600 mt-2">Review feedback and ratings from founders.</p>
+    <%= link_to 'View Feedback', mentor_feedback_path, class: 'inline-block mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700' %>
+  </div>
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900">Edit Profile</h3>
+    <p class="text-sm text-gray-600 mt-2">Update your profile information and preferences.</p>
+    <%= link_to 'Edit Profile', edit_mentor_profile_path, class: 'inline-block mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700' %>
+  </div>
+</div>

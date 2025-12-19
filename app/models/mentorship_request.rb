@@ -4,6 +4,8 @@ class MentorshipRequest < ApplicationRecord
   belongs_to :founder, class_name: 'User'
   belongs_to :mentor, class_name: 'User'
 
+  validates :mentor_id, presence: true
+
   scope :for_mentor, ->(mentor_id) { where(mentor_id: mentor_id).order(created_at: :desc) }
   scope :recent, -> { order(created_at: :desc) }
 

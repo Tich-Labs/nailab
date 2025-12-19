@@ -6,11 +6,14 @@ class MentorOnboardingController < ApplicationController
   STEPS = %w[basic_details work_experience mentorship_focus mentorship_style availability review]
 
   def show
-    @step = params[:step] || STEPS.first
+    @step = params[:step] || @profile.onboarding_step || STEPS.first
     unless STEPS.include?(@step)
       redirect_to mentor_onboarding_path(step: STEPS.first)
       return
     end
+
+    # Save current step for resume later
+    @profile.update(onboarding_step: @step) unless @profile.onboarding_step == @step
 
     @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
   end
@@ -29,6 +32,17 @@ class MentorOnboardingController < ApplicationController
       else
         complete_onboarding
       end
+    else
+      @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
+      render :show
+    end
+  end
+
+  def save_and_exit
+    @step = params[:step]
+    if @profile.update(mentor_params_for_step(@step))
+      @profile.update(onboarding_step: @step)
+      redirect_to mentor_root_path, notice: 'Your progress has been saved. You can continue onboarding later.'
     else
       @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
       render :show

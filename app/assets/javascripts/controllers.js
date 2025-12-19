@@ -30,57 +30,48 @@ class NavigationController extends Controller {
 application.register('navigation', NavigationController);
 
 class HeroController extends Controller {
-  static targets = ['slide', 'dot'];
+  static targets = ["slide", "dots"]
 
   connect() {
-    this.currentIndex = 0;
-    this.showSlide(0);
-    this.startAutoplay();
+    this.current = 0;
+    this.slidesCount = parseInt(this.element.dataset.heroSlidesCount) || this.slideTargets.length;
+    this.startAutoSlide();
   }
 
   disconnect() {
-    if (this.autoplay) {
-      clearInterval(this.autoplay);
+    clearInterval(this.timer)
+  }
+
+  startAutoSlide() {
+    this.timer = setInterval(() => this.next(), 5000)
+  }
+
+  update() {
+    this.slideTargets.forEach((el, i) => {
+      el.classList.toggle("opacity-100", i === this.current)
+      el.classList.toggle("opacity-0", i !== this.current)
+    })
+
+    if (this.dotsTarget) {
+      this.dotsTarget.innerHTML = this.slideTargets.map((_, i) =>
+        `<button data-action="click->hero#goTo" data-index="${i}" class="${i === this.current ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'} w-3 h-3 rounded-full mx-1 transition-all"></button>`
+      ).join("")
     }
-  }
-
-  startAutoplay() {
-    if (this.autoplay) clearInterval(this.autoplay);
-    this.autoplay = setInterval(() => this.next(), 5000);
-  }
-
-  showSlide(index) {
-    if (!this.slideTargets?.length) return;
-    this.currentIndex = index % this.slideTargets.length;
-
-    this.slideTargets.forEach((slide, idx) => {
-      slide.classList.toggle('opacity-100', idx === this.currentIndex);
-      slide.classList.toggle('opacity-0', idx !== this.currentIndex);
-      slide.classList.toggle('pointer-events-none', idx !== this.currentIndex);
-    });
-
-    this.dotTargets.forEach((dot, idx) => {
-      dot.classList.toggle('bg-white', idx === this.currentIndex);
-      dot.classList.toggle('bg-white/40', idx !== this.currentIndex);
-    });
-  }
-
-  previous() {
-    this.showSlide((this.currentIndex - 1 + this.slideTargets.length) % this.slideTargets.length);
-    this.startAutoplay();
   }
 
   next() {
-    this.showSlide((this.currentIndex + 1) % this.slideTargets.length);
-    this.startAutoplay();
+    this.current = (this.current + 1) % this.slidesCount;
+    this.update();
+  }
+
+  previous() {
+    this.current = (this.current - 1 + this.slidesCount) % this.slidesCount;
+    this.update();
   }
 
   goTo(event) {
-    const index = Number(event.currentTarget.dataset.heroIndex);
-    if (!Number.isNaN(index)) {
-      this.showSlide(index);
-      this.startAutoplay();
-    }
+    this.current = parseInt(event.currentTarget.dataset.index)
+    this.update()
   }
 }
 
@@ -104,3 +95,25 @@ class FaqController extends Controller {
 }
 
 application.register('faq', FaqController);
+
+class AdminSidebarController extends Controller {
+  static targets = ['group'];
+
+  toggle(event) {
+    const button = event.currentTarget;
+    const group = button.nextElementSibling;
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+
+    this.groupTargets.forEach((el) => {
+      if (el !== group) el.classList.add('hidden');
+    });
+    this.element.querySelectorAll("[aria-expanded='true']").forEach((b) => {
+      if (b !== button) b.setAttribute('aria-expanded', 'false');
+    });
+
+    button.setAttribute('aria-expanded', String(!expanded));
+    group.classList.toggle('hidden', expanded);
+  }
+}
+
+application.register('admin-sidebar', AdminSidebarController);

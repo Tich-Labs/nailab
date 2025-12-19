@@ -1,0 +1,16 @@
+<% content_for :title do %>
+  <%= @page_name.presence || "Admin" %> | Nailab Admin
+<% end %>
+<% if flash.present? %>
+  <div class="space-y-2 mb-4">
+    <% flash.each do |type, msg| %>
+      <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+        <span class="font-semibold"><%= type.to_s.upcase %>:</span>
+        <%= msg %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<div class="space-y-6">
+  <%= yield %>
+</div>

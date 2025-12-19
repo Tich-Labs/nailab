@@ -6,8 +6,13 @@ class Founder::MentorshipRequestsController < Founder::BaseController
   end
 
   def new
-    @mentor = UserProfile.find_by(id: params[:mentor_id], role: 'mentor') if params[:mentor_id]
-    @request = current_user.mentorship_requests.build(mentor_id: @mentor&.user_id)
+    if params[:mentor_id].present?
+      mentor = Mentor.find_by(id: params[:mentor_id])
+      @mentor = mentor
+      @request = current_user.mentorship_requests.build(mentor_id: mentor&.user_id)
+    else
+      @request = current_user.mentorship_requests.build
+    end
   end
 
   def show

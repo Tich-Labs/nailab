@@ -81,7 +81,7 @@ class PagesController < ApplicationController
       title: 'For Mentors',
       description: 'Join Nailab’s mentor network to guide promising founders, share expertise, and provide real-world insights that help startups overcome challenges.',
       cta_label: 'Become a Mentor',
-      cta_link: '/mentors'
+      cta_link: '/mentors/signup'
     },
     {
       title: 'For Partners',

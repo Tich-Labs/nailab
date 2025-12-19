@@ -1,44 +1,105 @@
 <%# app/views/founder/mentors/show.html.erb %>
 <div class="max-w-4xl mx-auto py-8 px-4">
-  <div class="bg-white shadow rounded-lg p-6">
+  <div class="bg-gradient-to-r from-purple-50 to-teal-50 shadow rounded-lg p-6">
     <div class="flex items-start justify-between mb-6">
       <div class="flex items-center space-x-4">
-        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-          <span class="text-purple-600 font-semibold text-xl"><%= @mentor.name.first %></span>
+        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+          <% if @mentor.photo.present? %>
+            <img src="<%= @mentor.photo %>" alt="<%= @mentor.name || 'Mentor' %>" class="w-full h-full object-cover">
+          <% else %>
+            <span class="text-purple-600 font-semibold text-xl">?</span>
+          <% end %>
         </div>
         <div>
-          <h1 class="text-3xl font-bold text-gray-900"><%= @mentor.name %></h1>
-          <p class="text-lg text-gray-600"><%= @mentor.expertise %></p>
-          <p class="text-sm text-gray-500"><%= @mentor.company %> • <%= @mentor.years_experience %> years experience</p>
+          <h1 class="text-3xl font-bold text-gray-900"><%= @mentor.name || 'Unknown Mentor' %></h1>
+          <p class="text-sm text-teal-800"><%= @mentor.organization || 'No organization listed' %> • <%= @mentor.years_experience || 'Experience not specified' %> years experience</p>
         </div>
       </div>
-      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
+      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700" %>
     </div>
     <div class="mb-6">
-      <h2 class="text-xl font-semibold mb-4">About</h2>
-      <p class="text-gray-600"><%= @mentor.bio %></p>
+      <h2 class="text-xl font-semibold mb-4">Bio</h2>
+      <p class="text-gray-600"><%= @mentor.bio || 'No bio available' %></p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <div>
-        <h3 class="font-medium text-gray-700">Specialties</h3>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Mentorship Approach</h2>
+      <p class="text-gray-600"><%= @mentor.mentorship_approach || 'No mentorship approach provided' %></p>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Motivation</h2>
+      <p class="text-gray-600"><%= @mentor.motivation || 'No motivation provided' %></p>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Specialties</h2>
+      <% if @mentor.expertise.present? %>
         <ul class="mt-2 space-y-1">
-          <% @mentor.specialties.split(',').each do |specialty| %>
-            <li class="text-sm text-gray-600">• <%= specialty.strip %></li>
+          <% @mentor.expertise.each do |specialty| %>
+            <li class="text-sm text-gray-600">
+              • <%= specialty %>
+            </li>
           <% end %>
         </ul>
-      </div>
-      <div>
-        <h3 class="font-medium text-gray-700">Industries</h3>
+      <% else %>
+        <p class="text-sm text-gray-500 mt-2">No specialties listed</p>
+      <% end %>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Industries</h2>
+      <% if @mentor.sectors.present? %>
         <ul class="mt-2 space-y-1">
-          <% @mentor.industries.split(',').each do |industry| %>
-            <li class="text-sm text-gray-600">• <%= industry.strip %></li>
+          <% @mentor.sectors.each do |sector| %>
+            <li class="text-sm text-gray-600">
+              • <%= sector %>
+            </li>
           <% end %>
         </ul>
+      <% else %>
+        <p class="text-sm text-gray-500 mt-2">No industries listed</p>
+      <% end %>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Stage Preference</h2>
+      <% if @mentor.stage_preference.present? %>
+        <ul class="mt-2 space-y-1">
+          <% @mentor.stage_preference.each do |stage| %>
+            <li class="text-sm text-gray-600">
+              • <%= stage %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-gray-500 mt-2">No stage preference listed</p>
+      <% end %>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Preferred Mentorship Mode</h2>
+      <p class="text-sm text-gray-600"><%= @mentor.preferred_mentorship_mode || 'No preferred mode provided' %></p>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Availability</h2>
+      <p class="text-sm text-gray-600"><%= @mentor.availability_hours_month || 'No availability provided' %> hours per month</p>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Compensation</h2>
+      <% if @mentor.pro_bono %>
+        <p class="text-sm text-gray-600">Offers pro bono mentorship</p>
+      <% else %>
+        <p class="text-sm text-gray-600">Rate: <%= number_to_currency(@mentor.rate_per_hour) || 'No rate provided' %> per hour</p>
+      <% end %>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">LinkedIn</h2>
+      <%= link_to @mentor.linkedin_url, target: '_blank', rel: 'noreferrer', class: 'text-sm text-blue-600 hover:text-blue-800' do %>
+        View LinkedIn Profile
+      <% end %>
+    </div>
+    <% if @mentor.professional_website.present? %>
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-4">Professional Website</h2>
+        <%= link_to @mentor.professional_website, target: '_blank', rel: 'noreferrer', class: 'text-sm text-blue-600 hover:text-blue-800' do %>
+          Visit Website
+        <% end %>
       </div>
-    </div>
-    <div class="border-t pt-6">
-      <h3 class="font-medium text-gray-700 mb-4">Availability</h3>
-      <p class="text-gray-600"><%= @mentor.availability %></p>
-    </div>
+    <% end %>
   </div>
 </div>

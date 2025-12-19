@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_19_094500) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_19_094504) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "bookmarks", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -66,6 +94,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_094500) do
     t.index ["display_order"], name: "index_hero_slides_on_display_order"
   end
 
+  create_table "identities", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "provider"
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
   create_table "jwt_denylists", force: :cascade do |t|
     t.datetime "exp", null: false
     t.string "jti", null: false
@@ -100,10 +137,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_094500) do
   create_table "mentorship_requests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "decline_reason"
+    t.text "feedback"
     t.bigint "founder_id", null: false
     t.bigint "mentor_id", null: false
     t.text "message"
     t.datetime "proposed_time"
+    t.integer "rating"
     t.text "reschedule_reason"
     t.datetime "reschedule_requested_at"
     t.datetime "responded_at"
@@ -359,8 +398,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_094500) do
     t.text "mentorship_approach"
     t.text "motivation"
     t.boolean "onboarding_completed", default: false, null: false
+    t.string "onboarding_step"
     t.string "organization"
     t.string "phone"
+    t.string "photo"
     t.string "photo_url"
     t.string "preferred_mentorship_mode"
     t.boolean "pro_bono", default: false, null: false
@@ -396,12 +437,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_094500) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookmarks", "resources"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "connections", "users"
   add_foreign_key "connections", "users", column: "peer_id"
   add_foreign_key "conversations", "mentors"
   add_foreign_key "conversations", "users"
+  add_foreign_key "identities", "users"
   add_foreign_key "mentors", "users"
   add_foreign_key "mentorship_connections", "mentorship_requests"
   add_foreign_key "mentorship_connections", "users", column: "founder_id"

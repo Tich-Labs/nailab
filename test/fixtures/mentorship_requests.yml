@@ -4,12 +4,12 @@ one:
   founder: one
   mentor: one
   message: MyText
-  status: MyString
+  status: pending
   responded_at: 2025-12-16 03:29:31
 
 two:
   founder: two
   mentor: two
   message: MyText
-  status: MyString
+  status: pending
   responded_at: 2025-12-16 03:29:31

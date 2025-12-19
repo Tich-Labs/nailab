@@ -59,8 +59,12 @@
                 </div>
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900"><%= mentor.name %></h3>
-                  <p class="text-gray-600"><%= mentor.expertise %></p>
-                  <p class="text-sm text-gray-500"><%= mentor.company %></p>
+                  <p class="text-gray-600"><%= mentor.expertise&.join(', ') || 'No specialties listed' %></p>
+                  <% if mentor.company.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                      <%= mentor.company %>
+                    </span>
+                  <% end %>
                 </div>
               </div>
               <div class="flex space-x-3">
@@ -95,7 +99,7 @@
         <div class="space-y-4">
           <% @mentorship_requests.each do |request| %>
             <div class="p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
-              <p class="font-semibold text-gray-900"><%= request.mentor.name %></p>
+              <p class="font-semibold text-gray-900"><%= request.mentor&.name || 'Unknown Mentor' %></p>
               <p class="text-sm text-gray-600"><%= request.status.titleize %></p>
             </div>
           <% end %>

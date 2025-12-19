@@ -13,6 +13,10 @@ gem "puma", ">= 5.0"
 # gem "bcrypt", "~> 3.1.7"
 gem 'devise' # Authentication
 gem 'devise-jwt' # Token-based authentication for React
+gem 'omniauth' # OAuth authentication framework
+gem 'omniauth-linkedin-oauth2' # LinkedIn OAuth2 provider
+gem 'omniauth-google-oauth2' # Google OAuth2 provider
+gem 'omniauth-rails_csrf_protection' # CSRF protection for OmniAuth
 gem 'active_storage_validations' # Validations for ActiveStorage uploads
 gem 'rails_admin' # CMS/Admin interface (or use 'activeadmin')
 gem 'hotwire-rails' # Turbo/Stimulus for interactivity
@@ -52,5 +56,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # System testing with Capybara
+  gem "capybara"
+  gem "selenium-webdriver"
 end
 gem "sassc-rails"

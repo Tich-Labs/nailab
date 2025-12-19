@@ -30,17 +30,54 @@
       <% else %>
         <div></div>
       <% end %>
-      <% if @step == 'review' %>
-        <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
-                       class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
-          <i class="fas fa-check mr-2"></i> Complete Onboarding
+      <div class="flex gap-4">
+        <%= button_tag type: 'submit', form: 'mentor-onboarding-save-exit-form',
+                       class: "px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+          <i class="fas fa-save mr-2"></i> Save & Exit
         <% end %>
-      <% else %>
-        <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
-                       class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
-          Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+        <% if @step == 'review' %>
+          <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
+                         class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
+            <i class="fas fa-check mr-2"></i> Complete Onboarding
+          <% end %>
+        <% else %>
+          <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
+                         class: "px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" do %>
+            Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
+<!-- Hidden form for Save & Exit -->
+<%= form_with url: mentor_onboarding_save_and_exit_path, method: :patch, id: 'mentor-onboarding-save-exit-form', local: true do |f| %>
+  <%= hidden_field_tag :step, @step %>
+  <%= fields_for 'user_profile', @profile do |profile_form| %>
+    <!-- Include all current step fields for saving -->
+    <% case @step %>
+    <% when 'basic_details' %>
+      <%= profile_form.hidden_field :full_name %>
+      <%= profile_form.hidden_field :bio %>
+      <%= profile_form.hidden_field :title %>
+    <% when 'work_experience' %>
+      <%= profile_form.hidden_field :organization %>
+      <%= profile_form.hidden_field :years_experience %>
+      <%= profile_form.hidden_field :advisory_experience %>
+      <%= profile_form.hidden_field :advisory_description %>
+    <% when 'mentorship_focus' %>
+      <!-- Array fields need special handling -->
+    <% when 'mentorship_style' %>
+      <%= profile_form.hidden_field :mentorship_approach %>
+      <%= profile_form.hidden_field :motivation %>
+    <% when 'availability' %>
+      <%= profile_form.hidden_field :availability_hours_month %>
+      <%= profile_form.hidden_field :preferred_mentorship_mode %>
+      <%= profile_form.hidden_field :rate_per_hour %>
+      <%= profile_form.hidden_field :pro_bono %>
+      <%= profile_form.hidden_field :linkedin_url %>
+      <%= profile_form.hidden_field :professional_website %>
+      <%= profile_form.hidden_field :currency %>
+    <% end %>
+  <% end %>
+<% end %>

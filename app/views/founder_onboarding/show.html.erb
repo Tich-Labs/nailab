@@ -136,7 +136,40 @@
       <% else %>
         <span></span>
       <% end %>
-      <%= f.submit (@step == 'confirm' ? 'Finish' : 'Next'), class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+      <div class="flex gap-4">
+        <%= button_tag type: 'submit', form: 'founder-onboarding-save-exit-form',
+                       class: "btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold" do %>
+          <i class="fas fa-save mr-2"></i> Save & Exit
+        <% end %>
+        <%= f.submit (@step == 'confirm' ? 'Finish' : 'Next'), class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+      </div>
     </div>
   <% end %>
 </div>
+<!-- Hidden form for Save & Exit -->
+<%= form_with url: founder_onboarding_save_and_exit_path, method: :patch, id: 'founder-onboarding-save-exit-form', local: true do |f| %>
+  <%= hidden_field_tag :step, @step %>
+  <%= fields_for 'founder_onboarding[user_profile]', @user_profile do |up| %>
+    <%= up.hidden_field :full_name %>
+    <%= up.hidden_field :phone %>
+    <%= up.hidden_field :country %>
+    <%= up.hidden_field :city %>
+  <% end %>
+  <% if @startup_profile %>
+    <%= fields_for 'founder_onboarding[startup_profile]', @startup_profile do |sp| %>
+      <%= sp.hidden_field :startup_name %>
+      <%= sp.hidden_field :logo_url %>
+      <%= sp.hidden_field :description %>
+      <%= sp.hidden_field :stage %>
+      <%= sp.hidden_field :target_market %>
+      <%= sp.hidden_field :value_proposition %>
+      <%= sp.hidden_field :profile_visibility %>
+      <%= sp.hidden_field :sector %>
+      <%= sp.hidden_field :funding_stage %>
+      <%= sp.hidden_field :funding_raised %>
+      <%= sp.hidden_field :mentorship_areas %>
+      <%= sp.hidden_field :challenge_details %>
+      <%= sp.hidden_field :preferred_mentorship_mode %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <%= render "layouts/rails_admin/head" %>
+    <script>
+      window.tailwind = window.tailwind || {};
+      tailwind.config = { darkMode: 'class' };
+      (function () {
+        try {
+          const stored = localStorage.getItem('nailab-admin-theme');
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const useDark = stored ? stored === 'dark' : prefersDark;
+          document.documentElement.classList.toggle('dark', useDark);
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+    <title><%= content_for?(:title) ? yield(:title) : "Nailab Admin" %></title>
+  </head>
+  <body class="rails_admin bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div class="min-h-screen flex flex-col">
+      <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <%= link_to 'Nailab Admin', rails_admin.dashboard_path, class: 'text-lg font-semibold text-slate-900 dark:text-slate-100' %>
+            <button class="inline-flex items-center justify-center rounded-full border border-slate-200 px-3 py-1 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900" type="button">
+              <span class="mr-1">☰</span>
+              <span class="hidden sm:inline">Admin console</span>
+            </button>
+          </div>
+          <form action="<%= request.path %>" method="get" class="flex-1 max-w-md">
+            <label for="admin-search" class="sr-only">Search admin</label>
+            <div class="relative text-sm">
+              <input id="admin-search" name="query" value="<%= params[:query] %>" placeholder="Search models, founders, startups" class="w-full rounded-full border border-slate-200 bg-white py-2 px-4 shadow-sm focus:border-slate-400 focus:ring-2 focus:ring-emerald-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100" />
+              <svg class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M16 16l4.5 4.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+              </svg>
+            </div>
+          </form>
+          <div class="flex items-center gap-4">
+            <button id="admin-theme-toggle" type="button" class="rounded-full bg-slate-100 p-2 text-lg text-slate-700 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800" aria-label="Toggle theme">🌙</button>
+            <div class="relative">
+              <span class="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-semibold text-white"><%= @admin_pending_requests %></span>
+              <button class="rounded-full bg-slate-100 p-2 text-lg text-slate-600 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">🔔</button>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="hidden sm:inline text-sm text-slate-500 dark:text-slate-400"><%= current_user&.email %></span>
+              <div class="h-8 w-8 rounded-full bg-emerald-300 text-center font-semibold text-white dark:bg-emerald-500"><%= current_user&.name&.first&.upcase || 'A' %></div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="flex flex-1 pt-16">
+        <aside class="w-72 shrink-0 border-r border-slate-200 bg-white p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto dark:border-slate-800 dark:bg-slate-950">
+          <div class="space-y-6">
+            <% admin_sidebar_groups.each do |group| %>
+              <div>
+                <div class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 mb-2">
+                  <%= group[:title] %>
+                </div>
+                <div class="space-y-1">
+                  <% group[:sections].each do |item| %>
+                    <%= link_to item[:path], class: "flex items-center justify-between rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100 transition-colors #{'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' if request.path.start_with?(item[:path])}" do %>
+                      <span class="text-sm"><%= item[:label] %></span>
+                      <% if item[:badge].to_i.positive? %>
+                        <span class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white"><%= item[:badge] %></span>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </aside>
+        <main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950">
+          <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex flex-col gap-4 pb-4">
+              <nav aria-label="Breadcrumb" class="rounded-2xl bg-white/70 px-4 py-3 text-xs uppercase tracking-[0.4em] text-slate-500 shadow-sm dark:bg-slate-900/60 dark:text-slate-300">
+                <ol class="flex items-center gap-2">
+                  <% admin_breadcrumbs.each_with_index do |crumb, index| %>
+                    <li><%= link_to crumb[:label], crumb[:path], class: 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' %></li>
+                    <% unless index == admin_breadcrumbs.size - 1 %>
+                      <li>›</li>
+                    <% end %>
+                  <% end %>
+                </ol>
+              </nav>
+              <div class="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
+                <p class="text-xs uppercase tracking-[0.4em] text-slate-400">RailsAdmin workspace</p>
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-500">Filters</span>
+                  <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Active</span>
+                  </div>
+                  <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                    <span>Pending</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%= render template: 'layouts/rails_admin/content' %>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script>
+      (function () {
+        const storageKey = 'nailab-admin-theme';
+        const btn = document.getElementById('admin-theme-toggle');
+        if (!btn) return;
+
+        function isDark() {
+          return document.documentElement.classList.contains('dark');
+        }
+
+        function render() {
+          btn.textContent = isDark() ? '☀️' : '🌙';
+        }
+
+        render();
+        btn.addEventListener('click', function () {
+          const nextDark = !isDark();
+          document.documentElement.classList.toggle('dark', nextDark);
+          try {
+            localStorage.setItem(storageKey, nextDark ? 'dark' : 'light');
+          } catch (e) {
+            // ignore
+          }
+          render();
+        });
+      })();
+    </script>
+  </body>
+</html>
