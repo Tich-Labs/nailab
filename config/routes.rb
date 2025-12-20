@@ -66,7 +66,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "pages#home"
-  # get 'about', to: 'pages#about' # Marketing page (commented out)
+  get 'about', to: 'pages#about', as: :about
   get "programs", to: "pages#programs" # Marketing page (commented out)
   get "programs/:slug", to: "pages#program_detail", as: :program_detail # Marketing page (commented out)
   get "resources", to: "pages#resources" # Marketing page (commented out)
