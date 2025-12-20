@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_21_130100) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -416,6 +416,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_130100) do
     t.string "subject", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["status"], name: "index_support_tickets_on_status"
     t.index ["user_id"], name: "index_support_tickets_on_user_id"
   end
 
