@@ -1,3 +1,28 @@
+#
+# Recent Changes Since Last Audit (as of December 20, 2025)
+#
+
+
+- Added Partners onboarding flow (UI, controller, model, and validations)
+
+# Feature Implementation Audit
+
+---
+
+## Week X — Partners Onboarding
+
+| Feature | Status | Evidence | Missing pieces | Notes / Risks |
+| --- | --- | --- | --- | --- |
+| Partner onboarding form (company, contact, sector, etc.) | ✅ Implemented | `partner_onboarding_controller.rb`, `app/views/partner_onboarding/steps/*`, and `Partner` model with validations. | — | End-to-end onboarding for partners is live. |
+| Input validation on all steps | ✅ Implemented | Model and controller validations, error messages in views. | — | All required fields validated. |
+| Save & exit | ✅ Implemented | Onboarding step tracking, save/resume logic, and UI button. | — | Partners can save progress and resume onboarding. |
+| Email confirmation | ✅ Implemented | Devise confirmable enabled for partners, confirmation email sent. | — | Email confirmation required for access. |
+| Dashboard access after onboarding | ✅ Implemented | Redirect to partner dashboard after onboarding completion. | — | Partners land on dashboard post-onboarding. |
+| Support/contact links | ✅ Implemented | Support/contact info and links in onboarding and dashboard. | — | Partners can reach out for help. |
+
+---
+
+---
 # Feature Implementation Audit
 
 ## Legend
