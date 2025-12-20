@@ -48,7 +48,10 @@ end
 def seed_startup_profile!(user:, attrs:)
   profile = StartupProfile.find_or_initialize_by(user_id: user.id)
   SeedHelpers.safe_assign(profile, attrs.merge(active: true))
-  profile.save!
+  unless profile.save
+    puts "Failed to save StartupProfile for user #{user.email}: #{profile.errors.full_messages.join(', ')}"
+    raise "StartupProfile invalid for user #{user.email}"
+  end
   profile
 end
 
