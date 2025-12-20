@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+<p>
+  <strong>Title:</strong>
+  <%= @baseline_plan.title %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @baseline_plan.description %>
+</p>
+<p>
+  <strong>Baseline revenue:</strong>
+  <%= @baseline_plan.baseline_revenue %>
+</p>
+<p>
+  <strong>Baseline customers:</strong>
+  <%= @baseline_plan.baseline_customers %>
+</p>
+<p>
+  <strong>Baseline burn rate:</strong>
+  <%= @baseline_plan.baseline_burn_rate %>
+</p>
+<p>
+  <strong>Target milestones:</strong>
+  <%= @baseline_plan.target_milestones %>
+</p>
+<%= link_to 'Edit', edit_founder_baseline_plan_path(@baseline_plan) %> |
+<%= link_to 'Back', founder_baseline_plans_path %>

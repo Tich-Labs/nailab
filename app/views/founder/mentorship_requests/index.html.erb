@@ -1,0 +1,45 @@
+<%# app/views/founder/mentorship_requests/index.html.erb %>
+<div class="max-w-6xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">My Mentorship Requests</h1>
+  <div class="space-y-6">
+    <% @mentorship_requests.each do |request| %>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+              <span class="text-purple-600 font-semibold"><%= request.mentor&.name&.first || '?' %></span>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold"><%= request.mentor&.name || 'Unknown Mentor' %></h3>
+              <p class="text-sm text-gray-600"><%= request.mentor&.expertise || 'No expertise specified' %></p>
+            </div>
+          </div>
+          <span class="px-3 py-1 text-sm rounded-full <%= request.status == 'approved' ? 'bg-green-100 text-green-800' : request.status == 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800' %>">
+            <%= request.status.titleize %>
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <h4 class="font-medium text-gray-700">Requested Date</h4>
+            <p class="text-sm text-gray-600"><%= request.created_at.strftime('%B %d, %Y') %></p>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-700">Preferred Time</h4>
+            <p class="text-sm text-gray-600"><%= request.proposed_time&.strftime('%B %d, %Y at %I:%M %p') || 'Not specified' %></p>
+          </div>
+        </div>
+        <div class="mb-4">
+          <h4 class="font-medium text-gray-700">Message</h4>
+          <p class="text-sm text-gray-600"><%= request.message %></p>
+        </div>
+        <%= link_to 'View Details', founder_mentorship_request_path(request), class: "text-purple-600 hover:text-purple-800 text-sm" %>
+      </div>
+    <% end %>
+  </div>
+  <% if @mentorship_requests.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 mb-4">No mentorship requests yet.</p>
+      <%= link_to 'Browse Mentors', founder_mentorship_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
+    </div>
+  <% end %>
+</div>

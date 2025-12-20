@@ -1,0 +1,54 @@
+<%# app/views/founder/opportunities/show.html.erb %>
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @opportunity.title %></h1>
+        <p class="text-gray-600"><%= @opportunity.description %></p>
+      </div>
+      <div class="flex space-x-2">
+        <%= link_to 'Apply Now', apply_founder_opportunity_path(@opportunity), class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div>
+        <h3 class="font-medium text-gray-700">Type</h3>
+        <p class="text-gray-600 mt-1"><%= @opportunity.opportunity_type %></p>
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-700">Deadline</h3>
+        <p class="text-gray-600 mt-1"><%= @opportunity.deadline.strftime('%B %d, %Y') %></p>
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-700">Eligibility</h3>
+        <p class="text-gray-600 mt-1"><%= @opportunity.eligibility %></p>
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-700">Status</h3>
+        <p class="text-gray-600 mt-1">
+          <span class="px-2 py-1 text-xs rounded-full <%= @opportunity.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+            <%= @opportunity.active ? 'Active' : 'Closed' %>
+          </span>
+        </p>
+      </div>
+    </div>
+    <% if @opportunity.details.present? %>
+      <div class="border-t pt-6">
+        <h3 class="font-medium text-gray-700 mb-4">Additional Details</h3>
+        <div class="prose max-w-none">
+          <%= @opportunity.details.html_safe %>
+        </div>
+      </div>
+    <% end %>
+    <% if @opportunity.requirements.present? %>
+      <div class="border-t pt-6 mt-6">
+        <h3 class="font-medium text-gray-700 mb-4">Requirements</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <% @opportunity.requirements.split("\n").each do |req| %>
+            <li><%= req %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>

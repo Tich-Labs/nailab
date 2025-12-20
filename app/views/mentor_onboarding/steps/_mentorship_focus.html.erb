@@ -1,0 +1,122 @@
+<%# app/views/mentor_onboarding/steps/_mentorship_focus.html.erb %>
+<div class="p-8">
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Mentorship Focus</h2>
+    <p class="text-gray-600">Help us match you with the right startups</p>
+  </div>
+  <%= form_with model: @profile, url: mentor_onboarding_path(step: 'mentorship_focus'), method: :put, id: 'mentor-onboarding-form', class: 'space-y-8' do |f| %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
+    <div>
+      <%= f.label :sectors, 'Industries you can mentor in', class: 'block text-sm font-medium text-slate-600 mb-4' %>
+      <p class="text-sm text-slate-500 mb-3">Select all that apply</p>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <% industries = ['Agritech', 'Healthtech', 'Fintech', 'Edutech', 'Mobility & Logistics tech', 'E-commerce & Retailtech', 'SaaS', 'Creative & Mediatech', 'Cleantech', 'AI & ML', 'Robotics', 'Mobiletech', 'Other'] %>
+        <% industries.each do |industry| %>
+          <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-2xl hover:bg-slate-50 cursor-pointer">
+            <%= check_box_tag 'user_profile[sectors][]', industry,
+                              (@profile.sectors || []).include?(industry),
+                              class: 'rounded border-slate-300 text-purple-600 focus:ring-purple-500 sector-checkbox',
+                              data: { option: industry } %>
+            <span class="text-sm"><%= industry %></span>
+          </label>
+        <% end %>
+      </div>
+      <!-- Other sector text input -->
+      <div id="other-sector-container" class="mt-3 <%= (@profile.sectors || []).include?('Other') ? '' : 'hidden' %>">
+        <%= f.label :other_sector, 'Please specify other industry', class: 'block text-sm font-medium text-slate-600 mb-1' %>
+        <%= f.text_field :other_sector, value: @other_sector, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', placeholder: 'Enter your specific industry' %>
+      </div>
+      <% if @profile.errors[:sectors].any? %>
+        <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:sectors].first %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :expertise, 'Areas of mentorship you offer', class: 'block text-sm font-medium text-slate-600 mb-4' %>
+      <p class="text-sm text-slate-500 mb-3">Select all that apply</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <% areas = ['Business model refinement', 'PMF', 'Access to customers/markets', 'GTM planning', 'Product development', 'Pitching/fundraising', 'Marketing/branding', 'Team building/HR', 'Budgeting/finance', 'Market expansion', 'Legal/regulatory', 'Leadership growth', 'Partnerships', 'Sales & acquisition', 'Other'] %>
+        <% areas.each do |area| %>
+          <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-2xl hover:bg-slate-50 cursor-pointer">
+            <%= check_box_tag 'user_profile[expertise][]', area,
+                              (@profile.expertise || []).include?(area),
+                              class: 'rounded border-slate-300 text-purple-600 focus:ring-purple-500 expertise-checkbox',
+                              data: { option: area } %>
+            <span class="text-sm"><%= area %></span>
+          </label>
+        <% end %>
+      </div>
+      <!-- Other expertise text input -->
+      <div id="other-expertise-container" class="mt-3 <%= (@profile.expertise || []).include?('Other') ? '' : 'hidden' %>">
+        <%= f.label :other_expertise, 'Please specify other mentorship area', class: 'block text-sm font-medium text-slate-600 mb-1' %>
+        <%= f.text_field :other_expertise, value: @other_expertise, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', placeholder: 'Enter your specific mentorship area' %>
+      </div>
+      <% if @profile.errors[:expertise].any? %>
+        <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:expertise].first %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :stage_preference, 'Startup stages you prefer', class: 'block text-sm font-medium text-slate-600 mb-4' %>
+      <p class="text-sm text-slate-500 mb-3">Select your preferred startup stages</p>
+      <div class="space-y-3">
+        <% stages = ['Idea / Early (MVP)', 'Growth', 'Scaling', 'Other'] %>
+        <% stages.each do |stage| %>
+          <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-2xl hover:bg-slate-50 cursor-pointer">
+            <%= radio_button_tag 'user_profile[stage_preference][]', stage,
+                                (@profile.stage_preference || []).include?(stage),
+                                class: 'border-slate-300 text-purple-600 focus:ring-purple-500' %>
+            <span class="text-sm"><%= stage %></span>
+          </label>
+        <% end %>
+      </div>
+      <% if @profile.errors[:stage_preference].any? %>
+        <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:stage_preference].first %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle sector "Other" input
+    const otherSectorCheckbox = document.querySelector('input[data-option="Other"].sector-checkbox');
+    const otherSectorContainer = document.getElementById('other-sector-container');
+
+    if (otherSectorCheckbox && otherSectorContainer) {
+      function toggleSectorOtherInput() {
+        if (otherSectorCheckbox.checked) {
+          otherSectorContainer.classList.remove('hidden');
+        } else {
+          otherSectorContainer.classList.add('hidden');
+          // Clear the text input when unchecked
+          const textInput = otherSectorContainer.querySelector('input[type="text"]');
+          if (textInput) textInput.value = '';
+        }
+      }
+
+      otherSectorCheckbox.addEventListener('change', toggleSectorOtherInput);
+      // Initial check
+      toggleSectorOtherInput();
+    }
+
+    // Handle expertise "Other" input
+    const otherExpertiseCheckbox = document.querySelector('input[data-option="Other"].expertise-checkbox');
+    const otherExpertiseContainer = document.getElementById('other-expertise-container');
+
+    if (otherExpertiseCheckbox && otherExpertiseContainer) {
+      function toggleExpertiseOtherInput() {
+        if (otherExpertiseCheckbox.checked) {
+          otherExpertiseContainer.classList.remove('hidden');
+        } else {
+          otherExpertiseContainer.classList.add('hidden');
+          // Clear the text input when unchecked
+          const textInput = otherExpertiseContainer.querySelector('input[type="text"]');
+          if (textInput) textInput.value = '';
+        }
+      }
+
+      otherExpertiseCheckbox.addEventListener('change', toggleExpertiseOtherInput);
+      // Initial check
+      toggleExpertiseOtherInput();
+    }
+  });
+</script>

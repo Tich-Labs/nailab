@@ -1,0 +1,121 @@
+<div class="bg-gradient-to-br from-purple-700 to-teal-600 py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+    <h1 class="text-4xl font-bold"><%= @startup_profile.startup_name %></h1>
+    <p class="mt-2 text-lg"><%= @startup_profile.value_proposition.presence || 'Building the next generation of African innovation.' %></p>
+    <div class="mt-4 flex flex-wrap gap-3 text-sm">
+      <% if @startup_profile.stage.present? %>
+        <span class="px-3 py-1 rounded-full bg-white/20"><%= @startup_profile.stage %></span>
+      <% end %>
+      <% if @startup_profile.sector.present? %>
+        <span class="px-3 py-1 rounded-full bg-white/20"><%= @startup_profile.sector %></span>
+      <% end %>
+      <% if @startup_profile.funding_stage.present? %>
+        <span class="px-3 py-1 rounded-full bg-white/20"><%= funding_stage_label(@startup_profile.funding_stage) %></span>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="grid gap-8 lg:grid-cols-3">
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg p-8 space-y-6">
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900">About the startup</h2>
+        <p class="mt-4 text-gray-700 leading-relaxed"><%= @startup_profile.description %></p>
+      </section>
+      <section class="grid gap-6 sm:grid-cols-2">
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+          <h3 class="text-md font-semibold text-gray-500 uppercase tracking-wide">Target market</h3>
+          <p class="mt-3 text-gray-900"><%= @startup_profile.target_market %></p>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+          <h3 class="text-md font-semibold text-gray-500 uppercase tracking-wide">Challenge</h3>
+          <p class="mt-3 text-gray-900"><%= @startup_profile.challenge_details %></p>
+        </div>
+      </section>
+      <section>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Mentorship focus</h3>
+        <div class="space-y-2 text-gray-700 text-sm">
+          <% Array(@startup_profile.mentorship_areas).each do |area| %>
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-50 text-purple-700">■ <%= area %></span>
+          <% end %>
+        </div>
+      </section>
+    </div>
+    <div class="space-y-6">
+      <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Quick facts</h3>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <% if @startup_profile.location.present? %>
+            <li><strong>Location:</strong> <%= @startup_profile.location %></li>
+          <% end %>
+          <% if @startup_profile.website_url.present? %>
+            <li><strong>Website:</strong> <%= link_to @startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noreferrer', class: 'text-purple-600 hover:underline' %></li>
+          <% end %>
+          <% if @startup_profile.founded_year.present? %>
+            <li><strong>Founded:</strong> <%= @startup_profile.founded_year %></li>
+          <% end %>
+          <% if @startup_profile.team_size&.positive? %>
+            <li><strong>Team size:</strong> <%= @startup_profile.team_size %></li>
+          <% end %>
+          <% if @startup_profile.funding_raised.present? %>
+            <li><strong>Funds raised:</strong> $<%= number_with_delimiter(@startup_profile.funding_raised) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <% if @startup_profile.user&.user_profile.present? %>
+        <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
+          <h3 class="text-lg font-semibold text-gray-900">Founder</h3>
+          <div class="flex items-center space-x-4">
+            <% if @startup_profile.user.user_profile.photo_url.present? %>
+              <img src="<%= @startup_profile.user.user_profile.photo_url %>" alt="<%= @startup_profile.user.user_profile.full_name %>" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
+            <% else %>
+              <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500 text-lg font-semibold"><%= @startup_profile.user.user_profile.full_name&.first&.upcase %></span>
+              </div>
+            <% end %>
+            <div>
+              <h4 class="font-semibold text-gray-900"><%= @startup_profile.user.user_profile.full_name %></h4>
+              <% if @startup_profile.user.user_profile.title.present? %>
+                <p class="text-sm text-gray-600"><%= @startup_profile.user.user_profile.title %></p>
+              <% end %>
+              <% if @startup_profile.user.user_profile.organization.present? %>
+                <p class="text-sm text-gray-600"><%= @startup_profile.user.user_profile.organization %></p>
+              <% end %>
+            </div>
+          </div>
+          <% if @startup_profile.user.user_profile.bio.present? %>
+            <div class="mt-4">
+              <p class="text-sm text-gray-700 leading-relaxed"><%= @startup_profile.user.user_profile.bio %></p>
+            </div>
+          <% end %>
+          <% if @startup_profile.user.user_profile.linkedin_url.present? %>
+            <div class="mt-4">
+              <%= link_to @startup_profile.user.user_profile.linkedin_url, target: '_blank', rel: 'noreferrer', class: 'inline-flex items-center text-sm text-blue-600 hover:text-blue-800' do %>
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                LinkedIn Profile
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      <% if @startup_profile.team_size&.> 1 %>
+        <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
+          <h3 class="text-lg font-semibold text-gray-900">Team</h3>
+          <div class="text-sm text-gray-600">
+            <p><strong>Team size:</strong> <%= @startup_profile.team_size %> members</p>
+            <p class="mt-2 text-xs text-gray-500">Detailed team member profiles coming soon.</p>
+          </div>
+        </div>
+      <% end %>
+      <% if @owner_viewing %>
+        <div class="bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-3xl p-6 shadow-lg">
+          <h3 class="text-lg font-semibold">You are viewing your public profile</h3>
+          <p class="mt-2 text-sm">Toggle the visibility flag in your profile settings to hide or share this page.</p>
+          <%= link_to 'Edit Startup Profile', founder_startup_profile_path, class: 'mt-4 inline-flex px-4 py-2 bg-white text-purple-700 font-semibold rounded-full' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

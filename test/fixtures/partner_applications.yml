@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organization_name: MyString
+  website: MyString
+  country: MyString
+  description: MyText
+  organization_type: MyString
+  contact_name: MyString
+  contact_email: MyString
+  key_sectors: MyString
+  collaboration_areas: MyString
+  other_organization_type: MyString
+  other_key_sectors: MyString
+  other_collaboration_areas: MyString
+  user: one
+
+two:
+  organization_name: MyString
+  website: MyString
+  country: MyString
+  description: MyText
+  organization_type: MyString
+  contact_name: MyString
+  contact_email: MyString
+  key_sectors: MyString
+  collaboration_areas: MyString
+  other_organization_type: MyString
+  other_key_sectors: MyString
+  other_collaboration_areas: MyString
+  user: two

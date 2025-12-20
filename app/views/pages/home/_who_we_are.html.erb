@@ -1,0 +1,24 @@
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900">Who We Are</h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          Nailab is a startup incubator and accelerator, founded in 2010, dedicated to supporting early-stage and growth-stage startups with the skills, mentorship, networks, and funding they need to turn bold ideas into scalable, tech-enabled businesses solving real challenges in sectors like healthcare, agriculture, fintech, education, and more.
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          Through tailored acceleration and incubation programs, strategic mentorship and investor connections, we’ve played a pivotal role in shaping Africa’s startup ecosystem and advancing inclusive economic prosperity across the continent.
+        </p>
+        <%= link_to 'More About Us', '/about', class: 'inline-flex items-center space-x-2 text-purple-600 font-semibold text-lg hover:text-purple-700 transition-colors group' do %>
+          <span>More About Us</span>
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <% end %>
+      </div>
+      <div class="relative">
+        <div class="relative rounded-2xl overflow-hidden shadow-xl">
+          <img src="logo2.og" alt="Who We Are" class="w-full h-[450px] object-cover" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

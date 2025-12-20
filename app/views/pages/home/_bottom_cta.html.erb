@@ -1,0 +1,12 @@
+<%# _bottom_cta.html.erb - BottomCTA (call to action) %>
+<section class="py-20 bg-teal-600">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl lg:text-5xl font-bold text-white mb-6">Connect with someone who has solved the exact challenge you're facing now.</h2>
+    <p class="text-xl text-white/90 mb-8">Join our startup community. Whether you're an ambitious founder looking for the right support or a seasoned expert ready to give back, there's a place for you in our ecosystem.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <%= link_to 'Start Your Journey', new_founder_onboarding_path, class: 'inline-flex items-center justify-center px-8 py-4 bg-purple-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-purple-700 transition-all' %>
+      <%= link_to 'Find a Mentor', '/mentors', class: 'inline-flex items-center justify-center px-8 py-4 bg-white text-teal-700 text-lg font-semibold rounded-xl shadow-lg hover:bg-teal-50 transition-all' %>
+      <%= link_to 'Become a Mentor', '/mentors/new', class: 'inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-semibold rounded-xl hover:bg-white/10 transition-all' %>
+    </div>
+  </div>
+</section>

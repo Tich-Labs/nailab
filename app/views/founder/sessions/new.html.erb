@@ -1,0 +1,48 @@
+<%# app/views/founder/sessions/new.html.erb %>
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Book a Session</h1>
+  <div class="bg-white shadow rounded-lg p-6">
+    <form action="<%= founder_sessions_path %>" method="post" class="space-y-6">
+      <div>
+        <label for="session_mentor_id" class="block text-sm font-medium text-gray-700">Mentor</label>
+        <select name="session[mentor_id]" id="session_mentor_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+          <option value="">Select a mentor</option>
+          <% Mentor.all.each do |mentor| %>
+            <option value="<%= mentor.id %>"><%= mentor.name %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="session_scheduled_at" class="block text-sm font-medium text-gray-700">Scheduled at</label>
+          <input type="datetime-local" name="session[scheduled_at]" id="session_scheduled_at" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="session_duration" class="block text-sm font-medium text-gray-700">Duration</label>
+          <select name="session[duration]" id="session_duration" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+        </div>
+        <div>
+          <label for="session_session_type" class="block text-sm font-medium text-gray-700">Session type</label>
+          <select name="session[session_type]" id="session_session_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+            <option value="Initial Consultation">Initial Consultation</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Strategy Session">Strategy Session</option>
+            <option value="Technical Review">Technical Review</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="session_agenda" class="block text-sm font-medium text-gray-700">Agenda</label>
+        <textarea name="session[agenda]" id="session_agenda" rows="4" placeholder="What would you like to discuss in this session?" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"></textarea>
+      </div>
+      <div class="flex justify-end space-x-4">
+        <a href="<%= founder_sessions_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Book Session</button>
+      </div>
+    </form>
+  </div>
+</div>

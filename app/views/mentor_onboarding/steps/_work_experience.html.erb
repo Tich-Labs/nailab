@@ -1,0 +1,69 @@
+<%# app/views/mentor_onboarding/steps/_work_experience.html.erb %>
+<div class="p-8">
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Work & Experience</h2>
+    <p class="text-gray-600">Share your professional background</p>
+  </div>
+  <%= form_with model: @profile, url: mentor_onboarding_path(step: 'work_experience'), method: :put, id: 'mentor-onboarding-form', class: 'space-y-6' do |f| %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
+    <div>
+      <%= f.label :organization, 'Organization / startup affiliated with', class: 'block text-sm font-medium text-slate-600 mb-2' %>
+      <%= f.text_field :organization, required: true,
+                       class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500',
+                       placeholder: 'or "Independent Consultant/Self-employed"' %>
+      <% if @profile.errors[:organization].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:organization].first %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :years_experience, 'Years of professional experience', class: 'block text-sm font-medium text-slate-600 mb-2' %>
+      <%= f.select :years_experience, options_for_select([
+        ['Less than 3', '<3'],
+        ['3–5', '3-5'],
+        ['6–10', '6-10'],
+        ['10+', '10+']
+      ], @profile.years_experience), { include_blank: 'Select experience level' }, required: true,
+                  class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500' %>
+      <% if @profile.errors[:years_experience].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:years_experience].first %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :advisory_experience, 'Advisory or investor experience', class: 'block text-sm font-medium text-slate-600 mb-2' %>
+      <div class="space-y-3">
+        <%= f.radio_button :advisory_experience, true, class: 'mr-2' %>
+        <%= f.label :advisory_experience_true, 'Yes', class: 'mr-6' %>
+        <%= f.radio_button :advisory_experience, false, class: 'mr-2' %>
+        <%= f.label :advisory_experience_false, 'No' %>
+      </div>
+      <% if @profile.errors[:advisory_experience].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:advisory_experience].first %></p>
+      <% end %>
+    </div>
+    <% if @profile.advisory_experience %>
+      <div id="advisory-description" class="bg-slate-50 p-4 rounded-2xl">
+        <%= f.label :advisory_description, 'Briefly describe your advisory/investment experience', class: 'block text-sm font-medium text-slate-600 mb-2' %>
+        <%= f.text_area :advisory_description, rows: 3,
+                        class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500',
+                        placeholder: 'Optional: Share details about your experience' %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[name="user_profile[advisory_experience]"]');
+    const descriptionDiv = document.getElementById('advisory-description');
+
+    radioButtons.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.value === 'true') {
+          descriptionDiv.style.display = 'block';
+        } else {
+          descriptionDiv.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

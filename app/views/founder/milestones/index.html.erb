@@ -1,0 +1,34 @@
+<%# app/views/founder/milestones/index.html.erb %>
+<div class="max-w-6xl mx-auto py-8 px-4">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Milestones</h1>
+    <%= link_to 'Add New Milestone', new_founder_milestone_path, class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @milestones.each do |milestone| %>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold"><%= milestone.title %></h3>
+          <span class="px-2 py-1 text-xs rounded-full <%= milestone.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+            <%= milestone.completed ? 'Completed' : 'Pending' %>
+          </span>
+        </div>
+        <p class="text-gray-600 text-sm mb-4"><%= milestone.description %></p>
+        <div class="text-sm text-gray-500 space-y-1">
+          <div>Due: <%= milestone.due_date.strftime('%B %d, %Y') %></div>
+          <div>Created: <%= milestone.created_at.strftime('%B %d, %Y') %></div>
+        </div>
+        <div class="mt-4 flex space-x-2">
+          <%= link_to 'View', founder_milestone_path(milestone), class: "text-purple-600 hover:text-purple-800 text-sm" %>
+          <%= link_to 'Edit', edit_founder_milestone_path(milestone), class: "text-purple-600 hover:text-purple-800 text-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @milestones.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 mb-4">No milestones yet.</p>
+      <%= link_to 'Create your first milestone', new_founder_milestone_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
+    </div>
+  <% end %>
+</div>

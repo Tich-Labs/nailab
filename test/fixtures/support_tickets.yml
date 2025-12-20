@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  subject: Platform issue
+  category: Technical Issue
+  description: The dashboard is not honoring the filter for active mentors.
+  status: open
+  admin_note: ''
+
+two:
+  user: two
+  subject: Billing question
+  category: Billing Question
+  description: I need clarity on the upcoming invoice and next steps.
+  status: in_progress
+  admin_note: 'Asked finance to follow up via email.'

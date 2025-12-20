@@ -1,0 +1,274 @@
+<%# TEST CHANGE %>
+<%# app/views/founder_onboarding/show.html.erb %>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Founder Onboarding</h1>
+      <p class="text-gray-600">Start your journey as a founder in the Nailab ecosystem</p>
+    </div>
+    <!-- Progress Bar -->
+    <% steps = [
+      { key: 'personal', label: 'Personal' },
+      { key: 'startup', label: 'Startup' },
+      { key: 'professional', label: 'Professional' },
+      { key: 'mentorship', label: 'Mentorship' },
+      { key: 'confirm', label: 'Confirm' }
+    ] %>
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-sm font-medium text-gray-700">Step <%= @step_index = steps.index { |s| s[:key] == @step } + 1 %> of <%= steps.length %></span>
+        <span class="text-sm text-gray-500"><%= (((@step_index).to_f / steps.length) * 100).round %>% complete</span>
+      </div>
+      <div class="w-full bg-slate-200 rounded-full h-2">
+        <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: <%= (((@step_index).to_f / steps.length) * 100) %>%"></div>
+      </div>
+    </div>
+    <!-- Step Content -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <%= form_with url: founder_onboarding_path(step: @step), method: :put, local: true, scope: 'founder_onboarding' do |f| %>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
+        <% if @step == 'personal' %>
+          <h2 class="text-2xl font-semibold mb-6">Founder Personal Information</h2>
+          <%= f.fields_for :user_profile, @user_profile do |up| %>
+            <div class="space-y-6">
+              <div>
+                <%= up.label :full_name, class: 'block text-sm font-semibold text-slate-600 mb-2' %>
+                <%= up.text_field :full_name, required: true, aria: { required: true }, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', placeholder: 'Enter your full name' %>
+              </div>
+              <div>
+                <%= label_tag :email, 'Email', class: 'block text-sm font-semibold text-slate-600 mb-2' %>
+                <% email_value = (defined?(current_user) && current_user&.email) || session[:founder_onboarding_email] || params[:email] %>
+                <%= text_field_tag :email, email_value, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', readonly: (defined?(current_user) && current_user.present?), aria: { readonly: (defined?(current_user) && current_user.present?) }, placeholder: 'Enter your email' %>
+              </div>
+              <div>
+                <%= up.label :phone, class: 'block text-sm font-semibold text-slate-600 mb-2' %>
+                <%= up.telephone_field :phone, required: true, aria: { required: true }, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', placeholder: 'Enter your phone number' %>
+              </div>
+              <div>
+                <%= up.label :country, 'Country', class: 'block text-sm font-semibold text-slate-600 mb-2' %>
+                <%= up.select :country, country_list, { prompt: 'Select country' }, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500' %>
+              </div>
+              <div>
+                <%= up.label :city, 'City', class: 'block text-sm font-semibold text-slate-600 mb-2' %>
+                <%= up.text_field :city, aria: { describedby: 'city-help' }, class: 'w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500', placeholder: 'Enter your city' %>
+                <small id="city-help" class="text-slate-500">Enter your city name</small>
+              </div>
+            </div>
+          <% end %>
+        <% elsif @step == 'startup' %>
+          <h2 class="text-2xl font-semibold mb-6">Startup Information</h2>
+          <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+            <div class="space-y-6">
+              <div>
+                <%= sp.label :startup_name, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.text_field :startup_name, required: true, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :description, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.text_area :description, rows: 4, required: true, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :stage, 'Startup Stage', class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.select :stage, ['Idea/Concept', 'Prototype', 'Pilot', 'Traction', 'Scaling'], { prompt: 'Select startup stage' }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :target_market, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.text_area :target_market, rows: 3, required: true, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :value_proposition, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.text_area :value_proposition, rows: 3, required: true, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :funding_stage, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.select :funding_stage, ["Bootstrapped", "Friends & Family", "Angel Investment", "Pre-seed", "Seed", "Series A", "Series B or beyond", "Grant-funded"], { prompt: "Select funding stage" }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :funding_raised, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.number_field :funding_raised, step: 0.01, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+            </div>
+          <% end %>
+        <% elsif @step == 'professional' %>
+          <h2 class="text-2xl font-semibold mb-6">Professional Background</h2>
+          <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+            <div class="space-y-6">
+              <div>
+                <%= sp.label :sector, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.select :sector, [
+              'Agritech',
+              'Healthtech',
+              'Fintech',
+              'Edutech',
+              'Mobility & Logisticstech',
+              'E-commerce & Retailtech',
+              'SaaS',
+              'Creative & Mediatech',
+              'Cleantech',
+              'AI & ML',
+              'Robotics',
+              'Mobiletech',
+              'Other'
+            ], { prompt: 'Select sector' }, { required: true, aria: { required: true }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300', id: 'sector-select', onchange: 'toggleOtherSectorInput()' } %>
+                <div id="other-sector-container" class="mt-3 <%= @startup_profile&.sector == 'Other' ? '' : 'hidden' %>">
+                  <%= sp.label :other_sector, 'Please specify other sector', class: 'block text-sm font-semibold text-slate-600' %>
+                  <%= sp.text_field :other_sector, value: @startup_profile&.other_sector, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300', placeholder: 'Enter your sector' %>
+                </div>
+              </div>
+              <script>
+                function toggleOtherSectorInput() {
+                  var select = document.getElementById('sector-select');
+                  var otherContainer = document.getElementById('other-sector-container');
+                  if (select && otherContainer) {
+                    if (select.value === 'Other') {
+                      otherContainer.classList.remove('hidden');
+                    } else {
+                      otherContainer.classList.add('hidden');
+                      var textInput = otherContainer.querySelector('input[type="text"]');
+                      if (textInput) textInput.value = '';
+                    }
+                  }
+                }
+                document.addEventListener('DOMContentLoaded', function() {
+                  toggleOtherSectorInput();
+                });
+              </script>
+              <div>
+                <%= sp.label :funding_stage, 'Funding Stage', class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.select :funding_stage, ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Later', 'Bootstrapped', 'Other'], {}, { required: true, aria: { required: true }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' } %>
+              </div>
+              <div>
+                <%= sp.label :funding_raised, 'Funding Raised ($)', class: 'block text-sm font-semibold text-slate-600' %>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-500">$</span>
+                  <%= sp.number_field :funding_raised, class: 'mt-1 w-full pl-8 pr-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% elsif @step == 'mentorship' %>
+          <h2 class="text-2xl font-semibold mb-6">Mentorship & Challenges</h2>
+          <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
+            <div class="space-y-6">
+              <div>
+                <%= sp.label :mentorship_areas, 'Areas where you need mentorship', class: 'block text-sm font-semibold text-slate-600 mb-4' %>
+                <p class="text-sm text-slate-500 mb-3">Select all that apply</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <% mentorship_options = ['Product Development', 'Go-to-market Strategy', 'Fundraising', 'Team Building', 'Marketing & Branding', 'Sales & Customer Acquisition', 'Financial Planning', 'Legal & Regulatory', 'Partnerships', 'Leadership', 'Other'] %>
+                  <% mentorship_options.each do |option| %>
+                    <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+                      <%= check_box_tag 'founder_onboarding[startup_profile][mentorship_areas][]', option,
+                                    Array(@startup_profile.mentorship_areas).include?(option),
+                                    class: 'h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-200 rounded mentorship-checkbox',
+                                    data: { option: option } %>
+                      <span class="text-sm"><%= option %></span>
+                    </label>
+                  <% end %>
+                </div>
+                <!-- Other mentorship area text input -->
+                <div id="other-mentorship-container" class="mt-3 <%= Array(@startup_profile.mentorship_areas).include?('Other') ? '' : 'hidden' %>">
+                  <%= sp.label :other_mentorship_area, 'Please specify other mentorship area', class: 'block text-sm font-semibold text-slate-600' %>
+                  <%= sp.text_field :other_mentorship_area, value: @other_mentorship_area, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300', placeholder: 'Enter your specific mentorship need' %>
+                </div>
+              </div>
+              <div>
+                <%= sp.label :challenge_details, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.text_area :challenge_details, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+              </div>
+              <div>
+                <%= sp.label :preferred_mentorship_mode, class: 'block text-sm font-semibold text-slate-600' %>
+                <%= sp.select :preferred_mentorship_mode, ['One-on-one', 'Group', 'Virtual', 'In-person', 'Other'], {}, { required: true, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' } %>
+              </div>
+            </div>
+          <% end %>
+        <% elsif @step == 'confirm' %>
+          <h2 class="text-2xl font-semibold mb-6">Review & Confirm</h2>
+          <p class="mb-4">Please review your details before submitting.</p>
+          <%= render partial: 'summary', locals: { user_profile: @user_profile, startup_profile: @startup_profile } %>
+        <% end %>
+        <!-- Navigation -->
+        <div class="flex justify-between mt-8">
+          <% steps_keys = steps.map { |s| s[:key] } %>
+          <% current_idx = steps_keys.index(@step) %>
+          <% prev_step = current_idx && current_idx > 0 ? steps_keys[current_idx - 1] : nil %>
+          <%# Back button %>
+          <% if prev_step %>
+            <%= link_to founder_onboarding_path(step: prev_step),
+                        class: "px-6 py-3 border border-slate-300 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-arrow-left mr-2"></i> Previous
+            <% end %>
+          <% else %>
+            <div></div>
+          <% end %>
+          <div class="flex gap-4">
+            <%= button_tag type: 'button', onclick: "document.getElementById('save-and-exit-field').value = '1'; this.form.submit();",
+                           class: "px-6 py-3 border border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-save mr-2"></i> Save & Exit
+            <% end %>
+            <%= f.submit (@step == 'confirm' ? 'Finish' : 'Save & Continue'), class: "px-6 py-3 bg-purple-600 text-white rounded-2xl hover:bg-purple-700 transition-colors font-semibold flex items-center" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const otherCheckbox = document.querySelector('input[data-option="Other"]');
+        const otherContainer = document.getElementById('other-mentorship-container');
+
+        if (otherCheckbox && otherContainer) {
+          function toggleOtherInput() {
+            if (otherCheckbox.checked) {
+              otherContainer.classList.remove('hidden');
+            } else {
+              otherContainer.classList.add('hidden');
+              // Clear the text input when unchecked
+              const textInput = otherContainer.querySelector('input[type="text"]');
+              if (textInput) textInput.value = '';
+            }
+          }
+
+          otherCheckbox.addEventListener('change', toggleOtherInput);
+
+          // Initial check in case "Other" is already selected
+          toggleOtherInput();
+        }
+
+        // Team Members functionality
+        const teamContainer = document.getElementById('onboarding-team-members-container');
+        const addTeamButton = document.getElementById('onboarding-add-team-member');
+
+        if (addTeamButton && teamContainer) {
+          // Add new team member
+          addTeamButton.addEventListener('click', function() {
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'team-member-item flex items-center gap-3 p-3 bg-slate-50 rounded-lg';
+            memberDiv.innerHTML = `
+              <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <input type="text" name="founder_onboarding[startup_profile][team_members][][name]" placeholder="Team member name" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300">
+                  <input type="hidden" name="founder_onboarding[startup_profile][team_members][][id]" value="${Date.now()}">
+                </div>
+                <div>
+                  <input type="text" name="founder_onboarding[startup_profile][team_members][][role]" placeholder="Role (e.g., Co-founder, CTO)" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300">
+                </div>
+              </div>
+              <button type="button" class="remove-team-member text-red-600 hover:text-red-800 p-1" title="Remove team member">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+            `;
+            teamContainer.appendChild(memberDiv);
+          });
+
+          // Remove team member
+          teamContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-team-member')) {
+              e.target.closest('.team-member-item').remove();
+            }
+          });
+        }
+      });
+    </script>

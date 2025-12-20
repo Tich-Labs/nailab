@@ -1,0 +1,138 @@
+<div class="space-y-6">
+  <!-- KPI summary cards -->
+  <div class="grid gap-4 md:grid-cols-3">
+    <% admin_kpis = @admin_kpi_counts || { users: 0, requests: 0, startups: 0 } %>
+    <% kpi_definitions = [
+      { label: 'Users', value: admin_kpis[:users], hint: 'Total registered accounts', color: 'emerald' },
+      { label: 'Mentorship requests', value: admin_kpis[:requests], hint: 'All requests', color: 'amber' },
+      { label: 'Startups', value: admin_kpis[:startups], hint: 'Verified startup profiles', color: 'sky' }
+    ] %>
+    <% kpi_definitions.each do |kpi| %>
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="text-xs uppercase tracking-[0.4em] text-slate-400"><%= kpi[:label] %></div>
+        <div class="mt-3 flex items-center justify-between">
+          <span class="text-3xl font-semibold text-slate-900"><%= number_with_delimiter(kpi[:value]) %></span>
+          <span class="rounded-full bg-<%= "#{kpi[:color]}-50" %> px-2 py-1 text-xs font-semibold text-<%= "#{kpi[:color]}-600" %>">Live</span>
+        </div>
+        <div class="mt-3 h-2 rounded-full bg-slate-100">
+          <div class="h-2 rounded-full bg-<%= "#{kpi[:color]}-400" %>" style="width:<%= [kpi[:value].to_i, 1000].min / 10 %>%"></div>
+        </div>
+        <p class="mt-3 text-xs text-slate-500"><%= kpi[:hint] %></p>
+      </div>
+    <% end %>
+  </div>
+  <!-- Activity and content panels -->
+  <div class="grid gap-6 lg:grid-cols-3">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Activity feed</h3>
+        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Latest</span>
+      </div>
+      <div class="space-y-3 max-h-80 overflow-y-auto">
+        <% (@admin_activity_feed || []).each do |entry| %>
+          <div class="rounded-2xl border border-slate-100 p-3">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-900"><%= entry[:title] %></p>
+                <p class="text-xs text-slate-500">Submitted by <%= entry[:actor] %> · <%= time_ago_in_words(entry[:time]) %> ago</p>
+              </div>
+              <div><%= admin_status_tag(entry[:status]) %></div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2 text-xs text-slate-500">
+              <%= link_to 'View', entry[:link], class: 'rounded-full border border-slate-200 px-3 py-1 font-semibold text-slate-600 hover:border-slate-400' %>
+              <%= link_to 'Approve', entry[:link], class: 'rounded-full border border-emerald-200 px-3 py-1 font-semibold text-emerald-600 hover:border-emerald-400' %>
+              <%= link_to 'Decline', entry[:link], class: 'rounded-full border border-rose-200 px-3 py-1 font-semibold text-rose-600 hover:border-rose-400' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 lg:col-span-2">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Mentorship requests overview</h3>
+        <span class="text-xs text-slate-400">Inline controls</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-xs uppercase tracking-[0.4em] text-slate-400">
+            <tr>
+              <th class="pb-2">Founder</th>
+              <th class="pb-2">Mentor</th>
+              <th class="pb-2">Status</th>
+              <th class="pb-2">Requested</th>
+              <th class="pb-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% (@admin_recent_requests || []).each do |request| %>
+              <tr>
+                <td class="py-3 text-slate-800"><%= request.founder.full_name || request.founder.email %></td>
+                <td class="py-3 text-slate-800"><%= request.mentor.full_name || request.mentor.email %></td>
+                <td class="py-3"><%= admin_status_tag(request.status) %></td>
+                <td class="py-3 text-xs text-slate-500"><%= request.created_at.strftime('%b %-d, %Y %l:%M %p') %></td>
+                <td class="py-3 text-xs">
+                  <div class="flex flex-wrap gap-2 text-[11px]">
+                    <%= link_to 'Approve', rails_admin.edit_path(model_name: 'mentorship_request', id: request.id), class: 'inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 font-semibold text-emerald-600 hover:bg-emerald-100' %>
+                    <%= link_to 'Decline', rails_admin.edit_path(model_name: 'mentorship_request', id: request.id), class: 'inline-flex items-center justify-center rounded-full border border-rose-200 bg-rose-50 px-2 py-1 font-semibold text-rose-600 hover:bg-rose-100' %>
+                    <%= link_to 'Edit', rails_admin.edit_path(model_name: 'mentorship_request', id: request.id), class: 'inline-flex items-center justify-center rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 hover:bg-slate-50' %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Analytics & marketing updates -->
+  <div class="grid gap-6 lg:grid-cols-2">
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Analytics</h3>
+        <span class="text-xs uppercase tracking-[0.4em] text-slate-400">Monthly trends</span>
+      </div>
+      <div class="space-y-3 text-sm text-slate-500">
+        <p>Signups & sessions in the last 6 months</p>
+        <div class="space-y-2">
+          <div class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Signups</div>
+          <div class="flex items-end gap-2">
+            <% (@admin_monthly_signups || []).each do |point| %>
+              <div class="flex flex-col items-center gap-1 text-xs">
+                <span class="h-16 w-3 rounded-full bg-emerald-500" style="height:<%= [point[:value], 6].max * 6 %>px"></span>
+                <span><%= point[:label] %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Sessions</div>
+          <div class="flex items-end gap-2">
+            <% (@admin_monthly_sessions || []).each do |point| %>
+              <div class="flex flex-col items-center gap-1 text-xs">
+                <span class="h-16 w-3 rounded-full bg-sky-500" style="height:<%= [point[:value], 6].max * 6 %>px"></span>
+                <span><%= point[:label] %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Marketing updates</h3>
+        <span class="text-xs uppercase tracking-[0.4em] text-slate-400">Recent edits</span>
+      </div>
+      <div class="space-y-3">
+        <% (@admin_marketing_updates || []).each do |update| %>
+          <div class="flex items-start justify-between gap-3 rounded-2xl border border-slate-100 p-3">
+            <div>
+              <p class="text-sm font-semibold text-slate-900"><%= link_to update[:title], update[:path], class: 'hover:text-emerald-600' %></p>
+              <p class="text-xs text-slate-500"><%= update[:context] %></p>
+            </div>
+            <span class="text-xs text-slate-400"><%= distance_of_time_in_words(update[:updated_at], Time.current) %> ago</span>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>

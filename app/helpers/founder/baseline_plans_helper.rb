@@ -1,0 +1,2 @@
+module Founder::BaselinePlansHelper
+end

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nailab | Africa's Startup Network</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <!-- Tailwind CSS is now included in application.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+  </head>
+  <body class="bg-white text-gray-900">
+    <%= render 'layouts/header' %>
+    <div class="page-content">
+      <%= yield %>
+    </div>
+    <%= render 'layouts/footer' %>
+  </body>
+</html>

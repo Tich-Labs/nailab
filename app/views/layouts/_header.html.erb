@@ -1,0 +1,35 @@
+<nav class="py-4 bg-white shadow-md">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="flex justify-between items-center">
+      <!-- Logo/Brand -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center">
+          <%= image_tag 'nailab-logo-blue.png', alt: 'Nailab Logo', class: 'h-12 md:h-16 w-auto' %>
+        </a>
+      </div>
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6 font-medium">
+        <%= link_to 'Home', root_path, class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+        <div class="relative group">
+          <%= link_to 'Our Network', '#', class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+          <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2">
+            <%= link_to 'Startups', startups_path, class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+            <%= link_to 'Mentors', mentors_path, class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+          </div>
+        </div>
+        <%= link_to 'Programs', programs_path, class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+        <div class="relative group">
+          <%= link_to 'Resources', '#', class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+          <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2">
+            <%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+            <%= link_to 'Knowledge Hub', resources_category_path(category: 'knowledge-hub'), class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+            <%= link_to 'Opportunities', resources_category_path(category: 'opportunities'), class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+            <%= link_to 'Events & Webinars', resources_category_path(category: 'events'), class: 'block px-4 py-2 text-gray-900 hover:bg-gray-100' %>
+          </div>
+        </div>
+        <%= link_to 'Pricing', pricing_path, class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+        <%= link_to 'Login', login_path, class: 'text-gray-900 hover:text-primary transition-colors duration-200' %>
+      </div>
+    </div>
+  </div>
+</nav>

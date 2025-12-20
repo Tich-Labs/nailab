@@ -1,0 +1,248 @@
+<%# app/views/partner_onboarding/show.html.erb %>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Partner Onboarding</h1>
+      <p class="text-gray-600">Collaborate and support the growth of innovative startups in our ecosystem</p>
+    </div>
+    <!-- Progress Bar -->
+    <% steps = [
+      { key: 'organization', label: 'Organization' },
+      { key: 'organization_type', label: 'Type' },
+      { key: 'contact', label: 'Contact' },
+      { key: 'key_sectors', label: 'Sectors' },
+      { key: 'collaboration', label: 'Collaboration' },
+      { key: 'review', label: 'Review' }
+    ] %>
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-sm font-medium text-gray-700">Step <%= @step_index = steps.index { |s| s[:key] == @step } + 1 %> of <%= steps.length %></span>
+        <span class="text-sm text-gray-500"><%= (((@step_index).to_f / steps.length) * 100).round %>% complete</span>
+      </div>
+      <div class="w-full bg-slate-200 rounded-full h-2">
+        <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: <%= (((@step_index).to_f / steps.length) * 100) %>%"></div>
+      </div>
+    </div>
+    <!-- Step Content -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <%= form_with model: @partner_application, url: partner_onboarding_path(@partner_application, step: @step), method: :patch, local: true do |f| %>
+        <% if @step == "organization" %>
+          <h2 class="text-2xl font-semibold mb-6">Organization Information</h2>
+          <div class="space-y-6">
+            <div>
+              <%= f.label :organization_name, "What is the name of your organization?", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :organization_name, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Enter organization name" %>
+            </div>
+            <div>
+              <%= f.label :website, "What is your organization’s website?", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :website, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Enter website URL" %>
+            </div>
+            <div>
+              <%= f.label :country, "Which country is your organization headquartered in?", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :country, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Enter country" %>
+            </div>
+            <div>
+              <%= f.label :description, "Short description of your organization", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_area :description, rows: 4, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Describe your organization" %>
+              <p class="text-xs text-gray-500 mt-1">Who you are, what you do, and your focus areas (max 1000 characters)</p>
+            </div>
+          </div>
+        <% elsif @step == "organization_type" %>
+          <h2 class="text-2xl font-semibold mb-6">Type of Organization</h2>
+          <div class="space-y-6">
+            <div>
+              <%= f.label :organization_type, "Type of Organization", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.select :organization_type, [
+                "Nonprofit / Foundation",
+                "Corporate / CSR arm",
+                "Development agency / Multilateral",
+                "Government / Public Sector",
+                "Academic / Research Institution",
+                "Ecosystem enabler (e.g., hub, accelerator, investor network)",
+                "Other"
+              ], {}, class: "mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300" %>
+            </div>
+            <div id="other-organization-type" class="hidden">
+              <%= f.label :other_organization_type, "Please specify other type", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :other_organization_type, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Specify other type" %>
+            </div>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var select = document.querySelector('[name="partner_application[organization_type]"]');
+              var otherDiv = document.getElementById('other-organization-type');
+              function toggleOther() {
+                if (select.value === 'Other') {
+                  otherDiv.style.display = '';
+                } else {
+                  otherDiv.style.display = 'none';
+                }
+              }
+              if (select) {
+                select.addEventListener('change', toggleOther);
+                toggleOther();
+              }
+            });
+          </script>
+        <% elsif @step == "contact" %>
+          <h2 class="text-2xl font-semibold mb-6">Primary Contact</h2>
+          <div class="space-y-6">
+            <div>
+              <%= f.label :contact_name, "Full name of primary contact", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :contact_name, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Enter full name" %>
+            </div>
+            <div>
+              <%= f.label :contact_email, "Email of primary contact", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.email_field :contact_email, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Enter email address" %>
+            </div>
+          </div>
+        <% elsif @step == "key_sectors" %>
+          <h2 class="text-2xl font-semibold mb-6">Key Sectors or Themes</h2>
+          <div class="space-y-6">
+            <div>
+              <%= f.label :key_sectors, "Key sectors or themes your organization focuses on", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <% sectors = [
+            "Entrepreneurship & Innovation",
+            "Climate & Sustainability",
+            "Women & Youth Empowerment",
+            "Agriculture / Food Systems",
+            "Health",
+            "Financial Inclusion",
+            "Education",
+            "Digital Transformation",
+            "Other"
+          ] %>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <% sectors.each_with_index do |sector, idx| %>
+                  <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-2xl hover:bg-slate-50 cursor-pointer">
+                    <%= f.check_box :key_sectors, { multiple: true, id: "key_sector_", class: 'h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-200 rounded' }, sector, nil %>
+                    <span class="text-sm"><%= sector %></span>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+            <div id="other-key-sectors" class="hidden">
+              <%= f.label :other_key_sectors, "Please specify other sector(s)", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :other_key_sectors, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Specify other sector(s)" %>
+            </div>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var check = document.getElementById('key_sector_other');
+              var otherDiv = document.getElementById('other-key-sectors');
+              function toggleOther() {
+                if (check && check.checked) {
+                  otherDiv.style.display = '';
+                } else {
+                  otherDiv.style.display = 'none';
+                }
+              }
+              if (check) {
+                check.addEventListener('change', toggleOther);
+                toggleOther();
+              }
+            });
+          </script>
+        <% elsif @step == "collaboration" %>
+          <h2 class="text-2xl font-semibold mb-6">Collaboration Areas</h2>
+          <div class="space-y-6">
+            <div>
+              <%= f.label :collaboration_areas, "Which areas would you like to explore collaboration in?", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <% areas = [
+            "Co-create or deliver startup incubation, acceleration, or skills development programs",
+            "Provide targeted support to specific groups such as women-led or youth-led startups through skills development and access to funding",
+            "Co-design sector-specific initiatives in areas such as climate innovation, green entrepreneurship, or other impact-driven sectors",
+            "Co-develop or support a startup funding and investment readiness program to provide grant or equity funding, facilitate investment readiness, or connect startups to investor networks",
+            "Launch or contribute to a founder mentorship and training initiative",
+            "Co-host hackathons, workshops, pitch events, or broader community engagement activities",
+            "Collaborate on research, studies, reports, or learning initiatives to generate insights and share best practices",
+            "Other"
+          ] %>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <% areas.each_with_index do |area, idx| %>
+                  <label class="flex items-center space-x-2 p-3 border border-slate-200 rounded-2xl hover:bg-slate-50 cursor-pointer">
+                    <%= f.check_box :collaboration_areas, { multiple: true, id: "collab_area_#{idx}", class: 'h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-200 rounded' }, area, nil %>
+                    <span class="text-sm"><%= area %></span>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+            <div id="other-collaboration-areas" class="hidden">
+              <%= f.label :other_collaboration_areas, "Please specify other area(s)", class: "block text-sm font-semibold text-slate-600 mb-2" %>
+              <%= f.text_field :other_collaboration_areas, class: "w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-300 focus:border-purple-500", placeholder: "Specify other area(s)" %>
+            </div>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var check = document.getElementById('collab_area_other');
+              var otherDiv = document.getElementById('other-collaboration-areas');
+              function toggleOther() {
+                if (check && check.checked) {
+                  otherDiv.style.display = '';
+                } else {
+                  otherDiv.style.display = 'none';
+                }
+              }
+              if (check) {
+                check.addEventListener('change', toggleOther);
+                toggleOther();
+              }
+            });
+          </script>
+        <% elsif @step == "review" %>
+          <h2 class="text-2xl font-semibold mb-6">Review your details</h2>
+          <div class="bg-slate-50 rounded-xl p-6 mb-6">
+            <ul class="text-gray-800 space-y-2">
+              <li><strong>Organization Name:</strong> <%= @partner_application.organization_name %></li>
+              <li><strong>Website:</strong> <%= @partner_application.website %></li>
+              <li><strong>Country:</strong> <%= @partner_application.country %></li>
+              <li><strong>Description:</strong> <%= @partner_application.description %></li>
+              <li><strong>Type:</strong> <%= @partner_application.organization_type %> <%= @partner_application.other_organization_type.presence %></li>
+              <li><strong>Contact:</strong> <%= @partner_application.contact_name %> (<%= @partner_application.contact_email %>)</li>
+              <li><strong>Key Sectors:</strong> <%= Array(@partner_application.key_sectors).join(", ").gsub(/^\[|\]$/, "") %> <%= @partner_application.other_key_sectors.presence %></li>
+              <li><strong>Collaboration Areas:</strong> <%= Array(@partner_application.collaboration_areas).join(", ").gsub(/^\[|\]$/, "") %> <%= @partner_application.other_collaboration_areas.presence %></li>
+            </ul>
+            <%# Hidden fields for all attributes to ensure partner_application params are present %>
+            <%= f.hidden_field :organization_name %>
+            <%= f.hidden_field :website %>
+            <%= f.hidden_field :country %>
+            <%= f.hidden_field :description %>
+            <%= f.hidden_field :organization_type %>
+            <%= f.hidden_field :other_organization_type %>
+            <%= f.hidden_field :contact_name %>
+            <%= f.hidden_field :contact_email %>
+            <%= f.hidden_field :other_key_sectors %>
+            <%= f.hidden_field :other_collaboration_areas %>
+            <% Array(@partner_application.key_sectors).each do |sector| %>
+              <%= f.hidden_field :key_sectors, value: sector %>
+            <% end %>
+            <% Array(@partner_application.collaboration_areas).each do |area| %>
+              <%= f.hidden_field :collaboration_areas, value: area %>
+            <% end %>
+          </div>
+        <% end %>
+        <!-- Navigation -->
+        <div class="flex justify-between mt-8">
+          <% steps_keys = steps.map { |s| s[:key] } %>
+          <% current_idx = steps_keys.index(@step) %>
+          <% prev_step = current_idx && current_idx > 0 ? steps_keys[current_idx - 1] : nil %>
+          <%# Back button %>
+          <% if prev_step %>
+            <%= link_to partner_onboarding_path(@partner_application, step: prev_step),
+                        class: "px-6 py-3 border border-slate-300 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-arrow-left mr-2"></i> Previous
+            <% end %>
+          <% else %>
+            <div></div>
+          <% end %>
+          <div class="flex gap-4">
+            <%= button_tag type: 'button', onclick: "document.getElementById('save-and-exit-field') && (document.getElementById('save-and-exit-field').value = '1'); this.form.submit();",
+                           class: "px-6 py-3 border border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-save mr-2"></i> Save & Exit
+            <% end %>
+            <%= f.submit (@step == "review" ? "Submit" : "Save & Continue"), class: "px-6 py-3 bg-purple-600 text-white rounded-2xl hover:bg-purple-700 transition-colors font-semibold flex items-center" %>
+          </div>
+        </div>
+      <% end %>
+    </div>

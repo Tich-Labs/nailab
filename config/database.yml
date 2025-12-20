@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: nailab_rails_development
+  username: postgres
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: localhost
+
+test:
+  <<: *default
+  database: nailab_test
+  username: postgres
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: localhost
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>

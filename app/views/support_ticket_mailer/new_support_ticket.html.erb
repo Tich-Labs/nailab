@@ -1,0 +1,14 @@
+<div style="font-family: Arial, sans-serif;">
+  <h1 style="color: #1d2c4a;">New support ticket</h1>
+  <p>
+    <strong>From:</strong> <%= @support_ticket.user.name %> (<%= @support_ticket.user.email %>)<br>
+    <strong>Subject:</strong> <%= @support_ticket.subject %><br>
+    <strong>Category:</strong> <%= @support_ticket.category %><br>
+    <strong>Status:</strong> <%= @support_ticket.status.humanize %><br>
+    <strong>Submitted:</strong> <%= l(@support_ticket.created_at, format: :long) %>
+  </p>
+  <p style="margin-top: 1.5rem; line-height: 1.6;">
+    <strong>Description:</strong><br>
+    <%= simple_format(@support_ticket.description) %>
+  </p>
+</div>

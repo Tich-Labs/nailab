@@ -1,0 +1,52 @@
+<div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">Startup Profile</h2>
+    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+      <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+      </svg>
+    </div>
+  </div>
+  <div class="space-y-4">
+    <% profile_fields = [
+      ['Name', @startup_profile&.startup_name],
+      ['Stage', @startup_profile&.stage],
+      ['Industry', @startup_profile&.sector],
+      ['Founded', @startup_profile&.founded_year],
+      ['Team Size', @startup_profile&.team_size]
+    ] %>
+    <% profile_fields.each do |label, value| %>
+      <div class="flex justify-between items-center py-2 border-b border-gray-100">
+        <span class="text-gray-600 font-medium"><%= label %></span>
+        <div class="flex items-center space-x-2">
+          <% if value.present? %>
+            <span class="text-gray-900 font-semibold"><%= value %></span>
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+          <% else %>
+            <span class="text-gray-400 italic">Not set</span>
+            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% completed_fields = profile_fields.count { |_, value| value.present? } %>
+  <% completion_percentage = (completed_fields.to_f / profile_fields.size * 100).round %>
+  <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-gray-700">Profile Completion</span>
+      <span class="text-sm font-semibold text-gray-900"><%= completion_percentage %>%</span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: <%= completion_percentage %>%"></div>
+    </div>
+  </div>
+  <div class="mt-8">
+    <%= link_to founder_startup_profile_path, class: 'inline-flex items-center space-x-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors group' do %>
+      <span>View Full Profile</span>
+      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  </div>
+</div>

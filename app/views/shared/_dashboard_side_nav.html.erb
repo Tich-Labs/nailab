@@ -1,0 +1,47 @@
+<%# app/views/shared/_dashboard_side_nav.html.erb %>
+<aside class="hidden md:block w-64 h-full bg-white border-r shadow-sm fixed top-20 left-0 z-40">
+  <nav class="flex flex-col py-8 px-4 space-y-6 overflow-y-auto" style="max-height: calc(100vh - 5rem);">
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Dashboard</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Home', founder_root_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path == founder_root_path ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">My Startup</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Startup Profile', founder_startup_profile_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?(founder_startup_profile_path) ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Progress Tracker', founder_progress_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path == founder_progress_path ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Mentorship</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Mentorship', founder_mentorship_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path == founder_mentorship_path ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Messages', founder_conversations_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?('/founder/messages') ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Growth</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Resource Library', founder_resources_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?(founder_resources_path) ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Opportunities', founder_opportunities_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?(founder_opportunities_path) ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Community</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Community & Peer Connections', founder_community_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path == founder_community_path ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Settings</h3>
+      <ul class="space-y-1">
+        <li><%= link_to 'Account Settings', founder_account_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?(founder_account_path) ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Subscription & Billing', founder_subscription_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path.start_with?(founder_subscription_path) ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Support', founder_support_path, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition #{request.path == founder_support_path ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-gray-700'}" %></li>
+        <li><%= link_to 'Log Out', destroy_user_session_path, method: :delete, class: "block px-4 py-2 rounded-lg hover:bg-purple-50 transition text-gray-700" %></li>
+      </ul>
+    </div>
+  </nav>
+</aside>

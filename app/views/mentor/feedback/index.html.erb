@@ -1,0 +1,20 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <h1 class="text-3xl font-semibold text-gray-900">Feedback & Ratings</h1>
+  <p class="text-gray-600 mt-2">Review feedback and ratings from founders.</p>
+  <% if @feedbacks.empty? %>
+    <div class="bg-white border border-dashed border-teal-200 rounded-lg p-8 text-center">
+      <p class="text-teal-600 font-semibold">No feedback available yet.</p>
+      <p class="text-sm text-gray-500 mt-2">Feedback from founders will appear here once submitted.</p>
+    </div>
+  <% else %>
+    <div class="space-y-4">
+      <% @feedbacks.each do |feedback| %>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-900"><%= feedback.founder.user_profile.full_name %></h3>
+          <p class="text-sm text-gray-600 mt-1">Rating: <%= feedback.rating %>/5</p>
+          <p class="text-sm text-gray-600 mt-2"><%= feedback.feedback %></p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

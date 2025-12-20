@@ -1,0 +1,101 @@
+<%# app/views/founder_onboarding/_summary.html.erb %>
+<div class="space-y-8">
+  <!-- Founder Profile Section -->
+  <div class="bg-white rounded-lg border border-gray-200 p-6">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <i class="fas fa-user mr-2 text-teal-600"></i>
+      Founder Profile
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-3">
+        <div>
+          <span class="text-sm font-medium text-gray-500">Full Name</span>
+          <p class="text-gray-900"><%= user_profile.full_name %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Email</span>
+          <p class="text-gray-900"><%= user_profile.user&.email || current_user.email %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Phone</span>
+          <p class="text-gray-900"><%= user_profile.phone %></p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <span class="text-sm font-medium text-gray-500">Country</span>
+          <p class="text-gray-900"><%= user_profile.country %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">City</span>
+          <p class="text-gray-900"><%= user_profile.city %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Startup Profile Section -->
+  <div class="bg-white rounded-lg border border-gray-200 p-6">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <i class="fas fa-building mr-2 text-teal-600"></i>
+      Startup Profile
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-4">
+        <div>
+          <span class="text-sm font-medium text-gray-500">Startup Name</span>
+          <p class="text-gray-900"><%= startup_profile.startup_name %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Description</span>
+          <p class="text-gray-900 text-sm"><%= startup_profile.description %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Stage</span>
+          <p class="text-gray-900"><%= startup_profile.stage %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Target Market</span>
+          <p class="text-gray-900"><%= startup_profile.target_market %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Unique Value Proposition</span>
+          <p class="text-gray-900 text-sm"><%= startup_profile.value_proposition %></p>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <span class="text-sm font-medium text-gray-500">Sector</span>
+          <p class="text-gray-900"><%= startup_profile.sector %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Funding Stage</span>
+          <p class="text-gray-900"><%= startup_profile.funding_stage %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Funding Raised</span>
+          <p class="text-gray-900"><%= startup_profile.funding_raised&.to_i %></p>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Mentorship Areas</span>
+          <div class="flex flex-wrap gap-2 mt-1">
+            <% Array(startup_profile.mentorship_areas).each do |area| %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                <%= area %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+        <div>
+          <span class="text-sm font-medium text-gray-500">Preferred Mentorship Mode</span>
+          <p class="text-gray-900"><%= startup_profile.preferred_mentorship_mode %></p>
+        </div>
+      </div>
+    </div>
+    <% if startup_profile.challenge_details.present? %>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <span class="text-sm font-medium text-gray-500">Challenge Details</span>
+        <p class="text-gray-900 text-sm mt-1"><%= startup_profile.challenge_details %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

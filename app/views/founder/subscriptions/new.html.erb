@@ -1,0 +1,282 @@
+<%# app/views/founder/subscriptions/new.html.erb %>
+<div class="min-h-screen bg-white">
+  <% if current_user %>
+    <!-- Personalized Welcome Section -->
+    <section class="py-12 bg-gradient-to-r from-teal-600 to-purple-600 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-3xl lg:text-4xl font-bold mb-4">
+          <%= current_user.subscription ? 'Upgrade Your Plan' : 'Choose Your Plan' %>
+        </h1>
+        <p class="text-xl mb-2">
+          <% if current_user.subscription %>
+            Ready to unlock more features? Explore our premium plans to accelerate your startup journey.
+          <% else %>
+            Start your startup journey with the right plan. Choose the features that match your current stage.
+          <% end %>
+        </p>
+        <% if current_user.subscription %>
+          <div class="mt-6">
+            <%= link_to founder_account_path, class: "inline-flex items-center px-6 py-3 bg-white/20 text-white text-lg font-semibold rounded-xl hover:bg-white/30 transition-all" do %>
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+              View Current Subscription Details
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% else %>
+    <!-- Non-logged-in users see the standard pricing page -->
+    <section class="py-20 bg-gradient-to-br from-purple-50 to-teal-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 text-center">
+          <%= @pricing_hero[:title] || 'Choose Your Plan' %>
+        </h1>
+        <% if @pricing_page&.content.present? %>
+          <div class="text-xl text-gray-700 text-center max-w-3xl mx-auto">
+            <%= raw(@pricing_page.content) %>
+          </div>
+        <% else %>
+          <p class="text-xl text-gray-700 text-center max-w-3xl mx-auto">
+            <%= @pricing_hero[:subtitle] || 'Flexible plans for every stage of your startup journey. Choose the plan that fits your needs.' %>
+          </p>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <%= form_with model: @subscription, url: founder_subscription_path, method: :post, id: 'subscription-form' do |f| %>
+        <%= render 'shared/pricing_grid', pricing_tiers: @pricing_tiers, current_user_tier: current_user&.subscription&.tier, selectable: true %>
+      <% end %>
+    </div>
+  </section>
+  <!-- Payment Modal -->
+  <div id="payment-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-900">Complete Your Payment</h3>
+          <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="mb-6 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-semibold text-gray-900" id="selected-plan-name">Premium Plan</h4>
+              <p class="text-sm text-gray-600" id="selected-plan-price">Ksh 15,000</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-gray-500">One-time payment</p>
+            </div>
+          </div>
+        </div>
+        <form id="payment-form">
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">Select Payment Method</label>
+            <div class="space-y-3">
+              <!-- Card Payment -->
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-teal-500 transition-colors" data-method="card">
+                <div class="flex items-center">
+                  <input type="radio" name="payment_method" value="card" class="mr-3 text-teal-600 focus:ring-teal-500">
+                  <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                      <path d="M4 8h16M4 12h8"/>
+                    </svg>
+                    <div>
+                      <p class="font-medium text-gray-900">Credit/Debit Card</p>
+                      <p class="text-sm text-gray-600">Visa, Mastercard, American Express</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- PayPal -->
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-teal-500 transition-colors" data-method="paypal">
+                <div class="flex items-center">
+                  <input type="radio" name="payment_method" value="paypal" class="mr-3 text-teal-600 focus:ring-teal-500">
+                  <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M7.076 21.337H2.47a.641.641 0 01-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.622 1.566 1.035.974 1.481 2.408 1.34 3.948-.013.014-.013.027-.013.041v.306c0 .227.013.454.027.68.454 4.195-1.314 7.177-5.505 7.177H9.54c-.68 0-1.204.524-1.204 1.204v8.217c0 .68.524 1.204 1.204 1.204h4.609c.68 0 1.204-.524 1.204-1.204V16.85c2.536-.013 4.47-1.204 5.505-3.386.67-1.415.415-2.971-.142-4.262-.013-.014-.013-.027-.013-.041-.415-1.962-.973-3.448-1.733-4.59-.787-1.176-1.972-1.782-3.762-1.782H8.25c-.227 0-.42.168-.472.394L7.076 21.337z"/>
+                    </svg>
+                    <div>
+                      <p class="font-medium text-gray-900">PayPal</p>
+                      <p class="text-sm text-gray-600">Pay with your PayPal account</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- M-Pesa -->
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-teal-500 transition-colors" data-method="mpesa">
+                <div class="flex items-center">
+                  <input type="radio" name="payment_method" value="mpesa" class="mr-3 text-teal-600 focus:ring-teal-500">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                      <span class="text-white font-bold text-sm">M</span>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">M-Pesa</p>
+                      <p class="text-sm text-gray-600">Pay with M-Pesa mobile money</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card Details (shown when card is selected) -->
+          <div id="card-details" class="hidden space-y-4 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+              <input type="text" placeholder="1234 5678 9012 3456" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                <input type="text" placeholder="MM/YY" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                <input type="text" placeholder="123" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Cardholder Name</label>
+              <input type="text" placeholder="John Doe" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+            </div>
+          </div>
+          <!-- M-Pesa Details (shown when M-Pesa is selected) -->
+          <div id="mpesa-details" class="hidden space-y-4 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">M-Pesa Phone Number</label>
+              <input type="tel" placeholder="0712345678" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+            </div>
+            <div class="p-3 bg-blue-50 rounded-md">
+              <p class="text-sm text-blue-800">You'll receive an M-Pesa prompt on your phone to complete the payment.</p>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <button type="button" id="cancel-payment" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors">
+              Complete Payment
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('payment-modal');
+      const closeModal = document.getElementById('close-modal');
+      const cancelPayment = document.getElementById('cancel-payment');
+      const paymentForm = document.getElementById('payment-form');
+      const paymentOptions = document.querySelectorAll('.payment-option');
+      const cardDetails = document.getElementById('card-details');
+      const mpesaDetails = document.getElementById('mpesa-details');
+      const selectedPlanName = document.getElementById('selected-plan-name');
+      const selectedPlanPrice = document.getElementById('selected-plan-price');
+
+      let selectedTier = null;
+
+      // Handle plan selection
+      document.querySelectorAll('input[name="subscription[tier]"]').forEach(input => {
+        input.closest('form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          selectedTier = input.value;
+
+          // Find the selected plan details
+          const pricingTiers = <%= raw @pricing_tiers.to_json %>;
+          const selectedPlan = pricingTiers.find(tier => tier.name === selectedTier);
+
+          if (selectedPlan) {
+            selectedPlanName.textContent = selectedPlan.name;
+            selectedPlanPrice.textContent = selectedPlan.price;
+          }
+
+          modal.classList.remove('hidden');
+        });
+      });
+
+      // Handle payment method selection
+      paymentOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const method = this.dataset.method;
+          const radio = this.querySelector('input[type="radio"]');
+          radio.checked = true;
+
+          // Hide all payment details
+          cardDetails.classList.add('hidden');
+          mpesaDetails.classList.add('hidden');
+
+          // Show relevant payment details
+          if (method === 'card') {
+            cardDetails.classList.remove('hidden');
+          } else if (method === 'mpesa') {
+            mpesaDetails.classList.remove('hidden');
+          }
+
+          // Update visual selection
+          paymentOptions.forEach(opt => opt.classList.remove('border-teal-500', 'bg-teal-50'));
+          this.classList.add('border-teal-500', 'bg-teal-50');
+        });
+      });
+
+      // Close modal functions
+      function closeModalFunc() {
+        modal.classList.add('hidden');
+        paymentForm.reset();
+        cardDetails.classList.add('hidden');
+        mpesaDetails.classList.add('hidden');
+        paymentOptions.forEach(opt => opt.classList.remove('border-teal-500', 'bg-teal-50'));
+      }
+
+      closeModal.addEventListener('click', closeModalFunc);
+      cancelPayment.addEventListener('click', closeModalFunc);
+
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModalFunc();
+        }
+      });
+
+      // Handle payment form submission
+      paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+        if (!paymentMethod) {
+          alert('Please select a payment method');
+          return;
+        }
+
+        // Here you would integrate with actual payment processors
+        // For now, we'll simulate a successful payment
+        alert(`Payment processed successfully with ${paymentMethod.value}! Your ${selectedTier} subscription is now active.`);
+
+        // Submit the original form
+        const originalForm = document.getElementById('subscription-form');
+        const tierInput = originalForm.querySelector('input[name="subscription[tier]"]');
+        if (tierInput) {
+          tierInput.value = selectedTier;
+        }
+
+        // Add payment method to form
+        const paymentMethodInput = document.createElement('input');
+        paymentMethodInput.type = 'hidden';
+        paymentMethodInput.name = 'subscription[payment_method]';
+        paymentMethodInput.value = paymentMethod.value;
+        originalForm.appendChild(paymentMethodInput);
+
+        originalForm.submit();
+        closeModalFunc();
+      });
+    });
+  </script>
+</div>

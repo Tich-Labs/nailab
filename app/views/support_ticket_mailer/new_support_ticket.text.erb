@@ -1,0 +1,6 @@
+New support ticket submitted by <%= @support_ticket.user.name %>
+Subject: <%= @support_ticket.subject %>
+Category: <%= @support_ticket.category %>
+Description:
+<%= @support_ticket.description %>
+Submitted at: <%= l(@support_ticket.created_at, format: :long) %>

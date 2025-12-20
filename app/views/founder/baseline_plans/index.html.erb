@@ -1,0 +1,30 @@
+<h1>Baseline Plans</h1>
+<%= link_to 'New Baseline Plan', new_founder_baseline_plan_path %>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Baseline Revenue</th>
+      <th>Baseline Customers</th>
+      <th>Baseline Burn Rate</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @baseline_plans.each do |baseline_plan| %>
+      <tr>
+        <td><%= baseline_plan.title %></td>
+        <td><%= baseline_plan.description %></td>
+        <td><%= baseline_plan.baseline_revenue %></td>
+        <td><%= baseline_plan.baseline_customers %></td>
+        <td><%= baseline_plan.baseline_burn_rate %></td>
+        <td>
+          <%= link_to 'Show', founder_baseline_plan_path(baseline_plan) %>
+          <%= link_to 'Edit', edit_founder_baseline_plan_path(baseline_plan) %>
+          <%= link_to 'Destroy', founder_baseline_plan_path(baseline_plan), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,28 @@
+<%# _focus_areas.html.erb - FocusAreas (key focus sectors) %>
+<section class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-4 text-center">
+    <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>
+    <div class="flex flex-wrap justify-center gap-6">
+      <% focus_areas = [
+        { title: 'HealthTech', description: 'Innovative solutions improving healthcare accessibility and quality across Africa' },
+        { title: 'AgriTech', description: 'Technologies enhancing agricultural productivity and sustainability.' },
+        { title: 'FinTech', description: 'Innovations making banking, payments, and financial services more accessible.' },
+        { title: 'EduTech', description: 'Digital solutions revolutionizing education and skill development in Africa.' },
+        { title: 'CleanTech', description: 'Sustainable solutions for renewable energy and environmental conservation.' },
+        { title: 'E-commerce & RetailTech', description: 'Innovative solutions transforming how Africans shop and access goods, no matter where they live.' },
+        { title: 'SaaS', description: 'Empowering businesses with scalable software solutions to enhance operations and growth.' },
+        { title: 'AI & ML', description: 'Artificial intelligence and machine learning applications solving African challenges.' },
+        { title: 'Robotics', description: 'Robotic innovations addressing industrial and social needs across the continent.' },
+        { title: 'MobileTech', description: 'Mobile-first solutions designed for Africa\'s rapidly growing smartphone market.' },
+        { title: 'Mobility & LogisticsTech', description: 'Streamlining the movement of people and goods for a more connected Africa.' },
+        { title: 'Creative & MediaTech', description: 'Revolutionizing digital content creation and consumption across the continent.' }
+      ] %>
+      <% focus_areas.each do |area| %>
+        <div class="bg-teal-50 border border-teal-100 rounded-xl px-8 py-6 w-64 shadow">
+          <h3 class="text-xl font-semibold text-teal-700 mb-2"><%= area[:title] %></h3>
+          <p class="text-gray-700"><%= area[:description] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

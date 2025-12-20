@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: "Launch Your African Startup Journey"
+  subtitle: "Connect with experienced mentors, access funding opportunities, and join a thriving community of African innovators building the future."
+  image_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+  cta_text: "Start Your Journey"
+  cta_link: "/users/sign_up"
+  display_order: 1
+  active: true
+
+two:
+  title: "Find the Perfect Mentor"
+  subtitle: "Get 1-on-1 guidance from seasoned entrepreneurs and industry experts who understand the African startup ecosystem."
+  image_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+  cta_text: "Browse Mentors"
+  cta_link: "/mentors"
+  display_order: 2
+  active: true
+
+three:
+  title: "Access Growth Programs"
+  subtitle: "Join accelerator programs, pitch competitions, and capacity-building initiatives designed for African startups."
+  image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+  cta_text: "Explore Programs"
+  cta_link: "/programs"
+  display_order: 3
+  active: true

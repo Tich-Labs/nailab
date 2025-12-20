@@ -1,0 +1,23 @@
+<%# _hero.html.erb - Hero (landing section) %>
+<% secondary_cta = { 'label' => 'Request Mentorship', 'link' => '/mentorship' } %>
+<% hero_slides = [
+  { title: 'Grow your startup with people who’ve done it before.', subtitle: 'Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.', cta_text: 'Request Mentorship', cta_link: '/mentorship', image_url: 'logo1.og' }
+] %>
+<div class="relative overflow-hidden">
+  <div class="relative h-[600px] lg:h-[700px]">
+    <% hero_slides.each do |slide| %>
+      <div class="absolute inset-0">
+        <img src="<%= slide[:image_url] %>" alt="<%= slide[:title] %>" class="w-full h-full object-cover" />
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div class="max-w-3xl space-y-6">
+            <h1 class="text-4xl lg:text-6xl font-bold text-white leading-tight"><%= slide[:title] %></h1>
+            <p class="text-xl lg:text-2xl text-gray-100 leading-relaxed"><%= slide[:subtitle] %></p>
+            <div>
+              <%= link_to slide[:cta_text], slide[:cta_link], class: "inline-flex items-center justify-center px-8 py-4 bg-teal-600 text-white text-lg font-semibold rounded-lg hover:bg-teal-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

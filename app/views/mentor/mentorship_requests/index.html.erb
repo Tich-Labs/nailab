@@ -1,0 +1,16 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-3xl font-semibold text-gray-900">Mentorship Requests</h1>
+    <p class="text-gray-600 mt-1">Manage incoming requests, accept, decline, or suggest a new time.</p>
+  </div>
+  <% if @requests.empty? %>
+    <div class="bg-white border border-dashed border-teal-200 rounded-lg p-8 text-center">
+      <p class="text-teal-600 font-semibold">You have no pending mentorship requests yet.</p>
+      <p class="text-sm text-gray-500 mt-2">Founders will appear here as they reach out.</p>
+    </div>
+  <% else %>
+    <div class="space-y-6">
+      <%= render partial: 'mentor/mentorship_requests/request_card', collection: @requests, as: :request %>
+    </div>
+  <% end %>
+</div>

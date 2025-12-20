@@ -1,0 +1,49 @@
+<%# app/views/mentor_onboarding/show.html.erb %>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Become a Nailab Mentor</h1>
+      <p class="text-gray-600">Join our community of experienced mentors helping startups succeed</p>
+    </div>
+    <!-- Progress Bar -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-sm font-medium text-gray-700">Step <%= @step_index = MentorOnboardingController::STEPS.index(@step) + 1 %> of <%= MentorOnboardingController::STEPS.length %></span>
+        <span class="text-sm text-gray-500"><%= @progress.round %>% complete</span>
+      </div>
+      <div class="w-full bg-slate-200 rounded-full h-2">
+        <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: <%= @progress %>%"></div>
+      </div>
+    </div>
+    <!-- Step Content and Navigation (buttons inside form) -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <%= form_with model: @profile, url: mentor_onboarding_path(step: @step), method: :put, id: 'mentor-onboarding-form', local: true do |f| %>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
+        <%= render "mentor_onboarding/steps/#{@step}", f: f %>
+        <div class="flex justify-between mt-8">
+          <% steps = MentorOnboardingController::STEPS %>
+          <% current_idx = steps.index(@step) %>
+          <% prev_step = current_idx && current_idx > 0 ? steps[current_idx - 1] : nil %>
+          <%# Back button %>
+          <% if prev_step %>
+            <%= link_to mentor_onboarding_path(step: prev_step),
+                        class: "px-6 py-3 border border-slate-300 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-arrow-left mr-2"></i> Previous
+            <% end %>
+          <% else %>
+            <div></div>
+          <% end %>
+          <div class="flex gap-4">
+            <%= button_tag type: 'button', onclick: "document.getElementById('save-and-exit-field').value = '1'; this.form.submit();",
+                           class: "px-6 py-3 border border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 transition-colors font-semibold flex items-center" do %>
+              <i class="fas fa-save mr-2"></i> Save & Exit
+            <% end %>
+            <%= f.submit (@step == 'review' ? 'Finish' : 'Save & Continue'), class: "px-6 py-3 bg-purple-600 text-white rounded-2xl hover:bg-purple-700 transition-colors font-semibold flex items-center" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

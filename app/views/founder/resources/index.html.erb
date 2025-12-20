@@ -1,0 +1,90 @@
+<%# app/views/founder/resources/index.html.erb %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Resource Library</h1>
+    <p class="text-xl text-gray-600">Access tools, templates, and guides to accelerate your startup growth</p>
+  </div>
+  <!-- Filter Section -->
+  <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+    <div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+      <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+        <%= form_with url: founder_resources_path, method: :get, class: "flex flex-col sm:flex-row gap-6 items-start sm:items-center" do |f| %>
+          <!-- Bookmark Filter -->
+          <div class="flex items-center space-x-3 bg-gray-50 px-4 py-3 rounded-lg border">
+            <%= check_box_tag :filter, 'bookmarked', params[:filter] == 'bookmarked', class: "rounded border-gray-300 text-purple-600 focus:ring-purple-500", onchange: "this.form.submit()" %>
+            <%= label_tag :filter, "Show only bookmarked", class: "text-sm font-medium text-gray-700 cursor-pointer" %>
+          </div>
+          <!-- Resource Type Filter -->
+          <div class="flex items-center space-x-3 bg-gray-50 px-4 py-3 rounded-lg border">
+            <%= label_tag :resource_type, "Filter by type:", class: "text-sm font-medium text-gray-700 whitespace-nowrap" %>
+            <%= select_tag :resource_type, options_for_select([
+              ['All Types', 'all'],
+              ['Blog Posts', 'blog'],
+              ['Events', 'event'],
+              ['Webinars', 'webinar'],
+              ['Opportunities', 'opportunity'],
+              ['Templates', 'template'],
+              ['Guides', 'guide'],
+              ['PDFs', 'pdf'],
+              ['Videos', 'video']
+            ], params[:resource_type] || 'all'), class: "rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 text-sm bg-white", onchange: "this.form.submit()" %>
+          </div>
+          <!-- Clear Filters -->
+          <%= link_to "Clear Filters", founder_resources_path, class: "text-sm text-purple-600 hover:text-purple-800 font-medium px-4 py-2 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors" %>
+        <% end %>
+      </div>
+      <!-- Results Count -->
+      <div class="text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-lg border">
+        <%= @resources.count %> resource<%= @resources.count == 1 ? '' : 's' %> found
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <% @resources.each do |resource| %>
+      <% is_bookmarked = current_user.bookmarks.exists?(resource: resource) %>
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
+        <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-6 py-4">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full"><%= resource.category %></span>
+            <div class="flex items-center space-x-2">
+              <% if is_bookmarked %>
+                <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              <% end %>
+              <span class="text-white text-sm font-medium"><%= resource.file_type %></span>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-3"><%= resource.title %></h3>
+          <p class="text-gray-600 mb-6"><%= resource.description %></p>
+          <div class="flex space-x-3">
+            <% action_text = case resource.resource_type
+              when 'blog'
+                'Read'
+              when 'event', 'webinar'
+                'Attend'
+              when 'opportunity'
+                'Apply'
+              else
+                'Access'
+            end %>
+            <%= link_to action_text, founder_resource_path(resource), class: "w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-600 to-teal-600 text-white text-sm font-semibold rounded-lg hover:from-purple-700 hover:to-teal-700 transition-all" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @resources.empty? %>
+    <div class="text-center py-20">
+      <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">No resources available yet</h3>
+      <p class="text-gray-600">We're curating the best resources for founders. Check back soon!</p>
+    </div>
+  <% end %>
+</div>
