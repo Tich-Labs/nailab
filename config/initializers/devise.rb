@@ -282,7 +282,8 @@ Devise.setup do |config|
     jwt.expiration_time = 1.day.to_i
   end
 
-  config.navigational_formats = []
+  # Restore default navigational formats to allow HTML redirects for unauthenticated users
+  config.navigational_formats = ['*/*', :html, :turbo_stream]
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
