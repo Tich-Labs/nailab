@@ -52,6 +52,7 @@ def seed_startup_profile!(user:, attrs:)
     puts "Failed to save StartupProfile for user #{user.email}: #{profile.errors.full_messages.join(', ')}"
     raise "StartupProfile invalid for user #{user.email}"
   end
+  puts "StartupProfile saved for user #{user.email}: #{profile.inspect}"
   profile
 end
 
