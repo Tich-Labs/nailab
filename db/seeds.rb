@@ -107,6 +107,7 @@ end
 # FOUNDER 1 — Agritech (Early Stage)
 # ----------------------------
 f1 = seed_founder!(email: "aisha@greensprout.africa", full_name: "Aisha Wanjiku")
+
 s1 = seed_startup_profile!(user: f1, attrs: {
   startup_name: "GreenSprout",
   sector: "Agritech",
@@ -124,6 +125,9 @@ s1 = seed_startup_profile!(user: f1, attrs: {
   value_proposition: "Reduce post-harvest losses and improve farmer margins through better planning and market access.",
   challenge_details: "Need help refining GTM, partnership strategy with cooperatives, and pricing model for sustainability."
 })
+unless s1 && s1.persisted?
+  puts "StartupProfile not created for user \\#{f1.email}"
+end
 
 seed_milestones!(
   user: f1,
@@ -152,6 +156,7 @@ seed_monthly_metrics!(
 # FOUNDER 2 — Healthtech (Early Stage)
 # ----------------------------
 f2 = seed_founder!(email: "brian@clinicflow.health", full_name: "Brian Ochieng")
+
 s2 = seed_startup_profile!(user: f2, attrs: {
   startup_name: "ClinicFlow",
   sector: "Healthtech",
@@ -169,6 +174,9 @@ s2 = seed_startup_profile!(user: f2, attrs: {
   value_proposition: "Cut waiting time and reduce stockouts for small clinics with an affordable workflow system.",
   challenge_details: "Need mentorship on PMF validation, B2B sales playbook, and compliance pathway."
 })
+unless s2 && s2.persisted?
+  puts "StartupProfile not created for user \\#{f2.email}"
+end
 
 seed_milestones!(
   user: f2,
@@ -197,6 +205,7 @@ seed_monthly_metrics!(
 # FOUNDER 3 — Fintech/SME tools (Early Stage)
 # ----------------------------
 f3 = seed_founder!(email: "leila@pocketledger.io", full_name: "Leila Hassan")
+
 s3 = seed_startup_profile!(user: f3, attrs: {
   startup_name: "PocketLedger",
   sector: "Fintech / SME Tools",
@@ -214,6 +223,9 @@ s3 = seed_startup_profile!(user: f3, attrs: {
   value_proposition: "Help SMEs understand cashflow and reduce financial stress with simple daily tracking.",
   challenge_details: "Need mentorship on distribution partnerships, retention loops, and scaling from MVP to v1."
 })
+unless s3 && s3.persisted?
+  puts "StartupProfile not created for user \\#{f3.email}"
+end
 
 seed_milestones!(
   user: f3,
