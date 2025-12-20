@@ -1,5 +1,6 @@
 
 class FounderOnboardingController < ApplicationController
+  skip_before_action :authenticate_user!
   include CountryHelper
   STEPS = %w[personal startup professional mentorship confirm]
 

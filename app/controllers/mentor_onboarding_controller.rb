@@ -1,4 +1,5 @@
 class MentorOnboardingController < ApplicationController
+  skip_before_action :authenticate_user!
   # before_action :authenticate_user! # Removed to allow onboarding without login
   # before_action :ensure_mentor_role # Removed to allow onboarding without login
   # before_action :load_profile # Will refactor for session-based or new model onboarding
