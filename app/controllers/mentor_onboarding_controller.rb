@@ -14,7 +14,7 @@ class MentorOnboardingController < ApplicationController
     end
 
     # Handle "Other" options for mentorship_focus step
-    if @step == 'mentorship_focus'
+    if @step == "mentorship_focus"
       prepare_mentorship_focus_form_data
     end
 
@@ -35,17 +35,17 @@ end
     if params[:save_and_exit].present?
       # Handle save and exit
       mentorship_params = mentor_params_for_step(@step)
-      if @step == 'mentorship_focus'
+      if @step == "mentorship_focus"
         mentorship_params = process_mentorship_focus_params(mentorship_params)
       end
       if @profile.update(mentorship_params)
         @profile.update(onboarding_step: @step)
-        redirect_to mentor_root_path, notice: 'Your progress has been saved. You can continue onboarding later.'
+        redirect_to mentor_root_path, notice: "Your progress has been saved. You can continue onboarding later."
       else
         @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
         render :show
       end
-    elsif @step == 'mentorship_focus'
+    elsif @step == "mentorship_focus"
       mentorship_params = mentor_params_for_step(@step)
       mentorship_params = process_mentorship_focus_params(mentorship_params)
       if @profile.update(mentorship_params)
@@ -75,8 +75,8 @@ end
   private
 
   def ensure_mentor_role
-    unless current_user.user_profile&.role == 'mentor'
-      redirect_to root_path, alert: 'Access denied'
+    unless current_user.user_profile&.role == "mentor"
+      redirect_to root_path, alert: "Access denied"
     end
   end
 
@@ -86,15 +86,15 @@ end
 
   def mentor_params_for_step(step)
     case step
-    when 'basic_details'
+    when "basic_details"
       params.require(:user_profile).permit(:full_name, :bio, :title)
-    when 'work_experience'
+    when "work_experience"
       params.require(:user_profile).permit(:organization, :years_experience, :advisory_experience, :advisory_description)
-    when 'mentorship_focus'
+    when "mentorship_focus"
       params.require(:user_profile).permit(sectors: [], expertise: [], stage_preference: [], other_sector: [], other_expertise: [])
-    when 'mentorship_style'
+    when "mentorship_style"
       params.require(:user_profile).permit(:mentorship_approach, :motivation)
-    when 'availability'
+    when "availability"
       params.require(:user_profile).permit(:availability_hours_month, :preferred_mentorship_mode, :rate_per_hour, :pro_bono, :linkedin_url, :professional_website, :currency)
     else
       {}
@@ -109,20 +109,20 @@ end
   def prepare_mentorship_focus_form_data
     # Prepare sectors for form display
     if @profile.sectors.present?
-      predefined_sectors = ['Agritech', 'Healthtech', 'Fintech', 'Edutech', 'Mobility & Logistics tech', 'E-commerce & Retailtech', 'SaaS', 'Creative & Mediatech', 'Cleantech', 'AI & ML', 'Robotics', 'Mobiletech', 'Other']
+      predefined_sectors = [ "Agritech", "Healthtech", "Fintech", "Edutech", "Mobility & Logistics tech", "E-commerce & Retailtech", "SaaS", "Creative & Mediatech", "Cleantech", "AI & ML", "Robotics", "Mobiletech", "Other" ]
       custom_sectors = (@profile.sectors - predefined_sectors)
       if custom_sectors.any?
-        @profile.sectors = (@profile.sectors - custom_sectors) + ['Other']
+        @profile.sectors = (@profile.sectors - custom_sectors) + [ "Other" ]
         @other_sector = custom_sectors.first
       end
     end
 
     # Prepare expertise for form display
     if @profile.expertise.present?
-      predefined_expertise = ['Business model refinement', 'PMF', 'Access to customers/markets', 'GTM planning', 'Product development', 'Pitching/fundraising', 'Marketing/branding', 'Team building/HR', 'Budgeting/finance', 'Market expansion', 'Legal/regulatory', 'Leadership growth', 'Partnerships', 'Sales & acquisition', 'Other']
+      predefined_expertise = [ "Business model refinement", "PMF", "Access to customers/markets", "GTM planning", "Product development", "Pitching/fundraising", "Marketing/branding", "Team building/HR", "Budgeting/finance", "Market expansion", "Legal/regulatory", "Leadership growth", "Partnerships", "Sales & acquisition", "Other" ]
       custom_expertise = (@profile.expertise - predefined_expertise)
       if custom_expertise.any?
-        @profile.expertise = (@profile.expertise - custom_expertise) + ['Other']
+        @profile.expertise = (@profile.expertise - custom_expertise) + [ "Other" ]
         @other_expertise = custom_expertise.first
       end
     end

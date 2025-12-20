@@ -9,7 +9,7 @@ class Founder::StartupProfilesController < Founder::BaseController
 
   def update
     if @startup_profile.update(startup_profile_params)
-      redirect_to founder_startup_profile_path, notice: 'Profile updated successfully.'
+      redirect_to founder_startup_profile_path, notice: "Profile updated successfully."
     else
       render :edit
     end
@@ -35,7 +35,7 @@ class Founder::StartupProfilesController < Founder::BaseController
         :funding_raised,
         :website_url,
         :profile_visibility,
-        team_members: [:id, :name, :role]
+        team_members: [ :id, :name, :role ]
       ),
       :profile_visibility
     )

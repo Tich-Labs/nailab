@@ -11,16 +11,16 @@ gem "puma", ">= 5.0"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
-gem 'devise' # Authentication
-gem 'devise-jwt' # Token-based authentication for React
-gem 'omniauth' # OAuth authentication framework
-gem 'omniauth-linkedin-oauth2' # LinkedIn OAuth2 provider
-gem 'omniauth-google-oauth2' # Google OAuth2 provider
-gem 'omniauth-rails_csrf_protection' # CSRF protection for OmniAuth
-gem 'active_storage_validations' # Validations for ActiveStorage uploads
-gem 'rails_admin' # CMS/Admin interface (or use 'activeadmin')
-gem 'hotwire-rails' # Turbo/Stimulus for interactivity
-gem 'cssbundling-rails' # TailwindCSS integration
+gem "devise" # Authentication
+gem "devise-jwt" # Token-based authentication for React
+gem "omniauth" # OAuth authentication framework
+gem "omniauth-linkedin-oauth2" # LinkedIn OAuth2 provider
+gem "omniauth-google-oauth2" # Google OAuth2 provider
+gem "omniauth-rails_csrf_protection" # CSRF protection for OmniAuth
+gem "active_storage_validations" # Validations for ActiveStorage uploads
+gem "rails_admin" # CMS/Admin interface (or use 'activeadmin')
+gem "hotwire-rails" # Turbo/Stimulus for interactivity
+gem "cssbundling-rails" # TailwindCSS integration
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

@@ -8,11 +8,11 @@ class MatchingService
 
   def initialize(founder_id)
     @founder = User.find_by(id: founder_id)
-    raise ActiveRecord::RecordNotFound, 'Founder not found' unless @founder
+    raise ActiveRecord::RecordNotFound, "Founder not found" unless @founder
     @founder_profile = @founder.user_profile
     @startup_profile = @founder.startup_profile
-    raise ActiveRecord::RecordNotFound, 'Founder profile missing' unless @founder_profile
-    raise ActiveRecord::RecordNotFound, 'Startup profile missing' unless @startup_profile
+    raise ActiveRecord::RecordNotFound, "Founder profile missing" unless @founder_profile
+    raise ActiveRecord::RecordNotFound, "Startup profile missing" unless @startup_profile
   end
 
   def call(limit: 10)
@@ -30,7 +30,7 @@ class MatchingService
 
   def mentor_scope
     UserProfile
-      .where(role: 'mentor', profile_visibility: true, onboarding_completed: true)
+      .where(role: "mentor", profile_visibility: true, onboarding_completed: true)
       .includes(:user)
   end
 
@@ -42,7 +42,7 @@ class MatchingService
 
     {
       mentor: mentor_payload(mentor_profile),
-      score: [sector_score + stage_score + expertise_score + location_score, 100].min.round,
+      score: [ sector_score + stage_score + expertise_score + location_score, 100 ].min.round,
       match_reasons: match_reasons(mentor_profile, sector_score, stage_score, expertise_score, location_score)
     }
   end
@@ -86,14 +86,14 @@ class MatchingService
     return 0 if mentor_profile.expertise.blank? || @startup_profile.mentorship_areas.blank?
     matches = mentor_profile.expertise & @startup_profile.mentorship_areas
     return 0 if matches.empty?
-    (matches.length.to_f / [@startup_profile.mentorship_areas.length, 1].max) * MATCH_SCORE[:expertise]
+    (matches.length.to_f / [ @startup_profile.mentorship_areas.length, 1 ].max) * MATCH_SCORE[:expertise]
   end
 
   def location_match(mentor_profile)
     return 0 if mentor_profile.location.blank? || @startup_profile.location.blank?
 
-    mentor_country = mentor_profile.location.split(',').last&.strip
-    founder_country = @startup_profile.location.split(',').last&.strip
+    mentor_country = mentor_profile.location.split(",").last&.strip
+    founder_country = @startup_profile.location.split(",").last&.strip
 
     return MATCH_SCORE[:location] if mentor_profile.location == @startup_profile.location
     return 10 if mentor_country.present? && mentor_country == founder_country
@@ -117,10 +117,10 @@ class MatchingService
 
     if stage_score.positive?
       stage_labels = {
-        'idea' => 'Idea Stage',
-        'mvp' => 'Early Stage',
-        'growth' => 'Growth Stage',
-        'scale' => 'Scaling Stage'
+        "idea" => "Idea Stage",
+        "mvp" => "Early Stage",
+        "growth" => "Growth Stage",
+        "scale" => "Scaling Stage"
       }
       reasons << "Experienced with #{stage_labels[@startup_profile.stage] || @startup_profile.stage} startups"
     end
@@ -131,12 +131,12 @@ class MatchingService
     end
 
     if location_score >= 10
-      country = mentor_profile.location.split(',').last&.strip
+      country = mentor_profile.location.split(",").last&.strip
       reasons << "Based in #{country}" if country.present?
     end
 
-    reasons << 'Experienced advisor and investor' if mentor_profile.advisory_experience
-    reasons << 'Offers pro bono sessions' if mentor_profile.pro_bono
+    reasons << "Experienced advisor and investor" if mentor_profile.advisory_experience
+    reasons << "Offers pro bono sessions" if mentor_profile.pro_bono
     reasons << "#{mentor_profile.years_experience}+ years of experience" if mentor_profile.years_experience.present?
 
     reasons.uniq

@@ -1,5 +1,5 @@
 class Founder::BaselinePlansController < Founder::BaseController
-  before_action :set_baseline_plan, only: [:show, :edit, :update, :destroy]
+  before_action :set_baseline_plan, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @baseline_plans = current_user.baseline_plans
@@ -15,7 +15,7 @@ class Founder::BaselinePlansController < Founder::BaseController
   def create
     @baseline_plan = current_user.baseline_plans.new(baseline_plan_params)
     if @baseline_plan.save
-      redirect_to founder_baseline_plans_path, notice: 'Baseline plan was successfully created.'
+      redirect_to founder_baseline_plans_path, notice: "Baseline plan was successfully created."
     else
       render :new
     end
@@ -26,7 +26,7 @@ class Founder::BaselinePlansController < Founder::BaseController
 
   def update
     if @baseline_plan.update(baseline_plan_params)
-      redirect_to founder_baseline_plans_path, notice: 'Baseline plan was successfully updated.'
+      redirect_to founder_baseline_plans_path, notice: "Baseline plan was successfully updated."
     else
       render :edit
     end
@@ -34,7 +34,7 @@ class Founder::BaselinePlansController < Founder::BaseController
 
   def destroy
     @baseline_plan.destroy
-    redirect_to founder_baseline_plans_path, notice: 'Baseline plan was successfully destroyed.'
+    redirect_to founder_baseline_plans_path, notice: "Baseline plan was successfully destroyed."
   end
 
   private

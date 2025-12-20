@@ -138,9 +138,9 @@ seed_monthly_metrics!(
     { month: Date.new(2025, 7, 1), revenue: 0,    customers: 25, runway_months: 3, burn_rate: 35000, notes: "MVP pilots started." },
     { month: Date.new(2025, 8, 1), revenue: 8000, customers: 60, runway_months: 3, burn_rate: 42000, notes: "Added 2 cooperatives." },
     { month: Date.new(2025, 9, 1), revenue: 15000, customers: 110, runway_months: 2, burn_rate: 55000, notes: "Field ops expanded." },
-    { month: Date.new(2025,10, 1), revenue: 23000, customers: 160, runway_months: 2, burn_rate: 60000, notes: "Improved retention." },
-    { month: Date.new(2025,11, 1), revenue: 35000, customers: 210, runway_months: 2, burn_rate: 62000, notes: "Tested subscription tiers." },
-    { month: Date.new(2025,12, 1), revenue: 48000, customers: 280, runway_months: 2, burn_rate: 65000, notes: "Preparing for buyer partnership." }
+    { month: Date.new(2025, 10, 1), revenue: 23000, customers: 160, runway_months: 2, burn_rate: 60000, notes: "Improved retention." },
+    { month: Date.new(2025, 11, 1), revenue: 35000, customers: 210, runway_months: 2, burn_rate: 62000, notes: "Tested subscription tiers." },
+    { month: Date.new(2025, 12, 1), revenue: 48000, customers: 280, runway_months: 2, burn_rate: 65000, notes: "Preparing for buyer partnership." }
   ]
 )
 
@@ -183,9 +183,9 @@ seed_monthly_metrics!(
     { month: Date.new(2025, 7, 1), revenue: 20000, customers: 3, runway_months: 4, burn_rate: 70000, notes: "First paid clinics." },
     { month: Date.new(2025, 8, 1), revenue: 35000, customers: 5, runway_months: 4, burn_rate: 75000, notes: "Referrals started." },
     { month: Date.new(2025, 9, 1), revenue: 50000, customers: 7, runway_months: 3, burn_rate: 90000, notes: "Support load increased." },
-    { month: Date.new(2025,10, 1), revenue: 65000, customers: 9, runway_months: 3, burn_rate: 95000, notes: "Added training sessions." },
-    { month: Date.new(2025,11, 1), revenue: 82000, customers: 12, runway_months: 3, burn_rate: 98000, notes: "New pricing tier tested." },
-    { month: Date.new(2025,12, 1), revenue: 100000, customers: 15, runway_months: 3, burn_rate: 105000, notes: "Pipeline building." }
+    { month: Date.new(2025, 10, 1), revenue: 65000, customers: 9, runway_months: 3, burn_rate: 95000, notes: "Added training sessions." },
+    { month: Date.new(2025, 11, 1), revenue: 82000, customers: 12, runway_months: 3, burn_rate: 98000, notes: "New pricing tier tested." },
+    { month: Date.new(2025, 12, 1), revenue: 100000, customers: 15, runway_months: 3, burn_rate: 105000, notes: "Pipeline building." }
   ]
 )
 
@@ -228,9 +228,9 @@ seed_monthly_metrics!(
     { month: Date.new(2025, 7, 1), revenue: 0,    customers: 80, runway_months: 5, burn_rate: 25000, notes: "Free beta users." },
     { month: Date.new(2025, 8, 1), revenue: 5000, customers: 140, runway_months: 5, burn_rate: 28000, notes: "Started paid test." },
     { month: Date.new(2025, 9, 1), revenue: 12000, customers: 220, runway_months: 4, burn_rate: 35000, notes: "Added reminders." },
-    { month: Date.new(2025,10, 1), revenue: 18000, customers: 320, runway_months: 4, burn_rate: 40000, notes: "Referral loop introduced." },
-    { month: Date.new(2025,11, 1), revenue: 26000, customers: 450, runway_months: 4, burn_rate: 42000, notes: "Improved onboarding." },
-    { month: Date.new(2025,12, 1), revenue: 40000, customers: 620, runway_months: 4, burn_rate: 45000, notes: "Preparing partnerships." }
+    { month: Date.new(2025, 10, 1), revenue: 18000, customers: 320, runway_months: 4, burn_rate: 40000, notes: "Referral loop introduced." },
+    { month: Date.new(2025, 11, 1), revenue: 26000, customers: 450, runway_months: 4, burn_rate: 42000, notes: "Improved onboarding." },
+    { month: Date.new(2025, 12, 1), revenue: 40000, customers: 620, runway_months: 4, burn_rate: 45000, notes: "Preparing partnerships." }
   ]
 )
 
@@ -411,9 +411,9 @@ mentors_data = [
     years_experience: 10,
     advisory_experience: 5,
     advisory_description: "Led operations for a $2B fintech unicorn, scaled from 50 to 500+ employees across 5 countries.",
-    sectors: ["fintech", "payments"],
-    expertise: ["operations", "scaling", "team-building"],
-    stage_preference: ["growth", "scale"],
+    sectors: [ "fintech", "payments" ],
+    expertise: [ "operations", "scaling", "team-building" ],
+    stage_preference: [ "growth", "scale" ],
     mentorship_approach: "Structured and results-oriented, combining strategic guidance with practical implementation plans. I believe in setting clear milestones and accountability while providing the tools and frameworks needed for rapid execution. My approach focuses on building scalable systems and processes that founders can implement immediately, rather than just theoretical advice. I work closely with founders to identify their biggest bottlenecks and create actionable plans to overcome them, drawing from my experience scaling operations across multiple African markets.",
     motivation: "Giving back to the African startup ecosystem that shaped my career.",
     availability_hours_month: 10,
@@ -433,9 +433,9 @@ mentors_data = [
     years_experience: 12,
     advisory_experience: 7,
     advisory_description: "Built and exited two healthtech companies, raised $15M+ in funding, and now invest in early-stage healthcare startups.",
-    sectors: ["healthcare", "healthtech"],
-    expertise: ["regulatory", "fundraising", "market-entry"],
-    stage_preference: ["mvp", "growth"],
+    sectors: [ "healthcare", "healthtech" ],
+    expertise: [ "regulatory", "fundraising", "market-entry" ],
+    stage_preference: [ "mvp", "growth" ],
     mentorship_approach: "Empathetic and patient, focusing on sustainable growth and founder well-being. Healthcare is a unique sector with complex regulatory and ethical considerations, so I prioritize understanding each founder's vision while ensuring they build compliant, ethical businesses. My mentorship style involves regular check-ins, honest feedback, and connecting founders with the right healthcare stakeholders. I believe in building long-term relationships that extend beyond just business advice to include personal development and work-life balance in the demanding healthcare entrepreneurship space.",
     motivation: "Healthcare is personal - I want to ensure more Africans have access to quality care through entrepreneurship.",
     availability_hours_month: 8,
@@ -455,9 +455,9 @@ mentors_data = [
     years_experience: 15,
     advisory_experience: 8,
     advisory_description: "Founded three B2B SaaS companies, achieved 3 successful exits, and invested in 20+ African startups.",
-    sectors: ["saas", "enterprise-software"],
-    expertise: ["sales", "enterprise", "product-market-fit"],
-    stage_preference: ["mvp", "growth", "scale"],
+    sectors: [ "saas", "enterprise-software" ],
+    expertise: [ "sales", "enterprise", "product-market-fit" ],
+    stage_preference: [ "mvp", "growth", "scale" ],
     mentorship_approach: "Direct and challenging, pushing founders to think bigger and execute faster. I don't believe in sugarcoating feedback - African startups need to compete globally from day one. My approach involves setting ambitious goals, holding founders accountable, and providing the tactical advice needed to achieve rapid growth. I focus on revenue generation, customer acquisition, and building defensible business models. While I'm direct, I'm also supportive and will roll up my sleeves to help with execution when needed, drawing from my experience building and selling multiple software companies.",
     motivation: "Africa needs more world-class software companies, and I'm here to help build them.",
     availability_hours_month: 12,
@@ -477,9 +477,9 @@ mentors_data = [
     years_experience: 9,
     advisory_experience: 4,
     advisory_description: "Led growth for pan-African tech media company, grew audience from 50K to 500K+ across 10 countries.",
-    sectors: ["media", "content", "marketing"],
-    expertise: ["growth", "marketing", "user-acquisition"],
-    stage_preference: ["mvp", "growth"],
+    sectors: [ "media", "content", "marketing" ],
+    expertise: [ "growth", "marketing", "user-acquisition" ],
+    stage_preference: [ "mvp", "growth" ],
     mentorship_approach: "Data-driven and creative, combining analytics with storytelling to drive user growth. Marketing is both an art and a science, and I help founders find the right balance for their product and market. My approach involves setting up proper analytics frameworks, A/B testing, and creative campaign strategies tailored to African markets. I believe in teaching founders how to fish rather than just giving them fish - I provide the methodologies and tools they need to become self-sufficient in their growth efforts. This includes building internal marketing capabilities and creating scalable growth systems that work across different African countries and cultures.",
     motivation: "Marketing is often overlooked in African startups - I want to change that narrative.",
     availability_hours_month: 15,
@@ -494,16 +494,16 @@ mentors_data = [
 
 mentors_data.each do |mentor_data|
   user = seed_founder!(email: mentor_data[:email], full_name: mentor_data[:full_name])
-  
+
   profile = UserProfile.find_or_initialize_by(user_id: user.id)
   profile.role = 'mentor'
   profile.onboarding_completed = true
   profile.profile_visibility = true
-  
+
   # Remove email from mentor_data since it's not a profile field
   profile_data = mentor_data.except(:email)
   SeedHelpers.safe_assign(profile, profile_data)
-  
+
   profile.save!
 end
 

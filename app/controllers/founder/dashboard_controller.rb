@@ -1,5 +1,4 @@
 class Founder::DashboardController < Founder::BaseController
-
   def show
     @user = current_user
     @startup_profile = @user.startup_profile

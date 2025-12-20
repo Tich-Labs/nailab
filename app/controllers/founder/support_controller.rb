@@ -8,7 +8,7 @@ class Founder::SupportController < Founder::BaseController
     @support_ticket = current_user.support_tickets.build(support_ticket_params)
     if @support_ticket.save
       SupportTicketMailer.with(support_ticket: @support_ticket).new_support_ticket.deliver_later
-      redirect_to founder_support_path, notice: 'Your support ticket has been submitted. Our team will follow up shortly.'
+      redirect_to founder_support_path, notice: "Your support ticket has been submitted. Our team will follow up shortly."
     else
       load_tickets
       render :show, status: :unprocessable_entity

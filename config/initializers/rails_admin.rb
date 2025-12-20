@@ -1,20 +1,20 @@
 MARKETING_CONTENT_MENU = {
-  'Home • Hero slides' => '/admin/hero_slide',
-  'Home • Structured content' => '/admin/static_page?f[slug_eq]=home',
-  'About page' => '/admin/static_page?f[slug_eq]=about',
-  'Programs' => '/admin/program',
-  'Resources' => '/admin/resource',
-  'Startup directory' => '/admin/startup_profile',
-  'Pricing page' => '/admin/static_page?f[slug_eq]=pricing',
-  'Contact page' => '/admin/static_page?f[slug_eq]=contact',
-  'Partners' => '/admin/partner',
-  'Testimonials' => '/admin/testimonial',
-  'Focus areas' => '/admin/focus_area'
+  "Home • Hero slides" => "/admin/hero_slide",
+  "Home • Structured content" => "/admin/static_page?f[slug_eq]=home",
+  "About page" => "/admin/static_page?f[slug_eq]=about",
+  "Programs" => "/admin/program",
+  "Resources" => "/admin/resource",
+  "Startup directory" => "/admin/startup_profile",
+  "Pricing page" => "/admin/static_page?f[slug_eq]=pricing",
+  "Contact page" => "/admin/static_page?f[slug_eq]=contact",
+  "Partners" => "/admin/partner",
+  "Testimonials" => "/admin/testimonial",
+  "Focus areas" => "/admin/focus_area"
 }.freeze
 
 RailsAdmin.config do |config|
   config.asset_source = :sprockets
-  config.navigation_static_label = 'Pages & Marketing Content'
+  config.navigation_static_label = "Pages & Marketing Content"
   config.navigation_static_links = MARKETING_CONTENT_MENU
 
   config.actions do
@@ -33,34 +33,34 @@ RailsAdmin.config do |config|
   # (We still keep the quick links above for convenience.)
 
   # Structure admin navigation
-  config.model 'Program' do
-    navigation_label 'Marketing'
+  config.model "Program" do
+    navigation_label "Marketing"
     weight 5
   end
-  config.model 'Resource' do
-    navigation_label 'Marketing'
+  config.model "Resource" do
+    navigation_label "Marketing"
     weight 6
   end
-  config.model 'StartupProfile' do
-    navigation_label 'Marketing'
+  config.model "StartupProfile" do
+    navigation_label "Marketing"
     weight 7
   end
-  config.model 'Testimonial' do
-    navigation_label 'Marketing'
+  config.model "Testimonial" do
+    navigation_label "Marketing"
     weight 3
   end
-  config.model 'Partner' do
-    navigation_label 'Marketing'
+  config.model "Partner" do
+    navigation_label "Marketing"
     weight 4
   end
-  config.model 'FocusArea' do
-    navigation_label 'Marketing'
+  config.model "FocusArea" do
+    navigation_label "Marketing"
     weight 2
   end
 
-  config.model 'StaticPage' do
-    navigation_label 'Marketing'
-    label_plural 'Landing + page content'
+  config.model "StaticPage" do
+    navigation_label "Marketing"
+    label_plural "Landing + page content"
     weight 0
 
     list do
@@ -72,25 +72,25 @@ RailsAdmin.config do |config|
 
     edit do
       field :title do
-        help 'Page title shown in the header and the browser tab.'
+        help "Page title shown in the header and the browser tab."
       end
       field :slug do
-        help 'System slug for routing (home/about/pricing/contact). Locked for reserved pages.'
+        help "System slug for routing (home/about/pricing/contact). Locked for reserved pages."
         read_only do
           bindings[:object].persisted? && StaticPage::RESERVED_SLUGS.include?(bindings[:object].slug_was)
         end
       end
       field :content do
-        help 'Main content for the public page. Accepts HTML/markdown.'
+        help "Main content for the public page. Accepts HTML/markdown."
       end
       field :structured_content do
-        help 'Advanced structured blocks used on the home page; edit with care.'
+        help "Advanced structured blocks used on the home page; edit with care."
       end
     end
   end
 
-  config.model 'HeroSlide' do
-    navigation_label 'Marketing'
+  config.model "HeroSlide" do
+    navigation_label "Marketing"
     weight 1
 
     list do
@@ -105,58 +105,58 @@ RailsAdmin.config do |config|
       field :title
       field :subtitle
       field :cta_text do
-        help 'Primary CTA text shown on the slide.'
+        help "Primary CTA text shown on the slide."
       end
       field :cta_link do
-        help 'Primary CTA URL; make sure it begins with https://.'
+        help "Primary CTA URL; make sure it begins with https://."
       end
       field :image, :active_storage do
-        help 'Upload a hero image for this slide.'
+        help "Upload a hero image for this slide."
       end
       field :display_order
       field :active
     end
   end
 
-  config.model 'Program' do
-    navigation_label 'Marketing'
+  config.model "Program" do
+    navigation_label "Marketing"
     weight 5
   end
 
-  config.model 'Resource' do
-    navigation_label 'Marketing'
+  config.model "Resource" do
+    navigation_label "Marketing"
     weight 6
   end
 
-  config.model 'StartupProfile' do
-    navigation_label 'Marketing'
+  config.model "StartupProfile" do
+    navigation_label "Marketing"
     weight 7
   end
-  config.model 'User' do
-    navigation_label 'Users & Auth'
+  config.model "User" do
+    navigation_label "Users & Auth"
   end
-  config.model 'UserProfile' do
-    navigation_label 'Users & Auth'
+  config.model "UserProfile" do
+    navigation_label "Users & Auth"
   end
-  config.model 'MentorshipRequest' do
-    navigation_label 'Users & Auth'
+  config.model "MentorshipRequest" do
+    navigation_label "Users & Auth"
   end
-  config.model 'MentorshipConnection' do
-    navigation_label 'Users & Auth'
-  end
-
-  config.model 'Notification' do
-    navigation_label 'System'
-  end
-  config.model 'Startup' do
-    navigation_label 'System'
-  end
-  config.model 'JwtDenylist' do
-    navigation_label 'System'
+  config.model "MentorshipConnection" do
+    navigation_label "Users & Auth"
   end
 
-  config.model 'SupportTicket' do
-    navigation_label 'Support'
+  config.model "Notification" do
+    navigation_label "System"
+  end
+  config.model "Startup" do
+    navigation_label "System"
+  end
+  config.model "JwtDenylist" do
+    navigation_label "System"
+  end
+
+  config.model "SupportTicket" do
+    navigation_label "Support"
     weight -1
 
     list do
@@ -202,8 +202,8 @@ RailsAdmin.config do |config|
   ## == Gravatar integration ==
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
-  config.model 'Resource' do
-    navigation_label 'Marketing'
+  config.model "Resource" do
+    navigation_label "Marketing"
     weight 6
 
     list do
@@ -213,7 +213,7 @@ RailsAdmin.config do |config|
       field :author
       field :created_at
       field :average_rating do
-        label 'Avg Rating'
+        label "Avg Rating"
         pretty_value do
           ratings = bindings[:object].ratings
           if ratings.any?
@@ -225,7 +225,7 @@ RailsAdmin.config do |config|
         end
       end
       field :bookmark_count do
-        label 'Bookmarks'
+        label "Bookmarks"
         pretty_value do
           count = bindings[:object].bookmarks.count
           "#{count} bookmarks"
@@ -244,7 +244,7 @@ RailsAdmin.config do |config|
       field :created_at
       field :updated_at
       field :average_rating do
-        label 'Average Rating'
+        label "Average Rating"
         pretty_value do
           ratings = bindings[:object].ratings
           if ratings.any?
@@ -256,29 +256,29 @@ RailsAdmin.config do |config|
         end
       end
       field :bookmark_count do
-        label 'Total Bookmarks'
+        label "Total Bookmarks"
         pretty_value do
           count = bindings[:object].bookmarks.count
           "#{count} users have bookmarked this resource"
         end
       end
       field :ratings do
-        label 'Individual Ratings'
+        label "Individual Ratings"
         pretty_value do
           ratings = bindings[:object].ratings.includes(:user)
           if ratings.any?
-            ratings.map { |r| "#{r.user.email}: #{r.score} stars" }.join(', ')
+            ratings.map { |r| "#{r.user.email}: #{r.score} stars" }.join(", ")
           else
             "No ratings"
           end
         end
       end
       field :bookmarks do
-        label 'Users Who Bookmarked'
+        label "Users Who Bookmarked"
         pretty_value do
           bookmarks = bindings[:object].bookmarks.includes(:user)
           if bookmarks.any?
-            bookmarks.map { |b| b.user.email }.join(', ')
+            bookmarks.map { |b| b.user.email }.join(", ")
           else
             "No bookmarks"
           end

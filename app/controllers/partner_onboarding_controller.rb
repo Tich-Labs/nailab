@@ -1,5 +1,5 @@
 class PartnerOnboardingController < ApplicationController
-  before_action :set_partner_application, only: [:show, :update]
+  before_action :set_partner_application, only: [ :show, :update ]
 
   # Step-by-step wizard: show current step
   def show
@@ -30,7 +30,7 @@ class PartnerOnboardingController < ApplicationController
   def new
     # Redirect to multi-step wizard start
     partner_application = PartnerApplication.create
-    redirect_to partner_onboarding_path(partner_application, step: 'organization')
+    redirect_to partner_onboarding_path(partner_application, step: "organization")
   end
 
   def create

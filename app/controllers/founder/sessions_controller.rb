@@ -15,7 +15,7 @@ class Founder::SessionsController < Founder::BaseController
   def create
     @session = current_user.sessions.build(session_params)
     if @session.save
-      redirect_to founder_sessions_path, notice: 'Session booked.'
+      redirect_to founder_sessions_path, notice: "Session booked."
     else
       render :new
     end

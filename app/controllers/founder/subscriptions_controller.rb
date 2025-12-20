@@ -14,7 +14,7 @@ class Founder::SubscriptionsController < Founder::BaseController
     if current_user.subscription
       # Update existing subscription
       if current_user.subscription.update(subscription_params)
-        redirect_to founder_subscription_path, notice: 'Subscription updated successfully.'
+        redirect_to founder_subscription_path, notice: "Subscription updated successfully."
       else
         @subscription = current_user.subscription
         render :new
@@ -23,7 +23,7 @@ class Founder::SubscriptionsController < Founder::BaseController
       # Create new subscription
       @subscription = current_user.build_subscription(subscription_params)
       if @subscription.save
-        redirect_to founder_subscription_path, notice: 'Subscribed successfully.'
+        redirect_to founder_subscription_path, notice: "Subscribed successfully."
       else
         render :new
       end

@@ -15,7 +15,7 @@ class Founder::MilestonesController < Founder::BaseController
   def create
     @milestone = current_user.milestones.build(milestone_params)
     if @milestone.save
-      redirect_to founder_milestones_path, notice: 'Milestone created.'
+      redirect_to founder_milestones_path, notice: "Milestone created."
     else
       render :new
     end
@@ -26,7 +26,7 @@ class Founder::MilestonesController < Founder::BaseController
 
   def update
     if @milestone.update(milestone_params)
-      redirect_to founder_milestones_path, notice: 'Milestone updated.'
+      redirect_to founder_milestones_path, notice: "Milestone updated."
     else
       render :edit
     end
@@ -34,7 +34,7 @@ class Founder::MilestonesController < Founder::BaseController
 
   def destroy
     @milestone.destroy
-    redirect_to founder_milestones_path, notice: 'Milestone deleted.'
+    redirect_to founder_milestones_path, notice: "Milestone deleted."
   end
 
   private

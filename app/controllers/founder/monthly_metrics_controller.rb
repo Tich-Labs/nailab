@@ -15,7 +15,7 @@ class Founder::MonthlyMetricsController < Founder::BaseController
   def create
     @monthly_metric = current_user.monthly_metrics.build(monthly_metric_params)
     if @monthly_metric.save
-      redirect_to founder_monthly_metrics_path, notice: 'Metric created.'
+      redirect_to founder_monthly_metrics_path, notice: "Metric created."
     else
       render :new
     end
@@ -26,7 +26,7 @@ class Founder::MonthlyMetricsController < Founder::BaseController
 
   def update
     if @monthly_metric.update(monthly_metric_params)
-      redirect_to founder_monthly_metrics_path, notice: 'Metric updated.'
+      redirect_to founder_monthly_metrics_path, notice: "Metric updated."
     else
       render :edit
     end

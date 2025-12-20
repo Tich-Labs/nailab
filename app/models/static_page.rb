@@ -10,16 +10,16 @@ class StaticPage < ApplicationRecord
   def rails_admin_preview_path
     helpers = Rails.application.routes.url_helpers
     case slug
-    when 'home'
-      '/'
-    when 'about'
+    when "home"
+      "/"
+    when "about"
       helpers.about_path
-    when 'pricing'
+    when "pricing"
       helpers.pricing_path
-    when 'contact'
+    when "contact"
       helpers.contact_path
     else
-      '/' 
+      "/"
     end
   end
 
@@ -32,6 +32,6 @@ class StaticPage < ApplicationRecord
   def slug_immutable_for_reserved_page
     return unless slug_was.present? && RESERVED_SLUGS.include?(slug_was)
 
-    errors.add(:slug, 'cannot be changed for reserved system pages')
+    errors.add(:slug, "cannot be changed for reserved system pages")
   end
 end

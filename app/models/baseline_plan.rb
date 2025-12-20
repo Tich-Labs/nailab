@@ -14,6 +14,6 @@ class BaselinePlan < ApplicationRecord
   end
 
   def target_milestones_list=(value)
-    self.target_milestones = value.is_a?(Array) ? value : [value].compact
+    self.target_milestones = value.is_a?(Array) ? value : [ value ].compact
   end
 end

@@ -5,12 +5,12 @@ class Founder::ResourcesController < Founder::BaseController
     @resources = Resource.all
 
     # Filter by bookmarks if requested
-    if params[:filter] == 'bookmarked'
+    if params[:filter] == "bookmarked"
       @resources = @resources.joins(:bookmarks).where(bookmarks: { user_id: current_user.id })
     end
 
     # Filter by resource type if specified
-    if params[:resource_type].present? && params[:resource_type] != 'all'
+    if params[:resource_type].present? && params[:resource_type] != "all"
       @resources = @resources.where(resource_type: params[:resource_type])
     end
 
@@ -22,17 +22,17 @@ class Founder::ResourcesController < Founder::BaseController
 
   def bookmark
     current_user.bookmarks.create(resource: @resource)
-    redirect_back fallback_location: founder_resources_path, notice: 'Bookmarked.'
+    redirect_back fallback_location: founder_resources_path, notice: "Bookmarked."
   end
 
   def rate
     @resource.ratings.create(user: current_user, score: params[:score])
-    redirect_back fallback_location: founder_resource_path(@resource), notice: 'Rated.'
+    redirect_back fallback_location: founder_resource_path(@resource), notice: "Rated."
   end
 
   def download
     # stub download logic
-    send_file @resource.file_path, type: 'application/pdf', disposition: 'attachment'
+    send_file @resource.file_path, type: "application/pdf", disposition: "attachment"
   end
 
   private

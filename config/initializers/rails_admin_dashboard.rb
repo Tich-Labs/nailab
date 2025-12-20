@@ -1,4 +1,4 @@
-require 'rails_admin'
+require "rails_admin"
 
 Rails.application.config.to_prepare do
   RailsAdmin::MainController.class_eval do
@@ -11,18 +11,18 @@ Rails.application.config.to_prepare do
     private
 
     def set_admin_layout_data
-      @admin_pending_requests = MentorshipRequest.where(status: 'pending').count
+      @admin_pending_requests = MentorshipRequest.where(status: "pending").count
       @admin_kpi_counts = {
         users: User.count,
         requests: MentorshipRequest.count,
         startups: StartupProfile.count
       }
-      @admin_support_ticket_alerts = SupportTicket.where(status: 'open').count
-      @admin_support_by_category = SupportTicket.group(:category).order('count_id desc').count(:id)
+      @admin_support_ticket_alerts = SupportTicket.where(status: "open").count
+      @admin_support_by_category = SupportTicket.group(:category).order("count_id desc").count(:id)
       @admin_support_by_status = SupportTicket.group(:status).count
       @admin_recent_support_tickets = SupportTicket.includes(:user).order(created_at: :desc).limit(4)
 
-      return unless action_name == 'dashboard'
+      return unless action_name == "dashboard"
 
       @admin_recent_sessions = Session.order(created_at: :desc).limit(4)
       @admin_recent_requests = MentorshipRequest.order(created_at: :desc).limit(4)
@@ -37,11 +37,11 @@ Rails.application.config.to_prepare do
       @admin_recent_sessions.each do |session|
         entries << {
           type: :session,
-          title: session.topic.presence || 'Mentorship Session',
+          title: session.topic.presence || "Mentorship Session",
           actor: display_user_name(session.user),
           time: session.created_at,
-          link: rails_admin.show_path(model_name: 'session', id: session.id),
-          status: 'completed'
+          link: rails_admin.show_path(model_name: "session", id: session.id),
+          status: "completed"
         }
       end
       @admin_recent_requests.each do |request|
@@ -50,7 +50,7 @@ Rails.application.config.to_prepare do
           title: request.status.humanize,
           actor: display_user_name(request.founder),
           time: request.created_at,
-          link: rails_admin.show_path(model_name: 'mentorship_request', id: request.id),
+          link: rails_admin.show_path(model_name: "mentorship_request", id: request.id),
           status: request.status
         }
       end
@@ -60,10 +60,10 @@ Rails.application.config.to_prepare do
     def fetch_marketing_updates
       updates = []
       HeroSlide.order(updated_at: :desc).limit(3).each do |slide|
-        updates << { title: slide.title.presence || 'Hero slide update', updated_at: slide.updated_at, path: rails_admin.show_path(model_name: 'hero_slide', id: slide.id), context: 'Hero slide' }
+        updates << { title: slide.title.presence || "Hero slide update", updated_at: slide.updated_at, path: rails_admin.show_path(model_name: "hero_slide", id: slide.id), context: "Hero slide" }
       end
       StaticPage.where(slug: %w[home about pricing contact]).order(updated_at: :desc).limit(3).each do |page|
-        updates << { title: page.title, updated_at: page.updated_at, path: rails_admin.show_path(model_name: 'static_page', id: page.id), context: "Page: #{page.slug}" }
+        updates << { title: page.title, updated_at: page.updated_at, path: rails_admin.show_path(model_name: "static_page", id: page.id), context: "Page: #{page.slug}" }
       end
       updates.sort_by { |update| update[:updated_at] }.reverse.first(5)
     end
@@ -73,14 +73,14 @@ Rails.application.config.to_prepare do
         period = Time.current.advance(months: -offset)
         range = period.beginning_of_month..period.end_of_month
         {
-          label: period.strftime('%b'),
+          label: period.strftime("%b"),
           value: model.where(column => range).count
         }
       end.reverse
     end
 
     def display_user_name(user)
-      user&.user_profile&.full_name.presence || user&.email || 'User'
+      user&.user_profile&.full_name.presence || user&.email || "User"
     end
   end
 end
