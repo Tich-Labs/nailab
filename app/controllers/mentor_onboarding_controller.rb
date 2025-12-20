@@ -7,8 +7,8 @@ class MentorOnboardingController < ApplicationController
   STEPS = %w[basic_details work_experience mentorship_focus mentorship_style availability review]
 
   def show
-    @profile ||= UserProfile.new
-    @step = params[:step] || @profile.onboarding_step || STEPS.first
+    @profile = UserProfile.new
+    @step = params[:step] || STEPS.first
     unless STEPS.include?(@step)
       redirect_to mentor_onboarding_path(step: STEPS.first)
       return
