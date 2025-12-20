@@ -1,5 +1,5 @@
 
-# Nailab Rails Application
+# Nailab
 
 Welcome to the Nailab Rails application! This project powers the Nailab platform, providing resources, programs, and a startup ecosystem.
 
@@ -7,7 +7,7 @@ Welcome to the Nailab Rails application! This project powers the Nailab platform
 
 ## Table of Contents
 
-- [Nailab Rails Application](#nailab-rails-application)
+- [Nailab](#nailab)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Tech Stack](#tech-stack)

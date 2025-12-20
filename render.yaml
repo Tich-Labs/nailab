@@ -2,7 +2,7 @@ services:
   - type: web
     name: "Nailab Backend"
     env: ruby
-    branch: main
+    branch: master
     plan: starter
     buildCommand: |
       bundle install --jobs 4 --retry 3
