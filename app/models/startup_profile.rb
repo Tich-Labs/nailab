@@ -25,7 +25,7 @@ class StartupProfile < ApplicationRecord
   end
 
   def team_members
-    value = super
+    value = self[:team_members]
     if value.is_a?(String)
       begin
         JSON.parse(value)
