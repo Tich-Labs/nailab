@@ -71,8 +71,8 @@ Rails.application.routes.draw do
 
   root "pages#home"
   get 'about', to: 'pages#about', as: :about
-  get "programs", to: "pages#programs" # Marketing page (commented out)
-  get "programs/:slug", to: "pages#program_detail", as: :program_detail # Marketing page (commented out)
+  get "programs", to: "pages#programs"
+  get "programs/:slug", to: "pages#program_detail", as: :program_detail
   get "resources", to: "pages#resources" # Marketing page (commented out)
   get "resources/category/:category", to: "pages#resources", as: :resources_category, constraints: { category: /blogs|knowledge-hub|opportunities|events/ } # Marketing page (commented out)
   get "resources/:slug", to: "pages#resource_detail", as: :resource_detail # Marketing page (commented out)
