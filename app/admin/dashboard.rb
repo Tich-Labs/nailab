@@ -7,8 +7,7 @@ ActiveAdmin.register_page "Dashboard" do
 
   content title: proc { "Admin Dashboard" } do
     # --- Metrics (Top Row) ---
-    div class: "overflow-x-auto -mx-6 px-6" do
-      div class: "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 mb-8" do
+    div class: "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8" do
       # Total Startup Founders
       founders_count = Rails.cache.fetch("dashboard/founders_count", expires_in: 10.minutes) { User.founder.count }
       div class: "bg-white rounded-2xl shadow p-6 flex flex-col items-start hover:shadow-lg transition group" do
@@ -93,12 +92,10 @@ ActiveAdmin.register_page "Dashboard" do
           end
         end
       end
-      end
     end
 
     # --- Additional Metrics (Second Row) ---
-    div class: "overflow-x-auto -mx-6 px-6" do
-      div class: "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 mb-8" do
+    div class: "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8" do
       pending_requests = Rails.cache.fetch("dashboard/pending_requests", expires_in: 10.minutes) { MentorshipRequest.where(status: :pending).count }
       resources_count = Rails.cache.fetch("dashboard/resources_count", expires_in: 10.minutes) { Resource.count }
       subscriptions_count = Rails.cache.fetch("dashboard/subscriptions_count", expires_in: 10.minutes) { Subscription.active.count rescue 0 }
@@ -179,7 +176,6 @@ ActiveAdmin.register_page "Dashboard" do
             end
           end
         end
-      end
       end
     end
 
