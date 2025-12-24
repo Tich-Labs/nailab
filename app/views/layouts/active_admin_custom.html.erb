@@ -1,0 +1,78 @@
+<%# app/views/layouts/active_admin_custom.html.erb %>
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <title>Nailab Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "controllers", type: "module", "data-turbo-track": "reload" %>
+  </head>
+  <body class="flex flex-col h-screen bg-neutral text-neutral-dark antialiased">
+    <!-- Top Bar: Alerts + User/Login -->
+    <header class="bg-primary text-white shadow-lg z-30">
+      <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex-1">
+          <!-- Flash Messages / Alerts -->
+          <% if flash.any? %>
+            <div class="space-y-2">
+              <% flash.each do |type, message| %>
+                <div class="<%= flash_class(type) %> inline-block px-4 py-2 rounded-lg text-sm">
+                  <%= message %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="flex items-center gap-6">
+          <% if current_admin_user %>
+            <span class="text-sm">Welcome, <%= current_admin_user.email %></span>
+            <%= button_to "Logout", destroy_admin_user_session_path, method: :delete,
+                      class: "text-sm text-white underline hover:text-accent transition cursor-pointer",
+                      form_class: "inline-block" %>
+          <% else %>
+            <%= link_to "Login", new_admin_user_session_path, class: "text-sm underline hover:text-accent" %>
+          <% end %>
+        </div>
+      </div>
+    </header>
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Fixed Side Navigation -->
+      <aside class="w-64 bg-primary text-white flex flex-col overflow-y-auto">
+        <!-- Logo -->
+        <div class="flex items-center justify-center h-20 border-b border-primary-dark px-6">
+          <%= image_tag "nailab-logo-purple.png", alt: "Nailab Admin", class: "h-12 w-auto" %>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-1 py-6 px-4 space-y-1">
+          <%= link_to "Dashboard", admin_root_path,
+            class: nav_link_classes(admin_root_path) %>
+          <%= link_to "Users", admin_users_path,
+            class: nav_link_classes(admin_users_path) %>
+          <%= link_to "Founders", admin_founders_path,
+            class: nav_link_classes(admin_founders_path) %>
+          <%= link_to "Admin Users", admin_admin_users_path,
+            class: nav_link_classes(admin_admin_users_path) %>
+          <%= link_to "Mentorship Requests", admin_mentorship_requests_path,
+            class: nav_link_classes(admin_mentorship_requests_path) %>
+          <%= link_to "Programs", admin_programs_path,
+            class: nav_link_classes(admin_programs_path) %>
+        </nav>
+      </aside>
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 overflow-y-auto p-8">
+          <%= yield %>
+        </main>
+        <!-- Footer -->
+        <footer class="bg-primary-dark text-white py-4 px-8 text-center text-sm">
+          <p>
+            © <%= Time.current.year %> Nailab • 
+            Powered by ActiveAdmin <%= ActiveAdmin::VERSION %> • 
+            Built with ❤️ for African startups
+          </p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

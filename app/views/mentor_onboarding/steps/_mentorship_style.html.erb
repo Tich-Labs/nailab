@@ -4,9 +4,7 @@
     <h2 class="text-2xl font-bold text-gray-900 mb-2">Mentorship Style & Motivation</h2>
     <p class="text-gray-600">Tell us about your approach and why you want to mentor</p>
   </div>
-  <%= form_with model: @profile, url: mentor_onboarding_path(step: 'mentorship_style'), method: :put, id: 'mentor-onboarding-form', class: 'space-y-6' do |f| %>
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
+  <div class="space-y-6">
     <div>
       <%= f.label :mentorship_approach, 'Explain your approach to mentorship', class: 'block text-sm font-medium text-slate-600 mb-2' %>
       <%= f.text_area :mentorship_approach, required: true, rows: 6,
@@ -27,5 +25,5 @@
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:motivation].first %></p>
       <% end %>
     </div>
-  <% end %>
+  </div>
 </div>

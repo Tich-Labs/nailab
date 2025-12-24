@@ -1,102 +1,113 @@
-
 class FounderOnboardingController < ApplicationController
-  skip_before_action :authenticate_user!
-  include CountryHelper
-  STEPS = %w[personal startup professional mentorship confirm]
+  skip_before_action :authenticate_user!, raise: false
 
-  # GET /founder_onboarding/new
+  STEPS = %w[personal startup professional mentorship confirm].freeze
+
   def new
-    session[:founder_onboarding] = {}
-    redirect_to founder_onboarding_path(step: "personal")
+    reset_session
+    redirect_to founder_onboarding_path
   end
 
   def show
-    @step = params[:step] || session.dig(:founder_onboarding, :onboarding_step) || STEPS.first
-    @onboarding_data = session[:founder_onboarding] || {}
-    case @step
-    when "personal"
-      @user_profile = OpenStruct.new(@onboarding_data[:user_profile] || {})
-    when "startup", "professional", "mentorship", "confirm"
-      @user_profile = OpenStruct.new(@onboarding_data[:user_profile] || {})
-      @startup_profile = OpenStruct.new(@onboarding_data[:startup_profile] || {})
-      if @step == "mentorship" && @startup_profile.mentorship_areas.present?
-        predefined_options = [ "Product Development", "Go-to-market Strategy", "Fundraising", "Team Building", "Marketing & Branding", "Sales & Customer Acquisition", "Financial Planning", "Legal & Regulatory", "Partnerships", "Leadership", "Other" ]
-        custom_areas = Array(@startup_profile.mentorship_areas) - predefined_options
-        if custom_areas.any?
-          @startup_profile.mentorship_areas = (Array(@startup_profile.mentorship_areas) - custom_areas) + [ "Other" ]
-          @other_mentorship_area = custom_areas.first
-        end
-      end
-    end
-    # Save current step for resume later
-    session[:founder_onboarding] ||= {}
-    session[:founder_onboarding][:onboarding_step] = @step
+    @step = valid_step(params[:step])
+    data = session.fetch(:founder_onboarding, {})
+    @user_profile = UserProfile.new(data.fetch("user_profile", {}))
+    @startup_profile = StartupProfile.new(data.fetch("startup_profile", {}))
+    @other_mentorship_area = data.dig("startup_profile", "other_mentorship_area")
   end
 
   def update
-    @step = params[:step] || STEPS.first
-    session[:founder_onboarding] ||= {}
-    onboarding_data = session[:founder_onboarding]
+    @step = valid_step(params[:step])
 
-    case @step
-    when "personal"
-      onboarding_data[:user_profile] = personal_params.to_h
-      next_step = "startup"
-    when "startup"
-      onboarding_data[:startup_profile] ||= {}
-      onboarding_data[:startup_profile].merge!(startup_params.to_h)
-      next_step = "professional"
-    when "professional"
-      onboarding_data[:startup_profile] ||= {}
-      onboarding_data[:startup_profile].merge!(professional_params.to_h)
-      next_step = "mentorship"
-    when "mentorship"
-      mentorship_data = mentorship_params.to_h
-      if mentorship_data[:mentorship_areas].is_a?(Array) && mentorship_data[:mentorship_areas].include?("Other") && mentorship_data[:other_mentorship_area].present?
-        mentorship_data[:mentorship_areas] = mentorship_data[:mentorship_areas].map do |area|
-          area == "Other" ? mentorship_data[:other_mentorship_area] : area
-        end
-      end
-      mentorship_data.delete(:other_mentorship_area)
-      onboarding_data[:startup_profile] ||= {}
-      onboarding_data[:startup_profile].merge!(mentorship_data)
-      next_step = "confirm"
-    when "confirm"
-      # At this point, prompt for account creation or login
-      redirect_to new_user_registration_path and return
+    session[:founder_onboarding_email] = params[:email] if params[:email].present?
+
+    merged = deep_merge(session.fetch(:founder_onboarding, {}), founder_params.to_h)
+    session[:founder_onboarding] = merged
+
+    if params[:save_and_exit].present?
+      redirect_to root_path
+      return
     end
 
-    onboarding_data[:onboarding_step] = next_step if defined?(next_step)
-    session[:founder_onboarding] = onboarding_data
-    redirect_to founder_onboarding_path(step: next_step)
+    if @step == STEPS.last
+      if params[:consent].to_s != "1"
+        flash[:alert] = "Please confirm you agree before submitting."
+        redirect_to founder_onboarding_path(step: @step)
+        return
+      end
+
+      email = session[:founder_onboarding_email].to_s.strip.downcase
+      if email.blank?
+        flash[:alert] = "Please provide your email address."
+        redirect_to founder_onboarding_path(step: @step)
+        return
+      end
+
+      user = User.find_by(email: email)
+      if user.blank?
+        user = User.create!(
+          email: email,
+          role: "founder",
+          password: Devise.friendly_token.first(20)
+        )
+      end
+
+      submission = OnboardingSubmission.create!(
+        role: "founder",
+        email: email,
+        user: user,
+        consented_at: Time.current,
+        confirmation_sent_at: Time.current,
+        payload: session.fetch(:founder_onboarding, {})
+      )
+
+      user.resend_confirmation_instructions unless user.confirmed?
+
+      reset_session
+      redirect_to onboarding_check_email_path(email: submission.email)
+    else
+      redirect_to founder_onboarding_path(step: next_step(@step))
+    end
   end
 
   private
 
-  def personal_params
-    params.require(:founder_onboarding).require(:user_profile).permit(:full_name, :phone, :country, :city)
+  def valid_step(step)
+    step = step.to_s
+    return step if STEPS.include?(step)
+    STEPS.first
   end
 
-  def startup_params
-    params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :description, :stage, :target_market, :value_proposition, :funding_stage, :funding_raised)
+  def next_step(step)
+    idx = STEPS.index(step) || 0
+    STEPS[[idx + 1, STEPS.length - 1].min]
   end
 
-  def professional_params
-    permitted = params.require(:founder_onboarding).require(:startup_profile).permit(:sector, :other_sector, :funding_stage, :funding_raised)
-    # If sector is not 'Other', clear other_sector
-    if permitted[:sector] != "Other"
-      permitted[:other_sector] = nil
-    end
-    permitted
+  def founder_params
+    raw = params[:founder_onboarding] || {}
+    raw = raw.respond_to?(:permit) ? raw : ActionController::Parameters.new(raw)
+
+    raw.permit(
+      user_profile: %i[full_name phone country city],
+      startup_profile: [
+        :startup_name,
+        :description,
+        :stage,
+        :target_market,
+        :value_proposition,
+        :funding_stage,
+        :funding_raised,
+        :sector,
+        :other_sector,
+        :other_mentorship_area,
+        :challenge_details,
+        :preferred_mentorship_mode,
+        { mentorship_areas: [] }
+      ]
+    )
   end
 
-  def mentorship_params
-    params.require(:founder_onboarding).require(:startup_profile).permit(:mentorship_areas, :challenge_details, :preferred_mentorship_mode, :other_mentorship_area)
-  end
-
-  def cast_boolean_param(attributes, key)
-    return attributes unless attributes.key?(key)
-    attributes[key] = ActiveModel::Type::Boolean.new.cast(attributes[key])
-    attributes
+  def deep_merge(left, right)
+    left.deep_merge(right)
   end
 end

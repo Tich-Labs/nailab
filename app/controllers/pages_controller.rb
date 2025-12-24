@@ -1,7 +1,6 @@
 require "ostruct"
 
 class PagesController < ApplicationController
-    skip_before_action :authenticate_user!
   PROGRAM_CATEGORIES = [
     "Startup Incubation & Acceleration",
     "Masterclasses & Mentorship",

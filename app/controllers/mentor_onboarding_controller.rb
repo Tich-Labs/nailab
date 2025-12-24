@@ -1,130 +1,120 @@
 class MentorOnboardingController < ApplicationController
-  skip_before_action :authenticate_user!
-  # before_action :authenticate_user! # Removed to allow onboarding without login
-  # before_action :ensure_mentor_role # Removed to allow onboarding without login
-  # before_action :load_profile # Will refactor for session-based or new model onboarding
+  skip_before_action :authenticate_user!, raise: false
 
-  STEPS = %w[basic_details work_experience mentorship_focus mentorship_style availability review]
+  STEPS = %w[
+    basic_details
+    work_experience
+    mentorship_focus
+    mentorship_style
+    availability
+    review
+  ].freeze
+
+  def new
+    reset_session
+    redirect_to mentor_onboarding_path
+  end
 
   def show
-    @profile = UserProfile.new
-    @step = params[:step] || STEPS.first
-    unless STEPS.include?(@step)
-      redirect_to mentor_onboarding_path(step: STEPS.first)
-      return
-    end
-
-    # Handle "Other" options for mentorship_focus step
-    if @step == "mentorship_focus"
-      prepare_mentorship_focus_form_data
-    end
-
-    # Save current step for resume later
-    @profile.update(onboarding_step: @step) unless @profile.onboarding_step == @step
-
-    @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
+    @step = valid_step(params[:step])
+    @profile = UserProfile.new(session.fetch(:mentor_onboarding, {}))
+    @progress = progress_for(@step)
   end
-end
 
   def update
-    @step = params[:step]
-    unless STEPS.include?(@step)
-      redirect_to mentor_onboarding_path(step: STEPS.first)
-      return
-    end
+    @step = valid_step(params[:step])
 
-    if params[:save_and_exit].present?
-      # Handle save and exit
-      mentorship_params = mentor_params_for_step(@step)
-      if @step == "mentorship_focus"
-        mentorship_params = process_mentorship_focus_params(mentorship_params)
+    merged = session.fetch(:mentor_onboarding, {}).merge(mentor_params_for_step.to_h)
+    session[:mentor_onboarding] = merged
+
+    session[:mentor_onboarding_email] = params[:email].to_s.strip.downcase if params[:email].present?
+
+    if @step == STEPS.last
+      if params[:consent].to_s != "1"
+        flash[:alert] = "Please confirm you agree before submitting."
+        redirect_to mentor_onboarding_path(step: @step)
+        return
       end
-      if @profile.update(mentorship_params)
-        @profile.update(onboarding_step: @step)
-        redirect_to mentor_root_path, notice: "Your progress has been saved. You can continue onboarding later."
-      else
-        @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-        render :show
+
+      email = session[:mentor_onboarding_email].to_s
+      if email.blank?
+        flash[:alert] = "Please provide your email address."
+        redirect_to mentor_onboarding_path(step: @step)
+        return
       end
-    elsif @step == "mentorship_focus"
-      mentorship_params = mentor_params_for_step(@step)
-      mentorship_params = process_mentorship_focus_params(mentorship_params)
-      if @profile.update(mentorship_params)
-        next_step = next_step(@step)
-        if next_step
-          redirect_to mentor_onboarding_path(step: next_step)
-        else
-          complete_onboarding
-        end
-      else
-        @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-        render :show
+
+      user = User.find_by(email: email)
+      if user.blank?
+        user = User.create!(
+          email: email,
+          role: "mentor",
+          password: Devise.friendly_token.first(20)
+        )
       end
-    elsif @profile.update(mentor_params_for_step(@step))
-      next_step = next_step(@step)
-      if next_step
-        redirect_to mentor_onboarding_path(step: next_step)
-      else
-        complete_onboarding
-      end
+
+      submission = OnboardingSubmission.create!(
+        role: "mentor",
+        email: email,
+        user: user,
+        consented_at: Time.current,
+        confirmation_sent_at: Time.current,
+        payload: { "user_profile" => session.fetch(:mentor_onboarding, {}) }
+      )
+
+      user.resend_confirmation_instructions unless user.confirmed?
+
+      reset_session
+      redirect_to onboarding_check_email_path(email: submission.email)
     else
-      @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-      render :show
+      redirect_to mentor_onboarding_path(step: next_step(@step))
     end
   end
 
   private
 
-  def ensure_mentor_role
-    unless current_user.user_profile&.role == "mentor"
-      redirect_to root_path, alert: "Access denied"
-    end
+  def valid_step(step)
+    step = step.to_s
+    return step if STEPS.include?(step)
+    STEPS.first
   end
 
-  def load_profile
-    @profile = current_user.user_profile || current_user.build_user_profile
+  def next_step(step)
+    idx = STEPS.index(step) || 0
+    STEPS[[idx + 1, STEPS.length - 1].min]
   end
 
-  def mentor_params_for_step(step)
-    case step
-    when "basic_details"
-      params.require(:user_profile).permit(:full_name, :bio, :title)
-    when "work_experience"
-      params.require(:user_profile).permit(:organization, :years_experience, :advisory_experience, :advisory_description)
-    when "mentorship_focus"
-      params.require(:user_profile).permit(sectors: [], expertise: [], stage_preference: [], other_sector: [], other_expertise: [])
-    when "mentorship_style"
-      params.require(:user_profile).permit(:mentorship_approach, :motivation)
-    when "availability"
-      params.require(:user_profile).permit(:availability_hours_month, :preferred_mentorship_mode, :rate_per_hour, :pro_bono, :linkedin_url, :professional_website, :currency)
-    else
-      {}
-    end
+  def progress_for(step)
+    idx = STEPS.index(step) || 0
+    ((idx + 1).to_f / STEPS.length * 100).round
   end
 
-  def next_step(current_step)
-    current_index = STEPS.index(current_step)
-    STEPS[current_index + 1] if current_index && current_index < STEPS.length - 1
+  def mentor_params_for_step
+    raw = params[:user_profile] || params[:mentor_onboarding] || params[:profile] || {}
+    raw = raw.respond_to?(:permit) ? raw : ActionController::Parameters.new(raw)
+
+    raw.permit(
+      :full_name,
+      :title,
+      :bio,
+      :linkedin_url,
+      :professional_website,
+      :organization,
+      :years_experience,
+      :advisory_experience,
+      :advisory_description,
+      :other_sector,
+      :other_expertise,
+      :mentorship_approach,
+      :motivation,
+      :availability_hours_month,
+      :preferred_mentorship_mode,
+      :currency,
+      :rate_per_hour,
+      :pro_bono,
+      { sectors: [] },
+      { expertise: [] },
+      { stage_preference: [] }
+    )
   end
 
-  def prepare_mentorship_focus_form_data
-    # Prepare sectors for form display
-    if @profile.sectors.present?
-      predefined_sectors = [ "Agritech", "Healthtech", "Fintech", "Edutech", "Mobility & Logistics tech", "E-commerce & Retailtech", "SaaS", "Creative & Mediatech", "Cleantech", "AI & ML", "Robotics", "Mobiletech", "Other" ]
-      custom_sectors = (@profile.sectors - predefined_sectors)
-      if custom_sectors.any?
-        @profile.sectors = (@profile.sectors - custom_sectors) + [ "Other" ]
-        @other_sector = custom_sectors.first
-      end
-    end
-
-    # Prepare expertise for form display
-    if @profile.expertise.present?
-      predefined_expertise = [ "Business model refinement", "PMF", "Access to customers/markets", "GTM planning", "Product development", "Pitching/fundraising", "Marketing/branding", "Team building/HR", "Budgeting/finance", "Market expansion", "Legal/regulatory", "Leadership growth", "Partnerships", "Sales & acquisition", "Other" ]
-      custom_expertise = (@profile.expertise - predefined_expertise)
-      if custom_expertise.any?
-        @profile.expertise = (@profile.expertise - custom_expertise) + [ "Other" ]
-        @other_expertise = custom_expertise.first
-      end
-    end
   end

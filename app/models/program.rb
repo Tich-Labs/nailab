@@ -9,4 +9,8 @@ class Program < ApplicationRecord
   rescue StandardError
     "/programs"
   end
+
+  def self.ransackable_associations(auth_object = nil)
+    []
+  end
 end

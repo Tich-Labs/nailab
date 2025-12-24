@@ -4,66 +4,66 @@ module AdminDashboardHelper
       {
         title: "🛎️ Support",
         sections: [
-          { label: "Support queue", path: rails_admin.index_path(model_name: "support_ticket"), icon: "🧾", badge: @admin_support_ticket_alerts }
+            { label: "Support queue", path: nil, icon: "🧾", badge: @admin_support_ticket_alerts } # RailsAdmin removed
         ]
       },
       {
         title: "👥 Mentorship",
         sections: [
-          { label: "Mentors", path: rails_admin.index_path(model_name: "user"), icon: "🧑‍🏫" },
-          { label: "Mentees", path: rails_admin.index_path(model_name: "user_profile"), icon: "🧑‍🎓" },
-          { label: "Requests", path: rails_admin.index_path(model_name: "mentorship_request"), icon: "🧾", badge: @admin_pending_requests },
-          { label: "Sessions", path: rails_admin.index_path(model_name: "session"), icon: "🗓️" },
-          { label: "Ratings", path: rails_admin.index_path(model_name: "rating"), icon: "⭐" }
+            { label: "Mentors", path: nil, icon: "🧑‍🏫" },
+            { label: "Mentees", path: nil, icon: "🧑‍🎓" },
+            { label: "Requests", path: nil, icon: "🧾", badge: @admin_pending_requests },
+            { label: "Sessions", path: nil, icon: "🗓️" },
+            { label: "Ratings", path: nil, icon: "⭐" }
         ]
       },
       {
         title: "💼 Startups",
         sections: [
-          { label: "Startups", path: rails_admin.index_path(model_name: "startup_profile"), icon: "🚀" },
-          { label: "Milestones", path: rails_admin.index_path(model_name: "milestone"), icon: "📌" },
-          { label: "Submissions", path: rails_admin.index_path(model_name: "opportunity_submission"), icon: "📤" },
-          { label: "Opportunities", path: rails_admin.index_path(model_name: "opportunity"), icon: "🎯" }
+            { label: "Startups", path: nil, icon: "🚀" },
+            { label: "Milestones", path: nil, icon: "📌" },
+            { label: "Submissions", path: nil, icon: "📤" },
+            { label: "Opportunities", path: nil, icon: "🎯" }
         ]
       },
       {
         title: "🔐 Users & Auth",
         sections: [
-          { label: "Users", path: rails_admin.index_path(model_name: "user"), icon: "👤" },
-          { label: "Profiles", path: rails_admin.index_path(model_name: "user_profile"), icon: "🧾" },
-          { label: "Identities", path: rails_admin.index_path(model_name: "identity"), icon: "🆔" }
+            { label: "Users", path: nil, icon: "👤" },
+            { label: "Profiles", path: nil, icon: "🧾" },
+            { label: "Identities", path: nil, icon: "🆔" }
         ]
       },
       {
         title: "💬 Messaging & Comms",
         sections: [
-          { label: "Messages", path: rails_admin.index_path(model_name: "message"), icon: "✉️" },
-          { label: "Conversations", path: rails_admin.index_path(model_name: "conversation"), icon: "💬" },
-          { label: "Peer Messages", path: rails_admin.index_path(model_name: "peer_message"), icon: "🤝" }
+            { label: "Messages", path: nil, icon: "✉️" },
+            { label: "Conversations", path: nil, icon: "💬" },
+            { label: "Peer Messages", path: nil, icon: "🤝" }
         ]
       },
       {
         title: "📈 Metrics & Analytics",
         sections: [
-          { label: "Monthly Metrics", path: rails_admin.index_path(model_name: "monthly_metric"), icon: "📊" },
-          { label: "Engagement Stats", path: rails_admin.index_path(model_name: "monthly_metric"), icon: "📈" }
+            { label: "Monthly Metrics", path: nil, icon: "📊" },
+            { label: "Engagement Stats", path: nil, icon: "📈" }
         ]
       },
       {
         title: "🎯 Marketing",
         sections: [
-          { label: "Hero Slides", path: rails_admin.index_path(model_name: "hero_slide"), icon: "🪄" },
-          { label: "Testimonials", path: rails_admin.index_path(model_name: "testimonial"), icon: "🗣️" },
-          { label: "Partners", path: rails_admin.index_path(model_name: "partner"), icon: "🤝" },
-          { label: "Pages", path: rails_admin.index_path(model_name: "static_page"), icon: "📄" }
+            { label: "Hero Slides", path: nil, icon: "🪄" },
+            { label: "Testimonials", path: nil, icon: "🗣️" },
+          { label: "Partners", path: nil, icon: "🤝" },
+          { label: "Pages", path: nil, icon: "📄" }
         ]
       },
       {
         title: "⚙️ System",
         sections: [
-          { label: "JWTs", path: rails_admin.index_path(model_name: "jwt_denylist"), icon: "🔐" },
-          { label: "Notifications", path: rails_admin.index_path(model_name: "notification"), icon: "🔔" },
-          { label: "Admin Tools", path: rails_admin.index_path(model_name: "notification"), icon: "🛠️" }
+          { label: "JWTs", path: nil, icon: "🔐" },
+          { label: "Notifications", path: nil, icon: "🔔" },
+          { label: "Admin Tools", path: nil, icon: "🛠️" }
         ]
       }
     ]
@@ -80,7 +80,7 @@ module AdminDashboardHelper
   end
 
   def admin_breadcrumbs
-    crumbs = [ { label: "Admin", path: rails_admin.dashboard_path } ]
+    crumbs = [ { label: "Admin", path: nil } ] # rails_admin.dashboard_path removed
     crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
     crumbs
   end

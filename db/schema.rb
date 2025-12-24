@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_24_091500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "author_type"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "namespace"
+    t.bigint "resource_id"
+    t.string "resource_type"
+    t.datetime "updated_at", null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -40,6 +54,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "admin_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_admin_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
   create_table "baseline_plans", force: :cascade do |t|
@@ -94,6 +120,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
     t.index ["display_order"], name: "index_focus_areas_on_display_order"
   end
 
+  create_table "founder_applications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "industry"
+    t.text "mentorship_needs"
+    t.string "name"
+    t.string "startup_name"
+    t.integer "team_size"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "hero_slides", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -122,6 +159,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "mentor_applications", force: :cascade do |t|
+    t.string "availability"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.text "mentorship_focus"
+    t.text "mentorship_style"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.text "work_experience"
+  end
+
   create_table "mentors", force: :cascade do |t|
     t.text "bio"
     t.datetime "created_at", null: false
@@ -148,12 +196,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
   end
 
   create_table "mentorship_requests", force: :cascade do |t|
+    t.string "areas_needed", default: [], array: true
     t.datetime "created_at", null: false
     t.text "decline_reason"
     t.text "feedback"
     t.bigint "founder_id", null: false
     t.bigint "mentor_id", null: false
     t.text "message"
+    t.string "preferred_mode"
     t.datetime "proposed_time"
     t.integer "rating"
     t.text "reschedule_reason"
@@ -219,6 +269,22 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
     t.index ["notif_type"], name: "index_notifications_on_notif_type"
     t.index ["user_id", "read"], name: "index_notifications_on_user_id_and_read"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "onboarding_submissions", force: :cascade do |t|
+    t.datetime "applied_at"
+    t.datetime "confirmation_sent_at"
+    t.datetime "consented_at"
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.jsonb "payload", default: {}, null: false
+    t.string "role", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["role", "email"], name: "index_onboarding_submissions_on_role_and_email"
+    t.index ["token"], name: "index_onboarding_submissions_on_token", unique: true
+    t.index ["user_id"], name: "index_onboarding_submissions_on_user_id"
   end
 
   create_table "opportunities", force: :cascade do |t|
@@ -489,11 +555,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "role", default: "founder", null: false
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role"], name: "index_users_on_role"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -517,6 +585,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_21_172000) do
   add_foreign_key "milestones", "users"
   add_foreign_key "monthly_metrics", "users"
   add_foreign_key "notifications", "users"
+  add_foreign_key "onboarding_submissions", "users"
   add_foreign_key "opportunity_submissions", "opportunities"
   add_foreign_key "opportunity_submissions", "users"
   add_foreign_key "partner_applications", "users"

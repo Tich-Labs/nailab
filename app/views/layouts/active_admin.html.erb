@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <title>Nailab Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "controllers", type: "module", "data-turbo-track": "reload" %>
+  </head>
+  <body class="flex flex-col h-screen bg-neutral text-neutral-dark antialiased">
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded z-50">Skip to main content</a>
+    <!-- Top Bar: Alerts + User/Login -->
+    <header class="bg-primary text-white shadow-lg z-30" role="banner">
+      <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex-1">
+          <!-- Flash Messages / Alerts -->
+          <% if flash.any? %>
+            <div class="space-y-2" role="status" aria-live="polite">
+              <% flash.each do |type, message| %>
+                <div class="<%= flash_class(type) %> inline-block px-4 py-2 rounded-lg text-sm" role="alert">
+                  <%= message %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <!-- Login/Logout links removed: Devise is disabled -->
+      </div>
+    </header>
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Fixed Side Navigation -->
+      <aside class="w-64 bg-primary text-white flex flex-col overflow-y-auto" role="navigation" aria-label="Main navigation">
+        <!-- Logo -->
+        <div class="flex items-center justify-center h-20 border-b border-primary-dark px-6">
+          <%= image_tag "nailab-logo-purple.png", alt: "Nailab Admin", class: "h-12 w-auto" %>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-1 py-6 px-4 space-y-1">
+          <%
+            nav_items = [
+              { name: "Dashboard", path: admin_root_path },
+              { name: "Users", resource: "user" },
+              { name: "Founders", resource: "founder" },
+              { name: "Admin Users", resource: "admin_user" },
+              { name: "Mentorship Requests", resource: "mentorship_request" },
+              { name: "Support Tickets", resource: "support_ticket" },
+              { name: "Programs", resource: "program" },
+              { name: "Resources", resource: "resource" }
+            ]
+          %>
+          <% nav_items.each do |item| %>
+            <%
+              path = item[:path] || admin_resource_path(item[:resource])
+              aria_current = (path != "#" && current_page?(path)) ? "page" : nil
+            %>
+            <%= link_to item[:name], path,
+              class: nav_link_classes(path), "aria-current": aria_current %>
+          <% end %>
+        </nav>
+      </aside>
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <main id="main-content" class="flex-1 overflow-y-auto p-8" role="main">
+          <%= yield %>
+        </main>
+        <!-- Footer -->
+        <footer class="bg-primary-dark text-white py-4 px-8 text-center text-sm" role="contentinfo">
+          <p>
+            © <%= Time.current.year %> Nailab •
+            Powered by ActiveAdmin <%= ActiveAdmin::VERSION %> •
+            Built with ❤️ for African startups
+          </p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :show ]
+  skip_before_action :authenticate_user!, raise: false, only: [ :show ]
   before_action :authenticate_user!, except: [ :show ]
 
   def show

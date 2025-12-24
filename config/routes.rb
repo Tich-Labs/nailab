@@ -1,14 +1,15 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   # Partner onboarding multi-step wizard
-  resources :partner_onboarding, only: [ :new, :create, :show, :update ] do
+  resources :partner_onboarding, only: [:new, :show, :update] do
     member do
       get :complete
     end
   end
-  get "founder_onboarding/new", to: "founder_onboarding#new", as: :new_founder_onboarding
-  get "founder_onboarding", to: "founder_onboarding#show", as: :founder_onboarding
-  put "founder_onboarding", to: "founder_onboarding#update"
+  resource :founder_onboarding, controller: "founder_onboarding", only: [:new, :show, :update]
   get "mentor_onboarding", to: "mentor_onboarding#show", as: :mentor_onboarding
+  get "mentor_onboarding/new", to: "mentor_onboarding#new", as: :new_mentor_onboarding
   put "mentor_onboarding", to: "mentor_onboarding#update"
   missing_font = lambda do |_env|
     [ 204, { "Content-Type" => "font/woff2", "Cache-Control" => "public, max-age=86400" }, [] ]
@@ -20,7 +21,10 @@ Rails.application.routes.draw do
   get "/favicon.ico", to: missing_favicon
   get "/assets/fonts/gotham/*font", to: missing_font
 
-  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks", passwords: "users/passwords" }
+  get "onboarding/check_email", to: "onboarding_confirmations#check_email", as: :onboarding_check_email
+  post "onboarding/resend_confirmation", to: "onboarding_confirmations#resend", as: :onboarding_resend_confirmation
+
+  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks", passwords: "users/passwords", confirmations: "users/confirmations" }
   devise_scope :user do
     get "mentors/sign_up", to: "registrations#new", as: :new_mentor_registration, defaults: { role: "mentor" }
     post "mentors", to: "registrations#create", as: :mentor_registration, defaults: { role: "mentor" }
@@ -58,7 +62,7 @@ Rails.application.routes.draw do
     end
   end
 
-  mount RailsAdmin::Engine => "/admin", as: "rails_admin"
+  # mount RailsAdmin::Engine => "/admin", as: "rails_admin" # Removed for ActiveAdmin migration
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

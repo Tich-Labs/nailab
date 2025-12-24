@@ -1,0 +1,10 @@
+<% if collection.present? && collection.respond_to?(:size) %>
+  <div class="flex justify-between items-center py-4 px-4 border-t bg-white rounded-b-lg">
+    <div class="text-xs text-gray-500">
+      <%= page_entries_info(collection, entry_name: (defined?(resource_class) ? resource_class.model_name.human.downcase : 'record')) %>
+    </div>
+    <div>
+      <%= paginate collection %>
+    </div>
+  </div>
+<% end %>

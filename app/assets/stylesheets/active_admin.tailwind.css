@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active_admin .header { @apply bg-primary text-white; }
+.active_admin .title_bar { @apply bg-primary/10; }
+.active_admin .index_table th { @apply bg-primary/5 text-primary font-medium; }
+.active_admin .action_item a { @apply bg-accent text-white hover:bg-accent/90 px-4 py-2 rounded; }
+.active_admin input[type="submit"] { @apply bg-primary hover:bg-primary-dark text-white; }
+.active_admin .status_tag { @apply capitalize; }
+.active_admin .panel { @apply border border-primary/20; }
+
+@layer components {
+	.aa-topbar {
+		@apply flex items-center justify-between gap-4 px-6 py-3 bg-primary text-white shadow-md;
+	}
+
+	.aa-shell {
+		@apply flex flex-1 min-h-[calc(100vh-56px)];
+	}
+
+	.aa-sidenav {
+		@apply w-56 bg-[#EDE7F6] text-[#4A148C] px-6 py-8 flex flex-col gap-8;
+	}
+
+	.aa-sidenav-logo {
+		@apply flex items-center justify-center mb-4;
+	}
+
+	.aa-sidenav ul {
+		@apply flex flex-col gap-4;
+	}
+
+	.aa-sidenav a {
+		@apply text-[#6A1B9A] font-semibold hover:text-[#4A148C];
+	}
+
+	.aa-main {
+		@apply flex-1 bg-[#F5F5F5] p-6;
+	}
+}

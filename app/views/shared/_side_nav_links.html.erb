@@ -1,0 +1,23 @@
+<%# app/views/shared/_side_nav_links.html.erb %>
+<%# Usage: render partial: 'shared/side_nav_links', locals: { role: :mentor } %>
+<% case role.to_sym
+when :mentor %>
+  <%= nav_link 'Dashboard', mentor_root_path, icon: 'fas fa-tachometer-alt' %>
+  <%= nav_link 'My Mentees', mentor_startups_path, icon: 'fas fa-users' %>
+  <%= nav_link 'Mentorship Requests', mentor_mentorship_requests_path, icon: 'fas fa-inbox' %>
+  <%= nav_link 'Sessions', mentor_schedule_path, icon: 'fas fa-calendar-alt' %>
+  <%= nav_link 'Resources', mentor_resources_path, icon: 'fas fa-book' %>
+<% when :founder %>
+  <%= nav_link 'Dashboard', founder_root_path, icon: 'fas fa-tachometer-alt' %>
+  <%= nav_link 'Find a Mentor', founder_find_mentor_path, icon: 'fas fa-search' %>
+  <%= nav_link 'My Mentor', founder_my_mentor_path, icon: 'fas fa-user-friends' %>
+  <%= nav_link 'Milestones & Metrics', founder_milestones_path, icon: 'fas fa-chart-line' %>
+  <%= nav_link 'Resources', founder_resources_path, icon: 'fas fa-book' %>
+  <%= nav_link 'Community', founder_community_path, icon: 'fas fa-users' %>
+<% when :common %>
+  <%= nav_link 'Programs', programs_path, icon: 'fas fa-rocket' %>
+  <%= nav_link 'Events & Webinars', events_path, icon: 'fas fa-calendar' %>
+  <%= nav_link 'Account Settings', edit_user_registration_path, icon: 'fas fa-cog' %>
+  <%= nav_link 'Support', support_path, icon: 'fas fa-life-ring' %>
+  <%= nav_link 'Logout', destroy_user_session_path, icon: 'fas fa-sign-out-alt', method: :delete %>
+<% end %>

@@ -1,2 +1,6 @@
 #!/usr/bin/env ruby
 exec "./bin/rails", "server", *ARGV
+
+# To build both main app and ActiveAdmin CSS in watch mode, run these in separate terminals:
+#   npm run build:css --watch
+#   npm run build:css:aa --watch

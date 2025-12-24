@@ -34,6 +34,6 @@ class Founder::MentorshipRequestsController < Founder::BaseController
   end
 
   def mentorship_request_params
-    params.require(:mentorship_request).permit(:mentor_id, :message, :mentorship_mode, :details)
+    params.require(:mentorship_request).permit(:mentor_id, :message, :details, areas_needed: [], :preferred_mode)
   end
 end

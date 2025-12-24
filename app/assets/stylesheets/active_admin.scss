@@ -1,0 +1,64 @@
+/* app/assets/stylesheets/active_admin.css */
+
+/* Tailwind Base (must be first) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* HIDE ALL SORT ICON SVGs — cleanest UX */
+.index_as_table th .sort_icon,
+.index_as_table th svg,
+.index_as_table th .data-table-sorted-icon,
+svg.data-table-sorted-icon {
+  @apply hidden;
+}
+
+/* Subtle text arrows when sorted (purple, small) */
+.index_as_table th.asc a::after {
+  content: " ↑";
+  @apply text-primary font-bold text-sm ml-2;
+}
+
+.index_as_table th.desc a::after {
+  content: " ↓";
+  @apply text-primary font-bold text-sm ml-2;
+}
+
+/* Spacious, modern headers */
+.index_as_table th {
+  @apply py-6 px-8 text-left font-semibold text-neutral-dark bg-primary/5 border-b-2 border-primary/20;
+}
+
+/* Header links: perfect alignment */
+.index_as_table th a {
+  @apply flex items-center gap-4 no-underline hover:text-primary transition-colors;
+}
+
+/* Table cells: generous padding */
+.index_as_table td {
+  @apply py-6 px-8 border-b border-gray-200;
+}
+
+/* Hover rows: light purple tint */
+.index_as_table tr:hover td {
+  @apply bg-primary/5;
+}
+
+/* Status tags: compact pills */
+.index_as_table .status_tag {
+  @apply text-xs px-4 py-2 rounded-full font-medium;
+}
+
+/* Wide, breathable columns */
+.index_as_table th,
+.index_as_table td {
+  @apply min-w-64; /* Default spacious */
+}
+
+/* Specific tweaks for your Founders table */
+.index_as_table th:nth-child(1), .index_as_table td:nth-child(1) { @apply w-20; } /* Checkbox/ID */
+.index_as_table th:nth-child(2), .index_as_table td:nth-child(2) { @apply w-80; } /* Email */
+.index_as_table th:nth-child(3), .index_as_table td:nth-child(3) { @apply w-72; } /* Name */
+.index_as_table th:nth-child(4), .index_as_table td:nth-child(4) { @apply w-80; } /* Startup */
+.index_as_table th:nth-child(5), .index_as_table td:nth-child(5) { @apply w-48; } /* Stage */
+.index_as_table th:nth-child(6), .index_as_table td:nth-child(6) { @apply w-48; } /* Sector */

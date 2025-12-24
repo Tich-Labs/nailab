@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <title>Nailab Admin - Login</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "controllers", type: "module", "data-turbo-track": "reload" %>
+  </head>
+  <body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary to-primary-dark">
+    <div class="w-full max-w-md">
+      <!-- Flash Messages -->
+      <% if flash.any? %>
+        <div class="mb-4 space-y-2">
+          <% flash.each do |type, message| %>
+            <div class="<%= type == 'notice' ? 'bg-teal-500' : 'bg-red-500' %> text-white px-4 py-3 rounded-lg shadow-lg">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      <!-- Login Card -->
+      <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
+        <div class="px-8 py-6 bg-primary text-white text-center">
+          <%= image_tag "nailab-logo-purple.png", alt: "Nailab", class: "h-16 mx-auto mb-2 brightness-0 invert" %>
+          <h1 class="text-2xl font-bold">Admin Portal</h1>
+        </div>
+        <div class="px-8 py-8">
+          <%= yield %>
+        </div>
+      </div>
+      <div class="text-center mt-6 text-white text-sm">
+        <p>&copy; <%= Time.current.year %> Nailab. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

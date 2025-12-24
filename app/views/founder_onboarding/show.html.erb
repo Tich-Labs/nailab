@@ -187,6 +187,16 @@
           <h2 class="text-2xl font-semibold mb-6">Review & Confirm</h2>
           <p class="mb-4">Please review your details before submitting.</p>
           <%= render partial: 'summary', locals: { user_profile: @user_profile, startup_profile: @startup_profile } %>
+          <div class="mt-6 p-6 bg-purple-50 border border-purple-200 rounded-2xl">
+            <h3 class="text-sm font-medium text-purple-800">Activate your account</h3>
+            <p class="mt-1 text-sm text-purple-700">We’ll email you a confirmation link to activate your account.</p>
+            <div class="mt-4">
+              <label class="flex items-start space-x-3">
+                <%= check_box_tag :consent, '1', false, class: 'mt-1 h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-200 rounded' %>
+                <span class="text-sm text-slate-700">I agree to receive email from Nailab related to my onboarding and account activation.</span>
+              </label>
+            </div>
+          </div>
         <% end %>
         <!-- Navigation -->
         <div class="flex justify-between mt-8">

@@ -19,7 +19,6 @@
     <!-- Step Content and Navigation (buttons inside form) -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <%= form_with model: @profile, url: mentor_onboarding_path(step: @step), method: :put, id: 'mentor-onboarding-form', local: true do |f| %>
-        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <%= hidden_field_tag :save_and_exit, '', id: 'save-and-exit-field' %>
         <%= render "mentor_onboarding/steps/#{@step}", f: f %>
         <div class="flex justify-between mt-8">

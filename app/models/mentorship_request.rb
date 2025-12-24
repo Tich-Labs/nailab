@@ -20,4 +20,25 @@ class MentorshipRequest < ApplicationRecord
   def propose_reschedule!(proposed_time:, reason:, requested_at: Time.current)
     update!(status: :reschedule_requested, reschedule_reason: reason, reschedule_requested_at: requested_at, proposed_time: proposed_time)
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[
+      created_at
+      decline_reason
+      feedback
+      founder_id
+      id
+      mentor_id
+      message
+      proposed_time
+      rating
+      reschedule_reason
+      reschedule_requested_at
+      responded_at
+      status
+      updated_at
+      areas_needed
+      preferred_mode
+    ]
+  end
 end

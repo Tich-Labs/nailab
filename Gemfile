@@ -18,7 +18,12 @@ gem "omniauth-linkedin-oauth2" # LinkedIn OAuth2 provider
 gem "omniauth-google-oauth2" # Google OAuth2 provider
 gem "omniauth-rails_csrf_protection" # CSRF protection for OmniAuth
 gem "active_storage_validations" # Validations for ActiveStorage uploads
-gem "rails_admin" # CMS/Admin interface (or use 'activeadmin')
+# Use the latest ActiveAdmin v4 beta (recommended for Tailwind support)
+gem 'activeadmin', github: 'activeadmin/activeadmin', branch: 'master'
+# Or pin a specific beta version:
+# gem 'activeadmin', '4.0.0.beta15'
+# gem "activeadmin_addons" # Incompatible with ActiveAdmin 3.x - removed
+gem "pundit" # Optional: authorization beyond Devise
 gem "hotwire-rails" # Turbo/Stimulus for interactivity
 gem "cssbundling-rails" # TailwindCSS integration
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -51,6 +56,9 @@ group :development, :test do
   gem "dotenv-rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+
+  # For generating fake data in seeds and tests
+  gem "faker"
 
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false

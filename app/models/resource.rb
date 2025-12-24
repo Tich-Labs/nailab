@@ -3,7 +3,7 @@ class Resource < ApplicationRecord
   has_many :bookmarks
   has_many :users, through: :bookmarks
   def slug
-    title.parameterize
+    title&.parameterize || ""
   end
 
   def file_type

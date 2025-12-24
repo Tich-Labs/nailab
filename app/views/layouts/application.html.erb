@@ -12,10 +12,25 @@
     <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
   </head>
   <body class="bg-white text-gray-900">
-    <%= render 'layouts/header' %>
-    <div class="page-content">
-      <%= yield %>
-    </div>
-    <%= render 'layouts/footer' %>
+    <% if user_signed_in? && (current_user.founder? || current_user.mentor?) %>
+      <div class="flex min-h-screen">
+        <%= render 'shared/side_nav' %>
+        <!-- Hamburger button for mobile -->
+        <button type="button" data-action="click->sidebar#toggle" class="fixed bottom-6 left-6 z-50 md:hidden bg-[#6A1B9A] text-white rounded-full p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-white">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <main class="flex-1 bg-[#F5F5F5] min-h-screen overflow-y-auto">
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
+      <%= render 'layouts/header' %>
+      <div class="page-content">
+        <%= yield %>
+      </div>
+      <%= render 'layouts/footer' %>
+    <% end %>
   </body>
 </html>

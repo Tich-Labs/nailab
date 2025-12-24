@@ -19,8 +19,10 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        accent: '#00BCD4',
         primary: {
           DEFAULT: 'rgb(150, 55, 140)',
+          dark: '#4A148C',
         },
       },
     },
