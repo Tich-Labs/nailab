@@ -15,8 +15,14 @@ end
 
 
 
-if Rails.env.development? && !AdminUser.exists?(email: 'admin@example.com')
-  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+# Create admin user in all environments
+if !AdminUser.exists?(email: 'admin@nailab.com')
+  AdminUser.create!(email: 'admin@nailab.com', password: 'pa$$word@123', password_confirmation: 'pa$$word@123')
+  puts "Created admin user: admin@nailab.com"
+else
+  admin = AdminUser.find_by(email: 'admin@nailab.com')
+  admin.update!(password: 'pa$$word@123', password_confirmation: 'pa$$word@123')
+  puts "Updated admin user password: admin@nailab.com"
 end
 
 # Development-only: Seed admin and editor users
