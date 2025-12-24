@@ -1,6 +1,6 @@
 class CreateMentorApplications < ActiveRecord::Migration[6.1]
   def change
-    create_table :mentor_applications do |t|
+    create_table :mentor_applications, if_not_exists: true do |t|
       t.string :name
       t.string :email
       t.text :work_experience

@@ -1,6 +1,6 @@
 class CreatePartnerApplications < ActiveRecord::Migration[8.1]
   def change
-    create_table :partner_applications do |t|
+    create_table :partner_applications, if_not_exists: true do |t|
       t.string :organization_name
       t.string :website
       t.string :country
