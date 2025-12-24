@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin_user!
-    redirect_to new_user_session_path unless current_user&.admin?
+    redirect_to new_admin_user_session_path unless admin_user_signed_in?
   end
 
   protected
