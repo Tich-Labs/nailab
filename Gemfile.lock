@@ -68,6 +68,9 @@ GEM
       activestorage (>= 6.1.4)
       activesupport (>= 6.1.4)
       marcel (>= 1.0.3)
+    activeadmin-trix (0.0.1)
+      activeadmin
+      trix
     activejob (8.1.1)
       activesupport (= 8.1.1)
       globalid (>= 0.3.6)
@@ -318,8 +321,10 @@ GEM
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
-    omniauth-linkedin-oauth2 (1.0.1)
-      omniauth-oauth2
+    omniauth-linkedin-openid (1.0.2)
+      oauth2 (~> 2.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8)
     omniauth-oauth2 (1.9.0)
       oauth2 (>= 2.0.2, < 3)
       omniauth (~> 2.0)
@@ -510,6 +515,8 @@ GEM
     tilt (2.6.1)
     timeout (0.5.0)
     trailblazer-option (0.1.2)
+    trix (0.10.1)
+      rails
     tsort (0.2.0)
     turbo-rails (2.0.20)
       actionpack (>= 7.1.0)
@@ -546,6 +553,7 @@ PLATFORMS
 DEPENDENCIES
   active_storage_validations
   activeadmin!
+  activeadmin-trix
   bootsnap
   brakeman
   bundler-audit
@@ -563,7 +571,7 @@ DEPENDENCIES
   letter_opener
   omniauth
   omniauth-google-oauth2
-  omniauth-linkedin-oauth2
+  omniauth-linkedin-openid
   omniauth-rails_csrf_protection
   pg (~> 1.1)
   puma (>= 5.0)
@@ -577,6 +585,7 @@ DEPENDENCIES
   solid_cache
   solid_queue
   thruster
+  trix
   tzinfo-data
 
 BUNDLED WITH

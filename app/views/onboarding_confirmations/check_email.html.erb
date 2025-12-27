@@ -7,6 +7,13 @@
         <span class="font-semibold text-gray-900"><%= @email.presence || 'your email' %></span>.
         Click the link to confirm and activate your account.
       </p>
+      <% if Rails.env.development? && @confirmation_token.present? %>
+        <div class="mt-4 p-4 bg-green-50 rounded-2xl border border-green-200">
+          <p class="text-sm font-medium text-green-800 mb-2">Development Mode - Direct Confirmation</p>
+          <p class="text-sm text-green-700 mb-3">For testing purposes, you can confirm your account directly:</p>
+          <%= link_to "Confirm Account Now", user_confirmation_path(confirmation_token: @confirmation_token), class: "inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors" %>
+        </div>
+      <% end %>
       <div class="mt-6 p-4 bg-slate-50 rounded-2xl border border-slate-200">
         <p class="text-sm text-slate-700">Didn’t receive the email?</p>
         <ul class="mt-2 text-sm text-slate-600 list-disc pl-5 space-y-1">

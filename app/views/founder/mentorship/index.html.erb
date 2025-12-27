@@ -7,36 +7,36 @@
   <!-- Mentorship Request Modal -->
   <% if @selected_mentor %>
     <div id="mentorship-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" style="display: block;">
-      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-2xl rounded-2xl bg-white">
         <div class="mt-3">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Request Mentorship Session</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Request Mentorship Session</h3>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-colors">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
           </div>
-          <div class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full flex items-center justify-center">
-                <span class="text-white font-bold"><%= @selected_mentor.name.first %></span>
+          <div class="mb-6 p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-2xl border border-purple-100">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-white font-bold text-xl"><%= @selected_mentor.name.first %></span>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900"><%= @selected_mentor.name %></h4>
-                <p class="text-sm text-gray-600"><%= @selected_mentor.expertise %></p>
+                <h4 class="text-xl font-bold text-gray-900"><%= @selected_mentor.name %></h4>
+                <p class="text-gray-600 font-medium"><%= @selected_mentor.expertise %></p>
               </div>
             </div>
           </div>
-          <%= form_with model: @mentorship_request, url: founder_mentorship_requests_path, method: :post, local: true, class: "space-y-4" do |form| %>
+          <%= form_with model: @mentorship_request, url: founder_mentorship_requests_path, method: :post, local: true, class: "space-y-6" do |form| %>
             <%= form.hidden_field :mentor_id, value: @selected_mentor.id %>
             <div>
-              <%= form.label :message, "Tell us about your startup and what you'd like to discuss", class: "block text-sm font-medium text-gray-700 mb-2" %>
-              <%= form.text_area :message, placeholder: "Describe your current challenges, goals, and what specific help you're looking for from this mentor...", rows: 6, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+              <%= form.label :message, "Tell us about your startup and what you'd like to discuss", class: "block text-sm font-bold text-gray-700 mb-3" %>
+              <%= form.text_area :message, placeholder: "Describe your current challenges, goals, and what specific help you're looking for from this mentor...", rows: 6, class: "w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm" %>
             </div>
-            <div class="flex justify-end space-x-3">
-              <%= link_to 'Cancel', founder_mentorship_path, class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold" %>
-              <%= form.submit 'Send Request', class: "px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold" %>
+            <div class="flex justify-end space-x-4 pt-4">
+              <%= link_to 'Cancel', founder_mentorship_path, class: "px-6 py-3 bg-gray-100 text-gray-700 rounded-2xl hover:bg-gray-200 font-semibold transition-colors" %>
+              <%= form.submit 'Send Request', class: "px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-600 text-white rounded-2xl hover:from-purple-700 hover:to-teal-700 font-semibold shadow-lg transition-all" %>
             </div>
           <% end %>
         </div>
@@ -44,102 +44,148 @@
     </div>
   <% end %>
   <!-- Available Mentors -->
-  <div class="lg:col-span-2">
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
-        <h2 class="text-2xl font-bold text-white">Available Mentors</h2>
-      </div>
-      <div class="p-8">
-        <div class="space-y-6">
-          <% @mentors.each do |mentor| %>
-            <div class="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl hover:from-purple-100 hover:to-teal-100 transition-all">
-              <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold text-xl"><%= mentor.name.first %></span>
-                </div>
-                <div>
-                  <h3 class="text-lg font-semibold text-gray-900"><%= mentor.name %></h3>
-                  <p class="text-gray-600"><%= mentor.expertise&.join(', ') || 'No specialties listed' %></p>
-                  <% if mentor.company.present? %>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
-                      <%= mentor.company %>
-                    </span>
-                  <% end %>
-                </div>
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <h2 class="text-2xl font-bold text-white">Available Mentors</h2>
+      <p class="text-purple-100 mt-1">Connect with experienced professionals</p>
+    </div>
+    <div class="p-8">
+      <div class="space-y-6">
+        <% @mentors.each do |mentor| %>
+          <div class="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-2xl hover:from-purple-100 hover:to-teal-100 transition-all border border-purple-100">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-white font-bold text-xl"><%= mentor.name.first %></span>
               </div>
-              <div class="flex space-x-3">
-                <%= link_to 'View Profile', founder_mentor_path(mentor), class: "inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
-                <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-all" %>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900"><%= mentor.name %></h3>
+                <p class="text-gray-600 font-medium"><%= mentor.expertise&.join(', ') || 'No specialties listed' %></p>
+                <% if mentor.company.present? %>
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-teal-100 text-teal-800 mt-2">
+                    <%= mentor.company %>
+                  </span>
+                <% end %>
               </div>
             </div>
-          <% end %>
+            <div class="flex space-x-3">
+              <%= link_to 'View Profile', founder_mentor_path(mentor), class: "inline-flex items-center px-6 py-3 bg-white text-purple-600 border border-purple-300 text-sm font-bold rounded-2xl hover:bg-purple-50 transition-all shadow-sm" %>
+              <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-6 py-3 bg-gradient-to-r from-teal-600 to-purple-600 text-white text-sm font-bold rounded-2xl hover:from-teal-700 hover:to-purple-700 transition-all shadow-lg" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <% if @mentors.empty? %>
+        <div class="text-center py-12">
+          <div class="w-20 h-20 bg-gradient-to-r from-purple-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">No mentors available</h3>
+          <p class="text-gray-600 text-lg">We're working on expanding our mentor network. Check back soon!</p>
         </div>
-        <% if @mentors.empty? %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<!-- My Requests & Sessions -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <!-- My Requests -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
+      <h3 class="text-2xl font-bold text-white">My Requests</h3>
+      <p class="text-teal-100 mt-1">Track your mentorship requests</p>
+    </div>
+    <div class="p-8">
+      <div class="space-y-4">
+        <% @mentorship_requests.each do |request| %>
+          <div class="p-6 bg-gradient-to-r from-teal-50 to-purple-50 rounded-2xl border border-teal-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-bold text-gray-900 text-lg"><%= request.mentor&.name || 'Unknown Mentor' %></p>
+                <p class="text-sm text-gray-600 font-medium"><%= request.status.titleize %></p>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+                    <%= case request.status
+                       when 'pending' then 'bg-yellow-100 text-yellow-800'
+                       when 'accepted' then 'bg-green-100 text-green-800'
+                       when 'declined' then 'bg-red-100 text-red-800'
+                       else 'bg-gray-100 text-gray-800'
+                       end %>">
+                  <%= request.status.titleize %>
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <% if @mentorship_requests.empty? %>
           <div class="text-center py-12">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            <div class="w-16 h-16 bg-gradient-to-r from-teal-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No mentors available</h3>
-            <p class="text-gray-600">We're working on expanding our mentor network. Check back soon!</p>
+            <h4 class="text-lg font-bold text-gray-900 mb-2">No requests yet</h4>
+            <p class="text-gray-600">Start your mentorship journey by requesting a session above.</p>
           </div>
         <% end %>
       </div>
     </div>
   </div>
-  <!-- My Requests & Sessions -->
-  <div class="space-y-8">
-    <!-- My Requests -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
-        <h3 class="text-2xl font-bold text-white">My Requests</h3>
-      </div>
-      <div class="p-8">
-        <div class="space-y-4">
-          <% @mentorship_requests.each do |request| %>
-            <div class="p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
-              <p class="font-semibold text-gray-900"><%= request.mentor&.name || 'Unknown Mentor' %></p>
-              <p class="text-sm text-gray-600"><%= request.status.titleize %></p>
-            </div>
-          <% end %>
-          <% if @mentorship_requests.empty? %>
-            <div class="text-center py-8">
-              <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-              </div>
-              <p class="text-gray-600 text-sm">No requests yet.</p>
-            </div>
-          <% end %>
-        </div>
-      </div>
+  <!-- Upcoming Sessions -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <h3 class="text-2xl font-bold text-white">Upcoming Sessions</h3>
+      <p class="text-purple-100 mt-1">Your scheduled mentorship meetings</p>
     </div>
-    <!-- Upcoming Sessions -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
-        <h3 class="text-2xl font-bold text-white">Upcoming Sessions</h3>
-      </div>
-      <div class="p-8">
-        <div class="space-y-4">
-          <% @sessions.each do |session| %>
-            <div class="p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
-              <p class="font-semibold text-gray-900"><%= session.mentor.name %></p>
-              <p class="text-sm text-gray-600 mb-3"><%= session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %></p>
-              <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-all" %>
+    <div class="p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <% @sessions.each do |session| %>
+          <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-teal-500 rounded-full flex items-center justify-center">
+                  <span class="text-white font-bold text-lg"><%= session.mentor.name[0].upcase %></span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900"><%= session.mentor.name %></h4>
+                  <p class="text-sm text-gray-600">Mentor</p>
+                </div>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Scheduled
+              </span>
             </div>
-          <% end %>
-          <% if @sessions.empty? %>
-            <div class="text-center py-8">
-              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <div class="space-y-3">
+              <div class="flex items-center text-sm text-gray-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
+                <%= session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %>
               </div>
-              <p class="text-gray-600 text-sm">No upcoming sessions.</p>
+              <div class="flex items-center text-sm text-gray-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                60 minutes
+              </div>
             </div>
-          <% end %>
+            <div class="mt-6">
+              <%= link_to 'Join Session', founder_session_path(session), class: "w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-600 to-purple-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl" %>
+            </div>
+          </div>
+        <% end %>
+        <% if @sessions.empty? %>
+          <div class="col-span-full text-center py-12">
+            <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No Upcoming Sessions</h3>
+            <p class="text-gray-600">Your scheduled mentorship meetings will appear here.</p>
+          </div>
         </div>
       </div>
     </div>

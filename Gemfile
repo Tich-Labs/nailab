@@ -1,3 +1,6 @@
+# Rich text editor for admin forms
+gem 'trix'
+gem 'activeadmin-trix'
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -14,7 +17,7 @@ gem "puma", ">= 5.0"
 gem "devise" # Authentication
 gem "devise-jwt" # Token-based authentication for React
 gem "omniauth" # OAuth authentication framework
-gem "omniauth-linkedin-oauth2" # LinkedIn OAuth2 provider
+gem 'omniauth-linkedin-openid' # The new gem for OpenID Connect
 gem "omniauth-google-oauth2" # Google OAuth2 provider
 gem "omniauth-rails_csrf_protection" # CSRF protection for OmniAuth
 gem "active_storage_validations" # Validations for ActiveStorage uploads

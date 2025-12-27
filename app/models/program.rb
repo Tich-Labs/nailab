@@ -1,4 +1,5 @@
 class Program < ApplicationRecord
+  has_one_attached :image
   def rails_admin_preview_path
     helpers = Rails.application.routes.url_helpers
     if slug.present?

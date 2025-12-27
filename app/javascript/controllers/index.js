@@ -1,7 +1,7 @@
 // app/javascript/controllers/index.js
-import { application } from "./application"
-import FaqController from "./faq_controller"
-import DropdownController from "./dropdown_controller"
+import { Application } from "@hotwired/stimulus"
+import { definitionsFromContext } from "stimulus/webpack-helpers"
 
-application.register("faq", FaqController)
-application.register("dropdown", DropdownController)
+const application = Application.start()
+const context = require.context("./", true, /_controller\.js$/)
+application.load(definitionsFromContext(context))

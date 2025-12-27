@@ -1,13 +1,22 @@
 Rails.application.routes.draw do
+  # Redirect old admin paths to new nested content paths
+  get '/admin/programs', to: redirect('/admin/content/programs')
+  get '/admin/resources', to: redirect('/admin/content/resources')
   devise_for :admin_users, ActiveAdmin::Devise.config
+  # Mount default admin namespace for ActiveAdmin
   ActiveAdmin.routes(self)
+  # Also mount custom :content namespace for Programs/Resources
+  namespace :content do
+    ActiveAdmin.routes(self)
+  end
   # Partner onboarding multi-step wizard
   resources :partner_onboarding, only: [:new, :show, :update] do
     member do
       get :complete
     end
   end
-  resource :founder_onboarding, controller: "founder_onboarding", only: [:new, :show, :update]
+  resource :founder_onboarding, controller: "founder_onboarding", only: [:new, :show, :update], path: "founder_onboarding"
+
   get "mentor_onboarding", to: "mentor_onboarding#show", as: :mentor_onboarding
   get "mentor_onboarding/new", to: "mentor_onboarding#new", as: :new_mentor_onboarding
   put "mentor_onboarding", to: "mentor_onboarding#update"
@@ -40,20 +49,15 @@ Rails.application.routes.draw do
   mount ActiveStorage::Engine => "/rails/active_storage"
   namespace :api do
     namespace :v1 do
-      devise_scope :user do
-        post "sign_in", to: "sessions#create"
-        delete "sign_out", to: "sessions#destroy"
-        post "sign_up", to: "registrations#create"
-      end
-      resource(:me, controller: "profiles", only: %i[show])
-      resources(:hero_slides, only: %i[index])
-      resources(:partners, only: %i[index])
-      resources(:testimonials, only: %i[index])
-      resources(:programs, param: :slug, only: %i[index show])
-      resources(:resources, only: %i[index])
-      resources(:startup_profiles, only: %i[index])
-      resources(:mentor_profiles, only: %i[index])
-      resources(:mentorship_requests, only: %i[index create]) do
+      resource :me, controller: "profiles", only: %i[show], path: "me"
+      resources :hero_slides, only: %i[index], path: "hero_slides"
+      resources :partners, only: %i[index], path: "partners"
+      resources :testimonials, only: %i[index], path: "testimonials"
+      resources :programs, param: :slug, only: %i[index show], path: "programs"
+      resources :resources, only: %i[index], path: "resources"
+      resources :startup_profiles, only: %i[index], path: "startup_profiles"
+      resources :mentor_profiles, only: %i[index], path: "mentor_profiles"
+      resources :mentorship_requests, only: %i[index create], path: "mentorship_requests" do
         patch :respond, on: :member
       end
       get "matches", to: "matches#index"
@@ -90,7 +94,6 @@ Rails.application.routes.draw do
   get "login", to: redirect("/users/sign_in")
   get "signup", to: redirect("/users/sign_up")
   get "mentors_signup", to: redirect("/mentors/sign_up")
-  get "partners_signup", to: redirect("/partners/sign_up")
   get "partners_signup", to: redirect("/partners/sign_up")
 
   namespace :founder do
@@ -165,6 +168,15 @@ Rails.application.routes.draw do
     resource(:profile, controller: "profiles", only: %i[show edit update])
     resource(:settings, only: %i[show update])
     get "support", to: "support#show"
+  end
+
+  namespace :partners do
+    root to: "dashboard#show"
+
+    resource(:profile, controller: "profiles", only: %i[show edit update])
+    resource(:settings, only: %i[show update])
+    get "support", to: "support#show"
+    post "support", to: "support#create"
   end
 
   get "auth/google_oauth2/callback", to: "google_calendar#callback"

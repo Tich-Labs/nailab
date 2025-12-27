@@ -288,8 +288,11 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-
+  # config.omniauth :github, "APP_ID", "APP_SECRET", scope: "user,public_repo"
+  config.omniauth :linkedin,
+                  Rails.application.credentials.dig(:linkedin, :client_id) || ENV["LINKEDIN_CLIENT_ID"],
+                  Rails.application.credentials.dig(:linkedin, :client_secret) || ENV["LINKEDIN_CLIENT_SECRET"],
+                  scope: "openid profile email"
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
@@ -321,11 +324,6 @@ Devise.setup do |config|
   # Note: These might become the new default in future versions of Devise.
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
-
-  # ==> OmniAuth
-  # Add a new OmniAuth provider. Check the wiki for more information on setting
-  # up on your models and hooks.
-  config.omniauth :linkedin, ENV["LINKEDIN_CLIENT_ID"], ENV["LINKEDIN_CLIENT_SECRET"]
 
   # ==> Configuration for :registerable
 

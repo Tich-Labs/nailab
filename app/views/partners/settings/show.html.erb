@@ -1,0 +1,95 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Account Settings</h1>
+    <p class="mt-2 text-gray-600">Manage your account preferences and security</p>
+  </div>
+  <div class="space-y-8">
+    <!-- Account Information -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Account Information</h2>
+        <p class="text-purple-100 mt-1">Update your login details</p>
+      </div>
+      <div class="p-8">
+        <%= form_with model: current_user, url: partners_settings_path, method: :patch, local: true, class: "space-y-6" do |form| %>
+          <div>
+            <%= form.label :email, "Email Address", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.email_field :email, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm", placeholder: "your.email@example.com" %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Change Password</label>
+            <p class="text-sm text-gray-600 mb-4">Leave blank if you don't want to change your password</p>
+            <div class="space-y-4">
+              <div>
+                <%= form.label :password, "New Password", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                <%= form.password_field :password, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm", placeholder: "Enter new password" %>
+              </div>
+              <div>
+                <%= form.label :password_confirmation, "Confirm New Password", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                <%= form.password_field :password_confirmation, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm", placeholder: "Confirm new password" %>
+              </div>
+            </div>
+          </div>
+          <div class="pt-4">
+            <%= form.submit 'Update Account', class: "px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-600 text-white rounded-xl hover:from-purple-700 hover:to-teal-700 font-semibold shadow-lg transition-all" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- Account Status -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Account Status</h2>
+        <p class="text-purple-100 mt-1">Your account information</p>
+      </div>
+      <div class="p-8">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center py-3 border-b border-gray-200">
+            <div>
+              <p class="font-medium text-gray-900">Account Type</p>
+              <p class="text-sm text-gray-600">Partner</p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              Active
+            </span>
+          </div>
+          <div class="flex justify-between items-center py-3 border-b border-gray-200">
+            <div>
+              <p class="font-medium text-gray-900">Email Verified</p>
+              <p class="text-sm text-gray-600"><%= current_user.confirmed? ? 'Yes' : 'No' %></p>
+            </div>
+            <% if !current_user.confirmed? %>
+              <%= link_to 'Resend Verification', user_confirmation_path, method: :post, class: "text-purple-600 hover:text-purple-800 text-sm font-medium" %>
+            <% end %>
+          </div>
+          <div class="flex justify-between items-center py-3">
+            <div>
+              <p class="font-medium text-gray-900">Member Since</p>
+              <p class="text-sm text-gray-600"><%= current_user.created_at.strftime('%B %d, %Y') %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Danger Zone -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-red-200">
+      <div class="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Danger Zone</h2>
+        <p class="text-red-100 mt-1">Irreversible actions</p>
+      </div>
+      <div class="p-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Delete Account</h3>
+            <p class="text-gray-600">Permanently delete your account and all associated data</p>
+          </div>
+          <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors" onclick="alert('Account deletion is not available in demo mode. Please contact support.')">
+            Delete Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</content>
+<parameter name="filePath">/home/tich/Documents/nailab-rails/app/views/partners/settings/show.html.erb

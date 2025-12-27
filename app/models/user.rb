@@ -17,10 +17,11 @@ class User < ApplicationRecord
     roles.keys
   end
 
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :omniauthable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+      devise :database_authenticatable, :registerable,
+        :recoverable, :rememberable, :validatable,
+        :confirmable, :omniauthable, :jwt_authenticatable,
+        omniauth_providers: [:linkedin],
+        jwt_revocation_strategy: JwtDenylist
 
   has_one :user_profile, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true
@@ -28,6 +29,7 @@ class User < ApplicationRecord
   # Additional associations
   has_one :startup_profile, dependent: :destroy
   has_one :startup, dependent: :destroy
+  has_one :partner_application, dependent: :destroy
   has_one :subscription, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
@@ -66,6 +68,10 @@ class User < ApplicationRecord
     role == "founder"
   end
 
+  def partner?
+    role == "partner"
+  end
+
   def admin?
     role == "admin"
   end
@@ -83,6 +89,17 @@ class User < ApplicationRecord
         linkedin_url: auth.info.urls&.public_profile,
         bio: auth.info.description
       )
+    end
+  end
+
+  def self.find_for_oauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.provider = auth.provider
+      user.uid      = auth.uid
+      user.email    = auth.info.email || "#{auth.uid}@linkedin.example.com"
+      user.name     = auth.info.name
+      user.image    = auth.info.picture
+      user.password = Devise.friendly_token[0, 20]
     end
   end
 

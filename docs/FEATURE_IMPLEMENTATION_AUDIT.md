@@ -1,7 +1,23 @@
 #
-# Recent Changes Since Last Audit (as of December 24, 2025)
+
+# Recent Changes Since Last Audit (as of December 27, 2025)
+
 #
 
+- Migrated admin dashboard from RailsAdmin to ActiveAdmin (all resources, navigation, and layout)
+- Implemented Tailwind-based, simplified admin layout for all ActiveAdmin pages
+- Grouped and cleaned up sidebar navigation in ActiveAdmin; removed Admin Users resource
+- Removed SVG icons from resource tables, replaced with text headers for clarity
+- Fixed syntax errors and duplicate index blocks in admin resource files
+- Resolved 'superclass mismatch for class ProgramsController' by removing duplicate resource registration
+- All onboarding flows (mentor, founder, partner) are live and tested
+- Passwordless onboarding and confirmation flows are fully implemented
+- All admin resources now use the new theme and navigation
+- No critical errors remain after class cache/server restart (pending user confirmation)
+
+# Recent Changes Since Last Audit (as of December 24, 2025)
+
+#
 
 - Added Partners onboarding flow (UI, controller, model, and validations)
 - Implemented passwordless onboarding flow with email confirmation for mentors, founders, and partners (OnboardingSubmission model, custom confirmations controller)
@@ -27,6 +43,7 @@
 ---
 
 ---
+
 # Feature Implementation Audit
 
 ## Legend
@@ -37,9 +54,9 @@
 
 ## Summary Totals
 
-- ✅ Implemented: 44
-- 🟡 Partial: 14
-- ❌ Missing: 8
+- ✅ Implemented: 44  
+- 🟡 Partial: 15  
+- ❌ Missing: 9  
 
 ---
 
@@ -188,6 +205,7 @@
 ## Next Steps for Subscription Payments Implementation
 
 ### Immediate Priority (Week 6 Completion)
+
 1. **Payment Gateway Integration**
    - Add Stripe gem for card/PayPal processing
    - Add M-Pesa API integration for mobile money payments
@@ -205,28 +223,77 @@
    - Create payment failure handling and retry mechanisms
 
 ### Medium Priority (Week 7)
-4. **Email Notifications**
+
+1. **Email Notifications**
    - Subscription confirmation emails
    - Payment receipt emails
    - Renewal reminders
    - Payment failure notifications
 
-5. **Subscription Management**
+2. **Subscription Management**
    - Plan upgrade/downgrade functionality
    - Subscription cancellation flow
    - Billing history and invoice generation
    - Account settings for subscription management
 
 ### Long-term Enhancements
-6. **Advanced Features**
+
+1. **Advanced Features**
    - Prorated billing for plan changes
    - Subscription analytics and reporting
    - Multi-currency support
    - Subscription gifting/referral discounts
 
 ### Technical Debt & Testing
-7. **Quality Assurance**
+
+1. **Quality Assurance**
    - Comprehensive payment flow testing
    - Integration tests for payment gateways
    - Security audit for payment handling
    - Performance testing for concurrent payments
+
+# Recent Changes Since Last Audit (as of December 27, 2025)
+
+- ❌ **Missing**: Subscription tiers logic (backend access rules)  
+- ❌ **Missing**: Payment gateway integration  
+- ❌ **Missing**: Confirmation emails  
+- ❌ **Missing**: Receipt generation  
+- ❌ **Missing**: Subscription management  
+
+- 🟡 **Partial**: Subscription flow  
+- 🟡 **Partial**: Feedback & rating system  
+- 🟡 **Partial**: Ranking & display  
+- 🟡 **Partial**: Core matching logic  
+
+- ✅ **Implemented**: Payment modal (Card/PayPal/M-Pesa)  
+- ✅ **Implemented**: Mentor dashboard access (welcome message)  
+- ✅ **Implemented**: Mentor profile fields (expertise, availability, etc.)  
+- ✅ **Implemented**: Save & exit functionality  
+- ✅ **Implemented**: Email confirmation  
+- ✅ **Implemented**: Dashboard widgets  
+- ✅ **Implemented**: Left navigation panel (key areas)  
+- ✅ **Implemented**: Mentor onboarding form  
+- ✅ **Implemented**: Input validation on all steps  
+- ✅ **Implemented**: Step-by-step profile wizard (progress indicator)  
+- ✅ **Implemented**: Founder dashboard left navigation panel  
+- ✅ **Implemented**: Founder personal info fields  
+- ✅ **Implemented**: Startup profile wizard: privacy & visibility controls  
+- ✅ **Implemented**: Startup profile wizard: save & exit  
+- ✅ **Implemented**: Startup dashboard access + welcome message  
+- ✅ **Implemented**: Recommended mentors display  
+- ✅ **Implemented**: View mentor profiles  
+- ✅ **Implemented**: Request mentorship + booking flow + sessions display  
+- ✅ **Implemented**: Program cards (title, summary, primary category tag)  
+- ✅ **Implemented**: Learn more → detail page/modal  
+- ✅ **Implemented**: Mobile responsiveness testing  
+- ✅ **Implemented**: Programs page structure (all programs)  
+- ✅ **Implemented**: Content integration (text/images/videos)  
+- ✅ **Implemented**: Program categorization (backend categories)  
+- ✅ **Implemented**: Filters by category  
+- ✅ **Implemented**: Migration audit rake task  
+- ✅ **Implemented**: Migration existence checks  
+- ✅ **Implemented**: Modern admin dashboard layout (sticky nav, left sidebar, badges)  
+- ✅ **Implemented**: Dashboard content (KPIs, activity feed, analytics, content updates)  
+- ✅ **Implemented**: General UX polish (status tags, inline actions, breadcrumbs, progress/search controls)  
+- ✅ **Implemented**: Support ticket submission form  
+- ✅ **Implemented**: Admin notification + record

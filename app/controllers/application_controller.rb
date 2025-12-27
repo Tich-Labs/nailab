@@ -23,6 +23,9 @@ class ApplicationController < ActionController::Base
     onboarding_path = case user_profile&.role
     when "mentor"
       mentor_onboarding_path
+    when "partner"
+      # Partners don't have incomplete onboarding that blocks navigation
+      return
     else
       founder_onboarding_path
     end
@@ -48,7 +51,7 @@ class ApplicationController < ActionController::Base
       when "mentor"
         mentor_root_path
       when "partner"
-        founder_root_path
+        partners_root_path
       else
         founder_root_path
       end
@@ -64,7 +67,7 @@ class ApplicationController < ActionController::Base
         when "mentor"
           mentor_root_path
         when "partner"
-          founder_root_path
+          partners_root_path
         else
           founder_root_path
         end

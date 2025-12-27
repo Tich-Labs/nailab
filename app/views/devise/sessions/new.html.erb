@@ -1,6 +1,5 @@
 <%= render 'devise/shared/auth_layout', title: 'Log in to Nailab', subtitle: 'Access your profile, cohorts, and connections in one secure place.' do %>
   <%= render 'devise/shared/error_messages', resource: resource %>
-  <!-- LinkedIn Sign In -->
   <div class="space-y-4">
     <%= link_to user_linkedin_omniauth_authorize_path, class: 'w-full flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-4 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-blue-700' do %>
       <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

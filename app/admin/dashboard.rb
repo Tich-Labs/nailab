@@ -287,7 +287,7 @@ ActiveAdmin.register_page "Dashboard" do
         end
         div class: "grid grid-cols-1 gap-4 sm:grid-cols-2" do
           text_node link_to("Review Pending Requests", admin_mentorship_requests_path, "class": "bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Review pending mentorship requests")
-          text_node link_to("Add New Resource", new_admin_resource_path, "class": "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Add a new resource")
+          text_node link_to("Add New Resource", new_content_resource_path, "class": "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Add a new resource")
           text_node link_to("View All Founders", admin_founders_path, "class": "bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all startup founders")
           text_node link_to("View All Mentors", admin_users_path(q: { role_eq: 'mentor' }), "class": "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all mentors")
         end

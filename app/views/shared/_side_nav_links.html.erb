@@ -14,6 +14,10 @@ when :mentor %>
   <%= nav_link 'Milestones & Metrics', founder_milestones_path, icon: 'fas fa-chart-line' %>
   <%= nav_link 'Resources', founder_resources_path, icon: 'fas fa-book' %>
   <%= nav_link 'Community', founder_community_path, icon: 'fas fa-users' %>
+<% when :partner %>
+  <%= nav_link 'Dashboard', partners_root_path, icon: 'fas fa-tachometer-alt' %>
+  <%= nav_link 'Profile', partners_profile_path, icon: 'fas fa-building' %>
+  <%= nav_link 'Resources', resources_path, icon: 'fas fa-book' %>
 <% when :common %>
   <%= nav_link 'Programs', programs_path, icon: 'fas fa-rocket' %>
   <%= nav_link 'Events & Webinars', events_path, icon: 'fas fa-calendar' %>

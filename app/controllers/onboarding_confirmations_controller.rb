@@ -3,6 +3,8 @@ class OnboardingConfirmationsController < ApplicationController
 
   def check_email
     @email = params[:email].to_s
+    @user = User.find_by(email: @email) if @email.present?
+    @confirmation_token = @user&.confirmation_token if @user && !@user.confirmed?
   end
 
   def resend

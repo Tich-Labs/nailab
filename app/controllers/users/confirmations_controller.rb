@@ -23,7 +23,7 @@ module Users
       when "mentor"
         mentor_root_path
       when "partner"
-        founder_root_path
+        partners_root_path
       else
         founder_root_path
       end
