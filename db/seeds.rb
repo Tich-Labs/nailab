@@ -75,7 +75,13 @@ if Rails.env.development? && File.exist?(Rails.root.join('db/seeds/mentorship_re
   require Rails.root.join('db/seeds/mentorship_requests.rb')
 end
 
+
 # Development-only: Seed resources (blogs, webinars, events, opportunities, templates, knowledge hub)
 if Rails.env.development? && File.exist?(Rails.root.join('db/seeds/resources.rb'))
   require Rails.root.join('db/seeds/resources.rb')
+end
+
+# Seed programs (all environments)
+if File.exist?(Rails.root.join('db/seeds/programs.rb'))
+  require Rails.root.join('db/seeds/programs.rb')
 end
