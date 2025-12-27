@@ -194,7 +194,9 @@ founders_data.each do |data|
       team_size: rand(2..10),
       founded_year: rand(2020..2025),
       location: ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'London, UK'].sample,
-      profile_visibility: true
+      profile_visibility: true,
+      target_market: "Early adopters in the #{data[:sectors].first} industry looking for innovative solutions.",
+      value_proposition: "Providing cutting-edge #{data[:sectors].first} solutions that address key pain points in the market."
     )
   end
 
