@@ -189,11 +189,10 @@ founders_data.each do |data|
       sector: data[:sectors].first,
       stage: 'Seed',
       description: "A startup founded by #{user.user_profile.full_name} in the #{data[:sectors].first} sector.",
-      website: 'https://example.com',
-      valuation: rand(500000..2000000),
+      website_url: 'https://example.com',
       funding_raised: rand(100000..500000),
       team_size: rand(2..10),
-      founding_year: rand(2020..2025),
+      founded_year: rand(2020..2025),
       location: ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'London, UK'].sample,
       profile_visibility: true
     )
