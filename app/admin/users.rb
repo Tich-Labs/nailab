@@ -13,7 +13,7 @@ ActiveAdmin.register User do
   menu priority: 2, label: "Users"
 
   # Disable create and destroy actions (can view and edit only)
-  actions :index, :show, :edit, :update
+  actions :index, :show, :edit, :update, :destroy
 
   permit_params :email, :role, :confirmed_at,
                 user_profile_attributes: [
@@ -31,7 +31,7 @@ ActiveAdmin.register User do
   end
 
   # Clean unified index with role badges
-  index do
+  index download_links: false, class: "admin-table w-full text-sm text-gray-800 bg-white rounded-xl overflow-hidden shadow" do
     selectable_column
     id_column
     column :email
@@ -91,11 +91,18 @@ ActiveAdmin.register User do
       end
     end
 
-    column :created_at, sortable: :created_at do |u|
-      u.created_at.strftime("%b %d, %Y")
+    column "Created At" do |u|
+      u.created_at&.strftime("%b %d, %Y at %I:%M %p")
     end
 
-    actions
+    actions defaults: false do |u|
+      content_tag :div, class: "flex items-center gap-2" do
+        safe_join([
+          link_to("View", admin_user_path(u), class: "btn-primary text-xs px-3 py-1 rounded-md bg-primary hover:bg-primary-dark text-white"),
+          link_to("Delete", admin_user_path(u), method: :delete, data: { confirm: "Are you sure?" }, class: "btn-secondary text-xs px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-700")
+        ])
+      end
+    end
   end
 
   form do |f|
@@ -161,179 +168,24 @@ ActiveAdmin.register User do
 
   # Enhanced show page with conditional panels based on role
   show title: ->(u) { u.user_profile&.full_name || u.email } do
-    columns do
-      column do
-        # Basic user info
-        panel "User Account", class: "bg-white shadow rounded-lg" do
-          attributes_table_for resource do
-            row :email do
-              mail_to resource.email
-            end
-            row :role do
-              role_class = case resource.role
-              when "founder" then "bg-primary text-white"
-              when "mentor" then "bg-accent text-white"
-              when "admin" then "bg-gray-700 text-white"
-              else "bg-gray-400 text-white"
-              end
-              span resource.role.humanize, class: "px-3 py-1 rounded-full text-sm font-semibold #{role_class}"
-            end
-            row :confirmed_at
-            row :created_at
-            row :updated_at
-          end
-        end
-
-        # Basic profile info (all users)
-        if resource.user_profile
-          panel "Profile Information", class: "bg-white shadow rounded-lg mt-6" do
-            attributes_table_for resource.user_profile do
-              row :full_name
-              row :bio
-              row :title
-              row :organization
-              row :phone if resource.role == "founder"
-              row :country if resource.role == "founder"
-              row :city if resource.role == "founder"
-              row :linkedin_url do |p|
-                link_to p.linkedin_url, p.linkedin_url, target: "_blank" if p.linkedin_url.present?
-              end
-            end
-          end
-        end
+    div class: "max-w-3xl mx-auto bg-white rounded-xl shadow p-8 space-y-6" do
+      attributes_table_for resource do
+        row :id
+        row :email
+        row :role
+        row :confirmed_at
+        row :created_at
+        row :updated_at
       end
-
-      column do
-        # CONDITIONAL PANEL: Mentor-specific details
-        if resource.role == "mentor" && resource.user_profile
-          panel "Mentor Expertise & Availability", class: "bg-accent bg-opacity-5 border-l-4 border-accent shadow rounded-lg" do
-            attributes_table_for resource.user_profile do
-              row "Years of Experience" do |p|
-                p.years_experience || "—"
-              end
-              row "Advisory Experience" do |p|
-                p.advisory_experience ? "Yes" : "No"
-              end
-              row "Sectors" do |p|
-                if p.sectors&.any?
-                  div do
-                    p.sectors.map { |s| span s, class: "inline-block bg-accent bg-opacity-10 text-accent px-2 py-1 rounded text-sm mr-1 mb-1" }.join.html_safe
-                  end
-                else
-                  "—"
-                end
-              end
-              row "Expertise Areas" do |p|
-                if p.expertise&.any?
-                  div do
-                    p.expertise.map { |e| span e, class: "inline-block bg-primary bg-opacity-10 text-primary px-2 py-1 rounded text-sm mr-1 mb-1" }.join.html_safe
-                  end
-                else
-                  "—"
-                end
-              end
-              row "Stage Preference" do |p|
-                p.stage_preference&.join(", ") || "—"
-              end
-              row "Rate per Hour" do |p|
-                if p.pro_bono
-                  span "Pro Bono", class: "text-green-600 font-semibold"
-                elsif p.rate_per_hour.to_i > 0
-                  "$#{p.rate_per_hour}"
-                else
-                  "Not specified"
-                end
-              end
-              row "Availability" do |p|
-                p.availability_hours_month || "—"
-              end
-              row "Preferred Mode" do |p|
-                p.preferred_mentorship_mode&.humanize || "—"
-              end
-            end
-          end
+      div class: "flex gap-4 mt-8" do
+        span do
+          link_to "Edit", edit_admin_user_path(resource), class: "btn-primary text-xs px-4 py-2 rounded-md bg-primary hover:bg-primary-dark text-white"
         end
-
-        # CONDITIONAL PANEL: Founder-specific details (linked startup)
-        if resource.role == "founder"
-          if resource.startup_profile
-            startup = resource.startup_profile
-            panel "Startup: #{startup.startup_name}", class: "bg-primary bg-opacity-5 border-l-4 border-primary shadow rounded-lg mt-6" do
-              attributes_table_for startup do
-                row :startup_name
-                row :description
-                row :target_market
-                row :value_proposition
-                row :stage do |s|
-                  span s.stage, class: "px-2 py-1 bg-primary bg-opacity-20 text-primary rounded text-sm font-medium"
-                end
-                row :sector
-                row :funding_stage
-                row :funding_raised do |s|
-                  s.funding_raised ? "$#{number_with_delimiter(s.funding_raised)}" : "—"
-                end
-                row :team_size
-                row "Team Members" do |s|
-                  if s.team_members&.any?
-                    ul do
-                      s.team_members.map { |m| li "#{m['name']} (#{m['role']})" }.join.html_safe
-                    end
-                  else
-                    "—"
-                  end
-                end
-                row :founded_year
-                row "Mentorship Areas Needed" do |s|
-                  if s.mentorship_areas&.any?
-                    div do
-                      s.mentorship_areas.map { |a| span a, class: "inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-sm mr-1 mb-1" }.join.html_safe
-                    end
-                  else
-                    "—"
-                  end
-                end
-                row :challenge_details
-                row :website_url do |s|
-                  link_to s.website_url, s.website_url, target: "_blank" if s.website_url.present?
-                end
-                row :profile_visibility do |s|
-                  s.profile_visibility ? span("✓ Public", class: "text-green-600") : span("✗ Private", class: "text-gray-500")
-                end
-              end
-            end
-          else
-            panel "Startup Profile", class: "bg-gray-50 border border-gray-200 shadow rounded-lg mt-6" do
-              div class: "text-center py-8 text-gray-500" do
-                para "No startup profile created yet."
-                para do
-                  link_to "View Founder Profile", resource.user_profile ? "#profile" : "#", class: "text-primary hover:underline"
-                end
-              end
-            end
-          end
+        span do
+          link_to "Delete", admin_user_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn-secondary text-xs px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-700"
         end
       end
     end
-
-    # Mentorship Requests Panel (for founders and mentors)
-    panel "Mentorship Requests", class: "bg-white shadow rounded-lg mt-6" do
-      requests = MentorshipRequest.where("founder_id = ? OR mentor_id = ?", resource.id, resource.id).order(created_at: :desc)
-      if requests.any?
-        table_for requests do
-          column("ID") { |r| link_to r.id, admin_mentorship_request_path(r) }
-          column("Role") { |r| r.founder_id == resource.id ? "Founder" : "Mentor" }
-          column("Other Party") { |r| r.founder_id == resource.id ? (link_to(r.mentor.user_profile&.full_name || r.mentor.email, admin_user_path(r.mentor))) : (link_to(r.founder.user_profile&.full_name || r.founder.email, admin_user_path(r.founder))) }
-          column("Status") { |r| status_tag r.status }
-          column("Created At") { |r| r.created_at.strftime("%b %d, %Y") }
-        end
-      else
-        div class: "text-gray-500 italic p-4" do
-          "No mentorship requests found for this user."
-        end
-      end
-    end
-
-    active_admin_comments
   end
 
   # Scoped collection with eager loading for performance

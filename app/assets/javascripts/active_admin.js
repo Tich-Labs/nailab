@@ -1,5 +1,3 @@
-//= require trix
-//= require activeadmin/trix
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll('svg.data-table-sorted-icon').forEach(function(el) {
     el.style.display = 'none';

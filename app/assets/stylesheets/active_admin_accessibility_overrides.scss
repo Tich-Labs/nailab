@@ -1,0 +1,51 @@
+/* Nailab Admin Table Accessibility & Sort Icon Fixes */
+
+/* 1. Make all sort icons small and aligned */
+.data-table-sorted-icon, .active_admin .sortable .sort_icon svg, .active_admin .sortable svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  min-width: 1rem !important;
+  min-height: 1rem !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+}
+
+/* 2. Table header alignment and spacing */
+.active_admin th, .active_admin .index_table th {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: #F5F5F5;
+  color: #4A148C;
+  font-weight: 700;
+  font-size: 1rem;
+  vertical-align: middle;
+  min-height: 2.5rem;
+}
+
+/* 3. Row separation and hover effect */
+.active_admin tbody tr, .active_admin .index_table tbody tr {
+  border-bottom: 1px solid #E5E7EB;
+  transition: background 0.2s;
+}
+.active_admin tbody tr:hover, .active_admin .index_table tbody tr:hover {
+  background: #FAFAFA;
+}
+
+/* 4. Action button spacing and rounding */
+.active_admin .index_table .col-actions .btn-primary,
+.active_admin .index_table .col-actions .btn-secondary {
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+  min-width: 3.5rem;
+  text-align: center;
+}
+.active_admin .index_table .col-actions .btn-secondary:last-child {
+  margin-right: 0;
+}
+
+/* 5. Checkbox alignment */
+.active_admin .index_table input[type="checkbox"] {
+  margin-top: 0.2rem;
+}

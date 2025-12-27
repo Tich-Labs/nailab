@@ -796,6 +796,16 @@ video {
   margin-right: 1rem;
 }
 
+.mx-6 {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.mx-8 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -871,6 +881,10 @@ video {
 
 .ml-\[19rem\] {
   margin-left: 19rem;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .mr-1 {
@@ -1318,6 +1332,11 @@ video {
 
 .rotate-180 {
   --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.rotate-90 {
+  --tw-rotate: 90deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -2580,6 +2599,10 @@ video {
   vertical-align: middle;
 }
 
+.font-sans {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -3317,6 +3340,10 @@ video {
   background-color: rgb(74 20 140 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-primary-dark\/20:hover {
+  background-color: rgb(74 20 140 / 0.2);
+}
+
 .hover\:bg-purple-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1));
@@ -3573,29 +3600,6 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.focus\:not-sr-only:focus {
-  position: static;
-  width: auto;
-  height: auto;
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-  clip: auto;
-  white-space: normal;
-}
-
-.focus\:absolute:focus {
-  position: absolute;
-}
-
-.focus\:left-4:focus {
-  left: 1rem;
-}
-
-.focus\:top-4:focus {
-  top: 1rem;
-}
-
 .focus\:border-purple-500:focus {
   --tw-border-opacity: 1;
   border-color: rgb(168 85 247 / var(--tw-border-opacity, 1));
@@ -3669,6 +3673,11 @@ video {
 .focus\:ring-white:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity, 1));
+}
+
+.group[open] .group-open\:rotate-90 {
+  --tw-rotate: 90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .group:hover .group-hover\:block {

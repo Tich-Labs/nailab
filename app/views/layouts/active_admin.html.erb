@@ -7,50 +7,58 @@
     <%= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "controllers", type: "module", "data-turbo-track": "reload" %>
   </head>
-  <body class="bg-neutral text-neutral-dark min-h-screen">
-    <header class="bg-primary text-white py-4 px-6 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <%= image_tag "nailab-logo-purple.png", alt: "Nailab Admin", class: "h-10 w-auto" %>
-        <span class="font-bold text-lg tracking-wide">Nailab Admin</span>
-      </div>
+  <body class="bg-neutral text-neutral-dark min-h-screen font-sans">
+    <header class="layout-header bg-primary text-white flex items-center justify-between px-6 py-4">
+      <%= image_tag "nailab-logo-purple.png", class: "h-10" %>
+      <span class="font-bold text-lg">Nailab Admin</span>
       <% if flash.any? %>
         <div class="space-x-2">
           <% flash.each do |type, message| %>
-            <span class="<%= flash_class(type) %> px-3 py-1 rounded text-sm" role="alert"><%= message %></span>
+            <span class="<%= flash_class(type) %> flash-alert"><%= message %></span>
           <% end %>
         </div>
       <% end %>
     </header>
     <div class="flex">
-      <aside class="w-56 bg-primary text-white min-h-screen py-6 px-2">
+      <aside class="layout-sidebar bg-primary text-white w-56 py-6 px-2">
         <nav>
           <ul class="space-y-2">
-            <li><%= link_to "Dashboard", admin_root_path, class: nav_link_classes(admin_root_path) %></li>
-            <li><%= link_to "Users", admin_users_path, class: nav_link_classes(admin_users_path) %></li>
-            <li><%= link_to "Founders", admin_founders_path, class: nav_link_classes(admin_founders_path) %></li>
-            <li><%= link_to "Mentorship Requests", admin_mentorship_requests_path, class: nav_link_classes(admin_mentorship_requests_path) %></li>
-            <li><%= link_to "Support Tickets", admin_support_tickets_path, class: nav_link_classes(admin_support_tickets_path) %></li>
+            <li><%= link_to "Dashboard", admin_root_path, class: "nav-link" %></li>
             <li>
-              <details class="group" <%= (current_page?(content_programs_path) || current_page?(content_resources_path)) ? 'open' : '' %>>
+              <details class="group">
+                <summary class="cursor-pointer px-2 py-1 rounded flex items-center gap-2 hover:bg-primary-dark/20">
+                  <span>Users</span>
+                  <svg class="w-4 h-4 ml-auto group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                </summary>
+                <ul class="ml-4 mt-1 space-y-1">
+                  <li><%= link_to "All Users", admin_users_path, class: "nav-link" %></li>
+                  <li><%= link_to "Founders", admin_founders_path, class: "nav-link" %></li>
+                  <li><%= link_to "Mentors", admin_mentors_path, class: "nav-link" %></li>
+                </ul>
+              </details>
+            </li>
+            <li><%= link_to "Support Tickets", admin_support_tickets_path, class: "nav-link" %></li>
+            <li>
+              <details class="group">
                 <summary class="cursor-pointer px-2 py-1 rounded flex items-center gap-2 hover:bg-primary-dark/20">
                   <span>Content</span>
                   <svg class="w-4 h-4 ml-auto group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </summary>
                 <ul class="ml-4 mt-1 space-y-1">
-                  <li><%= link_to "Programs", content_programs_path, class: nav_link_classes(content_programs_path) %></li>
-                  <li><%= link_to "Resources", content_resources_path, class: nav_link_classes(content_resources_path) %></li>
+                  <li><%= link_to "Programs", content_programs_path, class: "nav-link" %></li>
+                  <li><%= link_to "Resources", content_resources_path, class: "nav-link" %></li>
                 </ul>
               </details>
             </li>
           </ul>
         </nav>
       </aside>
-      <main id="main-content" class="flex-1 p-8">
+      <main class="layout-main p-8 bg-neutral text-neutral-dark flex-1">
         <%= yield %>
       </main>
     </div>
-    <footer class="bg-primary-dark text-white py-3 px-6 text-center text-xs">
-      © <%= Time.current.year %> Nailab • Powered by ActiveAdmin <%= ActiveAdmin::VERSION %>
+    <footer class="layout-footer bg-primary-dark text-white text-xs text-center py-3">
+      © <%= Time.current.year %> Nailab
     </footer>
   </body>
 </html>

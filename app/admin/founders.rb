@@ -1,8 +1,8 @@
 # app/admin/founders.rb
 ActiveAdmin.register User, as: "Founder" do
-  menu priority: 1, label: "Founders"
+  menu parent: "Users", priority: 3, label: "Founders"
 
-  actions :index, :show
+  actions :index, :show, :edit, :update, :destroy
 
   controller do
     def scoped_collection
@@ -10,7 +10,7 @@ ActiveAdmin.register User, as: "Founder" do
     end
   end
 
-  index do
+  index download_links: false, class: "admin-table w-full text-sm text-gray-800 bg-white rounded-xl overflow-hidden shadow" do
     selectable_column
     id_column
     column :email do |u|
@@ -34,10 +34,17 @@ ActiveAdmin.register User, as: "Founder" do
     column "Sector", sortable: false do |u|
       u.startup_profile&.sector || "—"
     end
-    column :created_at, sortable: :created_at do |u|
-      u.created_at.strftime("%b %d, %Y")
+    column "Created At" do |u|
+      u.created_at&.strftime("%b %d, %Y at %I:%M %p")
     end
-    actions
+    actions defaults: false do |u|
+      content_tag :div, class: "flex items-center gap-2" do
+        safe_join([
+          link_to("View", admin_founder_path(u), class: "btn-primary text-xs px-3 py-1 rounded-md bg-primary hover:bg-primary-dark text-white"),
+          link_to("Delete", admin_founder_path(u), method: :delete, data: { confirm: "Are you sure?" }, class: "btn-secondary text-xs px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-700")
+        ])
+      end
+    end
   end
 
   # Show: Stacked card panels (no tabs — fully supported)

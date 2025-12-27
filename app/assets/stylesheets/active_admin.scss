@@ -1,6 +1,6 @@
-@import "trix";
-@import "activeadmin/trix";
+
 /* app/assets/stylesheets/active_admin.css */
+
 
 /* Tailwind Base (must be first) */
 @tailwind base;
@@ -64,3 +64,9 @@ svg.data-table-sorted-icon {
 .index_as_table th:nth-child(4), .index_as_table td:nth-child(4) { @apply w-80; } /* Startup */
 .index_as_table th:nth-child(5), .index_as_table td:nth-child(5) { @apply w-48; } /* Stage */
 .index_as_table th:nth-child(6), .index_as_table td:nth-child(6) { @apply w-48; } /* Sector */
+
+/* Left-align attributes table */
+.active_admin .attributes_table th,
+.active_admin .attributes_table td {
+  text-align: left !important;
+}

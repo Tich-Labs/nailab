@@ -5,7 +5,7 @@ ActiveAdmin.register Program, namespace: :content do
   permit_params :title, :description, :content, :category, :video_url,
                 :slug, :active, :start_date, :end_date, :image
 
-  index do
+  index download_links: false, class: "admin-table w-full text-sm text-gray-800 bg-white rounded-xl overflow-hidden shadow" do
     selectable_column
     id_column
     column :title
@@ -22,8 +22,44 @@ ActiveAdmin.register Program, namespace: :content do
       end
     end
     column :active
-    column :created_at
-    actions
+    column "Created At" do |p|
+      p.created_at&.strftime("%b %d, %Y at %I:%M %p")
+    end
+    actions defaults: false do |p|
+      content_tag :div, class: "flex items-center gap-2" do
+        safe_join([
+          link_to("View", content_program_path(p), class: "btn-primary text-xs px-3 py-1 rounded-md bg-primary hover:bg-primary-dark text-white"),
+          link_to("Delete", content_program_path(p), method: :delete, data: { confirm: "Are you sure?" }, class: "btn-secondary text-xs px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-700")
+        ])
+      end
+    end
+  end
+
+  show title: proc { |p| p.title } do
+    div class: "max-w-3xl mx-auto bg-white rounded-xl shadow p-8 space-y-6" do
+      attributes_table_for resource do
+        row :id
+        row :title
+        row :description
+        row :content
+        row :category
+        row :video_url
+        row :slug
+        row :active
+        row :start_date
+        row :end_date
+        row :created_at
+        row :updated_at
+      end
+      div class: "flex gap-4 mt-8" do
+        span do
+          link_to "Edit", edit_content_program_path(resource), class: "btn-primary text-xs px-4 py-2 rounded-md bg-primary hover:bg-primary-dark text-white"
+        end
+        span do
+          link_to "Delete", content_program_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn-secondary text-xs px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-700"
+        end
+      end
+    end
   end
 
   form do |f|
