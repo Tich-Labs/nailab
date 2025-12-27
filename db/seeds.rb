@@ -203,4 +203,31 @@ founders_data.each do |data|
   puts "Created founder: #{user.email}"
 end
 
+# Seed StartupProfile for founder ID 19
+# Seed StartupProfile for founder ID 19
+founder = User.find_by(id: 19, role: "founder")
+
+if founder
+  StartupProfile.create!(
+    user_id: founder.id,
+    startup_name: "Innovative Health Solutions",
+    description: "Developing AI-powered healthcare solutions to improve patient outcomes.",
+    stage: "Seed",
+    sector: "Healthcare",
+    funding_stage: "Pre-seed",
+    funding_raised: 50000, # Example funding amount
+    team_size: 5, # Example team size
+    founded_year: 2023, # Example founded year
+    mentorship_areas: ["AI/ML", "Healthcare Innovation"], # Example mentorship areas
+    challenge_details: "Scaling operations and securing funding for product development.",
+    website_url: "https://innovativehealthsolutions.com",
+    profile_visibility: true,
+    target_market: "Healthcare providers and patients", # Added required field
+    value_proposition: "AI-powered solutions to improve patient outcomes" # Added required field
+  )
+  puts "StartupProfile seeded for founder ID 19."
+else
+  puts "Founder with ID 19 not found or not a founder."
+end
+
 puts "Seeding completed!"

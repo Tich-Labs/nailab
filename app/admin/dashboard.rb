@@ -1,11 +1,138 @@
-
 # app/admin/dashboard.rb
 # Admin Dashboard: Responsive, Tailwind-styled, metrics, charts, activity, and quick actions
 
 ActiveAdmin.register_page "Dashboard" do
   menu priority: 1, label: "Dashboard"
 
+  sidebar :navigation, only: :index do
+    ul class: "nav-links" do
+      li class: "dropdown #{params[:controller].start_with?("admin/users") || params[:controller].start_with?("founder/mentors") ? "open" : ""}" do
+        span "Users"
+        ul do
+          li class: (params[:controller] == "admin/users" ? "active" : "") do
+            link_to "All Users", admin_users_path
+          end
+          li class: (params[:controller] == "admin/founders" ? "active" : "") do
+            link_to "Founders", admin_founders_path
+          end
+          li class: (params[:controller] == "founder/mentors" ? "active" : "") do
+            link_to "Mentors", founder_mentors_path
+          end
+        end
+      end
+      li class: "dropdown #{params[:controller].start_with?("admin/content") ? "open" : ""}" do
+        span "Content"
+        ul do
+          li class: (params[:controller] == "admin/content/programs" ? "active" : "") do
+            link_to "Programs", admin_content_programs_path
+          end
+          li class: (params[:controller] == "admin/content/resources" ? "active" : "") do
+            link_to "Resources", admin_content_resources_path
+          end
+        end
+      end
+      li class: (params[:controller] == "admin/dashboard" ? "active" : "") do
+        link_to "Dashboard", admin_dashboard_path
+      end
+      li class: (params[:controller] == "admin/mentorship_requests" ? "active" : "") do
+        link_to "Mentorship Requests", admin_mentorship_requests_path
+      end
+      li class: (params[:controller] == "admin/subscriptions" ? "active" : "") do
+        link_to "Subscriptions", admin_subscriptions_path
+      end
+      # Add similar logic for other links
+    end
+  end
+
   content title: proc { "Admin Dashboard" } do
+    # --- Recent Activity and Quick Actions (Top) ---
+    h2 "Activity & Actions", class: "sr-only"
+    div class: "grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8", role: "region", "aria-labelledby": "activity-heading" do
+      div class: "bg-white rounded-2xl shadow p-6" do
+        h3 class: "text-lg font-semibold mb-4" do
+          text_node "Recent Activity"
+        end
+        ul class: "divide-y divide-gray-100", role: "list", "aria-label": "Recent activities" do
+          recent_activities = PublicActivity::Activity.order(created_at: :desc).limit(10) rescue []
+          recent_activities.each do |activity|
+            li class: "py-3 flex items-center gap-3", role: "listitem" do
+              span class: "inline-block w-2 h-2 rounded-full bg-indigo-500", "aria-hidden": "true" do
+                # dot
+              end
+              div do
+                span class: "text-sm text-gray-800" do
+                  text_node "#{activity.trackable_type.titleize} #{activity.key.humanize}"
+                end
+                br
+                span class: "text-xs text-gray-500" do
+                  text_node l(activity.created_at, format: :short)
+                end
+              end
+            end
+          end
+        end
+      end
+      # Quick Actions
+      div class: "bg-white rounded-2xl shadow p-6 flex flex-col gap-4" do
+        h3 class: "text-lg font-semibold mb-4" do
+          text_node "Quick Actions"
+        end
+        div class: "grid grid-cols-1 gap-4 sm:grid-cols-2" do
+          text_node link_to("Review Pending Requests", admin_mentorship_requests_path, "class": "bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Review pending mentorship requests")
+          text_node link_to("Add New Resource", new_content_resource_path, "class": "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Add a new resource")
+          text_node link_to("View All Founders", admin_founders_path, "class": "bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all startup founders")
+          text_node link_to("View All Mentors", admin_users_path(q: { role_eq: 'mentor' }), "class": "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all mentors")
+        end
+      end
+    end
+
+    # --- Summary (Middle Row) ---
+    h2 "Summary Reports", class: "sr-only"
+    div class: "grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8", role: "region", "aria-labelledby": "summary-heading" do
+      div class: "bg-white rounded-2xl shadow p-6" do
+        h3 class: "text-lg font-semibold mb-4" do
+          text_node "30-Day Signups"
+        end
+        signup_trend = User.where("created_at >= ?", 30.days.ago).group("DATE(created_at)").count
+        p class: "text-3xl font-bold text-gray-900" do
+          number_with_delimiter(signup_trend.values.sum)
+        end
+        span class: "text-sm text-gray-500" do
+          "Average per day: #{(signup_trend.values.sum / [signup_trend.size, 1].max).round(1)}"
+        end
+      end
+      div class: "bg-white rounded-2xl shadow p-6" do
+        h3 class: "text-lg font-semibold mb-4" do
+          text_node "Requests by Status"
+        end
+        status_counts = MentorshipRequest.group(:status).count
+        status_counts.each do |status, count|
+          div class: "flex justify-between text-sm text-gray-700" do
+            text_node status&.titleize || "Unknown"
+            text_node number_with_delimiter(count)
+          end
+        end
+      end
+      div class: "bg-white rounded-2xl shadow p-6" do
+        h3 class: "text-lg font-semibold mb-4" do
+          text_node "Top Mentors"
+        end
+        top_mentors = MentorshipRequest.where(status: :accepted)
+                                    .group(:mentor_id)
+                                    .order(Arel.sql("COUNT(*) DESC"))
+                                    .limit(3)
+                                    .count
+        top_mentors.each do |mentor_id, count|
+          mentor = User.find_by(id: mentor_id)
+          next unless mentor
+          div class: "flex justify-between text-sm text-gray-700" do
+            text_node mentor.name
+            text_node "#{count} sessions"
+          end
+        end
+      end
+    end
+
     # --- Metrics (Top Row) ---
     h2 "Key Metrics", class: "sr-only", id: "metrics-heading"
     div class: "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 mb-8", role: "region", "aria-labelledby": "metrics-heading" do
@@ -202,94 +329,6 @@ ActiveAdmin.register_page "Dashboard" do
               "Startup Valuation"
             end
           end
-        end
-      end
-    end
-
-    # --- Summary (Middle Row) ---
-    h2 "Summary Reports", class: "sr-only"
-    div class: "grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8", role: "region", "aria-labelledby": "summary-heading" do
-      div class: "bg-white rounded-2xl shadow p-6" do
-        h3 class: "text-lg font-semibold mb-4" do
-          text_node "30-Day Signups"
-        end
-        signup_trend = User.where("created_at >= ?", 30.days.ago).group("DATE(created_at)").count
-        p class: "text-3xl font-bold text-gray-900" do
-          number_with_delimiter(signup_trend.values.sum)
-        end
-        span class: "text-sm text-gray-500" do
-          "Average per day: #{(signup_trend.values.sum / [signup_trend.size, 1].max).round(1)}"
-        end
-      end
-      div class: "bg-white rounded-2xl shadow p-6" do
-        h3 class: "text-lg font-semibold mb-4" do
-          text_node "Requests by Status"
-        end
-        status_counts = MentorshipRequest.group(:status).count
-        status_counts.each do |status, count|
-          div class: "flex justify-between text-sm text-gray-700" do
-            text_node status&.titleize || "Unknown"
-            text_node number_with_delimiter(count)
-          end
-        end
-      end
-      div class: "bg-white rounded-2xl shadow p-6" do
-        h3 class: "text-lg font-semibold mb-4" do
-          text_node "Top Mentors"
-        end
-        top_mentors = MentorshipRequest.where(status: :accepted)
-                                    .group(:mentor_id)
-                                    .order(Arel.sql("COUNT(*) DESC"))
-                                    .limit(3)
-                                    .count
-        top_mentors.each do |mentor_id, count|
-          mentor = User.find_by(id: mentor_id)
-          next unless mentor
-          div class: "flex justify-between text-sm text-gray-700" do
-            text_node mentor.name
-            text_node "#{count} sessions"
-          end
-        end
-      end
-    end
-
-    # --- Recent Activity Feed (Bottom) ---
-    h2 "Activity & Actions", class: "sr-only"
-    div class: "grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8", role: "region", "aria-labelledby": "activity-heading" do
-      div class: "bg-white rounded-2xl shadow p-6" do
-        h3 class: "text-lg font-semibold mb-4" do
-          text_node "Recent Activity"
-        end
-        ul class: "divide-y divide-gray-100", role: "list", "aria-label": "Recent activities" do
-          recent_activities = PublicActivity::Activity.order(created_at: :desc).limit(10) rescue []
-          recent_activities.each do |activity|
-            li class: "py-3 flex items-center gap-3", role: "listitem" do
-              span class: "inline-block w-2 h-2 rounded-full bg-indigo-500", "aria-hidden": "true" do
-                # dot
-              end
-              div do
-                span class: "text-sm text-gray-800" do
-                  text_node "#{activity.trackable_type.titleize} #{activity.key.humanize}"
-                end
-                br
-                span class: "text-xs text-gray-500" do
-                  text_node l(activity.created_at, format: :short)
-                end
-              end
-            end
-          end
-        end
-      end
-      # Quick Actions
-      div class: "bg-white rounded-2xl shadow p-6 flex flex-col gap-4" do
-        h3 class: "text-lg font-semibold mb-4" do
-          text_node "Quick Actions"
-        end
-        div class: "grid grid-cols-1 gap-4 sm:grid-cols-2" do
-          text_node link_to("Review Pending Requests", admin_mentorship_requests_path, "class": "bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Review pending mentorship requests")
-          text_node link_to("Add New Resource", new_content_resource_path, "class": "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "Add a new resource")
-          text_node link_to("View All Founders", admin_founders_path, "class": "bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all startup founders")
-          text_node link_to("View All Mentors", admin_users_path(q: { role_eq: 'mentor' }), "class": "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition text-center", "aria-label": "View all mentors")
         end
       end
     end
