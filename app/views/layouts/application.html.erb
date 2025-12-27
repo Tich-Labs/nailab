@@ -10,6 +10,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
     <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+    <%= stylesheet_link_tag 'admin', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'admin', 'data-turbo-track': 'reload' %>
   </head>
   <body class="bg-white text-gray-900">
     <% if user_signed_in? && (current_user.founder? || current_user.mentor?) %>
