@@ -14,6 +14,9 @@
   <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
     <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name), class: "text-slate-600 hover:text-purple-600" %>
   <% end %>
+  <% if controller_name == 'sessions' %>
+    <%= link_to "Admin Login", new_admin_user_session_path, class: "text-slate-600 hover:text-purple-600 font-semibold" %>
+  <% end %>
   <%- if devise_mapping.omniauthable? %>
     <div class="space-y-2">
       <%- resource_class.omniauth_providers.each do |provider| %>

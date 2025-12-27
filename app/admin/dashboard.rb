@@ -228,7 +228,7 @@ ActiveAdmin.register_page "Dashboard" do
         status_counts = MentorshipRequest.group(:status).count
         status_counts.each do |status, count|
           div class: "flex justify-between text-sm text-gray-700" do
-            text_node status.titleize
+            text_node status&.titleize || "Unknown"
             text_node number_with_delimiter(count)
           end
         end
