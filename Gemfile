@@ -1,6 +1,6 @@
-# Rich text editor for admin forms
-gem 'trix'
-gem 'activeadmin-trix'
+# Rich text editor for admin forms - removed as not needed after import cleanup
+# gem 'trix'
+# gem 'activeadmin-trix'
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
