@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # Health check for Render
+  get '/up' => proc { [200, { 'Content-Type' => 'text/plain' }, ['OK']] }
   # Redirect old admin paths to new nested content paths
   get '/admin/programs', to: redirect('/admin/content/programs')
   get '/admin/resources', to: redirect('/admin/content/resources')
