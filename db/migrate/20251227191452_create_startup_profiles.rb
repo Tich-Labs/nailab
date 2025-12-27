@@ -1,6 +1,7 @@
 class CreateStartupProfiles < ActiveRecord::Migration[8.1]
   def change
-    create_table :startup_profiles, if_not_exists: true do |t|
+    drop_table :startup_profiles, if_exists: true
+    create_table :startup_profiles do |t|
       t.boolean :active, default: true, null: false
       t.text :challenge_details
       t.datetime :created_at, null: false
