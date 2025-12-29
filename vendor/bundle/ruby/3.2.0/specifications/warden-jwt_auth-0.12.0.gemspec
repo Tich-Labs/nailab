@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
   s.email = ["marc@lamarciana.com".freeze]
   s.homepage = "https://github.com/waiting-for-dev/warden-jwt_auth".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.4.20".freeze
+  s.rubygems_version = "3.4.19".freeze
   s.summary = "JWT authentication for Warden.".freeze
 
-  s.installed_by_version = "3.4.20" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.4.19" if s.respond_to? :installed_by_version
 
   s.specification_version = 4
 

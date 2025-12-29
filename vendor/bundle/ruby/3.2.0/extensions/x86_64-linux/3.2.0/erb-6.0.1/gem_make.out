@@ -1,0 +1,19 @@
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/erb-6.0.1/ext/erb/escape
+/home/tich/.rbenv/versions/3.2.3/bin/ruby extconf.rb
+checking for rb_ext_ractor_safe() in ruby.h... yes
+creating Makefile
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/erb-6.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-6ggsz8 sitelibdir\=./.gem.20251229-125539-6ggsz8 clean
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/erb-6.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-6ggsz8 sitelibdir\=./.gem.20251229-125539-6ggsz8
+compiling escape.c
+linking shared-object erb/escape.so
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/erb-6.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-6ggsz8 sitelibdir\=./.gem.20251229-125539-6ggsz8 install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20251229-125539-6ggsz8/erb
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/erb-6.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-6ggsz8 sitelibdir\=./.gem.20251229-125539-6ggsz8 clean

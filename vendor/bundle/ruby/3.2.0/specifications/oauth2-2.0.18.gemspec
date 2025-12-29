@@ -21,10 +21,10 @@ Gem::Specification.new do |s|
   s.post_install_message = "\n---+++--- oauth2 v2.0.18 ---+++---\n\n(minor) \u26A0\uFE0F BREAKING CHANGES \u26A0\uFE0F when upgrading from < v2\n\u2022 Summary of breaking changes: https://gitlab.com/ruby-oauth/oauth2#what-is-new-for-v20\n\u2022 Changes in this patch: https://gitlab.com/ruby-oauth/oauth2/-/blob/v2.0.18/CHANGELOG.md#2015-2025-09-08\n\nNews:\n1. New documentation website, including for OAuth 2.1 and OIDC: https://oauth2.galtzo.com\n2. New official Discord for discussion and support: https://discord.gg/3qme4XHNKN\n3. New org name \"ruby-oauth\" on Open Source Collective, GitHub, GitLab, Codeberg (update git remotes!)\n4. Non-commercial support for the 2.x series will end by April, 2026. Please make a plan to upgrade to the next version prior to that date.\nSupport will be dropped for Ruby 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.0, 3.1 and any other Ruby versions which will also have reached EOL by then.\n5. Gem releases are cryptographically signed with a 20-year cert; SHA-256 & SHA-512 checksums by stone_checksums.\n6. Please consider supporting this project:\n   \u2022 https://opencollective.com/ruby-oauth (new!)\n   \u2022 https://liberapay.com/pboling\n   \u2022 https://github.com/sponsors/pboling\n   \u2022 https://www.paypal.com/paypalme/peterboling\n   \u2022 https://ko-fi.com/pboling\n   \u2022 https://www.buymeacoffee.com/pboling\n   \u2022 https://tidelift.com/funding/github/rubygems/oauth\n   \u2022 Hire me - I can build anything\n   \u2022 Report issues, and star the project\nThanks, @pboling / @galtzo\n".freeze
   s.rdoc_options = ["--title".freeze, "oauth2 - \u{1F510} OAuth 2.0, 2.1 & OIDC Core Ruby implementation".freeze, "--main".freeze, "README.md".freeze, "--exclude".freeze, "^sig/".freeze, "--line-numbers".freeze, "--inline-source".freeze, "--quiet".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 2.2.0".freeze)
-  s.rubygems_version = "3.4.20".freeze
+  s.rubygems_version = "3.4.19".freeze
   s.summary = "\u{1F510} OAuth 2.0, 2.1 & OIDC Core Ruby implementation".freeze
 
-  s.installed_by_version = "3.4.20" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.4.19" if s.respond_to? :installed_by_version
 
   s.specification_version = 4
 

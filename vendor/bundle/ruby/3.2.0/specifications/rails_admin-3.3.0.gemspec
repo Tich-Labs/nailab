@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT".freeze]
   s.post_install_message = "### Upgrading RailsAdmin from 2.x.x to 3.x.x ###\n\nDue to introduction of Webpack/Webpacker support, some additional dependencies and configuration will be needed.\nRunning `bin/rails g rails_admin:install` will suggest required changes, based on the current setup of your app.\n\nFor a complete list of changes, see https://github.com/railsadminteam/rails_admin/blob/master/CHANGELOG.md\n".freeze
   s.required_ruby_version = Gem::Requirement.new(">= 2.6.0".freeze)
-  s.rubygems_version = "3.4.20".freeze
+  s.rubygems_version = "3.4.19".freeze
   s.summary = "Admin for Rails".freeze
 
-  s.installed_by_version = "3.4.20" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.4.19" if s.respond_to? :installed_by_version
 
   s.specification_version = 4
 

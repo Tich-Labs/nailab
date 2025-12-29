@@ -12,10 +12,10 @@ Gem::Specification.new do |s|
   s.description = "Gem to conveniently handle multiple models in a single form with Rails 3 and jQuery or Prototype.".freeze
   s.email = "ryan@railscasts.com".freeze
   s.homepage = "http://github.com/ryanb/nested_form".freeze
-  s.rubygems_version = "3.4.20".freeze
+  s.rubygems_version = "3.4.19".freeze
   s.summary = "Gem to conveniently handle multiple models in a single form.".freeze
 
-  s.installed_by_version = "3.4.20" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.4.19" if s.respond_to? :installed_by_version
 
   s.specification_version = 3
 

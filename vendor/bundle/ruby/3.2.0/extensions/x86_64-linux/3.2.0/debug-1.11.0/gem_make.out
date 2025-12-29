@@ -1,0 +1,19 @@
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/debug-1.11.0/ext/debug
+/home/tich/.rbenv/versions/3.2.3/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-mqv45q sitelibdir\=./.gem.20251229-125539-mqv45q clean
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-mqv45q sitelibdir\=./.gem.20251229-125539-mqv45q
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-mqv45q sitelibdir\=./.gem.20251229-125539-mqv45q install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20251229-125539-mqv45q/debug
+
+current directory: /home/tich/Documents/nailab-rails/vendor/bundle/ruby/3.2.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251229-125539-mqv45q sitelibdir\=./.gem.20251229-125539-mqv45q clean

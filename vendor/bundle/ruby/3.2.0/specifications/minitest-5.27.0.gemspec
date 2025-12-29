@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
   s.post_install_message = "NOTE: minitest 5 will be the last in the minitest family to support\n      ruby 1.8 to 2.7. If you need to keep using these versions,\n      you need to pin your dependency to minitest with something\n      like \"~> 5.0\". See History.rdoc to locate compatible\n      versions.\n\n      Further, minitest 6 will be dropping the following:\n\n      + MiniTest (it's been Minitest for >10 years)\n      + MiniTest::Unit\n      + MiniTest::Unit::TestCase\n      + assert_send (unless you argue for it well)\n      + assert_equal nil, obj\n      + mocks and stubs: moving minitest/mock.rb to its own gem\n".freeze
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 3.1".freeze)
-  s.rubygems_version = "3.4.20".freeze
+  s.rubygems_version = "3.4.19".freeze
   s.summary = "minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking".freeze
 
-  s.installed_by_version = "3.4.20" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.4.19" if s.respond_to? :installed_by_version
 
   s.specification_version = 4
 
