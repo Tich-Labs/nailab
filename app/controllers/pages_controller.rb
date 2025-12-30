@@ -118,11 +118,25 @@ class PagesController < ApplicationController
   def programs
     @program_categories = PROGRAM_CATEGORIES
     selected_category = params[:category]
-    @programs = if selected_category.present? && PROGRAM_CATEGORIES.include?(selected_category)
-      Program.where(active: true, category: selected_category)
+    if selected_category.present? && (
+         PROGRAM_CATEGORIES.include?(selected_category) ||
+         selected_category.include?("Startup Incubation") ||
+         selected_category.include?("Startup Acceleration")
+       )
+      # Map 'Social Impact Programs' to 'Social Impact' for filtering
+      mapped_category = selected_category == "Social Impact Programs" ? "Social Impact" : selected_category
+      if mapped_category == "Startup Incubation & Acceleration"
+        @programs = Program.where(active: true)
+          .where("category ILIKE ? OR category ILIKE ? OR program_type = ?",
+            "%Startup Incubation%", "%Startup Acceleration%", "incubation_acceleration")
+      else
+        @programs = Program.where(active: true)
+          .where("category = ? OR program_type = ?", mapped_category, mapped_category.parameterize.underscore)
+      end
     else
-      Program.where(active: true)
-    end.order(start_date: :desc)
+      @programs = Program.where(active: true)
+    end
+    @programs = @programs.order(start_date: :desc)
   end
 
   def program_detail

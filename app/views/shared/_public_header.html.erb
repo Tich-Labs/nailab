@@ -4,9 +4,9 @@
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <%= link_to root_path, class: "flex items-center" do %>
-          <%= image_tag "logo-blue.original.png", alt: "Nailab", class: "h-10 w-auto" %>
-        <% end %>
+          <a href="/" class="flex items-center py-4">
+            <img src="https://nailab-static.s3.eu-north-1.amazonaws.com/images/logo1.og.original.png" alt="logo1.og" class="h-12 md:h-16 w-auto">
+          </a>
       </div>
       <!-- Main Navigation -->
       <nav class="hidden md:flex space-x-8">
@@ -70,11 +70,29 @@
           <%= link_to 'Log in', new_user_session_path, class: "bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition-colors" %>
         <% end %>
         <!-- Mobile menu button -->
-        <button class="md:hidden" data-action="click->mobile-menu#toggle">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
+        <div data-controller="mobile-menu" class="md:hidden relative">
+          <button data-action="click->mobile-menu#toggle" type="button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <div data-mobile-menu-target="menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <%= link_to 'Home', root_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Programs', programs_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Startups', startups_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Mentors', mentors_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Resources', resources_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Pricing', pricing_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <%= link_to 'Contact', contact_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <% if user_signed_in? %>
+              <%= link_to 'Dashboard', (current_user.user_profile&.role == 'mentor' ? mentor_root_path : founder_root_path), class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+              <%= link_to 'Account Settings', founder_account_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+              <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <% else %>
+              <%= link_to 'Log in', new_user_session_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

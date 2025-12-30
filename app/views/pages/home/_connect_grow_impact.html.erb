@@ -3,30 +3,49 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Connect. Grow. Impact.</h2>
     <p class="text-xl text-gray-700 mb-8 max-w-3xl mx-auto"><%= @connect_intro %></p>
-    <div class="flex flex-wrap justify-center gap-6">
-      <% @connect_stats.each do |stat| %>
-        <div class="bg-white rounded-xl shadow p-8 w-64">
-          <h3 class="text-3xl font-bold text-teal-700 mb-2"><%= stat[:value] %></h3>
-          <p class="text-gray-700"><%= stat[:label] %></p>
-        </div>
-      <% end %>
-    </div>
   </div>
   <div class="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid lg:grid-cols-3 gap-8">
       <% @connect_cards.each_with_index do |card, idx| %>
-        <% btn_class = case idx
-          when 0 then 'bg-teal-600 hover:bg-teal-700'    # Founder
-          when 1 then 'bg-orange-600 hover:bg-orange-700' # Mentor
-          else         'bg-purple-600 hover:bg-purple-700' # Partner (default)
+        <% btn_class, svg_color = case idx
+          when 0 then ['bg-teal-600 hover:bg-teal-700', '#14b8a6']    # Founder
+          when 1 then ['bg-orange-600 hover:bg-orange-700', '#f97316'] # Mentor
+          else      ['bg-purple-600 hover:bg-purple-700', '#a78bfa']   # Partner (default)
         end %>
         <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col h-full">
           <div class="w-14 h-14 bg-gray-100 rounded-full mb-6 flex items-center justify-center">
-            <span class="text-lg font-bold text-purple-600"><%= card[:title].split.first %></span>
+            <%# Founder: user SVG, Mentor: group SVG, Partner: handshake SVG %>
+            <% if idx == 0 %>
+              <svg class="w-8 h-8" fill="none" stroke="<%= svg_color %>" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" stroke="<%= svg_color %>" fill="none"/>
+                <path stroke="<%= svg_color %>" stroke-linecap="round" stroke-linejoin="round" d="M4 20v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/>
+              </svg>
+            <% elsif idx == 1 %>
+              <svg class="w-8 h-8" fill="none" stroke="<%= svg_color %>" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="6" cy="8" r="3" stroke="<%= svg_color %>" fill="none"/>
+                <circle cx="18" cy="8" r="3" stroke="<%= svg_color %>" fill="none"/>
+                <circle cx="12" cy="16" r="3" stroke="<%= svg_color %>" fill="none"/>
+                <path stroke="<%= svg_color %>" stroke-linecap="round" stroke-linejoin="round" d="M6 8v8m12-8v8"/>
+              </svg>
+            <% else %>
+              <svg class="w-8 h-8" fill="none" stroke="<%= svg_color %>" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke="<%= svg_color %>" stroke-linecap="round" stroke-linejoin="round" d="M8 13l4 4 4-4"/>
+                <path stroke="<%= svg_color %>" stroke-linecap="round" stroke-linejoin="round" d="M12 17V3"/>
+              </svg>
+            <% end %>
           </div>
           <h3 class="text-2xl font-bold text-gray-900 mb-4"><%= card[:title] %></h3>
-          <p class="text-gray-700 mb-6 leading-relaxed"><%= card[:description] %></p>
-          <%= link_to card[:cta_label], card[:cta_link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all text-white #{btn_class}" %>
+          <%# Custom card descriptions and CTAs %>
+          <% if idx == 0 %>
+            <p class="text-gray-700 mb-6 leading-relaxed">Nailab is the launchpad for your bold ideas. Gain access to experienced business leaders and mentors, collaborate with like-minded founders building innovative startups, and access the tools, templates, and opportunities you need to launch, grow, and scale your startup in Africa. From refining your business model to securing funding, we support you every step of the way.</p>
+            <%= link_to 'Start your journey with us', card[:cta_link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all text-white #{btn_class}" %>
+          <% elsif idx == 1 %>
+            <p class="text-gray-700 mb-6 leading-relaxed">Your experience can shape Africa’s next generation of innovators. Join Nailab’s mentor network to guide promising founders, share your expertise, and provide real-world insights that help startups overcome challenges and scale successfully. Be part of a movement driving innovation, impact, and entrepreneurship across the continent.</p>
+            <%= link_to 'Become a mentor', card[:cta_link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all text-white #{btn_class}" %>
+          <% else %>
+            <p class="text-gray-700 mb-6 leading-relaxed">Collaborate with Nailab to catalyze innovation and impact. We work with organizations that believe in entrepreneurship as a driver for inclusive change. Partner with us to co-create programs, support promising startups, and drive systemic change across Africa’s innovation landscape.</p>
+            <%= link_to 'Partner with us', card[:cta_link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all text-white #{btn_class}" %>
+          <% end %>
         </div>
       <% end %>
     </div>
