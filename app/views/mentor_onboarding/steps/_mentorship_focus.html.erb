@@ -19,7 +19,7 @@
           </label>
         <% end %>
       </div>
-      <% if @profile.errors[:sectors].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:sectors].any? %>
         <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:sectors].first %></p>
       <% end %>
     </div>
@@ -37,7 +37,7 @@
           </label>
         <% end %>
       </div>
-      <% if @profile.errors[:expertise].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:expertise].any? %>
         <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:expertise].first %></p>
       <% end %>
     </div>

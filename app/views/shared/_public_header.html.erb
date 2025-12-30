@@ -67,8 +67,7 @@
           </div>
         <% else %>
           <!-- Logged Out State -->
-          <%= link_to 'Log in', new_user_session_path, class: "text-gray-700 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors" %>
-          <%= link_to 'Sign up', new_user_registration_path, class: "bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition-colors" %>
+          <%= link_to 'Log in', new_user_session_path, class: "bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition-colors" %>
         <% end %>
         <!-- Mobile menu button -->
         <button class="md:hidden" data-action="click->mobile-menu#toggle">

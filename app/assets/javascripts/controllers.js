@@ -1,4 +1,4 @@
-import { Application, Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.3.0/+esm';
+import { Application, Controller } from "@hotwired/stimulus";
 
 const application = Application.start();
 

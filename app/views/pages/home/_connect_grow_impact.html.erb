@@ -14,14 +14,19 @@
   </div>
   <div class="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid lg:grid-cols-3 gap-8">
-      <% @connect_cards.each do |card| %>
+      <% @connect_cards.each_with_index do |card, idx| %>
+        <% btn_class = case idx
+          when 0 then 'bg-teal-600 hover:bg-teal-700'    # Founder
+          when 1 then 'bg-orange-600 hover:bg-orange-700' # Mentor
+          else         'bg-purple-600 hover:bg-purple-700' # Partner (default)
+        end %>
         <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col h-full">
           <div class="w-14 h-14 bg-gray-100 rounded-full mb-6 flex items-center justify-center">
             <span class="text-lg font-bold text-purple-600"><%= card[:title].split.first %></span>
           </div>
           <h3 class="text-2xl font-bold text-gray-900 mb-4"><%= card[:title] %></h3>
           <p class="text-gray-700 mb-6 leading-relaxed"><%= card[:description] %></p>
-          <%= link_to card[:cta_label], card[:cta_link], class: 'mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all bg-purple-600 text-white hover:bg-purple-700' %>
+          <%= link_to card[:cta_label], card[:cta_link], class: "mt-auto inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all text-white #{btn_class}" %>
         </div>
       <% end %>
     </div>

@@ -10,7 +10,7 @@
       <%= f.text_field :organization, required: true,
                        class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent',
                        placeholder: 'or "Independent Consultant/Self-employed"' %>
-      <% if @profile.errors[:organization].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:organization].any? %>
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:organization].first %></p>
       <% end %>
     </div>
@@ -23,7 +23,7 @@
         ['10+', '10+']
       ], @profile.years_experience), { include_blank: 'Select experience level' }, required: true,
                   class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
-      <% if @profile.errors[:years_experience].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:years_experience].any? %>
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:years_experience].first %></p>
       <% end %>
     </div>
@@ -35,7 +35,7 @@
         <%= f.radio_button :advisory_experience, false, class: 'mr-2' %>
         <%= f.label :advisory_experience_false, 'No' %>
       </div>
-      <% if @profile.errors[:advisory_experience].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:advisory_experience].any? %>
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:advisory_experience].first %></p>
       <% end %>
     </div>

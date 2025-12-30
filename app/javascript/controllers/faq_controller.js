@@ -2,18 +2,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["answer", "button"]
+  static targets = ["button", "answer"]
+
+    connect() {
+      console.log("FAQ controller connected");
+    }
 
   toggle(event) {
-    const idx = event.currentTarget.dataset.faqIndex
-    this.answerTargets.forEach((el, i) => {
-      if (i == idx) {
-        el.classList.toggle("hidden")
-        this.buttonTargets[i].querySelector('svg').classList.toggle('rotate-180')
-      } else {
-        el.classList.add("hidden")
-        this.buttonTargets[i].querySelector('svg').classList.remove('rotate-180')
-      }
-    })
+    const idx = this.buttonTargets.indexOf(event.currentTarget);
+    if (idx === -1) return;
+    this.answerTargets[idx].classList.toggle('hidden');
+    const chevron = this.buttonTargets[idx].querySelector('svg');
+    if (chevron) {
+      chevron.classList.toggle('rotate-180');
+    }
   }
 }

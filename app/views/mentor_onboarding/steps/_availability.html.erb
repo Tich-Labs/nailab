@@ -22,7 +22,7 @@
           </label>
         <% end %>
       </div>
-      <% if @profile.errors[:availability_hours_month].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:availability_hours_month].any? %>
         <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:availability_hours_month].first %></p>
       <% end %>
     </div>
@@ -37,7 +37,7 @@
           </label>
         <% end %>
       </div>
-      <% if @profile.errors[:preferred_mentorship_mode].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:preferred_mentorship_mode].any? %>
         <p class="mt-2 text-sm text-red-600"><%= @profile.errors[:preferred_mentorship_mode].first %></p>
       <% end %>
     </div>

@@ -11,7 +11,7 @@
                       class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent',
                       placeholder: 'Philosophy + how you guide mentees (150–800 characters)' %>
       <p class="mt-1 text-sm text-gray-500">150–800 characters recommended</p>
-      <% if @profile.errors[:mentorship_approach].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:mentorship_approach].any? %>
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:mentorship_approach].first %></p>
       <% end %>
     </div>
@@ -21,7 +21,7 @@
                       class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent',
                       placeholder: 'What motivates you to mentor startups?' %>
       <p class="mt-1 text-sm text-gray-500">150–500 characters recommended</p>
-      <% if @profile.errors[:motivation].any? %>
+      <% if @profile.respond_to?(:errors) && @profile.errors && @profile.errors[:motivation].any? %>
         <p class="mt-1 text-sm text-red-600"><%= @profile.errors[:motivation].first %></p>
       <% end %>
     </div>
