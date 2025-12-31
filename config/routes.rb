@@ -1,40 +1,42 @@
 Rails.application.routes.draw do
-  get 'founder_onboarding', to: 'founder_onboarding#show', as: :founder_onboarding
-  put 'founder_onboarding', to: 'founder_onboarding#update'
-  patch 'founder_onboarding/save_and_exit', to: 'founder_onboarding#save_and_exit', as: :founder_onboarding_save_and_exit
-  get 'mentor_onboarding', to: 'mentor_onboarding#show', as: :mentor_onboarding
-  put 'mentor_onboarding', to: 'mentor_onboarding#update'
-  patch 'mentor_onboarding/save_and_exit', to: 'mentor_onboarding#save_and_exit', as: :mentor_onboarding_save_and_exit
+  get "partner_onboarding", to: "partner_onboarding#show", as: :partner_onboarding
+  put "partner_onboarding", to: "partner_onboarding#update"
+  get "founder_onboarding", to: "founder_onboarding#show", as: :founder_onboarding
+  put "founder_onboarding", to: "founder_onboarding#update"
+  patch "founder_onboarding/save_and_exit", to: "founder_onboarding#save_and_exit", as: :founder_onboarding_save_and_exit
+  get "mentor_onboarding", to: "mentor_onboarding#show", as: :mentor_onboarding
+  put "mentor_onboarding", to: "mentor_onboarding#update"
+  patch "mentor_onboarding/save_and_exit", to: "mentor_onboarding#save_and_exit", as: :mentor_onboarding_save_and_exit
   missing_font = lambda do |_env|
-    [204, { 'Content-Type' => 'font/woff2', 'Cache-Control' => 'public, max-age=86400' }, []]
+    [ 204, { "Content-Type" => "font/woff2", "Cache-Control" => "public, max-age=86400" }, [] ]
   end
   missing_favicon = lambda do |_env|
-    [204, { 'Content-Type' => 'image/x-icon', 'Cache-Control' => 'public, max-age=86400' }, []]
+    [ 204, { "Content-Type" => "image/x-icon", "Cache-Control" => "public, max-age=86400" }, [] ]
   end
 
-  get '/favicon.ico', to: missing_favicon
-  get '/assets/fonts/gotham/*font', to: missing_font
+  get "/favicon.ico", to: missing_favicon
+  get "/assets/fonts/gotham/*font", to: missing_font
 
-  devise_for :users, controllers: { registrations: 'registrations', omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks" }
   devise_scope :user do
-    get 'mentors/sign_up', to: 'registrations#new', as: :new_mentor_registration, defaults: { role: 'mentor' }
-    post 'mentors', to: 'registrations#create', as: :mentor_registration, defaults: { role: 'mentor' }
-    get 'founders/sign_up', to: 'registrations#new', as: :new_founder_registration, defaults: { role: 'founder' }
-    post 'founders', to: 'registrations#create', as: :founder_registration, defaults: { role: 'founder' }
-    post 'sign_in', to: 'sessions#create'
-    delete 'sign_out', to: 'sessions#destroy'
+    get "mentors/sign_up", to: "registrations#new", as: :new_mentor_registration, defaults: { role: "mentor" }
+    post "mentors", to: "registrations#create", as: :mentor_registration, defaults: { role: "mentor" }
+    get "founders/sign_up", to: "registrations#new", as: :new_founder_registration, defaults: { role: "founder" }
+    post "founders", to: "registrations#create", as: :founder_registration, defaults: { role: "founder" }
+    post "sign_in", to: "sessions#create"
+    delete "sign_out", to: "sessions#destroy"
   end
-  
+
   # ActiveStorage routes
-  mount ActiveStorage::Engine => '/rails/active_storage'
+  mount ActiveStorage::Engine => "/rails/active_storage"
   namespace :api do
     namespace :v1 do
       devise_scope :user do
-        post 'sign_in', to: 'sessions#create'
-        delete 'sign_out', to: 'sessions#destroy'
-        post 'sign_up', to: 'registrations#create'
+        post "sign_in", to: "sessions#create"
+        delete "sign_out", to: "sessions#destroy"
+        post "sign_up", to: "registrations#create"
       end
-      resource(:me, controller: 'profiles', only: %i[show])
+      resource(:me, controller: "profiles", only: %i[show])
       resources(:hero_slides, only: %i[index])
       resources(:partners, only: %i[index])
       resources(:testimonials, only: %i[index])
@@ -45,40 +47,40 @@ Rails.application.routes.draw do
       resources(:mentorship_requests, only: %i[index create]) do
         patch :respond, on: :member
       end
-      get 'matches', to: 'matches#index'
-      post 'onboarding/founder', to: 'onboarding#founder'
-      post 'onboarding/mentor', to: 'onboarding#mentor'
+      get "matches", to: "matches#index"
+      post "onboarding/founder", to: "onboarding#founder"
+      post "onboarding/mentor", to: "onboarding#mentor"
     end
   end
 
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root 'pages#home'
-  get 'about', to: 'pages#about'
-  get 'programs', to: 'pages#programs'
-  get 'programs/:slug', to: 'pages#program_detail', as: :program_detail
-  get 'resources', to: 'pages#resources'
-  get 'resources/category/:category', to: 'pages#resources', as: :resources_category, constraints: { category: /blogs|knowledge-hub|opportunities|events/ }
-  get 'resources/:slug', to: 'pages#resource_detail', as: :resource_detail
-  get 'startups', to: 'pages#startup_directory'
-  get 'startups/:id/profile', to: 'pages#startup_profile', as: :public_startup_profile
-  get 'mentors', to: 'pages#mentor_directory'
-  get 'pricing', to: 'pages#pricing'
-  get 'contact', to: 'pages#contact'
+  root "pages#home"
+  get "about", to: "pages#about"
+  get "programs", to: "pages#programs"
+  get "programs/:slug", to: "pages#program_detail", as: :program_detail
+  get "resources", to: "pages#resources"
+  get "resources/category/:category", to: "pages#resources", as: :resources_category, constraints: { category: /blogs|knowledge-hub|opportunities|events/ }
+  get "resources/:slug", to: "pages#resource_detail", as: :resource_detail
+  get "startups", to: "pages#startup_directory"
+  get "startups/:id/profile", to: "pages#startup_profile", as: :public_startup_profile
+  get "mentors", to: "pages#mentor_directory"
+  get "pricing", to: "pages#pricing"
+  get "contact", to: "pages#contact"
 
-  get 'dashboard', to: redirect('/founder'), constraints: lambda { |req| req.session[:user_id].present? }
-  get 'profile', to: redirect('/founder/account'), constraints: lambda { |req| req.session[:user_id].present? }
-  get 'mentor_dashboard', to: redirect('/mentor'), constraints: lambda { |req| req.session[:user_id].present? }
-  get 'mentor_profile', to: redirect('/mentor/profile'), constraints: lambda { |req| req.session[:user_id].present? }
+  get "dashboard", to: redirect("/founder"), constraints: lambda { |req| req.session[:user_id].present? }
+  get "profile", to: redirect("/founder/account"), constraints: lambda { |req| req.session[:user_id].present? }
+  get "mentor_dashboard", to: redirect("/mentor"), constraints: lambda { |req| req.session[:user_id].present? }
+  get "mentor_profile", to: redirect("/mentor/profile"), constraints: lambda { |req| req.session[:user_id].present? }
   # Use Devise pages as the canonical auth UI.
-  get 'login', to: redirect('/users/sign_in')
-  get 'signup', to: redirect('/users/sign_up')
-  get 'mentors_signup', to: redirect('/mentors/sign_up')
+  get "login", to: redirect("/users/sign_in")
+  get "signup", to: redirect("/users/sign_up")
+  get "mentors_signup", to: redirect("/mentors/sign_up")
 
   namespace :founder do
     root to: "dashboard#show"
@@ -152,8 +154,8 @@ Rails.application.routes.draw do
     get "support", to: "support#show"
   end
 
-  get 'auth/google_oauth2/callback', to: 'google_calendar#callback'
-  get 'auth/google_oauth2', as: 'google_oauth2_auth', to: 'google_calendar#connect'
+  get "auth/google_oauth2/callback", to: "google_calendar#callback"
+  get "auth/google_oauth2", as: "google_oauth2_auth", to: "google_calendar#connect"
 
   # Defines the root path route ("/")
   # root "posts#index"

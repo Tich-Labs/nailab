@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
 
-ActiveAdmin.register HomePage do
-  menu false
-  permit_params :hero_title, :hero_image_url, :cta_1_text, :cta_1_url, :cta_2_text, :cta_2_url,
-                :stat_1_label, :stat_1_value, :stat_2_label, :stat_2_value, :stat_3_label, :stat_3_value,
-                :about_title, :about_image_url, :about_button_text, :about_button_url, :support_title,
-                :connect_title, :connect_description, :connect_cta_1_text, :connect_cta_1_url,
-                :connect_cta_2_text, :connect_cta_2_url, :impact_title,
-                :hero_subtitle, :about_body,
-                focus_areas_attributes: [:id, :title, :description, :_destroy],
-                support_features_attributes: [:id, :title, :description, :_destroy],
-                testimonials_attributes: [:id, :quote, :name, :title, :company, :image_url, :company_url, :_destroy],
-                impact_logos_attributes: [:id, :image_url, :alt_text, :link_url, :_destroy],
-                stakeholder_blocks_attributes: [:id, :role, :title, :body, :cta_url, :cta_label, :_destroy]
-
-  index do
-    selectable_column
-    id_column
+# ActiveAdmin.register HomePage do
+#   menu false
+#   permit_params :hero_title, :hero_image_url, :cta_1_text, :cta_1_url, :cta_2_text, :cta_2_url,
+#                 :stat_1_label, :stat_1_value, :stat_2_label, :stat_2_value, :stat_3_label, :stat_3_value,
+#                 :about_title, :about_image_url, :about_button_text, :about_button_url, :support_title,
+#                 :connect_title, :connect_description, :connect_cta_1_text, :connect_cta_1_url,
+#                 :connect_cta_2_text, :connect_cta_2_url, :impact_title,
+#                 :hero_subtitle, :about_body,
+#                 focus_areas_attributes: [:id, :title, :description, :_destroy],
+#                 support_features_attributes: [:id, :title, :description, :_destroy],
+#                 testimonials_attributes: [:id, :quote, :name, :title, :company, :image_url, :company_url, :_destroy],
+#                 impact_logos_attributes: [:id, :image_url, :alt_text, :link_url, :_destroy],
+#                 stakeholder_blocks_attributes: [:id, :role, :title, :body, :cta_url, :cta_label, :_destroy]
+#
+#   index do
+#     selectable_column
+#     id_column
     column :hero_title
     column :about_title
     column :support_title

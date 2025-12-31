@@ -1,0 +1,20 @@
+<div>
+  <h2 class="text-2xl font-semibold mb-6">Type & Contact</h2>
+  <div class="mb-4">
+    <label class="block font-semibold mb-1">Type of Organization <span class="text-red-500">*</span></label>
+    <%= f.select :organization_type, [
+      'Nonprofit / Foundation',
+      'Corporate / CSR arm',
+      'Development agency / Multilateral',
+      'Government / Public Sector',
+      'Academic / Research Institution',
+      'Ecosystem enabler (e.g., hub, accelerator, investor network)',
+      'Other'
+    ], {}, { required: true, class: "w-full border rounded px-3 py-2" } %>
+  </div>
+  <div class="mb-4">
+    <label class="block font-semibold mb-1">Who is the primary contact person for this partnership inquiry? <span class="text-red-500">*</span></label>
+    <%= f.text_field :contact_person, required: true, class: "w-full border rounded px-3 py-2" %>
+    <p class="text-xs text-gray-500 mt-1">Full name and email of the main point of contact.</p>
+  </div>
+</div>

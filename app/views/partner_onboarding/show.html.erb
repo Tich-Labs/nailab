@@ -1,0 +1,127 @@
+<section class="max-w-2xl mx-auto py-12 px-4">
+  <h1 class="text-3xl font-bold mb-6 text-nailab-purple">Partner with Nailab!</h1>
+  <p class="mb-8 text-gray-700">We partner with organizations that believe in entrepreneurship as a driver of inclusive change. Work with us to co-create tailored accelerator programs that equip promising startups with knowledge and access to financing, enabling them to build scalable, tech-driven businesses that tackle Africa’s most pressing challenges across key sectors.</p>
+
+  <% steps = [
+    { key: 'organization', label: 'Organization' },
+    { key: 'type_and_contact', label: 'Type & Contact' },
+    { key: 'focus_and_collab', label: 'Focus & Collaboration' },
+    { key: 'confirm', label: 'Confirm' }
+  ] %>
+  <% step_index = steps.index { |s| s[:key] == @step } || 0 %>
+  <% percent_complete = ((step_index + 1).to_f / steps.size * 100).round %>
+  <div class="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-8">
+    <!-- Step Indicator and Progress Bar -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-sm font-medium text-gray-700">Step <%= step_index + 1 %> of <%= steps.size %></span>
+        <span class="text-sm text-gray-500"><%= percent_complete %>% complete</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+        <div class="bg-nailab-purple h-2 rounded-full transition-all duration-300" style="width: <%= percent_complete %>%"></div>
+      </div>
+    </div>
+    <%= form_with url: partner_onboarding_path(step: @step), method: :put, local: true, scope: 'partner_onboarding' do |f| %>
+      <% if @step == 'organization' %>
+        <div>
+          <label class="block font-semibold mb-1">What is the name of your organization? <span class="text-red-500">*</span></label>
+          <%= f.text_field :organization_name, required: true, class: "w-full border rounded px-3 py-2" %>
+          <p class="text-xs text-gray-500 mt-1">Enter your full registered or brand name.</p>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">What is your organization’s website? <span class="text-red-500">*</span></label>
+          <%= f.url_field :organization_website, required: true, class: "w-full border rounded px-3 py-2" %>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Which country is your organization headquartered in? <span class="text-red-500">*</span></label>
+          <%= f.text_field :organization_country, required: true, class: "w-full border rounded px-3 py-2" %>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Short description of your organization <span class="text-red-500">*</span></label>
+          <%= f.text_area :organization_description, required: true, maxlength: 1000, class: "w-full border rounded px-3 py-2" %>
+          <p class="text-xs text-gray-500 mt-1">Who you are, what you do, and your focus areas (max 1000 characters)</p>
+        </div>
+      <% elsif @step == 'type_and_contact' %>
+        <div>
+          <label class="block font-semibold mb-1">Type of Organization <span class="text-red-500">*</span></label>
+          <%= f.select :organization_type, [
+            'Nonprofit / Foundation',
+            'Corporate / CSR arm',
+            'Development agency / Multilateral',
+            'Government / Public Sector',
+            'Academic / Research Institution',
+            'Ecosystem enabler (e.g., hub, accelerator, investor network)',
+            'Other'
+          ], {}, { required: true, class: "w-full border rounded px-3 py-2" } %>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Who is the primary contact person for this partnership inquiry? <span class="text-red-500">*</span></label>
+          <%= f.text_field :contact_person, required: true, class: "w-full border rounded px-3 py-2" %>
+          <p class="text-xs text-gray-500 mt-1">Full name and email of the main point of contact.</p>
+        </div>
+      <% elsif @step == 'focus_and_collab' %>
+        <div>
+          <label class="block font-semibold mb-1">Key sectors or themes your organizations focuses on <span class="text-red-500">*</span></label>
+          <%= f.select :focus_sectors, [
+            'Entrepreneurship & Innovation',
+            'Climate & Sustainability',
+            'Women & Youth Empowerment',
+            'Agriculture / Food Systems',
+            'Health',
+            'Financial Inclusion',
+            'Education',
+            'Digital Transformation',
+            'Other'
+          ], {}, { multiple: true, required: true, class: "w-full border rounded px-3 py-2" } %>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Which areas would you like to explore collaboration in? <span class="text-red-500">*</span></label>
+          <%= f.select :collaboration_areas, [
+            'Co-create or deliver startup incubation, acceleration, or skills development programs',
+            'Provide targeted support to specific groups such as women-led or youth-led startups through skills development and access to funding',
+            'Co-design sector-specific initiatives in areas such as climate innovation, green entrepreneurship, or other impact-driven sectors',
+            'Co-develop or support a startup funding and investment readiness program to provide grant or equity funding, facilitate investment readiness, or connect startups to investor networks',
+            'Launch or contribute to a founder mentorship and training initiative',
+            'Co-host hackathons, workshops, pitch events, or broader community engagement activities',
+            'Collaborate on research, studies, reports, or learning initiatives to generate insights and share best practices',
+            'Other'
+          ], {}, { multiple: true, required: true, class: "w-full border rounded px-3 py-2" } %>
+        </div>
+      <% elsif @step == 'confirm' %>
+        <div class="bg-gray-100 rounded-lg p-4 mb-4">
+          <p class="text-sm text-gray-700">Please review your responses before submitting:</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="font-semibold text-gray-800">Organization Details</p>
+            <p class="text-gray-700"><strong>Name:</strong> <%= @partner_onboarding.organization_name %></p>
+            <p class="text-gray-700"><strong>Website:</strong> <%= @partner_onboarding.organization_website %></p>
+            <p class="text-gray-700"><strong>Country:</strong> <%= @partner_onboarding.organization_country %></p>
+            <p class="text-gray-700"><strong>Description:</strong> <%= @partner_onboarding.organization_description %></p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Contact Person</p>
+            <p class="text-gray-700"><strong>Name:</strong> <%= @partner_onboarding.contact_person %></p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Focus Sectors</p>
+            <p class="text-gray-700"><%= @partner_onboarding.focus_sectors.join(', ') %></p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Collaboration Areas</p>
+            <p class="text-gray-700"><%= @partner_onboarding.collaboration_areas.join(', ') %></p>
+          </div>
+        </div>
+      <% end %>
+      <div class="flex justify-between mt-8">
+        <% unless step_index == 0 %>
+          <%= link_to 'Back', partner_onboarding_path(step: steps[step_index - 1][:key]), class: "px-4 py-2 rounded bg-gray-200 text-gray-700 font-medium" %>
+        <% end %>
+        <div class="flex gap-4 ml-auto">
+          <%= button_tag 'Save & Exit', name: 'save_and_exit', value: '1', type: 'submit', class: "px-6 py-2 rounded bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-colors" %>
+          <%= f.submit(step_index == steps.size - 1 ? 'Submit' : 'Save & Next', class: "px-6 py-2 rounded bg-nailab-purple text-white font-semibold hover:bg-nailab-purple-dark transition-colors") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

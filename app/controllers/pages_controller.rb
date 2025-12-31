@@ -87,7 +87,7 @@ class PagesController < ApplicationController
       title: "For Partners",
       description: "Collaborate with Nailab to co-create programs, support high-potential startups, and drive inclusive innovation with corporates, governments, and funders.",
       cta_label: "Partner with us",
-      cta_link: "/partners"
+      cta_link: "/partner_onboarding"
     }
   ].freeze
 

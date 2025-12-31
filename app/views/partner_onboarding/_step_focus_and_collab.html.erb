@@ -1,0 +1,30 @@
+<div>
+  <h2 class="text-2xl font-semibold mb-6">Focus & Collaboration</h2>
+  <div class="mb-4">
+    <label class="block font-semibold mb-1">Key sectors or themes your organizations focuses on <span class="text-red-500">*</span></label>
+    <%= f.select :focus_sectors, [
+      'Entrepreneurship & Innovation',
+      'Climate & Sustainability',
+      'Women & Youth Empowerment',
+      'Agriculture / Food Systems',
+      'Health',
+      'Financial Inclusion',
+      'Education',
+      'Digital Transformation',
+      'Other'
+    ], {}, { multiple: true, required: true, class: "w-full border rounded px-3 py-2" } %>
+  </div>
+  <div class="mb-4">
+    <label class="block font-semibold mb-1">Which areas would you like to explore collaboration in? <span class="text-red-500">*</span></label>
+    <%= f.select :collaboration_areas, [
+      'Co-create or deliver startup incubation, acceleration, or skills development programs',
+      'Provide targeted support to specific groups such as women-led or youth-led startups through skills development and access to funding',
+      'Co-design sector-specific initiatives in areas such as climate innovation, green entrepreneurship, or other impact-driven sectors',
+      'Co-develop or support a startup funding and investment readiness program to provide grant or equity funding, facilitate investment readiness, or connect startups to investor networks',
+      'Launch or contribute to a founder mentorship and training initiative',
+      'Co-host hackathons, workshops, pitch events, or broader community engagement activities',
+      'Collaborate on research, studies, reports, or learning initiatives to generate insights and share best practices',
+      'Other'
+    ], {}, { multiple: true, required: true, class: "w-full border rounded px-3 py-2" } %>
+  </div>
+</div>
