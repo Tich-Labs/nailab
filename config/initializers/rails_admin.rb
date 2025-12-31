@@ -29,8 +29,12 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
-  # Marketing content models should be editable from the main RailsAdmin navigation.
-  # (We still keep the quick links above for convenience.)
+  HIDDEN_MARKETING_MODELS = %w[StaticPage HeroSlide FocusArea Testimonial Partner Program Resource StartupProfile]
+  HIDDEN_MARKETING_MODELS.each do |model_name|
+    config.model model_name do
+      visible false
+    end
+  end
 
   # Structure admin navigation
   config.model 'Program' do
@@ -110,8 +114,8 @@ RailsAdmin.config do |config|
       field :cta_link do
         help 'Primary CTA URL; make sure it begins with https://.'
       end
-      field :image, :active_storage do
-        help 'Upload a hero image for this slide.'
+      field :image_url do
+        help 'URL of the hero image. Upload to your CDN and paste the public link.'
       end
       field :display_order
       field :active
