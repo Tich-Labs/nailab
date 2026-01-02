@@ -1,5 +1,30 @@
 
-# Site Map (Visual Tree)
+# Nailab - Startup Mentorship Platform
+
+A comprehensive Rails application connecting startups with experienced mentors through structured mentorship programs, resources, and support systems.
+
+## Features
+
+### 🎯 Core Functionality
+- **Mentorship Matching**: AI-powered matching between founders and mentors
+- **Program Management**: Structured mentorship programs with milestones
+- **Resource Library**: Curated content for startup growth
+- **Progress Tracking**: Milestone and metric tracking for startups
+- **Community Features**: Peer connections and networking
+
+### 💬 Support System
+- **Support Ticketing**: Full conversation system between users and admins
+- **Admin Dashboard**: RailsAdmin interface for ticket management
+- **User Portals**: Separate interfaces for founders and mentors
+- **Conversation Threading**: Complete message history and status tracking
+
+### 🔐 Authentication & Authorization
+- **Devise Integration**: Complete user authentication system
+- **Role-Based Access**: Founder and mentor user types
+- **Social Sign-in**: LinkedIn OAuth integration
+- **Email Confirmation**: Account verification system
+
+## Site Map (Visual Tree)
 
 ```
 /        # Home — Nailab landing page (hero, sections, testimonials, partners, CTAs)
@@ -13,6 +38,41 @@
 ├── login        # Login page (Devise, styled)
 ├── signup       # Signup page (Devise, styled)
 ├── admin        # RailsAdmin dashboard
+│   ├── support_tickets  # Admin support ticket management
+│   └── ...              # Other admin interfaces
+├── founder      # Founder portal
+│   ├── dashboard        # Founder dashboard
+│   ├── support          # Support ticket system
+│   │   ├── tickets      # Create new tickets
+│   │   └── tickets/:id  # View ticket conversations
+│   ├── mentorship_requests
+│   ├── sessions
+│   ├── resources
+│   ├── opportunities
+│   ├── milestones
+│   ├── monthly_metrics
+│   ├── account
+│   ├── subscription
+│   └── profile
+├── mentor       # Mentor portal (alias: mentor_portal)
+│   ├── dashboard        # Mentor dashboard
+│   ├── support          # Support ticket system
+│   │   ├── tickets      # Create new tickets
+│   │   └── tickets/:id  # View ticket conversations
+│   ├── mentorship_requests
+│   │   ├── :id/accept
+│   │   ├── :id/decline
+│   │   └── :id/reschedule
+│   ├── conversations
+│   │   └── messages
+│   ├── schedule
+│   ├── sessions
+│   │   ├── :id/join
+│   │   └── :id/add_to_calendar
+│   ├── startups
+│   ├── profile
+│   ├── settings
+│   └── logout
 ├── users        # Devise user auth endpoints
 │   ├── sign_in
 │   ├── sign_up
@@ -40,3 +100,106 @@
 │           └── mentor
 └── up           # Health check endpoint
 ```
+
+## Support Ticketing System
+
+The application includes a comprehensive support ticketing system that enables full conversations between users and administrators:
+
+### For Users (Founders & Mentors)
+- **Create Support Tickets**: Submit issues with subject and detailed description
+- **View Ticket History**: See all their support tickets with status indicators
+- **Conversation Threading**: View complete conversation history with admin replies
+- **Reply to Tickets**: Continue conversations with support staff
+- **Status Tracking**: Monitor ticket progress (Open, In Progress, Resolved, Closed)
+
+### For Administrators
+- **RailsAdmin Integration**: Manage tickets through the admin dashboard
+- **Conversation View**: See full ticket conversations with user/admin distinction
+- **Inline Replies**: Reply directly from the admin interface
+- **Status Management**: Update ticket status and track resolution
+- **User Context**: View user information and ticket history
+
+### Technical Implementation
+- **Models**: `SupportTicket` and `SupportTicketReply` with polymorphic associations
+- **Admin Interface**: Custom RailsAdmin configuration with conversation display
+- **User Interfaces**: Separate controllers and views for founder and mentor portals
+- **Security**: CSRF protection and user-specific access control
+- **Styling**: Tailwind CSS with consistent design across admin and user interfaces
+
+## Getting Started
+
+### Prerequisites
+- Ruby 3.2.3
+- Rails 8.1.1
+- PostgreSQL
+- Node.js & Yarn (for asset compilation)
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd nailab-rails
+```
+
+2. Install dependencies
+```bash
+bundle install
+yarn install
+```
+
+3. Set up the database
+```bash
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+4. Configure environment variables
+```bash
+# Copy and configure .env file
+cp .env.example .env
+```
+
+5. Start the development server
+```bash
+bundle exec rails server
+```
+
+### Key Dependencies
+
+- **Rails 8.1.1**: Web framework
+- **Devise**: Authentication
+- **RailsAdmin**: Admin interface
+- **Tailwind CSS**: Styling
+- **PostgreSQL**: Database
+- **Hotwire**: Real-time features
+- **OmniAuth**: Social authentication
+
+## Development
+
+### Testing
+```bash
+rails test
+```
+
+### Code Quality
+```bash
+rubocop
+brakeman
+```
+
+### Deployment
+The application is configured for deployment on Render with included `render.yaml` configuration.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## License
+
+[Add license information]

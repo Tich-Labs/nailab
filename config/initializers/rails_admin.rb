@@ -1,115 +1,30 @@
 RailsAdmin.config do |config|
-  # ...existing config...
-
-  config.model "StaticPage" do
-    navigation_label "MARKETING PAGES"
-    label_plural "Landing + page content"
-    weight 0
-
-    list do
-      sort_by :updated_at
-      field :title
-      field :slug
-      field :updated_at
+    config.model "Mentor" do
+      navigation_label "Mentorship"
+      weight 15
     end
+  config.asset_source = :sprockets
 
-    edit do
-      field :title do
-        help "Page title shown in the header and the browser tab."
-      end
-      field :slug do
-        help "System slug for routing (home/about/pricing/contact). Locked for reserved pages."
-        read_only do
-          bindings[:object].persisted? && StaticPage::RESERVED_SLUGS.include?(bindings[:object].slug_was)
-        end
-      end
-      field :content do
-        help "Main content for the public page. Accepts HTML/markdown."
-        read_only do
-          bindings[:object].slug == "contact"
-        end
-        visible do
-          true
-        end
-        pretty_value do
-          if bindings[:object].slug == "contact"
-            "Contact Nailab using the form below. Edit this content in the admin to update contact details."
-          else
-            value
-          end
-        end
-      end
-
-      group :contact_info do
-        label "Contact Information"
-        active do
-          bindings[:object].slug == "contact"
-        end
-        field :contact_intro do
-          label "Contact Intro Text"
-          help "Intro text shown at the top of the Contact Us page."
-          visible true
-        end
-        field :contact_email do
-          label "Contact Email"
-          visible true
-        end
-        field :contact_phone do
-          label "Contact Phone"
-          visible true
-        end
-        field :contact_address do
-          label "Contact Address"
-          visible true
-        end
-      end
-
-      group :faq_info do
-        label "Frequently Asked Questions"
-        active do
-          bindings[:object].slug == "contact"
-        end
-        (1..8).each do |i|
-          field "faq_q"+i.to_s do
-            label "FAQ \\##{i} Question"
-            help "Leave blank to hide."
-            visible true
-          end
-          field "faq_a"+i.to_s, :text do
-            label "FAQ \\##{i} Answer"
-            help "Use Enter/Return for new lines. Line breaks will appear on the site. Leave blank to hide."
-            visible true
-          end
-        end
-      end
-
-      # Hide raw structured_content for contact page
-      field :structured_content do
-        help "Advanced structured blocks used on the home page; edit with care."
-        visible do
-          bindings[:object].slug != "contact"
-        end
+  # Register content management page models for admin editing
+  %w[
+    Homepage
+    AboutPage
+    PricingPage
+    ContactPage
+    ProgramsPage
+    BlogPage
+    KnowledgeHubPage
+    EventsWebinarsPage
+    OpportunitiesPage
+  ].each_with_index do |model, idx|
+    config.model model do
+      navigation_label "Content Management"
+      weight idx
+      edit do
+        fields(*model.constantize.attribute_names.map(&:to_sym))
       end
     end
   end
-  # ...rest of config...
-end
-MARKETING_CONTENT_MENU = {
-  "Homepage" => "/admin/static_page?f[slug_eq]=home",
-  "About" => "/admin/static_page?f[slug_eq]=about",
-  "Pricing" => "/admin/static_page?f[slug_eq]=pricing",
-  "Contact Us" => "/admin/static_page?f[slug_eq]=contact",
-  "Programs" => "/admin/program",
-  "Resources: Blog" => "/admin/resource?category=blog",
-  "Resources: Knowledge Hub" => "/admin/resource?category=knowledge_hub",
-  "Resources: Events & Webinars" => "/admin/resource?category=events_webinars",
-  "Resources: Opportunities" => "/admin/resource?category=opportunities"
-}.freeze
-
-RailsAdmin.config do |config|
-  config.asset_source = :sprockets
-  config.navigation_static_label = "MARKETING PAGES"
-  config.navigation_static_links = MARKETING_CONTENT_MENU
 
   config.actions do
     dashboard
@@ -123,54 +38,184 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
-  HIDDEN_MARKETING_MODELS = %w[StaticPage FocusArea Testimonial Partner Program Resource StartupProfile]
-  HIDDEN_MARKETING_MODELS.each do |model_name|
+  # Remove redundant/internal models from RailsAdmin entirely (no nav + no direct /admin/<model> access).
+  config.excluded_models ||= []
+  config.excluded_models += %w[
+    User
+    UserProfile
+    Identity
+    Notification
+    JwtDenylist
+    Conversation
+    Message
+    PeerMessage
+    Opportunity
+    Milestone
+    OpportunitySubmission
+    HeroSlide
+  ]
+
+  # Hide individual models since we have organized access via static links
+  HIDDEN_MODELS = %w[FocusArea Testimonial Partner Program Resource StartupProfile]
+  HIDDEN_MODELS.each do |model_name|
     config.model model_name do
       visible false
     end
   end
 
-  # Structure admin navigation
-  # Navigation labels and weights are set above for all MARKETING PAGES models
+  # Configure SupportTicket for conversation-style management
+  config.model "SupportTicket" do
+    navigation_label "Support"
+    weight 50
 
+    # Disable edit action since replies are handled through show page
+    config.actions do
+      dashboard
+      index
+      new
+      export
+      bulk_delete
+      show
+      delete
+    end
 
-  # Removed HeroSlide admin config
+    list do
+      field :id
+      field :subject
+      field :user do
+        pretty_value do
+          value&.full_name || value&.email
+        end
+      end
+      field :portal
+      field :category
+      field :status, :enum do
+        enum do
+          { 'open' => 'open', 'in_progress' => 'in_progress', 'resolved' => 'resolved', 'closed' => 'closed' }
+        end
+        pretty_value do
+          status_colors = {
+            'open' => 'badge badge-warning',
+            'in_progress' => 'badge badge-info',
+            'resolved' => 'badge badge-success',
+            'closed' => 'badge badge-secondary'
+          }
+          css_class = status_colors[value] || 'badge badge-default'
+          "<span class='#{css_class}'>#{value.humanize}</span>".html_safe
+        end
+      end
+      field :created_at
+      field :updated_at
+    end
 
+    show do
+      field :id
+      field :subject
+      field :user do
+        pretty_value do
+          value&.full_name || value&.email
+        end
+      end
+      field :portal
+      field :category
+      field :status, :enum do
+        enum do
+          { 'open' => 'open', 'in_progress' => 'in_progress', 'resolved' => 'resolved', 'closed' => 'closed' }
+        end
+        pretty_value do
+          status_colors = {
+            'open' => 'badge badge-warning',
+            'in_progress' => 'badge badge-info',
+            'resolved' => 'badge badge-success',
+            'closed' => 'badge badge-secondary'
+          }
+          css_class = status_colors[value] || 'badge badge-default'
+          "<span class='#{css_class}'>#{value.humanize}</span>".html_safe
+        end
+      end
+      field :created_at
+      field :updated_at
+
+      # Show conversation thread
+      field :replies do
+        label "Conversation"
+        pretty_value do
+          replies = value.order(:created_at)
+          html = "<div class='conversation-thread' style='margin-top: 20px;'>"
+          replies.each do |reply|
+            sender = reply.admin_reply? ? "Admin" : (reply.user&.full_name || reply.user&.email || "User")
+            is_admin = reply.admin_reply?
+            alert_class = is_admin ? "alert-info" : "alert-success"
+            align_class = is_admin ? "text-right" : "text-left"
+
+            html += "<div class='message-container #{align_class}' style='margin-bottom: 15px;'>"
+            html += "<div class='alert #{alert_class}' style='display: inline-block; max-width: 80%; border-radius: 10px; padding: 12px 15px;'>"
+            html += "<div style='font-size: 12px; color: #666; margin-bottom: 5px;'>"
+            html += "<strong>#{sender}</strong> - #{reply.created_at.strftime('%b %d, %Y at %I:%M %p')}"
+            html += "</div>"
+            html += "<div style='white-space: pre-wrap; word-wrap: break-word;'>#{reply.body}</div>"
+            html += "</div>"
+            html += "</div>"
+          end
+          html += "</div>"
+          html += "<div style='margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;'>"
+          html += "<h4 style='margin-bottom: 20px; color: #333;'>Send Reply</h4>"
+          html += "<form action='/admin/support_tickets/#{bindings[:object].id}/reply' method='post'>"
+          html += "<div class='form-group' style='margin-bottom: 15px;'>"
+          html += "<label for='message' style='display: block; margin-bottom: 5px; font-weight: bold;'>Your Reply</label>"
+          html += "<textarea name='message' id='message' class='form-control' rows='6' required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;'></textarea>"
+          html += "</div>"
+          html += "<div class='form-group' style='margin-bottom: 15px;'>"
+          html += "<label for='status' style='display: block; margin-bottom: 5px; font-weight: bold;'>Update Status (optional)</label>"
+          html += "<select name='status' id='status' class='form-control' style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;'>"
+          html += "<option value=''>Keep current status</option>"
+          html += "<option value='open'>Open</option>"
+          html += "<option value='in_progress'>In Progress</option>"
+          html += "<option value='resolved'>Resolved</option>"
+          html += "<option value='closed'>Closed</option>"
+          html += "</select>"
+          html += "</div>"
+          html += "<div class='form-group'>"
+          html += "<button type='submit' class='btn btn-primary' style='padding: 10px 20px; margin-right: 10px;'>"
+          html += "<i class='fa fa-send'></i> Send Reply"
+          html += "</button>"
+          html += "</div>"
+          html += "</form>"
+          html += "</div>"
+          html.html_safe
+        end
+      end
+    end
+  end
+
+  # Structure admin navigation - models appear below the static links
   config.model "Program" do
     navigation_label "Marketing"
-    weight 5
+    weight 10
   end
 
   config.model "Resource" do
     navigation_label "Marketing"
-    weight 6
+    weight 11
   end
 
   config.model "StartupProfile" do
     navigation_label "Marketing"
-    weight 7
-  end
-  config.model "User" do
-    navigation_label "Users & Auth"
-  end
-  config.model "UserProfile" do
-    navigation_label "Users & Auth"
-  end
-  config.model "MentorshipRequest" do
-    navigation_label "Users & Auth"
-  end
-  config.model "MentorshipConnection" do
-    navigation_label "Users & Auth"
+    weight 12
   end
 
-  config.model "Notification" do
-    navigation_label "System"
+  config.model "MentorshipRequest" do
+    navigation_label "Mentorship"
+    weight 30
   end
+  config.model "MentorshipConnection" do
+    navigation_label "Mentorship"
+    weight 31
+  end
+
   config.model "Startup" do
     navigation_label "System"
-  end
-  config.model "JwtDenylist" do
-    navigation_label "System"
+    weight 41
   end
 
   ### Popular gems integration
