@@ -1,0 +1,11 @@
+<h1 class="text-2xl font-bold mb-4">Hero Section — Editor</h1>
+
+<div class="mb-4">
+  <%= link_to 'Edit slides in CMS', rails_admin.index_path(model_name: 'hero_slide'), class: 'btn btn-primary' %>
+  <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'ml-2 btn btn-secondary' %>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+  <%# Render frontend hero partial for WYSIWYG preview. Ensure preview data is available via @hero_slides/@preview_hero %>
+  <%= render 'pages/home/hero' %>
+</div>

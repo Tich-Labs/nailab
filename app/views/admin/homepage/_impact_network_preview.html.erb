@@ -1,0 +1,20 @@
+<%# Admin preview: show one logo at a time with vertical scroll if multiple %>
+<% logos = local_assigns[:logos] || (defined?(@preview_logos) ? @preview_logos : (defined?(@logos) ? @logos : [])) %>
+<div class="admin-preview-single" style="height:220px; overflow-y:auto;">
+  <% Array(logos).each do |logo| %>
+    <div class="flex items-center justify-center h-56 border-b last:border-b-0 p-4">
+      <% if logo.respond_to?(:image) && logo.image.attached? %>
+        <% img_url = begin
+          url_for(logo.image.variant(resize_to_limit: [400, 160]))
+        rescue StandardError
+          url_for(logo.image)
+        end %>
+        <img src="<%= img_url %>" alt="<%= logo.name %>" class="max-h-40 max-w-full mx-auto" />
+      <% elsif logo.respond_to?(:logo_url) %>
+        <img src="<%= logo.logo_url %>" alt="<%= logo.name %>" class="max-h-40 max-w-full mx-auto" />
+      <% else %>
+        <div class="text-gray-500">No image</div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

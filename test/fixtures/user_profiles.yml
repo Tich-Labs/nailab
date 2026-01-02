@@ -2,6 +2,7 @@
 
 one:
   user: one
+  slug: mystring
   role: MyString
   full_name: MyString
   bio: MyText
@@ -24,6 +25,7 @@ one:
 
 two:
   user: two
+  slug: mystring-2
   role: MyString
   full_name: MyString
   bio: MyText

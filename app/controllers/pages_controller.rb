@@ -103,6 +103,15 @@ class PagesController < ApplicationController
   def home
     @hero_slides = HeroSlide.where(active: true).order(:display_order)
     @partners = Partner.where(active: true).order(:display_order)
+    @logos = Logo.active
+    if @logos.blank?
+      logos_path = Rails.root.join("app", "assets", "images", "logos")
+      if File.directory?(logos_path)
+        @asset_logos = Dir.children(logos_path).select { |f| f =~ /\.(png|jpe?g|gif|svg)\z/i }
+      else
+        @asset_logos = []
+      end
+    end
     @testimonials = Testimonial.where(active: true).order(:display_order)
     @focus_areas = FocusArea.where(active: true).order(:display_order)
     @program_highlights = Program.where(active: true).order(start_date: :desc).limit(3)
@@ -206,7 +215,8 @@ class PagesController < ApplicationController
   end
 
   def startup_profile
-    @startup_profile = StartupProfile.includes(user: :user_profile).find(params[:id])
+    @startup_profile = StartupProfile.includes(user: :user_profile).find_by(id: params[:id]) ||
+                       StartupProfile.includes(user: :user_profile).find_by(slug: params[:id])
     @owner_viewing = owner_signed_in?
     redirect_to startups_path, alert: "This profile is private." unless @startup_profile.public_viewable? || @owner_viewing
   end

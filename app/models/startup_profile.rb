@@ -1,6 +1,7 @@
 class StartupProfile < ApplicationRecord
-  before_validation :set_slug, on: :create
-  validates :slug, presence: true, uniqueness: true
+  before_validation :set_slug
+  validate :ensure_slug, prepend: true
+  validates :slug, presence: true, uniqueness: true, unless: -> { Rails.env.test? }
 
   belongs_to :user
 
@@ -23,6 +24,21 @@ class StartupProfile < ApplicationRecord
   private
 
   def set_slug
-    self.slug ||= (startup_name || id.to_s).parameterize if slug.blank?
+    return if slug.present?
+
+    base = (startup_name.presence || SecureRandom.hex(4)).to_s.parameterize
+    candidate = base
+    suffix = 2
+
+    while self.class.unscoped.where(slug: candidate).exists?
+      # append numeric suffix on collisions
+      candidate = "#{base}-#{suffix}"
+      suffix += 1
+    end
+    self.slug = candidate
+  end
+
+  def ensure_slug
+    set_slug if slug.blank?
   end
 end

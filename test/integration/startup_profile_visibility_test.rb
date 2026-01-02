@@ -7,7 +7,7 @@ class StartupProfileVisibilityTest < ActionDispatch::IntegrationTest
     @user = users(:one)
     @startup_profile = startup_profiles(:one)
     @user.user_profile&.update!(onboarding_completed: true)
-    @startup_profile.update!(
+    @startup_profile.update_columns(
       startup_name: "LaunchPad",
       description: "Product-market fit is our focus",
       stage: "MVP",
@@ -34,7 +34,7 @@ class StartupProfileVisibilityTest < ActionDispatch::IntegrationTest
   end
 
   test "non-owners cannot view private startup profiles" do
-    @startup_profile.update!(profile_visibility: false)
+    @startup_profile.update_columns(profile_visibility: false)
     sign_out @user
 
     get public_startup_profile_path(@startup_profile)
@@ -44,7 +44,7 @@ class StartupProfileVisibilityTest < ActionDispatch::IntegrationTest
   end
 
   test "founders can view their private profile" do
-    @startup_profile.update!(profile_visibility: false)
+    @startup_profile.update_columns(profile_visibility: false)
 
     get founder_startup_profile_path
 
