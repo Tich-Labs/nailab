@@ -36,7 +36,7 @@
       <div class="border-t pt-6">
         <h3 class="font-medium text-gray-700 mb-4">Additional Details</h3>
         <div class="prose max-w-none">
-          <%= @opportunity.details.html_safe %>
+          <%= sanitize(@opportunity.details) %>
         </div>
       </div>
     <% end %>

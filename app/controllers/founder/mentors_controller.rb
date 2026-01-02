@@ -1,5 +1,4 @@
 class Founder::MentorsController < Founder::BaseController
-
   def index
     @mentors = Mentor.all
   end

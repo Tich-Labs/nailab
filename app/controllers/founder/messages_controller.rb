@@ -4,9 +4,9 @@ class Founder::MessagesController < Founder::BaseController
   def create
     @message = @conversation.messages.build(message_params.merge(sender: current_user))
     if @message.save
-      redirect_to founder_message_path(@conversation), notice: 'Message sent.'
+      redirect_to founder_message_path(@conversation), notice: "Message sent."
     else
-      redirect_back fallback_location: founder_message_path(@conversation), alert: 'Error.'
+      redirect_back fallback_location: founder_message_path(@conversation), alert: "Error."
     end
   end
 

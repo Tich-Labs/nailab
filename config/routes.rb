@@ -144,7 +144,7 @@ Rails.application.routes.draw do
 
     get "support", to: "support#show"
     post "support/tickets", to: "support_tickets#create", as: :support_tickets
-    resources :support_tickets, only: [:show] do
+    resources :support_tickets, only: [ :show ] do
       member do
         post :reply
       end
@@ -182,7 +182,7 @@ Rails.application.routes.draw do
     resource(:settings, only: %i[show update])
     get "support", to: "support#show"
     post "support/tickets", to: "support_tickets#create", as: :support_tickets
-    resources :support_tickets, only: [:show] do
+    resources :support_tickets, only: [ :show ] do
       member do
         post :reply
       end

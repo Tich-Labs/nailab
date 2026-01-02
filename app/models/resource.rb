@@ -1,25 +1,25 @@
 class Resource < ApplicationRecord
-	before_validation :set_slug, on: :create
-	validates :slug, presence: true, uniqueness: true
+  before_validation :set_slug, on: :create
+  validates :slug, presence: true, uniqueness: true
 
-	def to_param
-		slug.presence || super
-	end
+  def to_param
+    slug.presence || super
+  end
 
-	private
+  private
 
-	def set_slug
-		self.slug ||= (title || id.to_s).parameterize if slug.blank?
-	end
+  def set_slug
+    self.slug ||= (title || id.to_s).parameterize if slug.blank?
+  end
 
-	def rails_admin_preview_path
-		helpers = Rails.application.routes.url_helpers
-		if slug.present?
-			helpers.resource_detail_path(slug)
-		else
-			helpers.resources_path
-		end
-	rescue StandardError
-		'/resources'
-	end
+  def rails_admin_preview_path
+    helpers = Rails.application.routes.url_helpers
+    if slug.present?
+      helpers.resource_detail_path(slug)
+    else
+      helpers.resources_path
+    end
+  rescue StandardError
+    "/resources"
+  end
 end

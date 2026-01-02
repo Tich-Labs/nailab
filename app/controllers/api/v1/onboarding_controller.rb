@@ -3,11 +3,11 @@ module Api
     class OnboardingController < PublicController
       def founder
         user = User.find_by(id: params[:user_id])
-        return render json: { error: 'User not found' }, status: :not_found unless user
+        return render json: { error: "User not found" }, status: :not_found unless user
 
         profile = user.user_profile || user.build_user_profile
         profile.assign_attributes(founder_profile_params.merge(
-          role: 'founder',
+          role: "founder",
           onboarding_completed: true,
           profile_visibility: true
         ))
@@ -26,11 +26,11 @@ module Api
 
       def mentor
         user = User.find_by(id: params[:user_id])
-        return render json: { error: 'User not found' }, status: :not_found unless user
+        return render json: { error: "User not found" }, status: :not_found unless user
 
         profile = user.user_profile || user.build_user_profile
         profile.assign_attributes(mentor_profile_params.merge(
-          role: 'mentor',
+          role: "mentor",
           onboarding_completed: true,
           profile_visibility: true
         ))

@@ -64,3 +64,5 @@ end
 gem "sassc-rails"
 
 gem "tailwindcss-rails", "~> 4.4"
+
+gem "rails_best_practices", "~> 1.23", group: :development

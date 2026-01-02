@@ -47,7 +47,7 @@ class Mentor < ApplicationRecord
   alias_method :availability, :availability_hours_month
 
   def role
-    'Mentor'
+    "Mentor"
   end
 
   private

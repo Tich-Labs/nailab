@@ -168,7 +168,7 @@
             <dt class="text-sm font-medium text-gray-500">LinkedIn/Profile</dt>
             <dd class="text-sm text-gray-900">
               <% if @profile.linkedin_url.present? %>
-                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', class: 'text-teal-600 hover:text-teal-700' %>
+                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', rel: 'noopener noreferrer', class: 'text-teal-600 hover:text-teal-700' %>
               <% else %>
                 Not provided
               <% end %>

@@ -7,7 +7,7 @@ module RailsAdmin
         if params[:message].present?
           @ticket.add_admin_reply(params[:message], current_user || User.first)
           @ticket.update(status: params[:status]) if params[:status].present?
-          redirect_to rails_admin.show_path(model_name: 'SupportTicket', id: @ticket.id), notice: "Reply sent successfully"
+          redirect_to rails_admin.show_path(model_name: "SupportTicket", id: @ticket.id), notice: "Reply sent successfully"
         else
           flash[:error] = "Message cannot be blank"
           render :reply

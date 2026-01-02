@@ -13,7 +13,7 @@ class Founder::SubscriptionsController < Founder::BaseController
   def create
     @subscription = current_user.build_subscription(subscription_params)
     if @subscription.save
-      redirect_to founder_subscription_path, notice: 'Subscribed.'
+      redirect_to founder_subscription_path, notice: "Subscribed."
     else
       render :new
     end
