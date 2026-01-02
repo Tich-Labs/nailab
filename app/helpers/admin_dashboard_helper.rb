@@ -83,7 +83,18 @@ module AdminDashboardHelper
         crumbs << { label: params[:action].titleize, path: request.path }
       end
     else
-      crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
+      # Special-case: Admin homepage sections edit should read: Admin > SECTIONS > Edit
+      if params[:controller] == "admin/homepages" && params[:action] == "edit"
+        # named route: admin_homepage_sections_edit_path -> helper generated as admin_homepage_sections_edit_path
+        begin
+          crumbs << { label: "Sections", path: admin_homepage_sections_edit_path }
+        rescue StandardError
+          crumbs << { label: "Sections", path: request.path }
+        end
+        crumbs << { label: action_name.titleize, path: request.path }
+      else
+        crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
+      end
     end
     crumbs
   end

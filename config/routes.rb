@@ -87,6 +87,8 @@ Rails.application.routes.draw do
     patch "homepage/impact_network/:id/toggle", to: "homepage#toggle", as: :homepage_impact_network_toggle
     get "homepage/hero", to: "homepage#hero", as: :homepage_hero
     get "homepage/focus_areas", to: "homepage#focus_areas", as: :homepage_focus_areas
+    # Friendly URL for editing homepage sections
+    get "homepage/sections/edit", to: "homepages#edit", as: :homepage_sections_edit
   end
 
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
