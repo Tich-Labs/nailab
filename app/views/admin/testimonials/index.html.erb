@@ -1,0 +1,213 @@
+<h1 class="text-2xl font-bold mb-4">Testimonials — Manage</h1>
+
+<div class="mb-4">
+  <%= link_to "Preview live section", root_path(anchor: "testimonials"), class: "ml-2 btn btn-secondary" %>
+</div>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div id="testimonial-editor" class="bg-white p-4 rounded shadow">
+    <h2 class="font-semibold mb-2">Editor</h2>
+    <%= form_with url: admin_testimonials_path, id: 'testimonial-form', local: true do |f| %>
+      <%= hidden_field_tag :testimonial_id, nil, id: 'testimonial-id' %>
+      <%= hidden_field_tag :_method, nil, id: 'testimonial-method' %>
+
+      <div class="mb-2">
+        <%= label_tag :author_name, 'Author', class: 'block font-medium' %>
+        <%= text_field_tag 'testimonial[author_name]', nil, id: 'testimonial-author', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :quote, 'Quote', class: 'block font-medium' %>
+        <%= text_area_tag 'testimonial[quote]', nil, id: 'testimonial-quote', class: 'w-full form-input', rows: 3 %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :author_role, 'Role', class: 'block font-medium' %>
+        <%= text_field_tag 'testimonial[author_role]', nil, id: 'testimonial-role', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :organization, 'Organization', class: 'block font-medium' %>
+        <%= text_field_tag 'testimonial[organization]', nil, id: 'testimonial-organization', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :photo_url, 'Photo URL (or leave blank for asset)', class: 'block font-medium' %>
+        <%= text_field_tag 'testimonial[photo_url]', nil, id: 'testimonial-photo', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :website_url, 'Website', class: 'block font-medium' %>
+        <%= text_field_tag 'testimonial[website_url]', nil, id: 'testimonial-website', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= label_tag :display_order, 'Order', class: 'block font-medium' %>
+        <%= number_field_tag 'testimonial[display_order]', 0, id: 'testimonial-order', class: 'w-32 form-input' %>
+      </div>
+
+      <div class="mb-2">
+        <%= check_box_tag 'testimonial[active]', '1', true, id: 'testimonial-active' %>
+        <%= label_tag 'testimonial-active', 'Active', class: 'ml-2' %>
+      </div>
+
+      <div class="flex items-center">
+        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= button_tag 'Cancel', type: 'button', id: 'testimonial-cancel', class: 'ml-2 btn btn-secondary' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-2">Preview</h2>
+    <div id="testimonial-preview" class="bg-white p-4 rounded shadow admin-preview-scroll">
+      <%= render partial: 'admin/testimonials/preview', locals: { testimonials: (@preview_testimonials || Testimonial.where(active: true).order(:display_order)) } %>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white rounded shadow overflow-y-auto" style="max-height:60vh;">
+  <h2 class="font-semibold mb-2 px-4 pt-4">Testimonials</h2>
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th class="p-2">Preview</th>
+        <th>Author</th>
+        <th>Quote</th>
+        <th>Order</th>
+        <th>Active</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="testimonial-rows">
+      <%= render partial: 'admin/testimonials/rows', locals: { testimonials: @testimonials } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  (function () {
+    var container = document.getElementById('testimonial-rows');
+    var form = document.getElementById('testimonial-form');
+    var idField = document.getElementById('testimonial-id');
+    var methodField = document.getElementById('testimonial-method');
+    var authorField = document.getElementById('testimonial-author');
+    var quoteField = document.getElementById('testimonial-quote');
+    var roleField = document.getElementById('testimonial-role');
+    var orgField = document.getElementById('testimonial-organization');
+    var photoField = document.getElementById('testimonial-photo');
+    var websiteField = document.getElementById('testimonial-website');
+    var orderField = document.getElementById('testimonial-order');
+    var activeField = document.getElementById('testimonial-active');
+    var cancelBtn = document.getElementById('testimonial-cancel');
+
+    function resetForm() {
+      if (!form) return;
+      form.action = '/admin/testimonials';
+      methodField.value = '';
+      idField.value = '';
+      authorField.value = '';
+      quoteField.value = '';
+      roleField.value = '';
+      orgField.value = '';
+      photoField.value = '';
+      websiteField.value = '';
+      orderField.value = 0;
+      activeField.checked = true;
+      var preview = document.getElementById('testimonial-preview');
+      if (preview) preview.innerHTML = '<div class="text-gray-500">Enter a new testimonial to preview here.</div>';
+    }
+
+    function escapeHtml(unsafe) {
+      return String(unsafe || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    function renderPreviewItem(opts) {
+      var author = escapeHtml(opts.author || '');
+      var quote = escapeHtml(opts.quote || '');
+      var photo = escapeHtml(opts.photo || '');
+      var img = photo ? ('<img src="' + photo + '" alt="' + author + '" class="mx-auto rounded-full" style="max-height:80px;"/>') : '<div class="text-gray-500">No image</div>';
+      return '<div class="text-center">' + img + '<div class="mt-2 font-semibold">' + author + '</div>' + '<div class="mt-2 text-sm text-gray-700">' + quote + '</div></div>';
+    }
+
+    function handleEdit(e) {
+      var tr = e.currentTarget.closest('tr');
+      if (!tr) return;
+      var id = tr.getAttribute('data-testimonial-id');
+      var author = tr.getAttribute('data-testimonial-author') || '';
+      var quote = tr.getAttribute('data-testimonial-quote') || '';
+      var role = tr.getAttribute('data-testimonial-role') || '';
+      var org = tr.getAttribute('data-testimonial-organization') || '';
+      var photo = tr.querySelector('td[data-testimonial-photo]') ? tr.querySelector('td[data-testimonial-photo]').getAttribute('data-testimonial-photo') : '';
+
+      form.action = '/admin/testimonials/' + id;
+      methodField.value = 'patch';
+      idField.value = id;
+      authorField.value = author;
+      quoteField.value = quote;
+      roleField.value = role;
+      orgField.value = org;
+      photoField.value = photo;
+      orderField.value = 0;
+      activeField.checked = true;
+
+      var preview = document.getElementById('testimonial-preview');
+      if (preview) preview.innerHTML = renderPreviewItem({ author: author, quote: quote, photo: photo });
+      document.getElementById('testimonial-editor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handlePreview(e) {
+      var tr = e.currentTarget.closest('tr');
+      if (!tr) return;
+      var author = tr.getAttribute('data-testimonial-author') || '';
+      var quote = tr.getAttribute('data-testimonial-quote') || '';
+      var photo = tr.querySelector('td[data-testimonial-photo]') ? tr.querySelector('td[data-testimonial-photo]').getAttribute('data-testimonial-photo') : '';
+      var preview = document.getElementById('testimonial-preview');
+      if (preview) preview.innerHTML = renderPreviewItem({ author: author, quote: quote, photo: photo });
+    }
+
+    function wireButtons() {
+      if (!container) return;
+      container.querySelectorAll('.testimonial-edit-btn').forEach(function (btn) { btn.removeEventListener('click', handleEdit); btn.addEventListener('click', handleEdit); });
+      container.querySelectorAll('.testimonial-preview-btn').forEach(function (btn) { btn.removeEventListener('click', handlePreview); btn.addEventListener('click', handlePreview); });
+    }
+
+    if (cancelBtn) cancelBtn.addEventListener('click', resetForm);
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var method = (methodField && methodField.value) || form.getAttribute('method') || 'post';
+        var action = form.action;
+
+        fetch(action, {
+          method: method.toUpperCase() === 'PATCH' ? 'PATCH' : 'POST',
+          headers: { 'X-CSRF-Token': token, 'Accept': 'application/json' },
+          body: fd,
+          credentials: 'same-origin'
+        }).then(function (resp) {
+          if (!resp.ok) return resp.json().then(function (j) { throw j; });
+          return resp.json();
+        }).then(function (data) {
+          if (data.html_rows) {
+            var tbody = document.getElementById('testimonial-rows');
+            tbody.innerHTML = data.html_rows;
+            wireButtons();
+          }
+          if (data.preview_html) {
+            var preview = document.getElementById('testimonial-preview');
+            preview.innerHTML = data.preview_html;
+          }
+          resetForm();
+        }).catch(function (err) {
+          console.error('Save failed', err);
+          alert((err && err.errors) ? err.errors.join('\n') : 'Save failed');
+        });
+      });
+    }
+
+    wireButtons();
+  })();
+</script>
