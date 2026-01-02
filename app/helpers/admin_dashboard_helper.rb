@@ -10,7 +10,7 @@ module AdminDashboardHelper
       {
         title: "�📄 CONTENT MANAGEMENT",
         sections: [
-          { label: "Homepage", path: rails_admin.edit_path(model_name: "homepage", id: 1), icon: "🏠" },
+          { label: "Homepage", path: admin_homepage_sections_edit_path, icon: "🏠" },
           { label: "About", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" },
           { label: "Pricing", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" },
           { label: "Contact Us", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" },
