@@ -69,7 +69,7 @@ Rails.application.routes.draw do
 
   # Custom admin homepage editors and logo management — define before mounting RailsAdmin
   namespace :admin do
-    resources :logos, only: %i[index new create destroy]
+    resources :logos, only: %i[index new create update destroy]
     resources :testimonials, only: %i[index new create edit update destroy]
     # Friendly custom Focus Areas editor (override RailsAdmin path) - define before mounting RailsAdmin
     get "focus_area", to: "focus_areas#index", as: :focus_areas

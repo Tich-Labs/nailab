@@ -17,8 +17,8 @@ module Admin
           format.html { redirect_to admin_homepage_impact_network_path, notice: "Logo uploaded" }
           format.json do
             render json: {
-              html_rows: render_to_string(partial: "admin/homepage/impact_network_rows", formats: [ :html ], locals: { logos: Logo.all.order(:display_order) }),
-              preview_html: render_to_string(partial: "admin/homepage/impact_network_preview", formats: [ :html ], locals: { logos: Logo.where(active: true).order(:display_order) })
+              html_rows: render_to_string(partial: "admin/homepage/impact_network/rows", formats: [ :html ], locals: { logos: Logo.all.order(:display_order) }),
+              preview_html: render_to_string(partial: "admin/homepage/impact_network/preview", formats: [ :html ], locals: { logos: Logo.where(active: true).order(:display_order) })
             }
           end
         end
@@ -44,8 +44,8 @@ module Admin
           format.html { redirect_to admin_homepage_impact_network_path, notice: "Logo updated" }
           format.json do
             render json: {
-              html_rows: render_to_string(partial: "admin/homepage/impact_network_rows", formats: [ :html ], locals: { logos: Logo.all.order(:display_order) }),
-              preview_html: render_to_string(partial: "admin/homepage/impact_network_preview", formats: [ :html ], locals: { logos: Logo.where(active: true).order(:display_order) })
+              html_rows: render_to_string(partial: "admin/homepage/impact_network/rows", formats: [ :html ], locals: { logos: Logo.all.order(:display_order) }),
+              preview_html: render_to_string(partial: "admin/homepage/impact_network/preview", formats: [ :html ], locals: { logos: Logo.where(active: true).order(:display_order) })
             }
           end
         end

@@ -1,4 +1,8 @@
 module Admin
+  # Controller: Admin::HomepageController
+  # Purpose: Per-homepage section editors (hero, impact_network, focus_areas).
+  # Renders the per-section admin pages located in `app/views/admin/homepage/`.
+  # Use `Admin::HomepagesController` for the central homepage sections dashboard.
   class HomepageController < RailsAdmin::MainController
     before_action :set_logos, only: %i[impact_network reorder toggle]
 

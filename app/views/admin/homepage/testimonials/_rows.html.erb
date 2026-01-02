@@ -1,0 +1,50 @@
+<%# Rows partial for admin Testimonials (moved under homepage namespace) %>
+<% testimonials.each do |t| %>
+  <tr class="border-t" data-testimonial-id="<%= t.id %>" data-testimonial-author="<%= h(t.author_name) %>" data-testimonial-quote="<%= h(t.quote) %>" data-testimonial-role="<%= h(t.author_role) %>" data-testimonial-organization="<%= h(t.organization) %>" data-testimonial-website="<%= h(t.website_url) %>" data-testimonial-order="<%= h(t.display_order) %>" data-testimonial-active="<%= t.active? %>" data-testimonial-rating="<%= h(t.rating) %>" data-testimonial-created-at="<%= h(t.created_at) %>" data-testimonial-updated-at="<%= h(t.updated_at) %>">
+    <td class="p-2 w-32" <% if (t.respond_to?(:photo) && t.photo.attached?) || t.photo_url.present? %>data-testimonial-photo="<%= h(t.respond_to?(:photo) && t.photo.attached? ? url_for(t.photo) : t.photo_url) %>"<% end %>>
+      <% if t.respond_to?(:photo) && t.photo.attached? %>
+        <% begin %>
+          <%= image_tag url_for(t.photo.variant(resize_to_limit: [160,160])), alt: h(t.author_name), class: 'mx-auto max-h-16' %>
+        <% rescue => _e %>
+          <%= image_tag url_for(t.photo), alt: h(t.author_name), class: 'mx-auto max-h-16' %>
+        <% end %>
+      <% elsif t.photo_url.present? %>
+        <img src="<%= t.photo_url %>" alt="<%= h(t.author_name) %>" class="mx-auto max-h-16" />
+      <% else %>
+        <span class="text-gray-500">No image</span>
+      <% end %>
+    </td>
+    <td class="p-2">
+      <div class="font-semibold"><%= h(t.author_name.presence || 'Untitled') %></div>
+      <% if t.author_role.present? || t.organization.present? || t.website_url.present? %>
+        <div class="text-sm text-gray-600 mt-1">
+          <% if t.author_role.present? %>
+            <span class="block"><%= h(t.author_role) %><% if t.organization.present? %>, <%= h(t.organization) %><% end %></span>
+          <% elsif t.organization.present? %>
+            <span class="block"><%= h(t.organization) %></span>
+          <% end %>
+          <% if t.website_url.present? %>
+            <a href="<%= h(t.website_url) %>" target="_blank" rel="noopener" class="text-xs text-blue-600">Learn more</a>
+          <% end %>
+        </div>
+      <% end %>
+    </td>
+    <td class="p-2"><%= truncate(t.quote.to_s, length: 80) %></td>
+    <td class="p-2">
+      <%= link_to 'Up', '#', class: 'btn btn-ghost' %>
+      <%= link_to 'Down', '#', class: 'btn btn-ghost' %>
+    </td>
+    <td class="p-2">
+      <%= form_with url: admin_testimonials_path, method: :patch, local: true do %>
+        <%= submit_tag(t.active? ? 'Archive' : 'Activate', class: 'btn btn-sm') %>
+      <% end %>
+    </td>
+    <td class="p-2">
+      <div class="flex items-center space-x-2">
+        <button type="button" class="btn btn-secondary testimonial-preview-btn" data-id="<%= t.id %>">Preview</button>
+        <button type="button" class="btn btn-secondary testimonial-edit-btn" data-id="<%= t.id %>">Edit</button>
+        <%= button_to 'Delete', admin_testimonial_path(t), method: :delete, data: { confirm: 'Delete testimonial?' }, class: 'btn btn-danger' %>
+      </div>
+    </td>
+  </tr>
+<% end %>

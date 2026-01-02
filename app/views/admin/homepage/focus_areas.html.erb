@@ -1,11 +1,198 @@
-<h1 class="text-2xl font-bold mb-4">Focus Areas — Editor</h1>
+<h1 class="text-2xl font-bold mb-4">Focus Areas — Manage Items</h1>
 
 <div class="mb-4">
   <%= link_to 'Edit focus areas in CMS', rails_admin.index_path(model_name: 'focus_area'), class: 'btn btn-primary' %>
   <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'ml-2 btn btn-secondary' %>
 </div>
 
-<div class="bg-white p-4 rounded shadow">
-  <%# Render frontend focus areas partial for WYSIWYG preview. Ensure @focus_areas present %>
-  <%= render 'pages/home/focus_areas' %>
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-2">Editor</h2>
+    <div id="focus-area-editor" class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_focus_areas_path, id: 'focus-area-form', local: true do |f| %>
+      <%= hidden_field_tag :focus_area_id, nil, id: 'focus-area-id' %>
+      <%= hidden_field_tag :_method, nil, id: 'focus-area-method' %>
+      <div class="mb-2">
+        <%= label_tag :title, 'Title', class: 'block font-medium' %>
+        <%= text_field_tag 'focus_area[title]', nil, id: 'focus-area-title', class: 'w-full form-input admin-form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :description, 'Description', class: 'block font-medium' %>
+        <%= text_area_tag 'focus_area[description]', nil, id: 'focus-area-description', rows: 4, class: 'w-full form-textarea admin-form-textarea' %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :icon, 'Icon', class: 'block font-medium' %>
+        <%= text_field_tag 'focus_area[icon]', nil, id: 'focus-area-icon', class: 'w-full form-input admin-form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :display_order, 'Order', class: 'block font-medium' %>
+        <%= number_field_tag 'focus_area[display_order]', 0, id: 'focus-area-order', class: 'w-32 form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= check_box_tag 'focus_area[active]', '1', true, id: 'focus-area-active' %>
+        <%= label_tag 'focus-area-active', 'Active', class: 'ml-2' %>
+      </div>
+      <div class="flex items-center">
+        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= button_tag 'Cancel', type: 'button', id: 'focus-area-cancel', class: 'ml-2 btn btn-secondary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-2">Preview</h2>
+    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll" style="min-height:520px;">
+      <%= render partial: 'admin/homepage/focus_areas_preview', locals: { focus_areas: (@preview_focus_areas || FocusArea.where(active: true).order(:display_order)) } %>
+    </div>
+  </div>
 </div>
+
+<div>
+  <h2 class="font-semibold mb-2 px-4 pt-4">Focus Areas</h2>
+  <div class="bg-white rounded shadow overflow-y-auto" style="max-height:60vh;">
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="p-2">Title & Description</th>
+          <th>Order</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="focus-areas-rows">
+          <%= render partial: 'admin/homepage/focus_areas/rows', locals: { focus_areas: @focus_areas } %>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script>
+  (function () {
+    var container = document.getElementById('focus-area-rows');
+    var form = document.getElementById('focus-area-form');
+    var idField = document.getElementById('focus-area-id');
+    var methodField = document.getElementById('focus-area-method');
+    var titleField = document.getElementById('focus-area-title');
+    var descField = document.getElementById('focus-area-description');
+    var iconField = document.getElementById('focus-area-icon');
+    var orderField = document.getElementById('focus-area-order');
+    var activeField = document.getElementById('focus-area-active');
+    var cancelBtn = document.getElementById('focus-area-cancel');
+
+    function resetForm() {
+      if (!form) return;
+      form.action = '/admin/focus_area';
+      methodField.value = '';
+      idField.value = '';
+      titleField.value = '';
+      descField.value = '';
+      iconField.value = '';
+      orderField.value = 0;
+      activeField.checked = true;
+      var preview = document.getElementById('preview-container');
+      if (preview) preview.innerHTML = '<div class="text-gray-500">Enter a new focus area to preview here.</div>';
+    }
+
+    function escapeHtml(unsafe) {
+      return String(unsafe || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    function renderPreviewFocusArea(opts) {
+      var title = escapeHtml(opts.title || '');
+      var desc = escapeHtml(opts.description || '');
+      return '<div class="admin-preview-single text-center">' +
+        '<div class="max-w-4xl mx-auto px-4">' +
+        '<div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow mx-auto">' +
+        '<h3 class="text-xl font-semibold text-purple-700 mb-2">' + title + '</h3>' +
+        '<p class="text-gray-700">' + desc + '</p>' +
+        '</div></div></div>';
+    }
+
+    function syncPreviewHeight() {
+      try {
+        var editor = document.getElementById('focus-area-editor');
+        var preview = document.getElementById('preview-container');
+        if (!editor || !preview) return;
+        var h = editor.clientHeight;
+        preview.style.height = h + 'px';
+        var inner = preview.querySelector('.admin-preview-single');
+        if (inner) inner.style.height = '100%';
+      } catch (e) { /* ignore */ }
+    }
+
+    function handleEdit(e) {
+      var tr = e.currentTarget.closest('tr');
+      if (!tr) return;
+      var id = tr.getAttribute('data-fa-id');
+      var title = tr.getAttribute('data-fa-title') || '';
+      var desc = tr.getAttribute('data-fa-description') || '';
+      var icon = tr.getAttribute('data-fa-icon') || '';
+
+      form.action = '/admin/focus_area/' + id;
+      methodField.value = 'patch';
+      idField.value = id;
+      titleField.value = title;
+      descField.value = desc;
+      iconField.value = icon;
+      orderField.value = 0;
+      activeField.checked = tr.getAttribute('data-fa-active') === 'true';
+
+      var preview = document.getElementById('preview-container');
+      if (preview) preview.innerHTML = renderPreviewFocusArea({ title: title, description: desc });
+      syncPreviewHeight();
+      document.getElementById('focus-area-editor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function wireButtons() {
+      if (!container) return;
+      container.querySelectorAll('.focus-edit-btn').forEach(function (btn) { btn.removeEventListener('click', handleEdit); btn.addEventListener('click', handleEdit); });
+    }
+
+    if (cancelBtn) cancelBtn.addEventListener('click', resetForm);
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var method = (methodField && methodField.value) || form.getAttribute('method') || 'post';
+        var action = form.action;
+
+        fetch(action, {
+          method: method.toUpperCase() === 'PATCH' ? 'PATCH' : 'POST',
+          headers: { 'X-CSRF-Token': token, 'Accept': 'application/json' },
+          body: fd,
+          credentials: 'same-origin'
+        }).then(function (resp) {
+          if (!resp.ok) return resp.json().then(function (j) { throw j; });
+          return resp.json();
+        }).then(function (data) {
+          if (data.html_rows) {
+            var tbody = document.getElementById('focus-area-rows');
+            tbody.innerHTML = data.html_rows;
+            wireButtons();
+          }
+          if (data.preview_html) {
+            var preview = document.getElementById('preview-container');
+            if (preview) preview.innerHTML = data.preview_html;
+          }
+          // wire and sync after preview update
+          wireButtons();
+          syncPreviewHeight();
+          resetForm();
+        }).catch(function (err) {
+          console.error('Save failed', err);
+          alert((err && err.errors) ? err.errors.join('\n') : 'Save failed');
+        });
+      });
+    }
+
+    // wire initially
+    wireButtons();
+    // sync preview height on load and resize
+    syncPreviewHeight();
+    window.addEventListener('resize', function () { syncPreviewHeight(); });
+  })();
+</script>

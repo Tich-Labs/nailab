@@ -5,9 +5,10 @@
 </div>
 
 <div class="grid grid-cols-2 gap-8 mb-6">
-  <div id="testimonial-editor" class="bg-white p-4 rounded shadow">
+  <div>
     <h2 class="font-semibold mb-2">Editor</h2>
-    <%= form_with url: admin_testimonials_path, id: 'testimonial-form', local: true do |f| %>
+    <div id="testimonial-editor" class="bg-white p-4 rounded shadow" style="min-height:520px;">
+      <%= form_with url: admin_testimonials_path, id: 'testimonial-form', local: true, html: { multipart: true } do |f| %>
       <%= hidden_field_tag :testimonial_id, nil, id: 'testimonial-id' %>
       <%= hidden_field_tag :_method, nil, id: 'testimonial-method' %>
 
@@ -37,6 +38,11 @@
       </div>
 
       <div class="mb-2">
+        <%= label_tag :photo_upload, 'Upload Photo (optional)', class: 'block font-medium' %>
+        <%= file_field_tag 'testimonial[photo]', id: 'testimonial-photo-file', class: 'w-full form-input' %>
+      </div>
+
+      <div class="mb-2">
         <%= label_tag :website_url, 'Website', class: 'block font-medium' %>
         <%= text_field_tag 'testimonial[website_url]', nil, id: 'testimonial-website', class: 'w-full form-input' %>
       </div>
@@ -55,19 +61,20 @@
         <%= submit_tag 'Save', class: 'btn btn-primary' %>
         <%= button_tag 'Cancel', type: 'button', id: 'testimonial-cancel', class: 'ml-2 btn btn-secondary' %>
       </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 
   <div>
     <h2 class="font-semibold mb-2">Preview</h2>
-    <div id="testimonial-preview" class="bg-white p-4 rounded shadow admin-preview-scroll">
-      <%= render partial: 'admin/testimonials/preview', locals: { testimonials: (@preview_testimonials || Testimonial.where(active: true).order(:display_order)) } %>
+    <div id="testimonial-preview" class="bg-white p-4 rounded shadow admin-preview-scroll" style="min-height:520px;">
+      <%= render partial: 'admin/homepage/testimonials/preview', locals: { testimonials: (@preview_testimonials || Testimonial.where(active: true).order(:display_order)) } %>
     </div>
   </div>
 </div>
 
+<h2 class="font-semibold mb-2 px-4 pt-4">Testimonials</h2>
 <div class="bg-white rounded shadow overflow-y-auto" style="max-height:60vh;">
-  <h2 class="font-semibold mb-2 px-4 pt-4">Testimonials</h2>
   <table class="w-full">
     <thead>
       <tr>
@@ -80,7 +87,7 @@
       </tr>
     </thead>
     <tbody id="testimonial-rows">
-      <%= render partial: 'admin/testimonials/rows', locals: { testimonials: @testimonials } %>
+          <%= render partial: 'admin/homepage/testimonials/rows', locals: { testimonials: @testimonials } %>
     </tbody>
   </table>
 </div>
@@ -111,6 +118,7 @@
       roleField.value = '';
       orgField.value = '';
       photoField.value = '';
+      var fileField = document.getElementById('testimonial-photo-file'); if (fileField) fileField.value = '';
       websiteField.value = '';
       orderField.value = 0;
       activeField.checked = true;
@@ -126,8 +134,28 @@
       var author = escapeHtml(opts.author || '');
       var quote = escapeHtml(opts.quote || '');
       var photo = escapeHtml(opts.photo || '');
+      var role = escapeHtml(opts.role || '');
+      var org = escapeHtml(opts.org || '');
+      var website = escapeHtml(opts.website || '');
+      var rating = escapeHtml(opts.rating || '');
+      var order = escapeHtml(opts.order || '');
+      var active = (opts.active === 'true' || opts.active === true) ? 'Yes' : 'No';
+      var created = escapeHtml(opts.created_at || '');
+      var updated = escapeHtml(opts.updated_at || '');
       var img = photo ? ('<img src="' + photo + '" alt="' + author + '" class="mx-auto rounded-full" style="max-height:80px;"/>') : '<div class="text-gray-500">No image</div>';
-      return '<div class="text-center">' + img + '<div class="mt-2 font-semibold">' + author + '</div>' + '<div class="mt-2 text-sm text-gray-700">' + quote + '</div></div>';
+      var meta = '';
+      if (role || org) meta = '<div class="text-sm text-gray-600 mt-1">' + (role ? role + (org ? ', ' + org : '') : org) + '</div>';
+      var learn = website ? ('<div class="mt-2"><a href="' + website + '" target="_blank" rel="noopener" class="text-sm text-blue-600">Learn more</a></div>') : '';
+      var details = '<div class="mt-2 text-left w-full max-w-xl mx-auto text-sm text-gray-600>'
+        + '<div><strong>Website:</strong> ' + (website || '<span class="text-gray-500">—</span>') + '</div>'
+        + '<div><strong>Rating:</strong> ' + (rating || '—') + '</div>'
+        + '<div><strong>Order:</strong> ' + (order || '—') + '</div>'
+        + '<div><strong>Active:</strong> ' + active + '</div>'
+        + '<div><strong>Created:</strong> ' + (created || '—') + '</div>'
+        + '<div><strong>Updated:</strong> ' + (updated || '—') + '</div>'
+        + '</div>';
+
+      return '<div class="text-center">' + img + '<div class="mt-2 font-semibold">' + author + '</div>' + meta + '<div class="mt-2 text-sm text-gray-700">' + quote + '</div>' + learn + details + '</div>';
     }
 
     function handleEdit(e) {
@@ -139,6 +167,12 @@
       var role = tr.getAttribute('data-testimonial-role') || '';
       var org = tr.getAttribute('data-testimonial-organization') || '';
       var photo = tr.querySelector('td[data-testimonial-photo]') ? tr.querySelector('td[data-testimonial-photo]').getAttribute('data-testimonial-photo') : '';
+      var website = tr.getAttribute('data-testimonial-website') || '';
+      var rating = tr.getAttribute('data-testimonial-rating') || '';
+      var order = tr.getAttribute('data-testimonial-order') || '';
+      var active = tr.getAttribute('data-testimonial-active') || '';
+      var created = tr.getAttribute('data-testimonial-created-at') || '';
+      var updated = tr.getAttribute('data-testimonial-updated-at') || '';
 
       form.action = '/admin/testimonials/' + id;
       methodField.value = 'patch';
@@ -148,8 +182,10 @@
       roleField.value = role;
       orgField.value = org;
       photoField.value = photo;
-      orderField.value = 0;
-      activeField.checked = true;
+      websiteField.value = website;
+      var fileField = document.getElementById('testimonial-photo-file'); if (fileField) fileField.value = '';
+      orderField.value = order || 0;
+      activeField.checked = (active === 'true' || active === '1');
 
       var preview = document.getElementById('testimonial-preview');
       if (preview) preview.innerHTML = renderPreviewItem({ author: author, quote: quote, photo: photo });
@@ -162,8 +198,16 @@
       var author = tr.getAttribute('data-testimonial-author') || '';
       var quote = tr.getAttribute('data-testimonial-quote') || '';
       var photo = tr.querySelector('td[data-testimonial-photo]') ? tr.querySelector('td[data-testimonial-photo]').getAttribute('data-testimonial-photo') : '';
+      var role = tr.getAttribute('data-testimonial-role') || '';
+      var org = tr.getAttribute('data-testimonial-organization') || '';
+      var website = tr.getAttribute('data-testimonial-website') || '';
+      var rating = tr.getAttribute('data-testimonial-rating') || '';
+      var order = tr.getAttribute('data-testimonial-order') || '';
+      var active = tr.getAttribute('data-testimonial-active') || '';
+      var created = tr.getAttribute('data-testimonial-created-at') || '';
+      var updated = tr.getAttribute('data-testimonial-updated-at') || '';
       var preview = document.getElementById('testimonial-preview');
-      if (preview) preview.innerHTML = renderPreviewItem({ author: author, quote: quote, photo: photo });
+      if (preview) preview.innerHTML = renderPreviewItem({ author: author, quote: quote, photo: photo, role: role, org: org, website: website, rating: rating, order: order, active: active, created_at: created, updated_at: updated });
     }
 
     function wireButtons() {
@@ -199,14 +243,40 @@
           if (data.preview_html) {
             var preview = document.getElementById('testimonial-preview');
             preview.innerHTML = data.preview_html;
+            // ensure any interactive preview elements are wired and height is synced
+            wireButtons();
+            syncPreviewHeight();
           }
           resetForm();
+          // final sync after resetting editor/preview
+          syncPreviewHeight();
         }).catch(function (err) {
           console.error('Save failed', err);
           alert((err && err.errors) ? err.errors.join('\n') : 'Save failed');
         });
       });
-    }
+      function syncPreviewHeight() {
+        try {
+          var editor = document.getElementById('testimonial-editor');
+          var preview = document.getElementById('testimonial-preview');
+          if (!editor || !preview) return;
+          // match preview height to editor height (use clientHeight to avoid margin)
+          var h = editor.clientHeight;
+          preview.style.height = h + 'px';
+          // ensure inner preview scroll container fills
+          var inner = preview.querySelector('.admin-preview-single');
+          if (inner) inner.style.height = '100%';
+        } catch (e) { /* ignore */ }
+      }
+
+      wireButtons();
+      // initial sync
+      syncPreviewHeight();
+      window.addEventListener('resize', syncPreviewHeight);
+
+      // ensure sync after row/preview updates
+      var originalHandlePreview = handlePreview;
+      window.setTimeout(function() { /* safe no-op to keep lint happy */ }, 0);
 
     wireButtons();
   })();

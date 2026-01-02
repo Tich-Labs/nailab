@@ -1,0 +1,29 @@
+<%# Rows partial for admin Impact Network logos %>
+<% logos.each do |logo| %>
+  <tr class="border-t" data-logo-id="<%= logo.id %>" data-logo-name="<%= h(logo.name) %>">
+    <td class="p-2 w-32" <% if logo.image.attached? %>data-logo-src="<%= url_for(logo.image.variant(resize_to_limit: [240, 120])) %>"<% end %>>
+      <% if logo.image.attached? %>
+        <%= image_tag url_for(logo.image.variant(resize_to_limit: [120, 60])), alt: logo.name, class: "mx-auto" %>
+      <% else %>
+        <span class="text-gray-500">No image</span>
+      <% end %>
+    </td>
+    <td class="p-2"><%= logo.name.presence || "Untitled" %></td>
+    <td class="p-2">
+      <%= link_to "Up", admin_homepage_impact_network_reorder_path(id: logo.id, direction: 'up'), method: :post, class: "btn btn-ghost" %>
+      <%= link_to "Down", admin_homepage_impact_network_reorder_path(id: logo.id, direction: 'down'), method: :post, class: "btn btn-ghost" %>
+    </td>
+    <td class="p-2">
+      <%= form_with url: admin_homepage_impact_network_toggle_path(logo), method: :patch, local: true do %>
+        <%= submit_tag(logo.active? ? "Archive" : "Activate", class: "btn btn-sm") %>
+      <% end %>
+    </td>
+    <td class="p-2">
+      <div class="flex items-center space-x-2">
+        <button type="button" class="btn btn-secondary logo-preview-btn" data-id="<%= logo.id %>">Preview</button>
+        <button type="button" class="btn btn-secondary logo-edit-btn" data-id="<%= logo.id %>">Edit</button>
+        <%= button_to "Delete", admin_logo_path(logo), method: :delete, data: { confirm: "Delete logo?" }, class: "btn btn-danger" %>
+      </div>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,46 @@
+<%# Admin testimonial preview: single-item scrollable stack (moved under homepage namespace) %>
+<% testimonials = local_assigns[:testimonials] || (defined?(@testimonials) ? @testimonials : []) %>
+<div class="admin-preview-single" style="display:flex; flex-direction:column; overflow-y:auto; scroll-snap-type:y mandatory; -webkit-overflow-scrolling:touch; height:500px; max-height:80%;">
+	<% Array(testimonials).each do |t| %>
+		<div class="flex flex-col items-center justify-center border-b last:border-b-0 p- text-center" style="scroll-snap-align:start; scroll-snap-stop:always; flex:0 0 600px; height:800px; box-sizing:border-box;">
+			<div class="mb-2">
+				<% if t.respond_to?(:photo) && t.photo.attached? %>
+					<% begin %>
+						<img src="<%= url_for(t.photo.variant(resize_to_limit: [160,160])) %>" alt="<%= h(t.author_name) %>" class="rounded-full" style="max-height:80px;" />
+					<% rescue => _e %>
+						<img src="<%= url_for(t.photo) %>" alt="<%= h(t.author_name) %>" class="rounded-full" style="max-height:80px;" />
+					<% end %>
+				<% elsif t.photo_url.present? %>
+					<img src="<%= t.photo_url %>" alt="<%= h(t.author_name) %>" class="rounded-full" style="max-height:80px;" />
+				<% else %>
+					<div class="text-gray-500">No image</div>
+				<% end %>
+			</div>
+
+			<div class="font-semibold"><%= h(t.author_name) %></div>
+			<% if t.author_role.present? || t.organization.present? %>
+				<div class="text-sm text-gray-600 mt-1"><%= [t.author_role.presence, t.organization.presence].compact.join(', ') %></div>
+			<% end %>
+
+			<div class="text-sm text-gray-700 mt-2"><%= h(t.quote) %></div>
+
+			<div class="mt-2 text-left w-full max-w-xl mx-auto text-sm text-gray-600">
+				<dl>
+					<dt class="font-medium">Website</dt>
+					<dd><% if t.website_url.present? %><a href="<%= h(t.website_url) %>" target="_blank" rel="noopener" class="text-blue-600"><%= h(t.website_url) %></a><% else %><span class="text-gray-500">—</span><% end %></dd>
+					<dt class="font-medium mt-1">Rating</dt>
+					<dd><%= h(t.rating) %></dd>
+					<dt class="font-medium mt-1">Order</dt>
+					<dd><%= h(t.display_order) %></dd>
+					<dt class="font-medium mt-1">Active</dt>
+					<dd><%= t.active? ? 'Yes' : 'No' %></dd>
+					<dt class="font-medium mt-1">Created</dt>
+					<dd><%= l(t.created_at) rescue t.created_at.to_s %></dd>
+					<dt class="font-medium mt-1">Updated</dt>
+					<dd><%= l(t.updated_at) rescue t.updated_at.to_s %></dd>
+				</dl>
+			</div>
+		</div>
+	<% end %>
+</div>
+

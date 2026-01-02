@@ -39,7 +39,7 @@
 
   <div>
     <h2 class="font-semibold mb-2">Preview</h2>
-      <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll">
+    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll">
       <%= render partial: 'admin/homepage/impact_network/preview', locals: { logos: (@preview_logos || @logos.where(active: true)) } %>
     </div>
   </div>
@@ -63,6 +63,7 @@
     </table>
   </div>
 </div>
+
 
 
 <script>

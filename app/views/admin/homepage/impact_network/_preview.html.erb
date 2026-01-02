@@ -1,0 +1,24 @@
+<%# Admin preview: full-height scrollable list of logos (matches editor height) %>
+<% logos = local_assigns[:logos] || (defined?(@preview_logos) ? @preview_logos : (defined?(@logos) ? @logos : [])) %>
+<div class="admin-preview-scroll-wrapper" style="height:100%;">
+  <div id="impact-network-preview" style="height:100%; overflow-y:auto;">
+    <% Array(logos).each do |logo| %>
+      <div class="py-4 flex justify-center border-b last:border-b-0">
+        <div class="p-4">
+          <% if logo.respond_to?(:image) && logo.image.attached? %>
+            <% img_url = begin
+              url_for(logo.image.variant(resize_to_limit: [400, 160]))
+            rescue StandardError
+              url_for(logo.image)
+            end %>
+            <img src="<%= img_url %>" alt="<%= logo.name %>" class="max-h-40 max-w-full mx-auto" />
+          <% elsif logo.respond_to?(:logo_url) %>
+            <img src="<%= logo.logo_url %>" alt="<%= logo.name %>" class="max-h-40 max-w-full mx-auto" />
+          <% else %>
+            <div class="text-gray-500">No image</div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
