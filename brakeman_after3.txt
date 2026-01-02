@@ -1,0 +1,172 @@
+
+== Brakeman Report ==
+
+Application Path: /home/tich/Documents/nailab-rails
+Rails Version: 8.1.1
+Brakeman Version: 7.1.1
+Scan Date: 2026-01-02 15:38:05 +0300
+Duration: 3.963624348 seconds
+Checks Run: BasicAuth, BasicAuthTimingAttack, CSRFTokenForgeryCVE, ContentTag, CookieSerialization, CreateWith, CrossSiteScripting, DefaultRoutes, Deserialize, DetailedExceptions, DigestDoS, DivideByZero, DynamicFinders, EOLRails, EOLRuby, EscapeFunction, Evaluation, Execute, FileAccess, FileDisclosure, FilterSkipping, ForceSSL, ForgerySetting, HeaderDoS, I18nXSS, JRubyXML, JSONEncoding, JSONEntityEscape, JSONParsing, LinkTo, LinkToHref, MailTo, MassAssignment, MimeTypeDoS, ModelAttrAccessible, ModelAttributes, ModelSerialize, NestedAttributes, NestedAttributesBypass, NumberToCurrency, PageCachingCVE, Pathname, PermitAttributes, QuoteTableName, Ransack, Redirect, RegexDoS, Render, RenderDoS, RenderInline, ResponseSplitting, ReverseTabnabbing, RouteDoS, SQL, SQLCVEs, SSLVerify, SafeBufferManipulation, SanitizeConfigCve, SanitizeMethods, Secrets, SelectTag, SelectVulnerability, Send, SendFile, SessionManipulation, SessionSettings, SimpleFormat, SingleQuotes, SkipBeforeFilter, SprocketsPathTraversal, StripTags, SymbolDoS, SymbolDoSCVE, TemplateInjection, TranslateBug, UnsafeReflection, UnsafeReflectionMethods, UnscopedFind, ValidationRegex, VerbConfusion, WeakHash, WeakRSAKey, WithoutProtection, XMLDoS, YAMLParsing
+
+== Overview ==
+
+Controllers: 64
+Models: 51
+Templates: 136
+Errors: 0
+Security Warnings: 18
+
+== Warning Types ==
+
+Cross-Site Scripting: 3
+Dynamic Render Path: 1
+File Access: 1
+Missing Encryption: 1
+Reverse Tabnabbing: 6
+Unscoped Find: 6
+
+== Warnings ==
+
+Confidence: High
+Category: Missing Encryption
+Check: ForceSSL
+Message: The application does not force use of HTTPS: `config.force_ssl` is not enabled
+File: config/environments/production.rb
+Line: 1
+
+Confidence: Medium
+Category: Dynamic Render Path
+Check: Render
+Message: Render path contains parameter value
+Code: render(action => "mentor_onboarding/steps/#{params[:step]}", {})
+File: app/views/mentor_onboarding/show.html.erb
+Line: 21
+
+Confidence: Medium
+Category: File Access
+Check: SendFile
+Message: Model attribute used in file name
+Code: send_file(Resource.find(params[:id]).file_path, :type => "application/pdf", :disposition => "attachment")
+File: app/controllers/founder/resources_controller.rb
+Line: 23
+
+Confidence: Weak
+Category: Cross-Site Scripting
+Check: LinkToHref
+Message: Potentially unsafe model attribute in `link_to` href
+Code: link_to(Mentor.find(params[:id]).linkedin_url, :target => "_blank", :rel => "noreferrer", :class => "text-sm text-blue-600 hover:text-blue-800")
+File: app/views/founder/mentors/show.html.erb
+Line: 92
+
+Confidence: Weak
+Category: Cross-Site Scripting
+Check: LinkToHref
+Message: Potentially unsafe model attribute in `link_to` href
+Code: link_to(Mentor.find(params[:id]).professional_website, :target => "_blank", :rel => "noreferrer", :class => "text-sm text-blue-600 hover:text-blue-800")
+File: app/views/founder/mentors/show.html.erb
+Line: 99
+
+Confidence: Weak
+Category: Cross-Site Scripting
+Check: LinkToHref
+Message: Potentially unsafe model attribute in `link_to` href
+Code: link_to(StartupProfile.includes(:user => :user_profile).find(params[:id]).website_url, StartupProfile.includes(:user => :user_profile).find(params[:id]).website_url, :target => "_blank", :rel => "noreferrer", :class => "text-purple-600 hover:underline")
+File: app/views/pages/startup_profile.html.erb
+Line: 52
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to(Mentor.find(params[:id]).linkedin_url, :target => "_blank", :rel => "noreferrer", :class => "text-sm text-blue-600 hover:text-blue-800")
+File: app/views/founder/mentors/show.html.erb
+Line: 92
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to(Mentor.find(params[:id]).professional_website, :target => "_blank", :rel => "noreferrer", :class => "text-sm text-blue-600 hover:text-blue-800")
+File: app/views/founder/mentors/show.html.erb
+Line: 99
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to("Open original resource", Resource.where(:active => true).detect do  (resource.slug == params[:slug])  end.url, :target => "_blank", :rel => "noreferrer", :class => "rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold text-white transition hover:bg-black")
+File: app/views/pages/resource_detail.html.erb
+Line: 14
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to("Open original resource", @resource.url, :target => "_blank", :rel => "noreferrer", :class => "rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold text-white transition hover:bg-black")
+File: app/views/pages/resources/resource_detail.html.erb
+Line: 14
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to(StartupProfile.includes(:user => :user_profile).find(params[:id]).website_url, StartupProfile.includes(:user => :user_profile).find(params[:id]).website_url, :target => "_blank", :rel => "noreferrer", :class => "text-purple-600 hover:underline")
+File: app/views/pages/startup_profile.html.erb
+Line: 52
+
+Confidence: Weak
+Category: Reverse Tabnabbing
+Check: ReverseTabnabbing
+Message: When opening a link in a new tab without setting `rel: "noopener noreferrer"`, the new tab can control the parent tab's location. For example, an attacker could redirect to a phishing page.
+Code: link_to(StartupProfile.includes(:user => :user_profile).find(params[:id]).user.user_profile.linkedin_url, :target => "_blank", :rel => "noreferrer", :class => "inline-flex items-center text-sm text-blue-600 hover:text-blue-800")
+File: app/views/pages/startup_profile.html.erb
+Line: 93
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `SupportTicket#find`
+Code: SupportTicket.find(params[:id])
+File: app/controllers/admin/support_tickets_controller.rb
+Line: 6
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `MentorshipRequest#find`
+Code: MentorshipRequest.find(params[:id])
+File: app/controllers/api/v1/mentorship_requests_controller.rb
+Line: 31
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Mentor#find`
+Code: Mentor.find(params[:id])
+File: app/controllers/founder/mentors_controller.rb
+Line: 7
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Mentor#find_by`
+Code: Mentor.find_by(:id => params[:request_mentor])
+File: app/controllers/founder/mentorship_controller.rb
+Line: 9
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Mentor#find_by`
+Code: Mentor.find_by(:id => params[:mentor_id])
+File: app/controllers/founder/mentorship_requests_controller.rb
+Line: 10
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `SupportTicket#find`
+Code: SupportTicket.find(params[:id])
+File: app/controllers/rails_admin/support_tickets_controller.rb
+Line: 4
+

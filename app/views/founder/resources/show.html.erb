@@ -33,7 +33,7 @@
       <div class="border-t pt-6">
         <h3 class="font-medium text-gray-700 mb-4">Content Preview</h3>
         <div class="prose max-w-none">
-          <%= @resource.content.html_safe %>
+          <%= sanitize(@resource.content) %>
         </div>
       </div>
     <% end %>

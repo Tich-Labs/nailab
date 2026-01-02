@@ -15,7 +15,7 @@
           <% if @program.description.respond_to?(:body) && @program.description.body.present? %>
             <%= @program.description.body.to_trix_html %>
           <% else %>
-            <%= @program.description.to_s.html_safe %>
+            <%= sanitize(@program.description.to_s) %>
           <% end %>
         </div>
         <div class="mt-6">

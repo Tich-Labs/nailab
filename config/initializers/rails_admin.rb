@@ -91,16 +91,16 @@ RailsAdmin.config do |config|
       field :category
       field :status, :enum do
         enum do
-          { 'open' => 'open', 'in_progress' => 'in_progress', 'resolved' => 'resolved', 'closed' => 'closed' }
+          { "open" => "open", "in_progress" => "in_progress", "resolved" => "resolved", "closed" => "closed" }
         end
         pretty_value do
           status_colors = {
-            'open' => 'badge badge-warning',
-            'in_progress' => 'badge badge-info',
-            'resolved' => 'badge badge-success',
-            'closed' => 'badge badge-secondary'
+            "open" => "badge badge-warning",
+            "in_progress" => "badge badge-info",
+            "resolved" => "badge badge-success",
+            "closed" => "badge badge-secondary"
           }
-          css_class = status_colors[value] || 'badge badge-default'
+          css_class = status_colors[value] || "badge badge-default"
           "<span class='#{css_class}'>#{value.humanize}</span>".html_safe
         end
       end
@@ -120,16 +120,16 @@ RailsAdmin.config do |config|
       field :category
       field :status, :enum do
         enum do
-          { 'open' => 'open', 'in_progress' => 'in_progress', 'resolved' => 'resolved', 'closed' => 'closed' }
+          { "open" => "open", "in_progress" => "in_progress", "resolved" => "resolved", "closed" => "closed" }
         end
         pretty_value do
           status_colors = {
-            'open' => 'badge badge-warning',
-            'in_progress' => 'badge badge-info',
-            'resolved' => 'badge badge-success',
-            'closed' => 'badge badge-secondary'
+            "open" => "badge badge-warning",
+            "in_progress" => "badge badge-info",
+            "resolved" => "badge badge-success",
+            "closed" => "badge badge-secondary"
           }
-          css_class = status_colors[value] || 'badge badge-default'
+          css_class = status_colors[value] || "badge badge-default"
           "<span class='#{css_class}'>#{value.humanize}</span>".html_safe
         end
       end

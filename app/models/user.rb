@@ -33,7 +33,7 @@ class User < ApplicationRecord
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
   has_many :mentorship_requests, foreign_key: :founder_id, dependent: :destroy
-  has_many :received_mentorship_requests, class_name: 'MentorshipRequest', foreign_key: :mentor_id, dependent: :destroy
+  has_many :received_mentorship_requests, class_name: "MentorshipRequest", foreign_key: :mentor_id, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :conversations, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
@@ -41,7 +41,7 @@ class User < ApplicationRecord
   has_one :subscription, dependent: :destroy
   has_many :connections, dependent: :destroy
   has_many :peer_messages, foreign_key: :sender_id, dependent: :destroy
-  has_many :received_peer_messages, class_name: 'PeerMessage', foreign_key: :recipient_id, dependent: :destroy
+  has_many :received_peer_messages, class_name: "PeerMessage", foreign_key: :recipient_id, dependent: :destroy
   has_many :identities, dependent: :destroy
   has_many :support_tickets, dependent: :destroy
   has_many :support_ticket_replies, as: :user, dependent: :destroy

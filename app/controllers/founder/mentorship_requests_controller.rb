@@ -21,9 +21,9 @@ class Founder::MentorshipRequestsController < Founder::BaseController
   def create
     @request = current_user.mentorship_requests.build(mentorship_request_params)
     if @request.save
-      redirect_to founder_mentorship_requests_path, notice: 'Request sent.'
+      redirect_to founder_mentorship_requests_path, notice: "Request sent."
     else
-      redirect_back fallback_location: founder_mentorship_path, alert: 'Error.'
+      redirect_back fallback_location: founder_mentorship_path, alert: "Error."
     end
   end
 

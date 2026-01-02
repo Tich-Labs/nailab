@@ -4,7 +4,7 @@ module PricingPageConcern
   private
 
   def load_pricing_content
-    @pricing_page = PricingPage.first || PricingPage.new(title: 'Pricing')
+    @pricing_page = PricingPage.first || PricingPage.new(title: "Pricing")
     structured_content = parse_pricing_structured_content(@pricing_page.content)
     @pricing_tiers = PricingContent.tiers(structured_content)
     @pricing_hero = PricingContent.hero(structured_content)

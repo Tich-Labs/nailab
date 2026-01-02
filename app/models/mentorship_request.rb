@@ -1,8 +1,8 @@
 class MentorshipRequest < ApplicationRecord
-  enum :status, { pending: 'pending', accepted: 'accepted', declined: 'declined', reschedule_requested: 'reschedule_requested' }, suffix: true
+  enum :status, { pending: "pending", accepted: "accepted", declined: "declined", reschedule_requested: "reschedule_requested" }, suffix: true
 
-  belongs_to :founder, class_name: 'User'
-  belongs_to :mentor, class_name: 'User'
+  belongs_to :founder, class_name: "User"
+  belongs_to :mentor, class_name: "User"
 
   validates :mentor_id, presence: true
 

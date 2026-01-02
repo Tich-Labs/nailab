@@ -12,7 +12,7 @@ class RegistrationsController < Devise::RegistrationsController
       end
       # Mentor onboarding
       if session[:mentor_onboarding_profile]
-        user_profile = user.build_user_profile(session[:mentor_onboarding_profile].merge(role: 'mentor'))
+        user_profile = user.build_user_profile(session[:mentor_onboarding_profile].merge(role: "mentor"))
         user_profile.save
       end
       # Send confirmation email (Devise confirmable handles this)
@@ -26,7 +26,7 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    if resource.user_profile&.role == 'mentor'
+    if resource.user_profile&.role == "mentor"
       mentor_root_path
     else
       founder_root_path

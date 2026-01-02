@@ -4,9 +4,9 @@ class Founder::OpportunitySubmissionsController < Founder::BaseController
   def create
     @submission = @opportunity.submissions.build(submission_params.merge(user: current_user))
     if @submission.save
-      redirect_to founder_opportunity_path(@opportunity), notice: 'Submitted.'
+      redirect_to founder_opportunity_path(@opportunity), notice: "Submitted."
     else
-      redirect_back fallback_location: founder_opportunity_path(@opportunity), alert: 'Error.'
+      redirect_back fallback_location: founder_opportunity_path(@opportunity), alert: "Error."
     end
   end
 

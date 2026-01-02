@@ -1,11 +1,10 @@
 class Founder::PeerMessagesController < Founder::BaseController
-
   def create
     @message = PeerMessage.create(peer_message_params.merge(sender: current_user))
     if @message.save
-      redirect_back fallback_location: founder_community_path, notice: 'Message sent.'
+      redirect_back fallback_location: founder_community_path, notice: "Message sent."
     else
-      redirect_back fallback_location: founder_community_path, alert: 'Error.'
+      redirect_back fallback_location: founder_community_path, alert: "Error."
     end
   end
 

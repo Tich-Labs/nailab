@@ -138,14 +138,14 @@
           <div>
             <dt class="text-sm font-medium text-gray-500">Hours per Month</dt>
             <dd class="text-sm text-gray-900">
-              <% case @profile.availability_hours_month %>
-              <% when 2 %> Up to 2 hours/week
-              <% when 4 %> 3–5 hours/month
-              <% when 8 %> 6–10 hours/month
-              <% when 12 %> 10+ hours/month
-              <% when 0 %> Flexible
-              <% else %> Not specified
-              <% end %>
+              <%= case @profile.availability_hours_month
+                 when 2 then 'Up to 2 hours/week'
+                 when 4 then '3–5 hours/month'
+                 when 8 then '6–10 hours/month'
+                 when 12 then '10+ hours/month'
+                 when 0 then 'Flexible'
+                 else 'Not specified'
+                end %>
             </dd>
           </div>
           <div>
@@ -168,7 +168,7 @@
             <dt class="text-sm font-medium text-gray-500">LinkedIn/Profile</dt>
             <dd class="text-sm text-gray-900">
               <% if @profile.linkedin_url.present? %>
-                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', class: 'text-teal-600 hover:text-teal-700' %>
+                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', rel: 'noopener noreferrer', class: 'text-teal-600 hover:text-teal-700' %>
               <% else %>
                 Not provided
               <% end %>

@@ -1,0 +1,4 @@
+== Gemfile ==
+C: 68: 40: [Corrected] Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+
+280 files inspected, 1 offense detected, 1 offense corrected

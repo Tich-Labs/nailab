@@ -1,6 +1,6 @@
 module Admin
   class SupportTicketsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: [:reply]
+    skip_before_action :verify_authenticity_token, only: [ :reply ]
 
     def reply
       @ticket = SupportTicket.find(params[:id])

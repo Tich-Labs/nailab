@@ -718,7 +718,7 @@ support_ticket_data = [
 
 support_ticket_data.each do |ticket_attrs|
   next unless ticket_attrs[:user] # Skip if user doesn't exist
-  
+
   ticket = SupportTicket.find_or_initialize_by(
     user: ticket_attrs[:user],
     subject: ticket_attrs[:subject]

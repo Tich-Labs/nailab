@@ -1,0 +1,225 @@
+
+Source Code: |===============================================================================|
+[31m/home/tich/Documents/nailab-rails/db/migrate/20251231_seed_major_partners.rb:31 - isolate seed data[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_welcome_banner.html.erb:4 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/mentorship/index.html.erb:128 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/sessions/index.html.erb:9 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/sessions/index.html.erb:12 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/sessions/index.html.erb:13 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/sessions/show.html.erb:15 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/sessions/show.html.erb:16 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder_onboarding/_summary.html.erb:5 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/config/initializers/rails_admin_dashboard.rb:77 - law of demeter[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:47 - move code into helper (array_count >= 3)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:19 - move code into helper (array_count >= 3)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/mentor_directory.html.erb:44 - move code into helper (array_count >= 3)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/rails_admin/main/reply.html.erb:61 - move code into helper (array_count >= 3)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/layouts/application.html.erb:19 - move code into model (request use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:25 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:40 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:13 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:22 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:32 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:22 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:40 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:14 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:24 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:13 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:26 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:38 - move code into model (@profile use_count > 2)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/admin/support_tickets_controller.rb:5 - move model logic into model (@ticket use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/mentor_profiles_controller.rb:4 - move model logic into model (mentors use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/mentorship_requests_controller.rb:30 - move model logic into model (request use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/onboarding_controller.rb:4 - move model logic into model (user use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/onboarding_controller.rb:4 - move model logic into model (startup use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/programs_controller.rb:4 - move model logic into model (programs use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/resources_controller.rb:4 - move model logic into model (resources use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/startup_profiles_controller.rb:4 - move model logic into model (startups use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/dashboard_controller.rb:4 - move model logic into model (current_user use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:6 - move model logic into model (@user_profile use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:6 - move model logic into model (current_user use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:6 - move model logic into model (@startup_profile use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:22 - move model logic into model (current_user use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:22 - move model logic into model (@startup_profile use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:85 - move model logic into model (current_user use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/founder_onboarding_controller.rb:85 - move model logic into model (@startup_profile use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/google_calendar_controller.rb:24 - move model logic into model (auth_client use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/mentor_onboarding_controller.rb:8 - move model logic into model (STEPS use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/mentor_onboarding_controller.rb:91 - move model logic into model (params use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:117 - move model logic into model (@programs use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:179 - move model logic into model (scoped use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:214 - move model logic into model (scoped use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:269 - move model logic into model ( use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:307 - move model logic into model (slides use_count > 4)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/rails_admin/main/dashboard.html.erb:37 - not use time_ago_in_words[0m
+[31m/home/tich/Documents/nailab-rails/app/helpers/users/omniauth_callbacks_helper.rb:1 - remove empty helpers[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/mentorship_requests_controller.rb:30 - remove unused methods (Api::V1::MentorshipRequestsController#respond)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/registrations_controller.rb:9 - remove unused methods (Api::V1::RegistrationsController#respond_with)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/sessions_controller.rb:9 - remove unused methods (Api::V1::SessionsController#respond_with)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/api/v1/sessions_controller.rb:13 - remove unused methods (Api::V1::SessionsController#respond_to_on_destroy)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/application_controller.rb:28 - remove unused methods (ApplicationController#after_sign_up_path_for)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/application_controller.rb:32 - remove unused methods (ApplicationController#after_sign_in_path_for)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/application_controller.rb:36 - remove unused methods (ApplicationController#after_sign_out_path_for)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/mentor_portal/sessions_controller.rb:17 - remove unused methods (MentorPortal::SessionsController#add_to_calendar)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/pages_controller.rb:251 - remove unused methods (PagesController#home_content_json)[0m
+[31m/home/tich/Documents/nailab-rails/app/controllers/registrations_controller.rb:28 - remove unused methods (RegistrationsController#after_sign_up_path_for)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:43 - remove unused methods (Mentor#company)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:44 - remove unused methods (Mentor#name)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:45 - remove unused methods (Mentor#specialties)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:46 - remove unused methods (Mentor#industries)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:47 - remove unused methods (Mentor#availability)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentor.rb:49 - remove unused methods (Mentor#role)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/mentorship_request.rb:10 - remove unused methods (MentorshipRequest#recent)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/program.rb:14 - remove unused methods (Program#rails_admin_preview_path)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/resource.rb:15 - remove unused methods (Resource#rails_admin_preview_path)[0m
+[31m/home/tich/Documents/nailab-rails/app/models/user.rb:55 - remove unused methods (User#from_omniauth)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_progress_charts.html.erb:29 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_recommended_mentors.html.erb:12 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_startup_profile_summary.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_startup_profile_summary.html.erb:17 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_startup_profile_summary.html.erb:21 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_startup_profile_summary.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_startup_profile_summary.html.erb:29 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_welcome_banner.html.erb:4 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/dashboard/_welcome_banner.html.erb:4 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:7 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:26 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:41 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:47 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:71 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_availability.html.erb:72 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:7 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:14 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:23 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:32 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:32 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:32 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_basic_details.html.erb:33 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:7 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:16 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:23 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:34 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:40 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:41 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:52 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:58 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_focus.html.erb:59 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:7 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:14 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:14 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:14 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:15 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:24 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:24 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:24 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_mentorship_style.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:8 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:21 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:29 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:45 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:49 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:53 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:70 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:75 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:83 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:88 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:96 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:101 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:120 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:124 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:141 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:153 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:158 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:160 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:161 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:161 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:170 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:171 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_review.html.erb:171 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:7 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:13 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:14 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:24 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:26 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:26 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:26 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:27 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:38 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:38 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:38 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:39 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/mentor_onboarding/steps/_work_experience.html.erb:42 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_bottom_cta.html.erb:2 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_connect_grow_impact.html.erb:5 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_connect_grow_impact.html.erb:9 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_hero.html.erb:2 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_hero.html.erb:3 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_partners.html.erb:6 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_testimonials.html.erb:26 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_who_we_are.html.erb:2 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:2 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:2 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:12 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:17 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:17 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:19 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:22 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/programs/_category_filter.html.erb:1 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/programs/_program_list.html.erb:3 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/programs/_program_list.html.erb:11 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/shared/_public_header.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/app/views/shared/_public_header.html.erb:25 - replace instance variable with local variable[0m
+[31m/home/tich/Documents/nailab-rails/config/routes.rb:74 - restrict auto-generated routes admin/support_tickets (only: [])[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder_onboarding/show.html.erb:133 - simplify render in views[0m
+[31m/home/tich/Documents/nailab-rails/app/services/matching_service.rb:76 - use query attribute (@startup_profile.sector?)[0m
+[31m/home/tich/Documents/nailab-rails/app/services/matching_service.rb:81 - use query attribute (@startup_profile.stage?)[0m
+[31m/home/tich/Documents/nailab-rails/app/services/matching_service.rb:93 - use query attribute (@startup_profile.location?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/mentors/show.html.erb:7 - use query attribute (@mentor.photo?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/mentors/show.html.erb:34 - use query attribute (@mentor.expertise?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/founder/resources/show.html.erb:32 - use query attribute (@resource.content?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_testimonials.html.erb:30 - use query attribute (testimonial.photo_url?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_testimonials.html.erb:34 - use query attribute (testimonial.organization?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/home/_testimonials.html.erb:35 - use query attribute (testimonial.website_url?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/mentor_directory.html.erb:76 - use query attribute (mentor.title?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/mentor_directory.html.erb:113 - use query attribute (mentor.expertise?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/pricing.html.erb:7 - use query attribute (@pricing_page.content?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail/_hero.html.erb:19 - use query attribute (@program.category?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail.html.erb:15 - use query attribute (@program.description.body?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail.html.erb:24 - use query attribute (@program.start_date?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/program_detail.html.erb:27 - use query attribute (@program.end_date?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/resource_detail.html.erb:13 - use query attribute (@resource.url?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/resources/resource_detail.html.erb:13 - use query attribute (@resource.url?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_directory.html.erb:81 - use query attribute (startup.stage?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_directory.html.erb:90 - use query attribute (startup.sector?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_directory.html.erb:96 - use query attribute (startup.location?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_profile.html.erb:6 - use query attribute (@startup_profile.stage?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_profile.html.erb:9 - use query attribute (@startup_profile.sector?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_profile.html.erb:12 - use query attribute (@startup_profile.funding_stage?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_profile.html.erb:48 - use query attribute (@startup_profile.location?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/startup_profile.html.erb:51 - use query attribute (@startup_profile.website_url?)[0m
+[31m/home/tich/Documents/nailab-rails/db/seeds.rb:21 - use query attribute (user.confirmed_at?)[0m
+[31m/home/tich/Documents/nailab-rails/app/views/pages/contact.html.erb:73 - remove trailing whitespace[0m
+[32m
+Please go to https://rails-bestpractices.com to see more useful Rails Best Practices.[0m
+[31m
+Found 219 warnings.[0m
