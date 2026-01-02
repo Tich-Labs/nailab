@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_03_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "about_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -42,6 +49,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "blog_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bookmarks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "resource_id", null: false
@@ -60,6 +74,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["user_id"], name: "index_connections_on_user_id"
   end
 
+  create_table "contact_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "mentor_id", null: false
@@ -67,6 +88,22 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.bigint "user_id", null: false
     t.index ["mentor_id"], name: "index_conversations_on_mentor_id"
     t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
+  create_table "events_webinars_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.text "answer", null: false
+    t.datetime "created_at", null: false
+    t.integer "display_order", default: 1, null: false
+    t.text "question", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "focus_areas", force: :cascade do |t|
@@ -94,6 +131,19 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["display_order"], name: "index_hero_slides_on_display_order"
   end
 
+  create_table "home_pages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.jsonb "structured_content", default: {}, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "homepages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "identities", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "provider"
@@ -109,15 +159,24 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "knowledge_hub_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mentors", force: :cascade do |t|
     t.text "bio"
     t.datetime "created_at", null: false
     t.string "expertise"
     t.string "name"
     t.string "photo"
+    t.string "slug"
     t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_mentors_on_slug", unique: true
     t.index ["user_id"], name: "index_mentors_on_user_id"
   end
 
@@ -213,6 +272,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "opportunities_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "opportunity_submissions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "details"
@@ -245,6 +311,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["sender_id"], name: "index_peer_messages_on_sender_id"
   end
 
+  create_table "pricing_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "programs", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.string "category"
@@ -262,6 +335,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.datetime "updated_at", null: false
     t.index ["active"], name: "index_programs_on_active"
     t.index ["slug"], name: "index_programs_on_slug", unique: true
+  end
+
+  create_table "programs_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
   end
 
   create_table "ratings", force: :cascade do |t|
@@ -287,6 +367,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.string "url"
     t.index ["active"], name: "index_resources_on_active"
     t.index ["published_at"], name: "index_resources_on_published_at"
+    t.index ["slug"], name: "index_resources_on_slug", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -316,6 +397,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.string "preferred_mentorship_mode"
     t.boolean "profile_visibility", default: false, null: false
     t.string "sector"
+    t.string "slug"
     t.string "stage"
     t.string "startup_name", null: false
     t.text "target_market"
@@ -325,6 +407,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.text "value_proposition"
     t.string "website_url"
     t.index ["active"], name: "index_startup_profiles_on_active"
+    t.index ["slug"], name: "index_startup_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_startup_profiles_on_user_id"
   end
 
@@ -347,6 +430,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
   end
 
   create_table "static_pages", force: :cascade do |t|
+    t.string "contact_address"
+    t.string "contact_email"
+    t.string "contact_phone"
     t.text "content"
     t.datetime "created_at", null: false
     t.string "slug", null: false
@@ -366,6 +452,45 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
+  create_table "support_messages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "message", null: false
+    t.string "sender_type", default: "user", null: false
+    t.bigint "support_ticket_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["sender_type"], name: "index_support_messages_on_sender_type"
+    t.index ["support_ticket_id"], name: "index_support_messages_on_support_ticket_id"
+    t.index ["user_id"], name: "index_support_messages_on_user_id"
+  end
+
+  create_table "support_ticket_replies", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.bigint "support_ticket_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.string "user_type"
+    t.index ["support_ticket_id"], name: "index_support_ticket_replies_on_support_ticket_id"
+    t.index ["user_id"], name: "index_support_ticket_replies_on_user_id"
+    t.index ["user_type", "user_id"], name: "index_support_ticket_replies_on_user"
+    t.index ["user_type"], name: "index_support_ticket_replies_on_user_type"
+  end
+
+  create_table "support_tickets", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.text "description", null: false
+    t.string "portal"
+    t.string "status", default: "open", null: false
+    t.string "subject", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["portal"], name: "index_support_tickets_on_portal"
+    t.index ["status"], name: "index_support_tickets_on_status"
+    t.index ["user_id"], name: "index_support_tickets_on_user_id"
+  end
+
   create_table "testimonials", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.string "author_name", null: false
@@ -377,6 +502,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.text "quote"
     t.integer "rating", default: 5, null: false
     t.datetime "updated_at", null: false
+    t.string "website_url"
     t.index ["active"], name: "index_testimonials_on_active"
     t.index ["display_order"], name: "index_testimonials_on_display_order"
   end
@@ -414,12 +540,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.decimal "rate_per_hour", precision: 10, scale: 2
     t.string "role"
     t.jsonb "sectors"
+    t.string "slug"
     t.jsonb "stage_preference"
     t.string "time_zone"
     t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "years_experience"
+    t.index ["slug"], name: "index_user_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_user_profiles_on_user_id", unique: true
   end
 
@@ -433,11 +561,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "slug"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -471,5 +601,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_120000) do
   add_foreign_key "startup_profiles", "users"
   add_foreign_key "startups", "users"
   add_foreign_key "subscriptions", "users"
+  add_foreign_key "support_messages", "support_tickets"
+  add_foreign_key "support_messages", "users"
+  add_foreign_key "support_ticket_replies", "support_tickets"
+  add_foreign_key "support_tickets", "users"
   add_foreign_key "user_profiles", "users"
 end

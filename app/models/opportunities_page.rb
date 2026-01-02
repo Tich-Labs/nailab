@@ -1,0 +1,2 @@
+class OpportunitiesPage < ApplicationRecord
+end

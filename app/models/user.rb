@@ -1,4 +1,25 @@
 class User < ApplicationRecord
+    before_validation :set_slug
+    validates :slug, presence: true, uniqueness: true
+
+    def to_param
+      slug.presence || super
+    end
+
+    private
+
+    def set_slug
+      return unless slug.blank?
+
+      base = (full_name || email || id.to_s).parameterize
+      candidate = base
+      counter = 2
+      while self.class.where(slug: candidate).where.not(id: id).exists?
+        candidate = "#{base}-#{counter}"
+        counter += 1
+      end
+      self.slug = candidate
+    end
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -22,6 +43,8 @@ class User < ApplicationRecord
   has_many :peer_messages, foreign_key: :sender_id, dependent: :destroy
   has_many :received_peer_messages, class_name: 'PeerMessage', foreign_key: :recipient_id, dependent: :destroy
   has_many :identities, dependent: :destroy
+  has_many :support_tickets, dependent: :destroy
+  has_many :support_ticket_replies, as: :user, dependent: :destroy
 
   delegate :full_name, to: :user_profile, prefix: false, allow_nil: true
 

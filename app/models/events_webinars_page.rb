@@ -1,0 +1,2 @@
+class EventsWebinarsPage < ApplicationRecord
+end

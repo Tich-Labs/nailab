@@ -1,7 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
-require 'devise'
+require "devise"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -28,6 +28,10 @@ module NailabBackend
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.autoload_paths << config.root.join("app/serializers")
+
+    initializer "nailab_backend.ignore_app_admin" do
+      Rails.autoloaders.main.ignore(Rails.root.join("app/admin"))
+    end
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.

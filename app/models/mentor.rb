@@ -1,4 +1,25 @@
 class Mentor < ApplicationRecord
+    before_validation :set_slug
+    validates :slug, presence: true, uniqueness: true
+
+    def to_param
+      slug.presence || super
+    end
+
+    private
+
+    def set_slug
+      return unless slug.blank?
+
+      base = (full_name || user&.email || id.to_s).parameterize
+      candidate = base
+      counter = 2
+      while self.class.where(slug: candidate).where.not(id: id).exists?
+        candidate = "#{base}-#{counter}"
+        counter += 1
+      end
+      self.slug = candidate
+    end
   belongs_to :user
 
   delegate :organization, to: :user_profile, prefix: false, allow_nil: true

@@ -112,7 +112,6 @@ class PagesController < ApplicationController
   end
 
   def about
-    @static_page = StaticPage.find_by(slug: "about")
   end
 
   def programs
@@ -246,41 +245,7 @@ class PagesController < ApplicationController
   end
 
   def contact
-    @static_page = StaticPage.find_by(slug: "contact")
-    @faqs = [
-      {
-        q: "What kind of startups does Nailab support?",
-        a: "Nailab supports early-stage and growth-stage startups leveraging innovation to tackle Africa’s most pressing social challenges across key sectors including fintech, agritech, healthtech, edtech, SaaS, cleantech, creative & mediatech, e-commerce & retailtech, mobility & logisticstech, and social impact. We partner with passionate founders with a clear vision and deep understanding of the challenges they are addressing."
-      },
-      {
-        q: "How do I apply for Nailab's programs?",
-        a: "We regularly announce open application windows on our website (nailab.org/programs) and social media channels. Check the Programs page for current calls, eligibility criteria, and application links."
-      },
-      {
-        q: "What does a typical incubation or acceleration program involve?",
-        a: "Our programs typically run for 3–6 months and include:\n• 1-on-1 and group mentorship from experienced entrepreneurs\n• Hands-on workshops on business modeling, product development, marketing, finance, legal, and pitching\n• Investor readiness training and pitch coaching\n• Networking events, demo days, and investor introductions\n• Seed funding or grant matching in select programs"
-      },
-      {
-        q: "What stage should my startup be at to apply?",
-        a: "We run programs for all stages – from idea validation to growth/scaling. Some are tailored for pre-MVP founders, others for startups with traction or revenue. Review each program's specific criteria on the Programs page."
-      },
-      {
-        q: "Does Nailab provide funding to startups?",
-        a: "Yes – many of our programs include seed grants, equity-free funding, or structured investor matchmaking through demo days and pitch events."
-      },
-      {
-        q: "How can I become a Nailab mentor?",
-        a: "Visit nailab.org/mentors (or the 'Become a Mentor' CTA on the homepage) to submit your application. We’re always looking for experienced founders, executives, and domain experts passionate about giving back."
-      },
-      {
-        q: "How can I request mentorship as a founder?",
-        a: "Once registered on the platform, you can browse mentor profiles and book 1-on-1 sessions directly. For general inquiries, reach out via this contact form."
-      },
-      {
-        q: "How can I partner with Nailab?",
-        a: "We love co-creating programs with corporates, governments, foundations, and development agencies. Use this contact form or email info@nailab.co.ke with your partnership idea."
-      }
-    ]
+    @faqs = Faq.active.order(:display_order)
   end
 
   def home_content_json
@@ -302,20 +267,37 @@ class PagesController < ApplicationController
   end
 
   def load_home_content
-    @home_static_page = StaticPage.find_or_initialize_by(slug: "home")
-    @home_content_json = (@home_static_page.structured_content || {}).with_indifferent_access
-    hero_json = (@home_content_json[:hero] || {}).with_indifferent_access
+    homepage = HomePage.first
+    raw_structured = homepage&.structured_content || {}
+    @home_content_json = case raw_structured
+    when Hash
+      raw_structured.with_indifferent_access
+    when String
+      begin
+        parsed = JSON.parse(raw_structured)
+        parsed.is_a?(Hash) ? parsed.with_indifferent_access : {}
+      rescue JSON::ParserError
+        {}
+      end
+    when NilClass
+      {}
+    else
+      Rails.logger.warn("Unexpected type for structured_content: \\#{raw_structured.class}")
+      {}
+    end.with_indifferent_access
+
+    hero_json = (@home_content_json[:hero].is_a?(Hash) ? @home_content_json[:hero] : {}).with_indifferent_access
     json_slides = hero_slides_from_json(hero_json)
     @hero_slides = json_slides.presence || @hero_slides
     @hero_badge = hero_json[:badge].presence || "Startup growth, made in Africa"
-    @hero_secondary_cta = (hero_json[:secondary_cta] || default_hero_secondary_cta).with_indifferent_access
-    @who_we_are_content = (@home_content_json[:who_we_are] || {}).with_indifferent_access
-    @how_we_support_items = (@home_content_json[:how_we_support].presence || DEFAULT_SUPPORT_ITEMS).map { |item| item.with_indifferent_access }
-    connect_json = (@home_content_json[:connect_grow_impact] || {}).with_indifferent_access
+    @hero_secondary_cta = (hero_json[:secondary_cta].is_a?(Hash) ? hero_json[:secondary_cta] : default_hero_secondary_cta).with_indifferent_access
+    @who_we_are_content = (@home_content_json[:who_we_are].is_a?(Hash) ? @home_content_json[:who_we_are] : {}).with_indifferent_access
+    @how_we_support_items = (@home_content_json[:how_we_support].is_a?(Array) ? @home_content_json[:how_we_support] : DEFAULT_SUPPORT_ITEMS).map { |item| item.is_a?(Hash) ? item.with_indifferent_access : {} }
+    connect_json = (@home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}).with_indifferent_access
     @connect_intro = connect_json[:intro].presence || DEFAULT_CONNECT_INTRO
     @connect_stats = connect_json[:stats].presence || DEFAULT_CONNECT_STATS
-    @connect_cards = connect_json[:cards].presence ? connect_json[:cards].map { |card| card.with_indifferent_access } : DEFAULT_CONNECT_CARDS
-    bottom_cta_json = (@home_content_json[:bottom_cta] || {}).with_indifferent_access
+    @connect_cards = connect_json[:cards].is_a?(Array) ? connect_json[:cards].map { |card| card.is_a?(Hash) ? card.with_indifferent_access : {} } : DEFAULT_CONNECT_CARDS
+    bottom_cta_json = (@home_content_json[:bottom_cta].is_a?(Hash) ? @home_content_json[:bottom_cta] : {}).with_indifferent_access
     @bottom_cta_content = DEFAULT_BOTTOM_CTA.deep_dup
     @bottom_cta_content.deep_merge!(bottom_cta_json)
     @bottom_cta_content = @bottom_cta_content.with_indifferent_access

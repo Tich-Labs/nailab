@@ -1,4 +1,16 @@
 class UserProfile < ApplicationRecord
+    before_validation :set_slug, on: :create
+    validates :slug, presence: true, uniqueness: true
+
+    def to_param
+      slug.presence || super
+    end
+
+    private
+
+    def set_slug
+      self.slug ||= (full_name || user&.email || id.to_s).parameterize if slug.blank?
+    end
   belongs_to :user
 
   # Validations

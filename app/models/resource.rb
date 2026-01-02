@@ -1,6 +1,15 @@
 class Resource < ApplicationRecord
-	def slug
-		title.parameterize
+	before_validation :set_slug, on: :create
+	validates :slug, presence: true, uniqueness: true
+
+	def to_param
+		slug.presence || super
+	end
+
+	private
+
+	def set_slug
+		self.slug ||= (title || id.to_s).parameterize if slug.blank?
 	end
 
 	def rails_admin_preview_path

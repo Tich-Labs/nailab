@@ -37,7 +37,7 @@ Rails.application.routes.draw do
         post "sign_up", to: "registrations#create"
       end
       resource(:me, controller: "profiles", only: %i[show])
-      resources(:hero_slides, only: %i[index])
+      # resources(:hero_slides, only: %i[index])
       resources(:partners, only: %i[index])
       resources(:testimonials, only: %i[index])
       resources(:programs, param: :slug, only: %i[index show])
@@ -53,7 +53,30 @@ Rails.application.routes.draw do
     end
   end
 
+  # Block redundant RailsAdmin endpoints (these models are intentionally excluded from admin).
+  match "/admin/user(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/user_profile(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/identity(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/notification(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/jwt_denylist(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/conversation(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/message(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/peer_message(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/opportunity(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/milestone(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/opportunity_submission(/*path)", to: redirect("/admin"), via: :all
+  match "/admin/hero_slide(/*path)", to: redirect("/admin"), via: :all
+
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
+
+  # Admin support ticket replies
+  namespace :admin do
+    resources :support_tickets do
+      member do
+        post :reply
+      end
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -120,6 +143,12 @@ Rails.application.routes.draw do
     resource(:subscription, only: %i[show new create])
 
     get "support", to: "support#show"
+    post "support/tickets", to: "support_tickets#create", as: :support_tickets
+    resources :support_tickets, only: [:show] do
+      member do
+        post :reply
+      end
+    end
   end
 
   namespace :mentor, module: "mentor_portal" do
@@ -152,6 +181,12 @@ Rails.application.routes.draw do
     resource(:profile, controller: "profiles", only: %i[show edit update])
     resource(:settings, only: %i[show update])
     get "support", to: "support#show"
+    post "support/tickets", to: "support_tickets#create", as: :support_tickets
+    resources :support_tickets, only: [:show] do
+      member do
+        post :reply
+      end
+    end
   end
 
   get "auth/google_oauth2/callback", to: "google_calendar#callback"

@@ -1,0 +1,2 @@
+class PricingPage < ApplicationRecord
+end

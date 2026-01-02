@@ -62,3 +62,5 @@ group :development, :test do
   gem "selenium-webdriver"
 end
 gem "sassc-rails"
+
+gem "tailwindcss-rails", "~> 4.4"

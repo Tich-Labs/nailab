@@ -3,25 +3,30 @@
 <% hero_slides = @hero_slides || [] %>
 
 <div class="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
-  <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-24 py-20 items-center relative">
-    <div class="text-nailab-purple">
+  <div class="hero-layout flex flex-col md:flex-row items-start md:items-center gap-12 md:gap-20 py-20">
+    <div class="hero-col flex-1 min-w-0 text-nailab-purple">
       <h1 class="font-medium mb-6 text-4xl md:text-5xl">
         Grow your <span class="text-nailab-yellow">startup</span> with people who’ve done it before.
       </h1>
       <p class="text-gray-700 text-lg md:text-xl mb-10 max-w-3xl">
         Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a href="/founder_onboarding" class="px-6 py-3 rounded-md inline-flex items-center justify-center bg-purple-600 text-white font-bold hover:bg-purple-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+      <div class="flex flex-row gap-4 items-center">
+        <a href="/founder_onboarding" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-purple-600 text-white font-bold hover:bg-purple-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
           Request Mentorship
         </a>
-        <a href="/mentor_onboarding" class="px-6 py-3 rounded-md inline-flex items-center justify-center bg-yellow-300 text-purple-700 font-bold hover:bg-yellow-400 hover:text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+        <a href="/mentor_onboarding" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-yellow-300 text-purple-700 font-bold hover:bg-yellow-400 hover:text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
           Become a Mentor
         </a>
       </div>
     </div>
-    <div class="hidden md:flex justify-center items-center overflow-hidden">
-      <%= image_tag 'images-events/Funding_Access.original.jpg', alt: 'Funding Access', class: 'rounded-2xl shadow-2xl w-full h-auto object-cover' %>
+
+    <div class="hero-col flex-1 min-w-0 mt-8 md:mt-0 md:flex md:justify-end relative">
+      <div class="relative rounded-2xl overflow-hidden shadow-xl w-full max-w-lg">
+        <%= image_tag 'images-events/Funding_Access.original.jpg', alt: 'Funding Access', class: 'w-full h-[300px] md:h-auto object-cover' %>
+      </div>
+      <div class="absolute -bottom-4 -right-4 w-40 h-40 bg-purple-100 rounded-2xl -z-10"></div>
+      <div class="absolute -top-4 -left-4 w-40 h-40 bg-teal-100 rounded-2xl -z-10"></div>
     </div>
   </div>
   <div class="flex flex-row justify-center items-center px-4 mb-8 gap-8 md:gap-20 lg:gap-24">

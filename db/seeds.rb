@@ -136,9 +136,9 @@ seed_monthly_metrics!(
     { month: Date.new(2025, 7, 1), revenue: 0,    customers: 25, runway_months: 3, burn_rate: 35000, notes: "MVP pilots started." },
     { month: Date.new(2025, 8, 1), revenue: 8000, customers: 60, runway_months: 3, burn_rate: 42000, notes: "Added 2 cooperatives." },
     { month: Date.new(2025, 9, 1), revenue: 15000, customers: 110, runway_months: 2, burn_rate: 55000, notes: "Field ops expanded." },
-    { month: Date.new(2025,10, 1), revenue: 23000, customers: 160, runway_months: 2, burn_rate: 60000, notes: "Improved retention." },
-    { month: Date.new(2025,11, 1), revenue: 35000, customers: 210, runway_months: 2, burn_rate: 62000, notes: "Tested subscription tiers." },
-    { month: Date.new(2025,12, 1), revenue: 48000, customers: 280, runway_months: 2, burn_rate: 65000, notes: "Preparing for buyer partnership." }
+    { month: Date.new(2025, 10, 1), revenue: 23000, customers: 160, runway_months: 2, burn_rate: 60000, notes: "Improved retention." },
+    { month: Date.new(2025, 11, 1), revenue: 35000, customers: 210, runway_months: 2, burn_rate: 62000, notes: "Tested subscription tiers." },
+    { month: Date.new(2025, 12, 1), revenue: 48000, customers: 280, runway_months: 2, burn_rate: 65000, notes: "Preparing for buyer partnership." }
   ]
 )
 
@@ -181,9 +181,9 @@ seed_monthly_metrics!(
     { month: Date.new(2025, 7, 1), revenue: 20000, customers: 3, runway_months: 4, burn_rate: 70000, notes: "First paid clinics." },
     { month: Date.new(2025, 8, 1), revenue: 35000, customers: 5, runway_months: 4, burn_rate: 75000, notes: "Referrals started." },
     { month: Date.new(2025, 9, 1), revenue: 50000, customers: 7, runway_months: 3, burn_rate: 90000, notes: "Support load increased." },
-    { month: Date.new(2025,10, 1), revenue: 65000, customers: 9, runway_months: 3, burn_rate: 95000, notes: "Added training sessions." },
-    { month: Date.new(2025,11, 1), revenue: 82000, customers: 12, runway_months: 3, burn_rate: 98000, notes: "New pricing tier tested." },
-    { month: Date.new(2025,12, 1), revenue: 100000, customers: 15, runway_months: 3, burn_rate: 105000, notes: "Pipeline building." }
+    { month: Date.new(2025, 10, 1), revenue: 65000, customers: 9, runway_months: 3, burn_rate: 95000, notes: "Added training sessions." },
+    { month: Date.new(2025, 11, 1), revenue: 82000, customers: 12, runway_months: 3, burn_rate: 98000, notes: "New pricing tier tested." },
+    { month: Date.new(2025, 12, 1), revenue: 100000, customers: 15, runway_months: 3, burn_rate: 105000, notes: "Pipeline building." }
   ]
 )
 
@@ -219,57 +219,6 @@ seed_milestones!(
   ]
 )
 
-seed_monthly_metrics!(
-  user: f3,
-  startup_profile: s3,
-  metrics: [
-    { month: Date.new(2025, 7, 1), revenue: 0,    customers: 80, runway_months: 5, burn_rate: 25000, notes: "Free beta users." },
-    { month: Date.new(2025, 8, 1), revenue: 5000, customers: 140, runway_months: 5, burn_rate: 28000, notes: "Started paid test." },
-    { month: Date.new(2025, 9, 1), revenue: 12000, customers: 220, runway_months: 4, burn_rate: 35000, notes: "Added reminders." },
-    { month: Date.new(2025,10, 1), revenue: 18000, customers: 320, runway_months: 4, burn_rate: 40000, notes: "Referral loop introduced." },
-    { month: Date.new(2025,11, 1), revenue: 26000, customers: 450, runway_months: 4, burn_rate: 42000, notes: "Improved onboarding." },
-    { month: Date.new(2025,12, 1), revenue: 40000, customers: 620, runway_months: 4, burn_rate: 45000, notes: "Preparing partnerships." }
-  ]
-)
-
-puts "✅ Seeded 3 founders + startup profiles + milestones + monthly metrics."
-
-# Seed hero slides
-puts "🌱 Seeding hero slides..."
-hero_slides_data = [
-  {
-    title: "Africa's Startup Network",
-    subtitle: "Connecting founders with mentors, programs, and capital across Africa's most promising industries.",
-    image_url: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    cta_text: "Join the Network",
-    cta_link: "/users/sign_up",
-    display_order: 1
-  },
-  {
-    title: "Accelerate Your Growth",
-    subtitle: "Access world-class mentorship, strategic programs, and investor connections to scale your startup.",
-    image_url: "https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    cta_text: "Browse Programs",
-    cta_link: "/programs",
-    display_order: 2
-  },
-  {
-    title: "Build the Future",
-    subtitle: "Join a thriving community of African innovators driving economic growth and social impact.",
-    image_url: "https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    cta_text: "Find Mentors",
-    cta_link: "/mentors",
-    display_order: 3
-  }
-]
-
-hero_slides_data.each do |data|
-  hero_slide = HeroSlide.find_or_initialize_by(title: data[:title])
-  hero_slide.assign_attributes(data)
-  hero_slide.save!
-end
-
-# Seed focus areas
 puts "🌱 Seeding focus areas..."
 focus_areas_data = [
   {
@@ -339,6 +288,35 @@ testimonials_data = [
     organization: "HealthBridge Medical",
     quote: "The mentorship from Nailab's network helped us navigate regulatory challenges and scale our telemedicine platform across Nigeria.",
     display_order: 3
+  },
+  # --- Homepage hardcoded testimonials ---
+  {
+    author_name: "Omar Shoukry Sakr",
+    author_role: "Founder and CEO",
+    organization: "Nawah Scientific",
+    quote: "Winning 2nd place in the Africa Netpreneur Prize Initiative (ANPI) 2019 constituted a major milestone in my startup journey. But beyond the cash prize, the exposure, networks, and partnerships I gained through the Nailab network proved far more valuable in scaling Nawah Scientific.”",
+    display_order: 4
+  },
+  {
+    author_name: "Munira Twahir",
+    author_role: "Founder and CEO",
+    organization: "Ari",
+    quote: "Being part of the I AM program in 2018-2019 not only helped me secure funding for my product development but the mentorship I received from the Nailab team of mentors was invaluable in refining our business model.",
+    display_order: 5
+  },
+  {
+    author_name: "Gabriel Mwaingo",
+    author_role: "Founder and CEO",
+    organization: "Eco Print Generation",
+    quote: "Before joining Nailab in 2024, we had a great idea and passion but lacked the experience of running a business. Through one-on-one mentorship on pitching, product–market fit, and customer discovery, Nailab helped us transform that passion into a market-ready product.",
+    display_order: 6
+  },
+  {
+    author_name: "Janet Dete",
+    author_role: "Founder and CEO",
+    organization: "Queening Afrika",
+    quote: "Through my interaction with the Nailab team and mentors during the Global Student Entrepreneur Awards (GSEA) program in 2024-2025, I learned how to articulate my venture clearly and impactfully, making it resonate with investors. I gained valuable skills in crafting a compelling pitch that highlights the social and environmental impact of Queening Afrika.",
+    display_order: 7
   }
 ]
 
@@ -409,9 +387,9 @@ mentors_data = [
     years_experience: 10,
     advisory_experience: 5,
     advisory_description: "Led operations for a $2B fintech unicorn, scaled from 50 to 500+ employees across 5 countries.",
-    sectors: ["fintech", "payments"],
-    expertise: ["operations", "scaling", "team-building"],
-    stage_preference: ["growth", "scale"],
+    sectors: [ "fintech", "payments" ],
+    expertise: [ "operations", "scaling", "team-building" ],
+    stage_preference: [ "growth", "scale" ],
     mentorship_approach: "Structured and results-oriented, combining strategic guidance with practical implementation plans. I believe in setting clear milestones and accountability while providing the tools and frameworks needed for rapid execution. My approach focuses on building scalable systems and processes that founders can implement immediately, rather than just theoretical advice. I work closely with founders to identify their biggest bottlenecks and create actionable plans to overcome them, drawing from my experience scaling operations across multiple African markets.",
     motivation: "Giving back to the African startup ecosystem that shaped my career.",
     availability_hours_month: 10,
@@ -431,9 +409,9 @@ mentors_data = [
     years_experience: 12,
     advisory_experience: 7,
     advisory_description: "Built and exited two healthtech companies, raised $15M+ in funding, and now invest in early-stage healthcare startups.",
-    sectors: ["healthcare", "healthtech"],
-    expertise: ["regulatory", "fundraising", "market-entry"],
-    stage_preference: ["mvp", "growth"],
+    sectors: [ "healthcare", "healthtech" ],
+    expertise: [ "regulatory", "fundraising", "market-entry" ],
+    stage_preference: [ "mvp", "growth" ],
     mentorship_approach: "Empathetic and patient, focusing on sustainable growth and founder well-being. Healthcare is a unique sector with complex regulatory and ethical considerations, so I prioritize understanding each founder's vision while ensuring they build compliant, ethical businesses. My mentorship style involves regular check-ins, honest feedback, and connecting founders with the right healthcare stakeholders. I believe in building long-term relationships that extend beyond just business advice to include personal development and work-life balance in the demanding healthcare entrepreneurship space.",
     motivation: "Healthcare is personal - I want to ensure more Africans have access to quality care through entrepreneurship.",
     availability_hours_month: 8,
@@ -453,9 +431,9 @@ mentors_data = [
     years_experience: 15,
     advisory_experience: 8,
     advisory_description: "Founded three B2B SaaS companies, achieved 3 successful exits, and invested in 20+ African startups.",
-    sectors: ["saas", "enterprise-software"],
-    expertise: ["sales", "enterprise", "product-market-fit"],
-    stage_preference: ["mvp", "growth", "scale"],
+    sectors: [ "saas", "enterprise-software" ],
+    expertise: [ "sales", "enterprise", "product-market-fit" ],
+    stage_preference: [ "mvp", "growth", "scale" ],
     mentorship_approach: "Direct and challenging, pushing founders to think bigger and execute faster. I don't believe in sugarcoating feedback - African startups need to compete globally from day one. My approach involves setting ambitious goals, holding founders accountable, and providing the tactical advice needed to achieve rapid growth. I focus on revenue generation, customer acquisition, and building defensible business models. While I'm direct, I'm also supportive and will roll up my sleeves to help with execution when needed, drawing from my experience building and selling multiple software companies.",
     motivation: "Africa needs more world-class software companies, and I'm here to help build them.",
     availability_hours_month: 12,
@@ -475,9 +453,9 @@ mentors_data = [
     years_experience: 9,
     advisory_experience: 4,
     advisory_description: "Led growth for pan-African tech media company, grew audience from 50K to 500K+ across 10 countries.",
-    sectors: ["media", "content", "marketing"],
-    expertise: ["growth", "marketing", "user-acquisition"],
-    stage_preference: ["mvp", "growth"],
+    sectors: [ "media", "content", "marketing" ],
+    expertise: [ "growth", "marketing", "user-acquisition" ],
+    stage_preference: [ "mvp", "growth" ],
     mentorship_approach: "Data-driven and creative, combining analytics with storytelling to drive user growth. Marketing is both an art and a science, and I help founders find the right balance for their product and market. My approach involves setting up proper analytics frameworks, A/B testing, and creative campaign strategies tailored to African markets. I believe in teaching founders how to fish rather than just giving them fish - I provide the methodologies and tools they need to become self-sufficient in their growth efforts. This includes building internal marketing capabilities and creating scalable growth systems that work across different African countries and cultures.",
     motivation: "Marketing is often overlooked in African startups - I want to change that narrative.",
     availability_hours_month: 15,
@@ -492,17 +470,22 @@ mentors_data = [
 
 mentors_data.each do |mentor_data|
   user = seed_founder!(email: mentor_data[:email], full_name: mentor_data[:full_name])
-  
+
   profile = UserProfile.find_or_initialize_by(user_id: user.id)
   profile.role = 'mentor'
   profile.onboarding_completed = true
   profile.profile_visibility = true
-  
+
   # Remove email from mentor_data since it's not a profile field
   profile_data = mentor_data.except(:email)
   safe_assign(profile, profile_data)
-  
   profile.save!
+
+  # Create Mentor record with only user_id; profile fields are delegated
+  mentor = Mentor.find_or_initialize_by(user_id: user.id)
+  mentor.set_slug if mentor.respond_to?(:set_slug)
+  puts "Seeding Mentor: #{mentor.full_name}, slug: #{mentor.slug}"
+  mentor.save!
 end
 
 puts "✅ Seeded 4 mentors."
@@ -634,3 +617,114 @@ resources_data.each do |resource_data|
 end
 
 puts "✅ Seeded resources (blogs, templates, opportunities, events)."
+
+puts "🌱 Seeding FAQs..."
+faq_data = [
+  {
+    question: "What kind of startups does Nailab support?",
+    answer: "Nailab supports early-stage and growth-stage startups leveraging innovation to tackle Africa’s most pressing social challenges across key sectors. We partner with passionate founders who have a clear vision and deep understanding of the problems they are addressing.",
+    display_order: 1
+  },
+  {
+    question: "How do I apply for Nailab’s programs?",
+    answer: "Application windows are published on our website and social channels. Visit the Programs page under Resources for the current opportunities and follow the links provided to apply.",
+    display_order: 2
+  },
+  {
+    question: "What does a typical incubation or accelerator program involve?",
+    answer: "Our programs run roughly 3–6 months and combine mentorship, workshops, pitch coaching, investor access, and, where applicable, seed funding to help founders scale with confidence.",
+    display_order: 3
+  },
+  {
+    question: "What stage should my startup be at to apply for Nailab programs?",
+    answer: "While some cohorts focus on early-stage founders refining concepts, others suit startups with traction or a proven model. Share your stage and vision in your application so we can match you to the right cohort.",
+    display_order: 4
+  },
+  {
+    question: "Does Nailab provide funding to startups?",
+    answer: "Yes, select programs include seed funding or investor introductions through demo days and pitch sessions.",
+    display_order: 5
+  },
+  {
+    question: "What are the benefits of joining the Nailab startup network?",
+    answer: "Members unlock mentorship, curated resources, peer collaboration across Africa, and guidance from industry leaders to navigate real-world startup challenges.",
+    display_order: 6
+  },
+  {
+    question: "How can I become a Nailab mentor?",
+    answer: "If you have relevant industry expertise or entrepreneurial experience, visit the Mentors page to apply or learn more about joining our mentor community.",
+    display_order: 7
+  },
+  {
+    question: "How can I partner with Nailab?",
+    answer: "We collaborate with agencies, corporates, governments, and academic institutions. Reach out via our Expertise page to explore partnership opportunities.",
+    display_order: 8
+  }
+]
+
+faq_data.each do |faq_attrs|
+  faq = Faq.find_or_initialize_by(question: faq_attrs[:question])
+  faq.assign_attributes(faq_attrs)
+  faq.save!
+end
+
+puts "✅ Seeded FAQs."
+
+# Seed Support Tickets
+puts "🌱 Seeding Support Tickets..."
+
+support_ticket_data = [
+  {
+    user: User.find_by(email: "aisha@greensprout.africa"),
+    portal: "founder",
+    subject: "Issue with mentorship matching",
+    category: "Technical Issue",
+    description: "I'm having trouble finding mentors in my industry. The search filters don't seem to work properly.",
+    status: "open"
+  },
+  {
+    user: User.find_by(email: "brian@clinicflow.health"),
+    portal: "founder",
+    subject: "Billing question about premium features",
+    category: "Billing Question",
+    description: "I upgraded to premium but still can't access the advanced analytics. Can you help?",
+    status: "open"
+  },
+  {
+    user: User.find_by(email: "sarah.kennedy@nailab.mentors"),
+    portal: "mentor",
+    subject: "Session scheduling not working",
+    category: "Technical Issue",
+    description: "When I try to schedule a mentorship session, the calendar doesn't load. Please fix this.",
+    status: "open"
+  },
+  {
+    user: User.find_by(email: "aisha@greensprout.africa"),
+    portal: "founder",
+    subject: "Feature request: Mobile app",
+    category: "Feature Request",
+    description: "It would be great to have a mobile app for easier access to mentorship sessions and resources.",
+    status: "open"
+  },
+  {
+    user: User.find_by(email: "amara.diallo@nailab.mentors"),
+    portal: "mentor",
+    subject: "Account verification issue",
+    category: "Account Problem",
+    description: "My mentor profile is still pending verification after 2 weeks. What's the status?",
+    status: "closed"
+  }
+]
+
+support_ticket_data.each do |ticket_attrs|
+  next unless ticket_attrs[:user] # Skip if user doesn't exist
+  
+  ticket = SupportTicket.find_or_initialize_by(
+    user: ticket_attrs[:user],
+    subject: ticket_attrs[:subject]
+  )
+  ticket.assign_attributes(ticket_attrs)
+  ticket.save!
+end
+
+puts "✅ Seeded Support Tickets."

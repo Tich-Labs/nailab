@@ -1,0 +1,8 @@
+/* Collapsible sidebar for RailsAdmin */
+.sidebar-nav .nav-header {
+  font-weight: bold;
+  cursor: pointer;
+}
+.sidebar-nav .nav {
+  margin-left: 1em;
+}

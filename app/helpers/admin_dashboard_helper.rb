@@ -2,62 +2,42 @@ module AdminDashboardHelper
   def admin_sidebar_groups
     [
       {
-        title: '👥 Mentorship',
+        title: "� DASHBOARD",
         sections: [
-          { label: 'Mentors', path: rails_admin.index_path(model_name: 'user'), icon: '🧑‍🏫' },
-          { label: 'Mentees', path: rails_admin.index_path(model_name: 'user_profile'), icon: '🧑‍🎓' },
-          { label: 'Requests', path: rails_admin.index_path(model_name: 'mentorship_request'), icon: '🧾', badge: @admin_pending_requests },
-          { label: 'Sessions', path: rails_admin.index_path(model_name: 'session'), icon: '🗓️' },
-          { label: 'Ratings', path: rails_admin.index_path(model_name: 'rating'), icon: '⭐' }
+          { label: "Dashboard Overview", path: "/admin", icon: "📊" }
         ]
       },
       {
-        title: '💼 Startups',
+        title: "�📄 CONTENT MANAGEMENT",
         sections: [
-          { label: 'Startups', path: rails_admin.index_path(model_name: 'startup_profile'), icon: '🚀' },
-          { label: 'Milestones', path: rails_admin.index_path(model_name: 'milestone'), icon: '📌' },
-          { label: 'Submissions', path: rails_admin.index_path(model_name: 'opportunity_submission'), icon: '📤' },
-          { label: 'Opportunities', path: rails_admin.index_path(model_name: 'opportunity'), icon: '🎯' }
+          { label: "Homepage", path: rails_admin.edit_path(model_name: "homepage", id: 1), icon: "🏠" },
+          { label: "About", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" },
+          { label: "Pricing", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" },
+          { label: "Contact Us", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" },
+          { label: "Programs", path: rails_admin.edit_path(model_name: "programs_page", id: 1), icon: "📚" },
+          { label: "Resources: Blog", path: rails_admin.edit_path(model_name: "blog_page", id: 1), icon: "📝" },
+          { label: "Resources: Knowledge Hub", path: rails_admin.edit_path(model_name: "knowledge_hub_page", id: 1), icon: "🧠" },
+          { label: "Resources: Events & Webinars", path: rails_admin.edit_path(model_name: "events_webinars_page", id: 1), icon: "🎤" },
+          { label: "Resources: Opportunities", path: rails_admin.edit_path(model_name: "opportunities_page", id: 1), icon: "🎯" }
         ]
       },
       {
-        title: '🔐 Users & Auth',
+        title: "👥 Mentorship",
         sections: [
-          { label: 'Users', path: rails_admin.index_path(model_name: 'user'), icon: '👤' },
-          { label: 'Profiles', path: rails_admin.index_path(model_name: 'user_profile'), icon: '🧾' },
-          { label: 'Identities', path: rails_admin.index_path(model_name: 'identity'), icon: '🆔' }
+            { label: "Mentors", path: rails_admin.index_path(model_name: "mentor"), icon: "🧑‍🏫" },
+            { label: "Requests", path: rails_admin.index_path(model_name: "mentorship_request"), icon: "🧾", badge: @admin_pending_requests, description: "View mentorship requests with mentor, mentee, and details" }
         ]
       },
       {
-        title: '💬 Messaging & Comms',
+        title: "💼 Startups",
         sections: [
-          { label: 'Messages', path: rails_admin.index_path(model_name: 'message'), icon: '✉️' },
-          { label: 'Conversations', path: rails_admin.index_path(model_name: 'conversation'), icon: '💬' },
-          { label: 'Peer Messages', path: rails_admin.index_path(model_name: 'peer_message'), icon: '🤝' }
+          { label: "Startups", path: rails_admin.index_path(model_name: "startup_profile"), icon: "🚀" }
         ]
       },
       {
-        title: '📈 Metrics & Analytics',
+        title: "💬 Messaging & Comms",
         sections: [
-          { label: 'Monthly Metrics', path: rails_admin.index_path(model_name: 'monthly_metric'), icon: '📊' },
-          { label: 'Engagement Stats', path: rails_admin.index_path(model_name: 'monthly_metric'), icon: '📈' }
-        ]
-      },
-      {
-        title: '🎯 Marketing',
-        sections: [
-          { label: 'Hero Slides', path: rails_admin.index_path(model_name: 'hero_slide'), icon: '🪄' },
-          { label: 'Testimonials', path: rails_admin.index_path(model_name: 'testimonial'), icon: '🗣️' },
-          { label: 'Partners', path: rails_admin.index_path(model_name: 'partner'), icon: '🤝' },
-          { label: 'Pages', path: rails_admin.index_path(model_name: 'static_page'), icon: '📄' }
-        ]
-      },
-      {
-        title: '⚙️ System',
-        sections: [
-          { label: 'JWTs', path: rails_admin.index_path(model_name: 'jwt_denylist'), icon: '🔐' },
-          { label: 'Notifications', path: rails_admin.index_path(model_name: 'notification'), icon: '🔔' },
-          { label: 'Admin Tools', path: rails_admin.index_path(model_name: 'notification'), icon: '🛠️' }
+          { label: "Support Tickets", path: rails_admin.index_path(model_name: "support_ticket"), icon: "🎫" }
         ]
       }
     ]
@@ -65,17 +45,46 @@ module AdminDashboardHelper
 
   def admin_status_tag(status)
     color = case status.to_s
-            when /pending/ then 'bg-amber-100 text-amber-700'
-            when /accepted|approved/ then 'bg-emerald-100 text-emerald-700'
-            when /declined/ then 'bg-rose-100 text-rose-700'
-            else 'bg-slate-100 text-slate-700'
-            end
+    when /pending/ then "bg-amber-100 text-amber-700"
+    when /accepted|approved/ then "bg-emerald-100 text-emerald-700"
+    when /declined/ then "bg-rose-100 text-rose-700"
+    else "bg-slate-100 text-slate-700"
+    end
     content_tag(:span, status.to_s.humanize, class: "rounded-full px-2 py-0.5 text-xs font-semibold #{color}")
   end
 
   def admin_breadcrumbs
-    crumbs = [{ label: 'Admin', path: rails_admin.dashboard_path }]
-    crumbs << { label: action_name.titleize, path: request.path } unless action_name == 'dashboard'
+    crumbs = [ { label: "Admin", path: rails_admin.dashboard_path } ]
+    if params[:controller]&.start_with?("rails_admin/")
+      # Add model name if present
+      if params[:model_name].present?
+        model_label = params[:model_name].to_s.titleize
+        model_path = rails_admin.index_path(model_name: params[:model_name])
+        crumbs << { label: model_label, path: model_path }
+      end
+      # Add object label if editing/showing a record
+      if params[:action].in?([ "show", "edit" ]) && defined?(@object)
+        # Try to use a user-friendly label for the object
+        object_label = if @object.respond_to?(:full_name) && @object.full_name.present?
+          @object.full_name
+        elsif @object.respond_to?(:name) && @object.name.present?
+          @object.name
+        elsif @object.respond_to?(:email) && @object.email.present?
+          @object.email
+        elsif @object.respond_to?(:title) && @object.title.present?
+          @object.title
+        elsif @object.respond_to?(:id)
+          "##{@object.class.name} #{@object.id}"
+        else
+          @object.to_s
+        end
+        crumbs << { label: object_label, path: request.path }
+      elsif params[:action] && !%w[index dashboard].include?(params[:action])
+        crumbs << { label: params[:action].titleize, path: request.path }
+      end
+    else
+      crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
+    end
     crumbs
   end
 end

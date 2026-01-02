@@ -58,9 +58,7 @@ Rails.application.config.to_prepare do
       HeroSlide.order(updated_at: :desc).limit(3).each do |slide|
         updates << { title: slide.title.presence || 'Hero slide update', updated_at: slide.updated_at, path: rails_admin.show_path(model_name: 'hero_slide', id: slide.id), context: 'Hero slide' }
       end
-      StaticPage.where(slug: %w[home about pricing contact]).order(updated_at: :desc).limit(3).each do |page|
-        updates << { title: page.title, updated_at: page.updated_at, path: rails_admin.show_path(model_name: 'static_page', id: page.id), context: "Page: #{page.slug}" }
-      end
+      # Optionally, add HomePage updates here if needed in the future
       updates.sort_by { |update| update[:updated_at] }.reverse.first(5)
     end
 
