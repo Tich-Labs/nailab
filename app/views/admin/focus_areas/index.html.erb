@@ -1,0 +1,191 @@
+<h1 class="text-2xl font-bold mb-4">Focus Areas — Manage</h1>
+
+<div class="mb-4">
+  <button id="new-focus-btn" class="btn btn-primary">New Focus Area</button>
+  <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'ml-2 btn btn-secondary' %>
+</div>
+
+<div id="admin-focus-areas" class="grid grid-cols-2 gap-8">
+  <div>
+    <h2 class="font-semibold mb-2">Editor</h2>
+    <div id="editor" class="bg-white p-4 rounded shadow mb-4">
+      <%= form_with url: admin_create_focus_area_path, id: 'focus-area-form', local: true do |f| %>
+        <%= hidden_field_tag :id, nil, id: 'fa-id' %>
+        <%= hidden_field_tag :_method, nil, id: 'fa-method' %>
+        <div class="mb-2">
+          <%= label_tag :title, 'Title', class: 'block font-medium' %>
+          <%= text_field_tag 'focus_area[title]', nil, id: 'fa-title', class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-2">
+          <%= label_tag :description, 'Description', class: 'block font-medium' %>
+          <%= text_area_tag 'focus_area[description]', nil, id: 'fa-description', rows: 3, class: 'w-full form-textarea admin-form-textarea' %>
+        </div>
+        <div class="mb-2">
+          <%= label_tag :icon, 'Icon (optional name/class)', class: 'block font-medium' %>
+          <%= text_field_tag 'focus_area[icon]', nil, id: 'fa-icon', class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-2">
+          <%= check_box_tag 'focus_area[active]', '1', true, id: 'fa-active' %>
+          <%= label_tag 'fa-active', 'Active', class: 'ml-2' %>
+        </div>
+        <div class="flex items-center">
+          <%= submit_tag 'Save', class: 'btn btn-primary' %>
+          <%= button_tag 'Cancel', type: 'button', id: 'fa-cancel', class: 'ml-2 btn btn-secondary' %>
+        </div>
+      <% end %>
+    </div>
+
+    <h2 class="font-semibold mb-2">Items</h2>
+    <div style="max-height:60vh; overflow-y:auto;" class="bg-white rounded shadow">
+      <table class="w-full">
+      <thead>
+        <tr>
+          <th class="p-2">Title</th>
+          <th>Description</th>
+          <th>Order</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="focus-areas-rows">
+        <%= render partial: 'admin/focus_areas/rows', locals: { focus_areas: @focus_areas } %>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-2">Preview</h2>
+    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll">
+      <%= render 'pages/home/focus_areas', focus_areas: @preview_focus_areas %>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Inline admin handlers for Focus Areas editor (fallback when Stimulus isn't loaded in admin)
+  (function () {
+    var container = document.getElementById('admin-focus-areas');
+    if (!container) return;
+
+    var form = document.getElementById('focus-area-form');
+    var idField = document.getElementById('fa-id');
+    var methodField = document.getElementById('fa-method');
+    var titleField = document.getElementById('fa-title');
+    var descriptionField = document.getElementById('fa-description');
+    var iconField = document.getElementById('fa-icon');
+    var activeField = document.getElementById('fa-active');
+    var cancelBtn = document.getElementById('fa-cancel');
+
+    function resetForm() {
+      if (!form) return;
+      form.action = '/admin/focus_area';
+      methodField.value = '';
+      idField.value = '';
+      titleField.value = '';
+      descriptionField.value = '';
+      iconField.value = '';
+      activeField.checked = true;
+      // show blank preview for new card
+      var preview = document.getElementById('preview-container');
+      if (preview) preview.innerHTML = renderEmptyPreviewCard();
+    }
+
+    container.querySelectorAll('.focus-edit-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        var tr = btn.closest('tr');
+        if (!tr) return;
+        var id = tr.getAttribute('data-fa-id');
+        var title = tr.getAttribute('data-fa-title') || '';
+        var description = tr.getAttribute('data-fa-description') || '';
+        var icon = tr.getAttribute('data-fa-icon') || '';
+        var active = tr.getAttribute('data-fa-active') === 'true';
+
+        form.action = '/admin/focus_area/' + id;
+        methodField.value = 'patch';
+        idField.value = id;
+        titleField.value = title;
+        descriptionField.value = description;
+        iconField.value = icon;
+        activeField.checked = active;
+
+        // update preview to show only the selected card
+        var preview = document.getElementById('preview-container');
+        if (preview) preview.innerHTML = renderPreviewCard({ title: title, description: description });
+
+        document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+        titleField.focus();
+      });
+    });
+
+    if (cancelBtn) cancelBtn.addEventListener('click', resetForm);
+    // New button resets form
+    var newBtn = document.getElementById('new-focus-btn');
+    if (newBtn) newBtn.addEventListener('click', function () { resetForm(); document.getElementById('editor').scrollIntoView({ behavior: 'smooth' }); });
+
+    // Render helpers for previewing a single card or an empty new card
+    function escapeHtml(unsafe) {
+      return String(unsafe || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    function renderPreviewCard(opts) {
+      var t = escapeHtml(opts.title || '');
+      var d = escapeHtml(opts.description || '');
+      return '<div class="max-w-6xl mx-auto px-4 text-center">' +
+        '<h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>' +
+        '<div class="flex flex-wrap justify-center gap-6">' +
+        '<div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">' +
+        '<h3 class="text-xl font-semibold text-purple-700 mb-2">' + t + '</h3>' +
+        '<p class="text-gray-700">' + d + '</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function renderEmptyPreviewCard() {
+      return '<div class="max-w-6xl mx-auto px-4 text-center">' +
+        '<h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>' +
+        '<div class="flex flex-wrap justify-center gap-6">' +
+        '<div class="bg-white border border-dashed border-gray-200 rounded-xl px-8 py-6 w-64 shadow-sm">' +
+        '<h3 class="text-xl font-semibold text-gray-500 mb-2">New focus area</h3>' +
+        '<p class="text-gray-400">Enter title and description to preview here.</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    // AJAX submit to update table and preview without reload
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var method = (methodField && methodField.value) || form.getAttribute('method') || 'post';
+        var action = form.action;
+
+        fetch(action, {
+          method: method.toUpperCase() === 'PATCH' ? 'PATCH' : 'POST',
+          headers: { 'X-CSRF-Token': token, 'Accept': 'application/json' },
+          body: fd,
+          credentials: 'same-origin'
+        }).then(function (resp) {
+          if (!resp.ok) return resp.json().then(function (j) { throw j; });
+          return resp.json();
+        }).then(function (data) {
+          if (data.html_rows) {
+            var tbody = document.getElementById('focus-areas-rows');
+            tbody.innerHTML = data.html_rows;
+          }
+          if (data.preview_html) {
+            var preview = document.getElementById('preview-container');
+            preview.innerHTML = data.preview_html;
+          }
+          resetForm();
+        }).catch(function (err) {
+          console.error('Save failed', err);
+          alert((err && err.errors) ? err.errors.join('\n') : 'Save failed');
+        });
+      });
+    }
+  })();
+</script>

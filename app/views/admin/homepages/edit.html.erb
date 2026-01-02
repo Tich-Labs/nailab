@@ -1,0 +1,16 @@
+<h1 class="text-2xl font-bold mb-6">Homepage — Sections</h1>
+
+<div class="grid grid-cols-2 gap-6">
+  <% @sections.each do |section| %>
+    <div class="p-4 bg-white rounded shadow">
+      <h2 class="font-semibold"><%= section[:title] %></h2>
+      <div class="mt-2">
+        <% if section[:path] && section[:path] != '#' %>
+          <%= link_to 'Edit', section[:path], class: 'btn btn-primary' %>
+        <% else %>
+          <span class="text-sm text-gray-500">Editor not implemented</span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -117,3 +117,6 @@ class AdminSidebarController extends Controller {
 }
 
 application.register('admin-sidebar', AdminSidebarController);
+
+import AdminFocusAreasController from './controllers/admin_focus_areas_controller'
+application.register('admin-focus-areas', AdminFocusAreasController);

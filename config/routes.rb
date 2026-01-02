@@ -67,6 +67,27 @@ Rails.application.routes.draw do
   match "/admin/opportunity_submission(/*path)", to: redirect("/admin"), via: :all
   match "/admin/hero_slide(/*path)", to: redirect("/admin"), via: :all
 
+  # Custom admin homepage editors and logo management — define before mounting RailsAdmin
+  namespace :admin do
+    resources :logos, only: %i[index new create destroy]
+    # Friendly custom Focus Areas editor (override RailsAdmin path) - define before mounting RailsAdmin
+    get "focus_area", to: "focus_areas#index", as: :focus_areas
+    get "focus_area/new", to: "focus_areas#new", as: :new_focus_area
+    post "focus_area", to: "focus_areas#create", as: :create_focus_area
+    get "focus_area/:id/edit", to: "focus_areas#edit", as: :edit_focus_area
+    patch "focus_area/:id", to: "focus_areas#update", as: :update_focus_area
+    delete "focus_area/:id", to: "focus_areas#destroy", as: :destroy_focus_area
+    post "focus_area/:id/reorder", to: "focus_areas#reorder", as: :reorder_focus_area
+    patch "focus_area/:id/toggle", to: "focus_areas#toggle", as: :toggle_focus_area
+    get "homepage/:id/edit", to: "homepages#edit", as: :edit_homepage
+    get "homepage/impact_network", to: "homepage#impact_network", as: :homepage_impact_network
+    post "homepage/impact_network/reorder", to: "homepage#reorder", as: :homepage_impact_network_reorder
+    post "homepage/impact_network/:id/reorder", to: "homepage#reorder", as: :homepage_impact_network_reorder_item
+    patch "homepage/impact_network/:id/toggle", to: "homepage#toggle", as: :homepage_impact_network_toggle
+    get "homepage/hero", to: "homepage#hero", as: :homepage_hero
+    get "homepage/focus_areas", to: "homepage#focus_areas", as: :homepage_focus_areas
+  end
+
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
 
   # Admin support ticket replies
@@ -77,6 +98,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

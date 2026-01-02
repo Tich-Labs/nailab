@@ -48,13 +48,31 @@
 
 .form-control {
   border-radius: 6px;
-  border: 1px solid #ced4da;
+  border: 1px solid #e6e1ef;
   padding: 8px 12px;
+  background: #ffffff;
 }
 
-.form-control:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+/* Nailab themed focus / outline for admin form controls */
+.form-control:focus,
+.ra-form input:focus,
+.ra-form textarea:focus,
+.ra-form select:focus {
+  border-color: #6b21a8; /* purple-700 */
+  box-shadow: 0 0 0 0.2rem rgba(107,33,168,0.12);
+  outline: none;
+}
+
+/* Specific admin form input helpers */
+.admin-form-input {
+  @apply rounded-md border p-2; /* works if Tailwind is available in build */
+  border-color: #e6e1ef;
+}
+
+.admin-form-textarea {
+  border-radius: 6px;
+  border: 1px solid #e6e1ef;
+  padding: 8px 12px;
 }
 
 /* Improve panel layouts */
@@ -161,4 +179,10 @@
 .alert-danger {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+/* Scrollable preview container for admin homepage previews */
+.admin-preview-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
 }

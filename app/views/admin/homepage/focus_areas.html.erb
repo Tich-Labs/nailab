@@ -1,0 +1,11 @@
+<h1 class="text-2xl font-bold mb-4">Focus Areas — Editor</h1>
+
+<div class="mb-4">
+  <%= link_to 'Edit focus areas in CMS', rails_admin.index_path(model_name: 'focus_area'), class: 'btn btn-primary' %>
+  <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'ml-2 btn btn-secondary' %>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+  <%# Render frontend focus areas partial for WYSIWYG preview. Ensure @focus_areas present %>
+  <%= render 'pages/home/focus_areas' %>
+</div>

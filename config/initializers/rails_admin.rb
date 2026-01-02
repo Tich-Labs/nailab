@@ -194,6 +194,83 @@ RailsAdmin.config do |config|
     weight 10
   end
 
+  # Expose HeroSlide in Content Management
+  begin
+    config.model "HeroSlide" do
+      navigation_label "Content Management"
+      weight 2
+      list do
+        fields(*HeroSlide.attribute_names.map(&:to_sym))
+      end
+      edit do
+        fields(*HeroSlide.attribute_names.map(&:to_sym))
+      end
+    end
+  rescue NameError
+    # model not present in this environment
+  end
+
+  # Expose Testimonial in Content Management
+  begin
+    config.model "Testimonial" do
+      navigation_label "Content Management"
+      weight 3
+      list do
+        fields(*Testimonial.attribute_names.map(&:to_sym))
+      end
+      edit do
+        fields(*Testimonial.attribute_names.map(&:to_sym))
+      end
+    end
+  rescue NameError
+  end
+
+  # Expose FocusArea in Content Management
+  begin
+    config.model "FocusArea" do
+      navigation_label "Content Management"
+      weight 4
+      list do
+        fields(*FocusArea.attribute_names.map(&:to_sym))
+      end
+      edit do
+        fields(*FocusArea.attribute_names.map(&:to_sym))
+      end
+    end
+  rescue NameError
+  end
+
+  # Expose Logo in Content Management (ActiveStorage)
+  begin
+    config.model "Logo" do
+      navigation_label "Content Management"
+      weight 5
+      list do
+        field :id
+        field :name
+        field :display_order
+        field :active
+        field :image do
+          pretty_value do
+            if bindings[:object].respond_to?(:image) && bindings[:object].image.attached?
+              bindings[:view].image_tag(bindings[:object].image.variant(resize_to_limit: [ 200, 80 ]))
+            else
+              "No image"
+            end
+          end
+        end
+      end
+
+      edit do
+        field :name
+        field :image, :active_storage
+        field :display_order
+        field :active
+      end
+    end
+  rescue NameError
+  end
+
   config.model "Resource" do
     navigation_label "Marketing"
     weight 11
