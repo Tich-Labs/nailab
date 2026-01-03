@@ -13,7 +13,8 @@ module Admin
         { key: "focus_areas", title: "Our Focus Areas", path: admin_homepage_focus_areas_path },
         { key: "connect_grow_impact", title: "Connect. Grow. Impact.", path: "#" },
         { key: "testimonials", title: "Testimonials", path: rails_admin.index_path(model_name: "testimonials") },
-        { key: "impact_network", title: "Impact Network (Logos)", path: admin_homepage_impact_network_path }
+        { key: "impact_network", title: "Impact Network (Logos)", path: admin_homepage_impact_network_path },
+        { key: "cta", title: "CTA Section", path: admin_homepage_cta_path }
       ]
     end
   end
