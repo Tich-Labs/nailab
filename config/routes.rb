@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     post "homepage/impact_network/:id/reorder", to: "homepage#reorder", as: :homepage_impact_network_reorder_item
     patch "homepage/impact_network/:id/toggle", to: "homepage#toggle", as: :homepage_impact_network_toggle
     get "homepage/hero", to: "homepage#hero", as: :homepage_hero
+    patch "homepage/hero", to: "homepage#update_hero", as: :homepage_hero_update
     get "homepage/focus_areas", to: "homepage#focus_areas", as: :homepage_focus_areas
     get "homepage/cta", to: "homepage#cta", as: :homepage_cta
     patch "homepage/cta", to: "homepage#update_cta", as: :homepage_cta_update

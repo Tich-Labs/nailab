@@ -1,59 +1,71 @@
-<h1 class="text-2xl font-bold mb-6">Hero Section — Editor & Preview</h1>
+<h1 class="text-2xl font-bold mb-4">Hero Section — Editor & Preview</h1>
 
-<div class="grid gap-6 lg:grid-cols-[2fr,1fr]">
-  <section class="space-y-4">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <div class="flex flex-wrap items-center gap-2">
-        <%= link_to 'Edit slides in CMS', rails_admin.index_path(model_name: 'hero_slide'), class: 'btn btn-primary' %>
-        <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'btn btn-secondary' %>
-      </div>
-      <%= link_to 'Create slide', rails_admin.new_path(model_name: 'hero_slide'), class: 'btn btn-outline' %>
-    </div>
-
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
     <div class="bg-white p-4 rounded shadow">
-      <%# Render frontend hero partial for WYSIWYG preview. Ensure preview data is available via @hero_slides/@preview_hero %>
-      <%= render 'pages/home/hero' %>
-    </div>
-  </section>
-
-  <aside class="space-y-3">
-    <div class="bg-white p-4 rounded shadow">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Slides</p>
-          <h2 class="text-base font-semibold text-slate-900">Current hero frames</h2>
+      <%= form_with url: admin_homepage_hero_update_path, method: :patch, local: true do %>
+        <p class="text-sm text-slate-600 mb-4">Update the hero heading, copy, image, and CTA links that appear on the landing section.</p>
+        <div class="mb-3">
+          <%= label_tag 'hero_title', 'Heading', class: 'block font-medium' %>
+          <%= text_field_tag 'hero[title]', @hero_content[:title], id: 'hero_title', class: 'w-full form-input admin-form-input' %>
         </div>
-        <%= link_to 'New slide', rails_admin.new_path(model_name: 'hero_slide'), class: 'btn btn-primary btn-sm' %>
-      </div>
-      <% if @editable_hero_slides.any? %>
-        <div class="mt-4 space-y-3">
-          <% @editable_hero_slides.each do |slide| %>
-            <div class="bg-slate-50/70 p-4 rounded border border-slate-100 shadow-sm">
-              <div class="flex items-start justify-between gap-4">
-                <div class="space-y-1">
-                  <p class="text-[11px] uppercase tracking-wider text-slate-500">Order <%= slide.display_order.to_i %></p>
-                  <p class="text-sm font-semibold text-slate-900"><%= slide.title.presence || 'Untitled slide' %></p>
-                  <% if slide.subtitle.present? %>
-                    <p class="text-sm text-slate-500"><%= slide.subtitle %></p>
-                  <% end %>
-                  <% if slide.cta_text.present? %>
-                    <p class="text-xs font-medium text-slate-600">CTA: <%= slide.cta_text %></p>
-                  <% end %>
-                </div>
-                <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase <%= slide.active? ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' %>">
-                  <%= slide.active? ? 'Active' : 'Inactive' %>
-                </span>
-              </div>
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <%= link_to 'Edit slide', rails_admin.edit_path(model_name: 'hero_slide', id: slide.id), class: 'rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:bg-white' %>
-                <%= link_to 'View in CMS list', rails_admin.index_path(model_name: 'hero_slide'), class: 'rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:bg-white' %>
-              </div>
-            </div>
-          <% end %>
+        <div class="mb-3">
+          <%= label_tag 'hero_subtitle', 'Body copy', class: 'block font-medium' %>
+          <%= text_area_tag 'hero[subtitle]', @hero_content[:subtitle], id: 'hero_subtitle', class: 'w-full form-input admin-form-input', rows: 3 %>
         </div>
-      <% else %>
-        <p class="mt-4 text-sm text-slate-500">No hero slides yet. Use the buttons above to create the first frame.</p>
+        <div class="mb-3">
+          <%= label_tag 'hero_image_url', 'Image URL', class: 'block font-medium' %>
+          <%= text_field_tag 'hero[image_url]', @hero_content[:image_url], id: 'hero_image_url', class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-3">
+          <div>
+            <%= label_tag 'hero_cta_text', 'Primary CTA label', class: 'block font-medium' %>
+            <%= text_field_tag 'hero[cta_text]', @hero_content[:cta_text], id: 'hero_cta_text', class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div>
+            <%= label_tag 'hero_cta_link', 'Primary CTA link', class: 'block font-medium' %>
+            <%= text_field_tag 'hero[cta_link]', @hero_content[:cta_link], id: 'hero_cta_link', class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-3">
+          <div>
+            <%= label_tag 'hero_secondary_label', 'Secondary CTA label', class: 'block font-medium' %>
+            <%= text_field_tag 'hero[secondary_cta][label]', @hero_content.dig(:secondary_cta, :label), id: 'hero_secondary_label', class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div>
+            <%= label_tag 'hero_secondary_link', 'Secondary CTA link', class: 'block font-medium' %>
+            <%= text_field_tag 'hero[secondary_cta][link]', @hero_content.dig(:secondary_cta, :link), id: 'hero_secondary_link', class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <%= submit_tag 'Save hero', class: 'btn btn-primary' %>
+          <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'btn btn-secondary' %>
+        </div>
       <% end %>
     </div>
-  </aside>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <%# Render frontend hero partial for WYSIWYG preview. Ensure preview data is available via @hero_slides/@preview_hero %>
+      <%= render 'pages/home/hero' %>
+      <div class="space-y-3">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800">1031</p>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Startup Founders</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800">50</p>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Active Mentors</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800">$250M</p>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Combined Startup Valuation</p>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500">Image-only hero; carousel support will ship later.</p>
+    </div>
+  </div>
 </div>
