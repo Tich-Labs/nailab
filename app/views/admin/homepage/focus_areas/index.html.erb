@@ -5,39 +5,54 @@
   <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'ml-2 btn btn-secondary' %>
 </div>
 
-<div id="admin-focus-areas" class="grid grid-cols-2 gap-8">
+
+<div id="admin-focus-areas" class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
-    <div id="editor" class="bg-white p-4 rounded shadow mb-4">
-      <%= form_with url: admin_create_focus_area_path, id: 'focus-area-form', local: true do |f| %>
-        <%= hidden_field_tag :id, nil, id: 'fa-id' %>
-        <%= hidden_field_tag :_method, nil, id: 'fa-method' %>
-        <div class="mb-2">
-          <%= label_tag :title, 'Title', class: 'block font-medium' %>
-          <%= text_field_tag 'focus_area[title]', nil, id: 'fa-title', class: 'w-full form-input admin-form-input' %>
-        </div>
-        <div class="mb-2">
-          <%= label_tag :description, 'Description', class: 'block font-medium' %>
-          <%= text_area_tag 'focus_area[description]', nil, id: 'fa-description', rows: 3, class: 'w-full form-textarea admin-form-textarea' %>
-        </div>
-        <div class="mb-2">
-          <%= label_tag :icon, 'Icon (optional name/class)', class: 'block font-medium' %>
-          <%= text_field_tag 'focus_area[icon]', nil, id: 'fa-icon', class: 'w-full form-input admin-form-input' %>
-        </div>
-        <div class="mb-2">
-          <%= check_box_tag 'focus_area[active]', '1', true, id: 'fa-active' %>
-          <%= label_tag 'fa-active', 'Active', class: 'ml-2' %>
-        </div>
-        <div class="flex items-center">
-          <%= submit_tag 'Save', class: 'btn btn-primary' %>
-          <%= button_tag 'Cancel', type: 'button', id: 'fa-cancel', class: 'ml-2 btn btn-secondary' %>
-        </div>
+    <div id="editor" class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_focus_areas_path, id: 'focus-area-form', local: true, html: { multipart: true } do |f| %>
+      <%= hidden_field_tag :focus_area_id, nil, id: 'fa-id' %>
+      <%= hidden_field_tag :_method, nil, id: 'fa-method' %>
+      <div class="mb-2">
+        <%= label_tag :title, 'Title', class: 'block font-medium' %>
+        <%= text_field_tag 'focus_area[title]', nil, id: 'fa-title', class: 'w-full form-input admin-form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :description, 'Description', class: 'block font-medium' %>
+        <%= text_area_tag 'focus_area[description]', nil, id: 'fa-description', class: 'w-full form-input admin-form-input', rows: 3 %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :icon, 'Icon (optional)', class: 'block font-medium' %>
+        <%= text_field_tag 'focus_area[icon]', nil, id: 'fa-icon', class: 'w-full form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= label_tag :display_order, 'Order', class: 'block font-medium' %>
+        <%= number_field_tag 'focus_area[display_order]', 0, id: 'fa-order', class: 'w-32 form-input' %>
+      </div>
+      <div class="mb-2">
+        <%= check_box_tag 'focus_area[active]', '1', true, id: 'fa-active' %>
+        <%= label_tag 'fa-active', 'Active', class: 'ml-2' %>
+      </div>
+      <div class="flex items-center">
+        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= button_tag 'Cancel', type: 'button', id: 'fa-cancel', class: 'ml-2 btn btn-secondary' %>
+      </div>
       <% end %>
     </div>
+  </div>
 
-    <h2 class="font-semibold mb-2">Items</h2>
-    <div style="max-height:60vh; overflow-y:auto;" class="bg-white rounded shadow">
-      <table class="w-full">
+  <div>
+    <h2 class="font-semibold mb-2">Preview</h2>
+    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll">
+      <%= render 'admin/homepage/focus_areas/preview', focus_areas: [] %>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h2 class="font-semibold mb-2 px-4 pt-4">Focus Areas</h2>
+  <div class="bg-white rounded shadow overflow-y-auto" style="max-height:60vh;">
+    <table class="w-full">
       <thead>
         <tr>
           <th class="p-2">Title</th>
@@ -51,16 +66,8 @@
         <%= render partial: 'admin/homepage/focus_areas/rows', locals: { focus_areas: @focus_areas } %>
       </tbody>
     </table>
-    </div>
   </div>
-
-  <div>
-    <h2 class="font-semibold mb-2">Preview</h2>
-    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll">
-      <%= render 'pages/home/focus_areas', focus_areas: @preview_focus_areas %>
-    </div>
   </div>
-</div>
 
 <script>
   // Inline admin handlers for Focus Areas editor (fallback when Stimulus isn't loaded in admin)
@@ -131,27 +138,33 @@
     function renderPreviewCard(opts) {
       var t = escapeHtml(opts.title || '');
       var d = escapeHtml(opts.description || '');
-      return '<div class="max-w-6xl mx-auto px-4 text-center">' +
-        '<h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>' +
-        '<div class="flex flex-wrap justify-center gap-6">' +
-        '<div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">' +
-        '<h3 class="text-xl font-semibold text-purple-700 mb-2">' + t + '</h3>' +
-        '<p class="text-gray-700">' + d + '</p>' +
+      return '<div class="admin-preview-scroll-wrapper" style="height:100%;">' +
+        '<div id="focus-areas-preview" style="height:100%; overflow-y:auto;">' +
+          '<div class="py-4 flex justify-center border-b last:border-b-0">' +
+            '<div class="p-4 w-full flex items-center justify-center">' +
+              '<div class="bg-purple-50 border border-purple-100 rounded-xl px-6 py-4 max-w-xs shadow break-words">' +
+                '<h3 class="text-lg font-semibold text-purple-700 mb-2 truncate">' + t + '</h3>' +
+                '<p class="text-gray-700 break-words">' + d + '</p>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        '</div>' +
-        '</div>';
+      '</div>';
     }
 
     function renderEmptyPreviewCard() {
-      return '<div class="max-w-6xl mx-auto px-4 text-center">' +
-        '<h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>' +
-        '<div class="flex flex-wrap justify-center gap-6">' +
-        '<div class="bg-white border border-dashed border-gray-200 rounded-xl px-8 py-6 w-64 shadow-sm">' +
-        '<h3 class="text-xl font-semibold text-gray-500 mb-2">New focus area</h3>' +
-        '<p class="text-gray-400">Enter title and description to preview here.</p>' +
+      return '<div class="admin-preview-scroll-wrapper" style="height:100%;">' +
+        '<div id="focus-areas-preview" style="height:100%; overflow-y:auto;">' +
+          '<div class="py-4 flex justify-center border-b last:border-b-0">' +
+            '<div class="p-4 w-full flex items-center justify-center">' +
+              '<div class="bg-white border border-dashed border-gray-200 rounded-xl px-6 py-4 max-w-xs shadow-sm">' +
+                '<h3 class="text-lg font-semibold text-gray-500 mb-2 truncate">New focus area</h3>' +
+                '<p class="text-gray-400">Enter title and description to preview here.</p>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        '</div>' +
-        '</div>';
+      '</div>';
     }
 
     // AJAX submit to update table and preview without reload
@@ -171,22 +184,87 @@
         }).then(function (resp) {
           if (!resp.ok) return resp.json().then(function (j) { throw j; });
           return resp.json();
-        }).then(function (data) {
-          if (data.html_rows) {
-            var tbody = document.getElementById('focus-areas-rows');
-            tbody.innerHTML = data.html_rows;
-          }
-          if (data.preview_html) {
-            var preview = document.getElementById('preview-container');
-            preview.innerHTML = data.preview_html;
-          }
-          resetForm();
-        }).catch(function (err) {
+          }).then(function (data) {
+            if (data.html_rows) {
+              var tbody = document.getElementById('focus-areas-rows');
+              tbody.innerHTML = data.html_rows;
+            }
+            if (data.preview_html) {
+              var preview = document.getElementById('preview-container');
+              preview.innerHTML = data.preview_html;
+            }
+            // re-wire buttons in the newly replaced rows and sync preview height
+            try { wireButtons(); } catch (e) { /* ignore */ }
+            try { syncPreviewHeight(); } catch (e) { /* ignore */ }
+            resetForm();
+          }).catch(function (err) {
           console.error('Save failed', err);
           alert((err && err.errors) ? err.errors.join('\n') : 'Save failed');
         });
       });
     }
+      // Wire buttons in initial rows and sync preview height like Impact Network
+      function wireButtons() {
+        var rows = document.getElementById('focus-areas-rows');
+        if (!rows) return;
+        rows.querySelectorAll('.focus-edit-btn').forEach(function (btn) {
+          btn.removeEventListener('click', handleRowEdit);
+          btn.addEventListener('click', handleRowEdit);
+        });
+        rows.querySelectorAll('.focus-preview-btn').forEach(function (btn) {
+          btn.removeEventListener('click', handleRowPreview);
+          btn.addEventListener('click', handleRowPreview);
+        });
+      }
+
+      function handleRowEdit(e) {
+        var tr = e.currentTarget.closest('tr');
+        if (!tr) return;
+        var id = tr.getAttribute('data-fa-id');
+        var title = tr.getAttribute('data-fa-title') || '';
+        var description = tr.getAttribute('data-fa-description') || '';
+        var icon = tr.getAttribute('data-fa-icon') || '';
+        var active = tr.getAttribute('data-fa-active') === 'true';
+
+        form.action = '/admin/focus_area/' + id;
+        methodField.value = 'patch';
+        idField.value = id;
+        titleField.value = title;
+        descriptionField.value = description;
+        iconField.value = icon;
+        activeField.checked = active;
+
+        var preview = document.getElementById('preview-container');
+        if (preview) preview.innerHTML = renderPreviewCard({ title: title, description: description });
+        document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+        titleField.focus();
+      }
+
+      function handleRowPreview(e) {
+        var tr = e.currentTarget.closest('tr');
+        if (!tr) return;
+        var title = tr.getAttribute('data-fa-title') || '';
+        var description = tr.getAttribute('data-fa-description') || '';
+        var preview = document.getElementById('preview-container');
+        if (preview) preview.innerHTML = renderPreviewCard({ title: title, description: description });
+      }
+
+      function syncPreviewHeight() {
+        try {
+          var editor = document.getElementById('editor');
+          var preview = document.getElementById('preview-container');
+          if (!editor || !preview) return;
+          var h = editor.clientHeight;
+          preview.style.height = h + 'px';
+          var inner = preview.querySelector('#focus-areas-preview');
+          if (inner) inner.style.height = '100%';
+        } catch (e) { /* ignore */ }
+      }
+
+      // Initial wiring
+      try { wireButtons(); } catch (e) { /* ignore */ }
+      try { syncPreviewHeight(); } catch (e) { /* ignore */ }
+      window.addEventListener('resize', function () { try { syncPreviewHeight(); } catch (e) {} });
   })();
 </script>
 

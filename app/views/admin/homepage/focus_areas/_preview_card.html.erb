@@ -1,0 +1,5 @@
+<%# Admin preview card for a single Focus Area (used inside admin preview) %>
+<div class="<%= defined?(card_class) ? card_class : 'bg-purple-50 border border-purple-100 rounded-xl px-6 py-4 max-w-xs shadow break-words' %>">
+  <h3 class="<%= defined?(h3_class) ? h3_class : 'text-lg font-semibold text-purple-700 mb-2 truncate' %>"><%= focus_area.respond_to?(:title) ? focus_area.title : focus_area[:title] %></h3>
+  <p class="<%= defined?(p_class) ? p_class : 'text-gray-700 break-words' %>"><%= focus_area.respond_to?(:description) ? focus_area.description : focus_area[:description] %></p>
+</div>

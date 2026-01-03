@@ -4,6 +4,10 @@ module Admin
 
     def index
       @testimonials = Testimonial.all.order(:display_order)
+      respond_to do |format|
+        format.html { render template: "admin/homepage/testimonials/index" }
+        format.json { render json: { testimonials: @testimonials } }
+      end
     end
 
     def new

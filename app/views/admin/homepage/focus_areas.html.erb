@@ -42,8 +42,8 @@
 
   <div>
     <h2 class="font-semibold mb-2">Preview</h2>
-    <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll" style="min-height:520px;">
-      <%= render partial: 'admin/homepage/focus_areas_preview', locals: { focus_areas: (@preview_focus_areas || FocusArea.where(active: true).order(:display_order)) } %>
+      <div id="preview-container" class="bg-white p-4 rounded shadow admin-preview-scroll" style="min-height:520px;">
+      <%= render partial: 'admin/homepage/focus_areas/preview', locals: { focus_areas: (@preview_focus_areas || FocusArea.where(active: true).order(:display_order)) } %>
     </div>
   </div>
 </div>

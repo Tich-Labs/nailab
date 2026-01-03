@@ -1,5 +1,6 @@
 <%# _focus_areas.html.erb - FocusAreas (key focus sectors) %>
 <%
+  admin_preview = local_assigns.key?(:admin_preview) && local_assigns[:admin_preview]
   focus_items = if local_assigns.key?(:focus_areas)
     local_assigns[:focus_areas]
   elsif defined?(FocusArea)
@@ -7,69 +8,72 @@
   else
     []
   end
+
+  card_class = admin_preview ? 'bg-purple-50 border border-purple-100 rounded-xl px-6 py-4 max-w-xs shadow break-words' : 'bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow'
+  h3_class = admin_preview ? 'text-lg font-semibold text-purple-700 mb-2 truncate' : 'text-xl font-semibold text-purple-700 mb-2'
+  p_class = admin_preview ? 'text-gray-700 break-words' : 'text-gray-700'
 %>
 
 <section class="py-20 bg-white">
-  <div class="max-w-6xl mx-auto px-4 text-center">
-    <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>
+    <div class="max-w-6xl mx-auto px-4 text-center">
+    <% unless admin_preview %>
+      <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>
+    <% end %>
     <div class="flex flex-wrap justify-center gap-6">
       <% if focus_items.present? %>
-        <% focus_items.each do |fa| %>
-          <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-            <h3 class="text-xl font-semibold text-purple-700 mb-2"><%= fa.title %></h3>
-            <p class="text-gray-700"><%= fa.description %></p>
+        <% if admin_preview %>
+          <div class="admin-preview-scroll-wrapper" style="height:100%;">
+            <div id="focus-areas-preview" style="height:100%; overflow-y:auto;">
+              <% focus_items.each do |fa| %>
+                <div class="py-4 flex justify-center border-b last:border-b-0">
+                  <div class="p-4 w-full flex items-center justify-center">
+                    <%= render 'admin/homepage/focus_areas/preview_card', focus_area: fa, card_class: card_class, h3_class: h3_class, p_class: p_class %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
           </div>
+        <% else %>
+          <% focus_items.each do |fa| %>
+            <div class="<%= card_class %>">
+              <h3 class="<%= h3_class %>"><%= fa.title %></h3>
+              <p class="<%= p_class %>"><%= fa.description %></p>
+            </div>
+          <% end %>
         <% end %>
       <% else %>
         <!-- Fallback static cards -->
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">HealthTech</h3>
-          <p class="text-gray-700">Innovative solutions improving healthcare accessibility and quality across Africa</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">AgriTech</h3>
-          <p class="text-gray-700">Technologies enhancing agricultural productivity and sustainability.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">FinTech</h3>
-          <p class="text-gray-700">Innovations making banking, payments, and financial services more accessible.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">EduTech</h3>
-          <p class="text-gray-700">Digital solutions revolutionizing education and skill development in Africa.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">CleanTech</h3>
-          <p class="text-gray-700">Sustainable solutions for renewable energy and environmental conservation.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">E-commerce & RetailTech</h3>
-          <p class="text-gray-700">Innovative solutions transforming how Africans shop and access goods, no matter where they live.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">SaaS</h3>
-          <p class="text-gray-700">Empowering businesses with scalable software solutions to enhance operations and growth.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">AI & ML</h3>
-          <p class="text-gray-700">Artificial intelligence and machine learning applications solving African challenges.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">Robotics</h3>
-          <p class="text-gray-700">Robotic innovations addressing industrial and social needs across the continent.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">MobileTech</h3>
-          <p class="text-gray-700">Mobile-first solutions designed for Africa's rapidly growing smartphone market.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">Mobility & LogisticsTech</h3>
-          <p class="text-gray-700">Streamlining the movement of people and goods for a more connected Africa.</p>
-        </div>
-        <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
-          <h3 class="text-xl font-semibold text-purple-700 mb-2">Creative & MediaTech</h3>
-          <p class="text-gray-700">Revolutionizing digital content creation and consumption across the continent.</p>
-        </div>
+          <% if admin_preview %>
+          <div class="admin-preview-scroll-wrapper" style="height:100%;">
+            <div id="focus-areas-preview" style="height:100%; overflow-y:auto;">
+            <% focus_items_for_preview = [
+              Struct.new(:title, :description).new('HealthTech', 'Innovative solutions improving healthcare accessibility and quality across Africa'),
+              Struct.new(:title, :description).new('AgriTech', 'Technologies enhancing agricultural productivity and sustainability.'),
+              Struct.new(:title, :description).new('FinTech', 'Innovations making banking, payments, and financial services more accessible.')
+            ] %>
+            <% focus_items_for_preview.each do |fa| %>
+              <div class="py-4 flex justify-center border-b last:border-b-0">
+                <div class="p-4 w-full flex items-center justify-center">
+                  <%= render 'admin/homepage/focus_areas/preview_card', focus_area: fa, card_class: card_class, h3_class: h3_class, p_class: p_class %>
+                </div>
+              </div>
+            <% end %>
+            </div>
+          </div>
+        <% else %>
+          <div class="<%= card_class %>">
+            <h3 class="<%= h3_class %>">HealthTech</h3>
+            <p class="<%= p_class %>">Innovative solutions improving healthcare accessibility and quality across Africa</p>
+          </div>
+          <div class="<%= card_class %>">
+            <h3 class="<%= h3_class %>">AgriTech</h3>
+            <p class="<%= p_class %>">Technologies enhancing agricultural productivity and sustainability.</p>
+          </div>
+          <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
+            <h3 class="text-xl font-semibold text-purple-700 mb-2">FinTech</h3>
+            <p class="text-gray-700">Innovations making banking, payments, and financial services more accessible.</p>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>

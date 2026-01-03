@@ -3,15 +3,16 @@ module Admin
     before_action :set_focus_area, only: %i[edit update destroy reorder toggle]
 
     def index
+      @focus_areas = FocusArea.order(:display_order)
+      @preview_focus_areas = @focus_areas.where(active: true)
+      @focus_area = FocusArea.new
+
       respond_to do |format|
-        format.html { redirect_to admin_homepage_focus_areas_path }
+        format.html { render template: "admin/homepage/focus_areas/index" }
         format.json do
-          @focus_areas = FocusArea.order(:display_order)
-          @preview_focus_areas = @focus_areas.where(active: true)
-          @focus_area = FocusArea.new
           render json: {
             html_rows: render_to_string(partial: "admin/homepage/focus_areas/rows", formats: [ :html ], locals: { focus_areas: @focus_areas }),
-            preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: @preview_focus_areas })
+            preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: [] })
           }
         end
       end
@@ -30,7 +31,7 @@ module Admin
           format.json do
             render json: {
               html_rows: render_to_string(partial: "admin/homepage/focus_areas/rows", formats: [ :html ], locals: { focus_areas: FocusArea.order(:display_order) }),
-                preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: FocusArea.where(active: true).order(:display_order) })
+                preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: [] })
             }
           end
         end
@@ -52,7 +53,7 @@ module Admin
           format.json do
             render json: {
               html_rows: render_to_string(partial: "admin/homepage/focus_areas/rows", formats: [ :html ], locals: { focus_areas: FocusArea.order(:display_order) }),
-                preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: FocusArea.where(active: true).order(:display_order) })
+                preview_html: render_to_string(partial: "admin/homepage/focus_areas/preview", formats: [ :html ], locals: { focus_areas: [] })
             }
           end
         end

@@ -1,0 +1,57 @@
+<h1 class="text-2xl font-bold mb-4">CTA — Ready to grow your startup?</h1>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow"> 
+      <%= form_with url: admin_homepage_cta_update_path, method: :patch, local: true do %>
+        <div class="mb-3">
+          <%= label_tag 'bottom_cta_heading', 'Heading', class: 'block font-medium' %>
+          <%= text_field_tag 'bottom_cta[heading]', @bottom_cta[:heading], id: 'bottom_cta_heading', class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'bottom_cta_body', 'Body copy', class: 'block font-medium' %>
+          <%= text_area_tag 'bottom_cta[body]', @bottom_cta[:body], id: 'bottom_cta_body', class: 'w-full form-input admin-form-input', rows: 3 %>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-3">
+          <div>
+            <%= label_tag 'bottom_cta_primary_label', 'Primary CTA label', class: 'block font-medium' %>
+            <%= text_field_tag 'bottom_cta[primary_cta][label]', @bottom_cta.dig(:primary_cta, :label), id: 'bottom_cta_primary_label', class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div>
+            <%= label_tag 'bottom_cta_primary_link', 'Primary CTA link', class: 'block font-medium' %>
+            <%= text_field_tag 'bottom_cta[primary_cta][link]', @bottom_cta.dig(:primary_cta, :link), id: 'bottom_cta_primary_link', class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-3">
+          <div>
+            <%= label_tag 'bottom_cta_secondary_label', 'Secondary CTA label', class: 'block font-medium' %>
+            <%= text_field_tag 'bottom_cta[secondary_cta][label]', @bottom_cta.dig(:secondary_cta, :label), id: 'bottom_cta_secondary_label', class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div>
+            <%= label_tag 'bottom_cta_secondary_link', 'Secondary CTA link', class: 'block font-medium' %>
+            <%= text_field_tag 'bottom_cta[secondary_cta][link]', @bottom_cta.dig(:secondary_cta, :link), id: 'bottom_cta_secondary_link', class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <%= submit_tag 'Save CTA', class: 'btn btn-primary' %>
+          <%= link_to 'Preview live section', root_path(anchor: 'bottom-cta'), class: 'btn btn-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow">
+      <div class="max-w-xl mx-auto text-center space-y-5">
+        <h2 class="text-3xl font-bold text-gray-900"><%= @bottom_cta[:heading] %></h2>
+        <p class="text-lg text-gray-600"><%= @bottom_cta[:body] %></p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <%= link_to @bottom_cta.dig(:primary_cta, :label) || 'Browse Programs', @bottom_cta.dig(:primary_cta, :link) || programs_path, class: 'inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold shadow-lg hover:bg-teal-700' %>
+          <%= link_to @bottom_cta.dig(:secondary_cta, :label) || 'Find a Mentor', @bottom_cta.dig(:secondary_cta, :link) || mentors_path, class: 'inline-flex items-center justify-center px-6 py-3 border border-teal-600 text-teal-600 rounded-xl font-semibold hover:bg-teal-50' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
