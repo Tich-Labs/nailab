@@ -26,7 +26,11 @@ module AdminDashboardHelper
       {
         title: "About",
         sections: [
-          { label: "Edit page", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" }
+          { label: "Why Nailab Exists", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-why_nailab_exists"), icon: "❓" },
+          { label: "Our Impact", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-our_impact"), icon: "📊" },
+          { label: "Vision & Mission", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-vision_mission"), icon: "🎯" },
+          { label: "What Drives Us", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-what_drives_us"), icon: "🔥" },
+          { label: "Edit full page", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" }
         ]
       },
       {
