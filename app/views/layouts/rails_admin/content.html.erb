@@ -4,7 +4,14 @@
 <% if flash.present? %>
   <div class="space-y-2 mb-4">
     <% flash.each do |type, msg| %>
-      <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+      <% css_type = case type.to_s
+        when 'notice', 'success' then 'success'
+        when 'alert', 'error' then 'danger'
+        when 'info' then 'info'
+        when 'warning' then 'warning'
+        else 'info'
+      end %>
+      <div class="alert alert-<%= css_type %> rounded-2xl px-4 py-3 text-sm shadow-sm">
         <span class="font-semibold"><%= type.to_s.upcase %>:</span>
         <%= msg %>
       </div>

@@ -8,7 +8,7 @@ module Admin
   class HomepageController < RailsAdmin::MainController
     include AdminLayoutData
       before_action :set_logos, only: %i[impact_network reorder toggle]
-      before_action :prepare_home_content, only: %i[hero update_hero cta update_cta]
+      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta]
       HERO_DEFAULT = {
         title: "Grow your startup with people who’ve done it before.",
         subtitle: "Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.",
@@ -36,11 +36,24 @@ module Admin
         @hero_slides = hero_slides_from_json(@hero_content)
         @hero_secondary_cta = (@hero_content[:secondary_cta].is_a?(Hash) ? @hero_content[:secondary_cta] : {}).with_indifferent_access
         @preview_hero = @hero_slides.first
+        connect_json = @home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}
+        @connect_stats = connect_json[:stats].presence || PagesController::DEFAULT_CONNECT_STATS
     end
 
       def update_hero
         @hero_content = hero_params_with_defaults
         @home_content_json[:hero] = @hero_content.except(:slides)
+          # Persist connect stats if provided from the editor
+          if params[:connect_stats].present?
+            stats = Array.wrap(params[:connect_stats]).map do |s|
+              {
+                value: s.is_a?(Hash) ? s["value"] : s[:value],
+                label: s.is_a?(Hash) ? s["label"] : s[:label]
+              }
+            end
+            @home_content_json[:connect_grow_impact] ||= {}
+            @home_content_json[:connect_grow_impact][:stats] = stats
+          end
           if @home_page.update(structured_content: @home_content_json.to_json)
             redirect_to admin_homepage_hero_path, notice: "Hero updated", status: :see_other
           else
@@ -63,6 +76,50 @@ module Admin
     def cta
         @home_content_json ||= {}.with_indifferent_access
       @bottom_cta = bottom_cta_content
+    end
+
+    def how_we_support
+      @how_we_support_items = if @home_content_json[:how_we_support].is_a?(Array)
+        @home_content_json[:how_we_support].map { |i| i.is_a?(Hash) ? i.with_indifferent_access : i }
+      else
+        PagesController::DEFAULT_SUPPORT_ITEMS
+      end
+    end
+
+    def update_how_we_support
+      incoming = params[:support_items] || {}
+      items = []
+      # incoming expected as hash of indexed entries (0 => {title=>.., description=>..})
+      if incoming.is_a?(ActionController::Parameters) || incoming.is_a?(Hash)
+        incoming.to_h.each do |_idx, vals|
+          vals = vals.to_h
+          items << {
+            title: vals["title"].to_s.strip,
+            description: vals["description"].to_s.strip,
+            cta_label: vals["cta_label"].to_s.strip,
+            cta_link: vals["cta_link"].to_s.strip
+          }
+        end
+      elsif incoming.is_a?(Array)
+        incoming.each do |vals|
+          vals = vals.to_h
+          items << {
+            title: vals["title"].to_s.strip,
+            description: vals["description"].to_s.strip,
+            cta_label: vals["cta_label"].to_s.strip,
+            cta_link: vals["cta_link"].to_s.strip
+          }
+        end
+      end
+
+      @home_content_json[:how_we_support] = items
+      if @home_page.update(structured_content: @home_content_json.to_json)
+        redirect_to admin_homepage_how_we_support_path, notice: "How we support updated", status: :see_other
+      else
+        flash.now[:alert] = "Unable to save support items"
+        @how_we_support_items = items
+        render :how_we_support, status: :unprocessable_entity
+      end
     end
 
     def update_cta
@@ -123,6 +180,10 @@ module Admin
       else
         {}
       end.with_indifferent_access
+      if Rails.env.development?
+        Rails.logger.debug("HomePage parsed structured_content: ")
+        Rails.logger.debug(@home_content_json.inspect)
+      end
     end
 
     def hero_content_hash

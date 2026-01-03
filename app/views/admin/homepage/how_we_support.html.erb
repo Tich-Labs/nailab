@@ -1,0 +1,61 @@
+<h1 class="text-2xl font-bold mb-4">How Nailab Supports You — Editor & Preview</h1>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_homepage_how_we_support_update_path, method: :patch, local: true do %>
+        <p class="text-sm text-slate-600 mb-4">Edit the support items that appear on the homepage.</p>
+        <% (@how_we_support_items || PagesController::DEFAULT_SUPPORT_ITEMS).each_with_index do |item, idx| %>
+          <div class="mb-4 border rounded p-3">
+            <p class="text-xs font-semibold mb-2">Item <%= idx + 1 %></p>
+            <div class="mb-2">
+              <%= label_tag "support_items[#{idx}][title]", 'Title', class: 'block font-medium' %>
+              <%= text_field_tag "support_items[#{idx}][title]", (item.is_a?(Hash) ? (item['title'] || item[:title]) : item[:title]), class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div class="mb-2">
+              <%= label_tag "support_items[#{idx}][description]", 'Description', class: 'block font-medium' %>
+              <%= text_area_tag "support_items[#{idx}][description]", (item.is_a?(Hash) ? (item['description'] || item[:description]) : item[:description]), class: 'w-full form-input admin-form-input', rows: 3 %>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <%= label_tag "support_items[#{idx}][cta_label]", 'CTA label', class: 'block font-medium' %>
+                <%= text_field_tag "support_items[#{idx}][cta_label]", (item.is_a?(Hash) ? (item['cta_label'] || item[:cta_label]) : item[:cta_label]), class: 'w-full form-input admin-form-input' %>
+              </div>
+              <div>
+                <%= label_tag "support_items[#{idx}][cta_link]", 'CTA link', class: 'block font-medium' %>
+                <%= text_field_tag "support_items[#{idx}][cta_link]", (item.is_a?(Hash) ? (item['cta_link'] || item[:cta_link]) : item[:cta_link]), class: 'w-full form-input admin-form-input' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <div class="flex gap-3">
+          <%= submit_tag 'Save support items', class: 'btn btn-primary' %>
+          <%= link_to 'Preview live section', root_path(anchor: 'how-we-support'), class: 'btn btn-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <% items = @how_we_support_items || PagesController::DEFAULT_SUPPORT_ITEMS %>
+      <div class="grid grid-cols-1 gap-4">
+        <% items.each do |it| %>
+          <% title = it.is_a?(Hash) ? (it['title'] || it[:title]) : it.title %>
+          <% desc = it.is_a?(Hash) ? (it['description'] || it[:description]) : it.description %>
+          <% cta_label = it.is_a?(Hash) ? (it['cta_label'] || it[:cta_label]) : it.cta_label %>
+          <% cta_link = it.is_a?(Hash) ? (it['cta_link'] || it[:cta_link]) : it.cta_link %>
+          <div class="border rounded p-4">
+            <h3 class="font-semibold mb-2"><%= title %></h3>
+            <p class="text-sm text-slate-600 mb-3"><%= desc %></p>
+            <% if cta_label.present? %>
+              <a href="<%= cta_link.presence || '#' %>" class="text-purple-600 font-semibold"><%= cta_label %></a>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

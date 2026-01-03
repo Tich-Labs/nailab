@@ -38,6 +38,17 @@
             <%= text_field_tag 'hero[secondary_cta][link]', @hero_content.dig(:secondary_cta, :link), id: 'hero_secondary_link', class: 'w-full form-input admin-form-input' %>
           </div>
         </div>
+        <div class="mb-4">
+          <p class="text-sm font-medium mb-2">Hero stats (displayed below the preview)</p>
+          <div class="space-y-2">
+            <% (@connect_stats || []).each_with_index do |stat, idx| %>
+              <div class="grid grid-cols-2 gap-3">
+                <%= text_field_tag 'connect_stats[][value]', stat.is_a?(Hash) ? stat[:value] || stat['value'] : stat[:value], placeholder: 'Value (e.g. 1031)', class: 'w-full form-input admin-form-input' %>
+                <%= text_field_tag 'connect_stats[][label]', stat.is_a?(Hash) ? stat[:label] || stat['label'] : stat[:label], placeholder: 'Label (e.g. Startup Founders)', class: 'w-full form-input admin-form-input' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
         <div class="flex gap-3">
           <%= submit_tag 'Save hero', class: 'btn btn-primary' %>
           <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'btn btn-secondary' %>
@@ -65,33 +76,18 @@
           </div>
         </div>
       </div>
-      <div class="space-y-4">
-        <div class="text-center">
-          <p class="text-3xl font-bold text-slate-800">1031</p>
-          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Startup Founders</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl font-bold text-slate-800">50</p>
-          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Active Mentors</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl font-bold text-slate-800">$250M</p>
-          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Combined Startup Valuation</p>
+      <div class="space-y-4 bg-teal-50 p-4 rounded-xl">
+        <% stats = @connect_stats || PagesController::DEFAULT_CONNECT_STATS %>
+        <div class="flex flex-row justify-center items-center gap-6">
+          <% stats.each do |s| %>
+            <div class="text-center">
+              <p class="text-3xl font-bold text-slate-800"><%= s.is_a?(Hash) ? (s[:value] || s['value']) : s %></p>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-500"><%= s.is_a?(Hash) ? (s[:label] || s['label']) : '' %></p>
+            </div>
+          <% end %>
         </div>
       </div>
       <p class="text-xs text-slate-500">Image-only hero; carousel support will ship later.</p>
     </div>
-  </div>
-</div>
-<div class="bg-white p-4 rounded shadow mt-6">
-  <h3 class="font-semibold mb-2">Debug — parsed homepage content</h3>
-  <p class="text-xs text-slate-500 mb-2">These values show what the controller parsed from `HomePage.structured_content`.</p>
-  <div class="prose max-w-none">
-    <strong>@home_page.structured_content</strong>
-    <pre class="whitespace-pre-wrap text-xs p-2 bg-slate-50 rounded border border-slate-100"><%= @home_page&.structured_content.to_s %></pre>
-    <strong>@home_content_json[:hero]</strong>
-    <pre class="whitespace-pre-wrap text-xs p-2 bg-slate-50 rounded border border-slate-100"><%= @home_content_json[:hero].to_json %></pre>
-    <strong>@hero_content</strong>
-    <pre class="whitespace-pre-wrap text-xs p-2 bg-slate-50 rounded border border-slate-100"><%= @hero_content.to_json %></pre>
   </div>
 </div>
