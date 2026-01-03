@@ -1,0 +1,93 @@
+// RailsAdmin form field overrides to emulate Tailwind utility styles
+// Applies globally to RailsAdmin pages. Adjusts labels and inputs for
+// consistent spacing, borders, focus, and transitions.
+
+.rails_admin, .rails_admin * {
+  box-sizing: border-box;
+}
+
+/* Ensure form group spacing */
+.rails_admin .form-group,
+.rails_admin .form-row {
+  margin-bottom: 1rem; /* equivalent to mb-4 */
+}
+
+/* Labels: bold, high contrast, small with spacing */
+.rails_admin label {
+  display: block;
+  font-weight: 700; /* font-bold */
+  color: #1f2937; /* text-gray-800 */
+  font-size: 0.875rem; /* text-sm */
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+/* Inputs, selects, textareas: padding, border, rounded, full width */
+.rails_admin input[type="text"],
+.rails_admin input[type="email"],
+.rails_admin input[type="password"],
+.rails_admin input[type="url"],
+.rails_admin input[type="number"],
+.rails_admin input[type="search"],
+.rails_admin textarea,
+.rails_admin select,
+.rails_admin .select2-container .select2-selection--single,
+.rails_admin .select2-container .select2-selection__rendered {
+  width: 100% !important; /* w-full */
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  background-clip: padding-box;
+  transition: all 200ms ease-in-out; /* transition duration-200 */
+  box-shadow: none;
+  color: #111827;
+}
+
+/* Ensure selects adopt the same height/appearance */
+.rails_admin select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Textareas consistent row sizing */
+.rails_admin textarea {
+  min-height: 3.25rem; /* ensure reasonable height */
+}
+
+/* Focus feedback: remove default outline and use blue ring + blue border */
+.rails_admin input:focus,
+.rails_admin textarea:focus,
+.rails_admin select:focus,
+.rails_admin .select2-container--default .select2-selection--single:focus {
+  outline: none !important; /* focus:outline-none */
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.25) !important; /* focus:ring-2 focus:ring-blue-500 */
+  border-color: #3b82f6 !important; /* focus:border-blue-500 */
+}
+
+/* File inputs: inherit spacing and border */
+.rails_admin input[type="file"] {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
+
+/* Help text and hints: spacing and softer color */
+.rails_admin .help-block,
+.rails_admin .field-description {
+  color: #6b7280; /* text-gray-500 */
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* Wrap label+input visually when RailsAdmin renders inline labels */
+.rails_admin .control-label + .form-control,
+.rails_admin .control-label + input,
+.rails_admin .control-label + select,
+.rails_admin .control-label + textarea {
+  display: block;
+}
+
+/* Make operation buttons consistent with spacing inside forms */
+.rails_admin .form-actions {
+  margin-top: 1rem;
+}
