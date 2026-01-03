@@ -27,7 +27,12 @@ module Admin
     end
 
     def hero
-        @hero_content = hero_content_hash
+        hero_json = @home_content_json[:hero]
+        @hero_content = if hero_json.is_a?(Hash)
+          hero_json.with_indifferent_access
+        else
+          HERO_DEFAULT.deep_dup.with_indifferent_access
+        end
         @hero_slides = hero_slides_from_json(@hero_content)
         @hero_secondary_cta = (@hero_content[:secondary_cta].is_a?(Hash) ? @hero_content[:secondary_cta] : {}).with_indifferent_access
         @preview_hero = @hero_slides.first
@@ -36,14 +41,14 @@ module Admin
       def update_hero
         @hero_content = hero_params_with_defaults
         @home_content_json[:hero] = @hero_content.except(:slides)
-        if @home_page.update(structured_content: @home_content_json.to_json)
-          redirect_to admin_homepage_hero_path, notice: "Hero updated"
-        else
+          if @home_page.update(structured_content: @home_content_json.to_json)
+            redirect_to admin_homepage_hero_path, notice: "Hero updated", status: :see_other
+          else
           flash.now[:alert] = "Unable to save hero"
           @hero_slides = hero_slides_from_json(@hero_content)
           @hero_secondary_cta = (@hero_content[:secondary_cta].is_a?(Hash) ? @hero_content[:secondary_cta] : {}).with_indifferent_access
           render :hero, status: :unprocessable_entity
-        end
+          end
       end
 
     def focus_areas
@@ -64,7 +69,7 @@ module Admin
         @home_content_json ||= {}.with_indifferent_access
       @home_content_json[:bottom_cta] = bottom_cta_params
       if @home_page.update(structured_content: @home_content_json.to_json)
-        redirect_to admin_homepage_cta_path, notice: "CTA updated"
+        redirect_to admin_homepage_cta_path, notice: "CTA updated", status: :see_other
       else
         @bottom_cta = bottom_cta_content
         flash.now[:alert] = "Unable to save CTA"
@@ -105,6 +110,7 @@ module Admin
 
     def prepare_home_content
       set_homepage
+      @home_page.reload if @home_page&.persisted?
       raw_content = @home_page.structured_content
       @home_content_json = case raw_content
       when Hash then raw_content.with_indifferent_access

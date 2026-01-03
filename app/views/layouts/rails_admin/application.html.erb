@@ -18,7 +18,7 @@
     </script>
     <%= stylesheet_link_tag 'tailwind', 'data-turbo-track': 'reload' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'application', type: 'module', 'data-turbo-track': 'reload' %>
     <title><%= content_for?(:title) ? yield(:title) : "Nailab Admin" %></title>
   </head>
   <body class="rails_admin bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
