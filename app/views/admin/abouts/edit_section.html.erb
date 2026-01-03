@@ -1,0 +1,83 @@
+<h1 class="text-2xl font-bold mb-4">Edit: <%= @section_title %></h1>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_about_section_update_path(section: @section_key), method: :patch, local: true, html: { multipart: true } do %>
+        <p class="text-sm text-slate-600 mb-4">Edit the <%= @section_title %> section content.</p>
+        <div class="mb-3">
+          <%= label_tag "section[title]", 'Title', class: 'block font-medium' %>
+          <%= text_field_tag 'section_payload[title]', (@section_content && (@section_content['title'] || @section_content[:title])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag "section[subheading]", 'Subheading', class: 'block font-medium' %>
+          <%= text_field_tag 'section_payload[subheading]', (@section_content && (@section_content['subheading'] || @section_content[:subheading])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag "section[paragraph_one]", 'Paragraph one', class: 'block font-medium' %>
+          <%= text_area_tag 'section_payload[paragraph_one]', (@section_content && (@section_content['paragraph_one'] || @section_content[:paragraph_one])), class: 'w-full form-input admin-form-input', rows: 4 %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag "section[paragraph_two]", 'Paragraph two', class: 'block font-medium' %>
+          <%= text_area_tag 'section_payload[paragraph_two]', (@section_content && (@section_content['paragraph_two'] || @section_content[:paragraph_two])), class: 'w-full form-input admin-form-input', rows: 4 %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag "section[paragraph_three]", 'Paragraph three', class: 'block font-medium' %>
+          <%= text_area_tag 'section_payload[paragraph_three]', (@section_content && (@section_content['paragraph_three'] || @section_content[:paragraph_three])), class: 'w-full form-input admin-form-input', rows: 4 %>
+        </div>
+        <div class="mb-4">
+          <%= label_tag "section[image_url]", 'Image URL', class: 'block font-medium' %>
+          <%= text_field_tag 'section_payload[image_url]', @section_image_url || (@section_content && (@section_content['image_url'] || @section_content[:image_url])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <% if @section_image_url.present? %>
+          <div class="mb-3">
+            <p class="text-sm font-medium mb-2">Current image</p>
+            <img src="<%= @section_image_url %>" alt="Current section image" class="w-full h-40 object-cover rounded-lg border border-white mb-2" />
+          </div>
+        <% end %>
+        <div class="mb-4">
+          <p class="text-sm text-slate-500 mb-2">Or upload an image</p>
+          <%= file_field_tag 'section_payload[image_file]', accept: 'image/*', class: 'w-full' %>
+        </div>
+        <div class="flex gap-3">
+          <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
+          <a class="btn btn-secondary" href="/about#<%= @section_key.to_s.tr('_','-') %>">Preview live section</a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <% content = @section_content || {} %>
+      <% image_url = @section_image_url || content['image_url'] || content[:image_url] %>
+      <% if image_url.present? %>
+        <div class="mb-4">
+          <img src="<%= image_url %>" alt="<%= content['title'] || content[:title] || @section_title %>" class="w-full h-48 object-cover rounded-lg border border-white" />
+        </div>
+      <% end %>
+      <% title = content['title'] || content[:title] || @section_title %>
+      <% subheading = content['subheading'] || content[:subheading] %>
+      <% p1 = content['paragraph_one'] || content[:paragraph_one] %>
+      <% p2 = content['paragraph_two'] || content[:paragraph_two] %>
+      <% p3 = content['paragraph_three'] || content[:paragraph_three] %>
+      <div class="space-y-4">
+        <h2 class="text-2xl font-bold"><%= title %></h2>
+        <% if subheading.present? %>
+          <p class="text-sm text-slate-600 font-semibold"><%= subheading %></p>
+        <% end %>
+        <% if p1.present? %>
+          <p class="text-sm text-slate-700"><%= p1 %></p>
+        <% end %>
+        <% if p2.present? %>
+          <p class="text-sm text-slate-700"><%= p2 %></p>
+        <% end %>
+        <% if p3.present? %>
+          <p class="text-sm text-slate-700"><%= p3 %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

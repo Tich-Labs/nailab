@@ -108,6 +108,7 @@ module Admin
 
     def connect_grow_impact
       connect_json = @home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}
+      @connect_title = connect_json[:title].presence || "Connect. Grow. Impact."
       @connect_intro = connect_json[:intro].presence || PagesController::DEFAULT_CONNECT_INTRO
       @connect_stats = connect_json[:stats].presence || PagesController::DEFAULT_CONNECT_STATS
       @connect_cards = if connect_json[:cards].is_a?(Array)
@@ -120,6 +121,7 @@ module Admin
     def update_connect_grow_impact
       incoming = params[:connect] || {}
       incoming = incoming.to_unsafe_h if incoming.is_a?(ActionController::Parameters)
+      title = incoming["title"].to_s.strip
       intro = incoming["intro"].to_s.strip
 
       cards_in = incoming["cards"] || {}
@@ -147,6 +149,7 @@ module Admin
       end
 
       @home_content_json[:connect_grow_impact] ||= {}
+      @home_content_json[:connect_grow_impact][:title] = title
       @home_content_json[:connect_grow_impact][:intro] = intro
       @home_content_json[:connect_grow_impact][:cards] = cards
 

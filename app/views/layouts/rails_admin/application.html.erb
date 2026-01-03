@@ -16,9 +16,7 @@
         }
       })();
     </script>
-    <%= stylesheet_link_tag 'tailwind', 'data-turbo-track': 'reload' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-    <%= javascript_include_tag 'application', type: 'module', 'data-turbo-track': 'reload' %>
     <title><%= content_for?(:title) ? yield(:title) : "Nailab Admin" %></title>
   </head>
   <body class="rails_admin bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
@@ -66,11 +64,16 @@
           <div class="space-y-6">
             <% admin_sidebar_groups.each do |group| %>
               <div>
-                <div class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 mb-2">
+                <%# highlight the group title when current_page? matches the group's path %>
+                <% active_group = group[:path].present? && current_page?(group[:path]) rescue false %>
+                <div class="px-3 py-2 text-sm font-extrabold uppercase tracking-wide border-b border-slate-200 dark:border-slate-800 mb-2 <%= active_group ? 'rounded-md ring-1 ring-black/10 text-black dark:text-white bg-transparent' : 'text-purple-700 dark:text-purple-300' %>">
+                  <%# ensure the link text inherits the container color using text-current %>
                   <% if group[:path].present? %>
-                    <%= link_to group[:title], group[:path], class: 'text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' %>
+                    <%= link_to group[:path], class: 'block text-current no-underline' do %>
+                      <span class="text-sm font-extrabold uppercase tracking-wide"><%= group[:title] %></span>
+                    <% end %>
                   <% else %>
-                    <%= group[:title] %>
+                    <span class="text-sm font-extrabold uppercase tracking-wide"><%= group[:title] %></span>
                   <% end %>
                 </div>
                 <div class="space-y-1">

@@ -9,7 +9,13 @@ module.exports = {
     './app/helpers/**/*.rb'
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'nailab-purple': '#5b21b6',
+        'nailab-teal': '#14b8a6',
+        'nailab-yellow': '#fbbf24'
+      }
+    },
   },
   plugins: [],
 }

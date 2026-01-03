@@ -9,7 +9,7 @@
           </a>
       </div>
       <!-- Main Navigation -->
-      <nav class="flex space-x-8 max-md:hidden">
+      <nav class="hidden md:flex space-x-8">
         <% network_active = request.path.start_with?(startups_path) || request.path.start_with?(mentors_path) %>
         <div class="relative group">
           <span class="inline-flex items-center gap-1 cursor-pointer transition-colors px-3 py-2 text-sm font-medium #{network_active ? 'text-teal-600' : 'text-gray-700 hover:text-teal-600'}">
@@ -67,9 +67,9 @@
           </div>
         <% else %>
           <!-- Logged Out State -->
-          <%= link_to 'Log in', new_user_session_path, class: "bg-nailab-teal font-semibold text-gray-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-teal-700 hover:text-white" %>
+          <%= link_to 'Log in', new_user_session_path, class: "bg-purple-600 font-semibold text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-purple-100 hover:text-black" %>
         <% end %>
-        <!-- Mobile menu button - TEMPORARILY DISABLED -->
+        <!-- Mobile menu button -->
         <div data-controller="mobile-menu" class="md:hidden relative">
           <button data-action="click->mobile-menu#toggle" type="button" class="p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 transition-colors duration-200">
             <svg data-mobile-menu-target="icon" class="w-6 h-6 transition-transform duration-300 ease-in-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@
               <path data-mobile-menu-target="bottomLine" class="transition-all duration-300 ease-in-out" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16"/>
             </svg>
           </button>
-          <div data-mobile-menu-target="menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <div data-mobile-menu-target="menu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
             <%= link_to 'Home', root_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <%= link_to 'Programs', programs_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <%= link_to 'Startups', startups_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>

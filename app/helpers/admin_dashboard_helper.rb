@@ -11,7 +11,7 @@ module AdminDashboardHelper
     [
       {
         title: "🏠 Homepage",
-        path: main_app.admin_homepage_sections_edit_path,
+        path: safe_path { main_app.admin_homepage_sections_edit_path },
         sections: [
           { label: "Hero Section", path: main_app.admin_homepage_hero_path, icon: "🌅" },
           { label: "Who We Are", path: main_app.admin_homepage_who_we_are_path, icon: "🤝" },
@@ -25,12 +25,12 @@ module AdminDashboardHelper
       },
       {
         title: "About",
+        path: safe_path { main_app.admin_about_sections_edit_path },
         sections: [
-          { label: "Why Nailab Exists", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-why_nailab_exists"), icon: "❓" },
-          { label: "Our Impact", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-our_impact"), icon: "📊" },
-          { label: "Vision & Mission", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-vision_mission"), icon: "🎯" },
-          { label: "What Drives Us", path: rails_admin.edit_path(model_name: "about_page", id: 1, anchor: "section-what_drives_us"), icon: "🔥" },
-          { label: "Edit full page", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" }
+          { label: "Why Nailab Exists", path: safe_path { main_app.admin_about_section_edit_path(section: "why_nailab_exists") }, icon: "❓" },
+          { label: "Our Impact", path: safe_path { main_app.admin_about_section_edit_path(section: "our_impact") }, icon: "📊" },
+          { label: "Vision & Mission", path: safe_path { main_app.admin_about_section_edit_path(section: "vision_mission") }, icon: "🎯" },
+          { label: "What Drives Us", path: safe_path { main_app.admin_about_section_edit_path(section: "what_drives_us") }, icon: "🔥" }
         ]
       },
       {

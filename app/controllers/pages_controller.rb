@@ -300,6 +300,7 @@ class PagesController < ApplicationController
     connect_json = (@home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}).with_indifferent_access
     @connect_intro = connect_json[:intro].presence || DEFAULT_CONNECT_INTRO
     @connect_stats = connect_json[:stats].presence || DEFAULT_CONNECT_STATS
+    @connect_title = connect_json[:title].presence || "Connect. Grow. Impact."
     @connect_cards = connect_json[:cards].is_a?(Array) ? connect_json[:cards].map { |card| card.is_a?(Hash) ? card.with_indifferent_access : {} } : DEFAULT_CONNECT_CARDS
     bottom_cta_json = (@home_content_json[:bottom_cta].is_a?(Hash) ? @home_content_json[:bottom_cta] : {}).with_indifferent_access
     @bottom_cta_content = DEFAULT_BOTTOM_CTA.deep_dup

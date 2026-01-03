@@ -29,6 +29,9 @@ module NailabBackend
     # config.eager_load_paths << Rails.root.join("extras")
     config.autoload_paths << config.root.join("app/serializers")
 
+    # Add vendor JavaScript to asset paths for importmap
+    config.assets.paths << Rails.root.join("vendor", "javascript")
+
     initializer "nailab_backend.ignore_app_admin" do
       Rails.autoloaders.main.ignore(Rails.root.join("app/admin"))
     end

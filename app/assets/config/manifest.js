@@ -1,3 +1,9 @@
 //= link_tree ../builds
 //= link_tree ../images
-//= link_directory ../javascripts .js
+//= link application.css
+//= link application.js
+//= link @hotwired--stimulus.js
+//= link @hotwired--turbo-rails.js
+//= link @hotwired--turbo.js
+//= link @rails--actioncable--src.js
+//= link swiper.js

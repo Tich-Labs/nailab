@@ -1,33 +1,53 @@
-<section class="py-20 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h2 class="text-5xl font-bold text-gray-900 mb-0">Our Impact</h2>
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">10+</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Years of Impact</p>
+<% about = AboutPage.first rescue nil %>
+<% stored = {} %>
+<% if about&.content.present? %>
+  <% begin %>
+    <% stored = JSON.parse(about.content) rescue {} %>
+  <% rescue StandardError %>
+    <% stored = {} %>
+  <% end %>
+<% end %>
+
+<% if stored['our_impact'].present? %>
+  <%= raw stored['our_impact'] %>
+<% else %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div class="flex flex-col md:col-span-4 justify-center pr-4">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900">Our Impact</h2>
+        <p class="text-lg text-gray-700 leading-relaxed">We partner with founders, mentors and partners to support startups across Africa.</p>
       </div>
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">54</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Africa Countries</p>
-      </div>
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">30+</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Innovation Programs</p>
-      </div>
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">$100M</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Funding Facilitated</p>
-      </div>
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">1000</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Startups Supported</p>
-      </div>
-      <div class="value-card bg-nailab-teal pt-6 pb-6 px-4 text-center rounded-lg">
-        <p class="text-nailab-purple text-4xl md:text-5xl font-bold mb-2">50+</p>
-        <p class="text-sm md:text-base font-base text-gray-700">Partners</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 md:col-span-8 gap-6">
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">10+</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">Years of Impact</p>
+        </div>
+
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">54</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">African Countries</p>
+        </div>
+
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">30+</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">Innovation Programs</p>
+        </div>
+
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">$100M</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">Funding Facilitated</p>
+        </div>
+
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">1000</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">Startups Supported</p>
+        </div>
+
+        <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+          <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2">50+</p>
+          <p class="text-sm md:text-sm font-base text-gray-700">Partners</p>
+        </div>
       </div>
     </div>
   </div>
-</section>
+<% end %>
