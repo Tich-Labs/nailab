@@ -40,7 +40,7 @@
         <% if current_image.present? %>
           <div class="mb-3">
             <p class="text-sm font-medium mb-2">Current image</p>
-            <img src="<%= current_image %>" alt="Current Who We Are image" class="w-full h-40 object-cover rounded mb-2" />
+            <img src="<%= current_image %>" alt="Current Who We Are image" class="w-full h-40 object-cover rounded-lg border border-white mb-2" />
           </div>
         <% end %>
         <div class="mb-4">
@@ -62,7 +62,7 @@
       <% image_url = defined?(@who_we_are_image_url) ? @who_we_are_image_url : (content['image_url'] || content[:image_url]) %>
       <% if image_url.present? %>
         <div class="mb-4">
-          <img src="<%= image_url %>" alt="<%= content['title'] || content[:title] || 'Who We Are' %>" class="w-full h-48 object-cover rounded" />
+          <img src="<%= image_url %>" alt="<%= content['title'] || content[:title] || 'Who We Are' %>" class="w-full h-48 object-cover rounded-lg border border-white" />
         </div>
       <% end %>
       <% title = content['title'] || content[:title] || 'Who We Are' %>

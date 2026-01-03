@@ -89,6 +89,8 @@ Rails.application.routes.draw do
     patch "homepage/hero", to: "homepage#update_hero", as: :homepage_hero_update
     get "homepage/how_we_support", to: "homepage#how_we_support", as: :homepage_how_we_support
     patch "homepage/how_we_support", to: "homepage#update_how_we_support", as: :homepage_how_we_support_update
+    get "homepage/connect_grow_impact", to: "homepage#connect_grow_impact", as: :homepage_connect_grow_impact
+    patch "homepage/connect_grow_impact", to: "homepage#update_connect_grow_impact", as: :homepage_connect_grow_impact_update
     get "homepage/who_we_are", to: "homepage#who_we_are", as: :homepage_who_we_are
     patch "homepage/who_we_are", to: "homepage#update_who_we_are", as: :homepage_who_we_are_update
     get "homepage/focus_areas", to: "homepage#focus_areas", as: :homepage_focus_areas

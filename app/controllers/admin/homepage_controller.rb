@@ -8,7 +8,7 @@ module Admin
   class HomepageController < RailsAdmin::MainController
     include AdminLayoutData
       before_action :set_logos, only: %i[impact_network reorder toggle]
-      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are]
+      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are connect_grow_impact update_connect_grow_impact]
       HERO_DEFAULT = {
         title: "Grow your startup with people who’ve done it before.",
         subtitle: "Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.",
@@ -103,6 +103,68 @@ module Admin
         end
       else
         @who_we_are_image_url = @who_we_are_content["image_url"] || @who_we_are_content[:image_url]
+      end
+    end
+
+    def connect_grow_impact
+      connect_json = @home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}
+      @connect_intro = connect_json[:intro].presence || PagesController::DEFAULT_CONNECT_INTRO
+      @connect_stats = connect_json[:stats].presence || PagesController::DEFAULT_CONNECT_STATS
+      @connect_cards = if connect_json[:cards].is_a?(Array)
+        connect_json[:cards].map { |c| c.is_a?(Hash) ? c.with_indifferent_access : {} }
+      else
+        PagesController::DEFAULT_CONNECT_CARDS
+      end
+    end
+
+    def update_connect_grow_impact
+      incoming = params[:connect] || {}
+      incoming = incoming.to_unsafe_h if incoming.is_a?(ActionController::Parameters)
+      intro = incoming["intro"].to_s.strip
+
+      cards_in = incoming["cards"] || {}
+      cards = []
+      if cards_in.is_a?(Array)
+        cards_in.each do |c|
+          c = c.is_a?(ActionController::Parameters) ? c.to_unsafe_h : c
+          cards << {
+            title: c["title"].to_s.strip,
+            description: c["description"].to_s.strip,
+            cta_label: c["cta_label"].to_s.strip,
+            cta_link: c["cta_link"].to_s.strip
+          }
+        end
+      elsif cards_in.is_a?(Hash)
+        cards_in.to_h.each do |_idx, vals|
+          vals = vals.is_a?(ActionController::Parameters) ? vals.to_unsafe_h : vals
+          cards << {
+            title: vals["title"].to_s.strip,
+            description: vals["description"].to_s.strip,
+            cta_label: vals["cta_label"].to_s.strip,
+            cta_link: vals["cta_link"].to_s.strip
+          }
+        end
+      end
+
+      @home_content_json[:connect_grow_impact] ||= {}
+      @home_content_json[:connect_grow_impact][:intro] = intro
+      @home_content_json[:connect_grow_impact][:cards] = cards
+
+      if params[:connect_stats].present?
+        stats = Array.wrap(params[:connect_stats]).map do |s|
+          s = s.is_a?(ActionController::Parameters) ? s.to_unsafe_h : s
+          { value: s["value"].to_s, label: s["label"].to_s }
+        end
+        @home_content_json[:connect_grow_impact][:stats] = stats
+      end
+
+      if @home_page.update(structured_content: @home_content_json.to_json)
+        redirect_to admin_homepage_connect_grow_impact_path, notice: "Connect. Grow. Impact. updated", status: :see_other
+      else
+        flash.now[:alert] = "Unable to save Connect. Grow. Impact."
+        @connect_intro = intro
+        @connect_cards = cards
+        render :connect_grow_impact, status: :unprocessable_entity
       end
     end
 
