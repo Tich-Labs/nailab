@@ -11,8 +11,8 @@ module AdminDashboardHelper
     [
       {
         title: "🏠 Homepage",
+        path: main_app.admin_homepage_sections_edit_path,
         sections: [
-          { label: "Sections", path: main_app.admin_homepage_sections_edit_path, icon: "🧩" },
           { label: "Hero Section", path: main_app.admin_homepage_hero_path, icon: "🌅" },
           { label: "Who We Are", path: main_app.admin_homepage_sections_edit_path(anchor: "section-who_we_are"), icon: "🤝" },
           { label: "How Nailab Supports You", path: main_app.admin_homepage_sections_edit_path(anchor: "section-how_we_support"), icon: "💡" },
@@ -24,16 +24,36 @@ module AdminDashboardHelper
         ]
       },
       {
-        title: "💼 Site Content",
+        title: "About",
         sections: [
-          { label: "About", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" },
-          { label: "Pricing", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" },
-          { label: "Contact Us", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" },
-          { label: "Programs", path: rails_admin.edit_path(model_name: "programs_page", id: 1), icon: "📚" },
-          { label: "Resources: Blog", path: rails_admin.edit_path(model_name: "blog_page", id: 1), icon: "📝" },
-          { label: "Resources: Knowledge Hub", path: rails_admin.edit_path(model_name: "knowledge_hub_page", id: 1), icon: "��" },
-          { label: "Resources: Events & Webinars", path: rails_admin.edit_path(model_name: "events_webinars_page", id: 1), icon: "🎤" },
-          { label: "Resources: Opportunities", path: rails_admin.edit_path(model_name: "opportunities_page", id: 1), icon: "🎯" }
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "about_page", id: 1), icon: "📖" }
+        ]
+      },
+      {
+        title: "Pricing",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" }
+        ]
+      },
+      {
+        title: "Contact Us",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" }
+        ]
+      },
+      {
+        title: "Programs",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "programs_page", id: 1), icon: "📚" }
+        ]
+      },
+      {
+        title: "Resources",
+        sections: [
+          { label: "Blog", path: rails_admin.edit_path(model_name: "blog_page", id: 1), icon: "📝" },
+          { label: "Knowledge Hub", path: rails_admin.edit_path(model_name: "knowledge_hub_page", id: 1), icon: "��" },
+          { label: "Events & Webinars", path: rails_admin.edit_path(model_name: "events_webinars_page", id: 1), icon: "🎤" },
+          { label: "Opportunities", path: rails_admin.edit_path(model_name: "opportunities_page", id: 1), icon: "🎯" }
         ]
       },
       {

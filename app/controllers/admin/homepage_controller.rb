@@ -14,6 +14,7 @@ module Admin
 
     def hero
       @hero_slides = HeroSlide.where(active: true).order(:display_order)
+      @editable_hero_slides = HeroSlide.order(:display_order)
       @preview_hero = @hero_slides
     end
 

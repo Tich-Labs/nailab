@@ -1,11 +1,59 @@
-<h1 class="text-2xl font-bold mb-4">Hero Section — Editor</h1>
+<h1 class="text-2xl font-bold mb-6">Hero Section — Editor & Preview</h1>
 
-<div class="mb-4">
-  <%= link_to 'Edit slides in CMS', rails_admin.index_path(model_name: 'hero_slide'), class: 'btn btn-primary' %>
-  <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'ml-2 btn btn-secondary' %>
-</div>
+<div class="grid gap-6 lg:grid-cols-[2fr,1fr]">
+  <section class="space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <%= link_to 'Edit slides in CMS', rails_admin.index_path(model_name: 'hero_slide'), class: 'btn btn-primary' %>
+        <%= link_to 'Preview live section', root_path(anchor: 'hero'), class: 'btn btn-secondary' %>
+      </div>
+      <%= link_to 'Create slide', rails_admin.new_path(model_name: 'hero_slide'), class: 'btn btn-outline' %>
+    </div>
 
-<div class="bg-white p-4 rounded shadow">
-  <%# Render frontend hero partial for WYSIWYG preview. Ensure preview data is available via @hero_slides/@preview_hero %>
-  <%= render 'pages/home/hero' %>
+    <div class="bg-white p-4 rounded shadow">
+      <%# Render frontend hero partial for WYSIWYG preview. Ensure preview data is available via @hero_slides/@preview_hero %>
+      <%= render 'pages/home/hero' %>
+    </div>
+  </section>
+
+  <aside class="space-y-3">
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Slides</p>
+          <h2 class="text-base font-semibold text-slate-900">Current hero frames</h2>
+        </div>
+        <%= link_to 'New slide', rails_admin.new_path(model_name: 'hero_slide'), class: 'btn btn-primary btn-sm' %>
+      </div>
+      <% if @editable_hero_slides.any? %>
+        <div class="mt-4 space-y-3">
+          <% @editable_hero_slides.each do |slide| %>
+            <div class="bg-slate-50/70 p-4 rounded border border-slate-100 shadow-sm">
+              <div class="flex items-start justify-between gap-4">
+                <div class="space-y-1">
+                  <p class="text-[11px] uppercase tracking-wider text-slate-500">Order <%= slide.display_order.to_i %></p>
+                  <p class="text-sm font-semibold text-slate-900"><%= slide.title.presence || 'Untitled slide' %></p>
+                  <% if slide.subtitle.present? %>
+                    <p class="text-sm text-slate-500"><%= slide.subtitle %></p>
+                  <% end %>
+                  <% if slide.cta_text.present? %>
+                    <p class="text-xs font-medium text-slate-600">CTA: <%= slide.cta_text %></p>
+                  <% end %>
+                </div>
+                <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase <%= slide.active? ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' %>">
+                  <%= slide.active? ? 'Active' : 'Inactive' %>
+                </span>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <%= link_to 'Edit slide', rails_admin.edit_path(model_name: 'hero_slide', id: slide.id), class: 'rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:bg-white' %>
+                <%= link_to 'View in CMS list', rails_admin.index_path(model_name: 'hero_slide'), class: 'rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:bg-white' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="mt-4 text-sm text-slate-500">No hero slides yet. Use the buttons above to create the first frame.</p>
+      <% end %>
+    </div>
+  </aside>
 </div>
