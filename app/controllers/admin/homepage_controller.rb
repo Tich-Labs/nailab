@@ -8,7 +8,7 @@ module Admin
   class HomepageController < RailsAdmin::MainController
     include AdminLayoutData
       before_action :set_logos, only: %i[impact_network reorder toggle]
-      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta]
+      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are]
       HERO_DEFAULT = {
         title: "Grow your startup with people who’ve done it before.",
         subtitle: "Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.",
@@ -86,13 +86,62 @@ module Admin
       end
     end
 
+    def who_we_are
+      content = @home_content_json[:who_we_are]
+      @who_we_are_content = if content.is_a?(Hash)
+        content.with_indifferent_access
+      else
+        {}.with_indifferent_access
+      end
+      # Prefer an attached image if present; fallback to stored image_url
+      if @home_page.respond_to?(:who_we_are_image) && @home_page.who_we_are_image.attached?
+        begin
+          @who_we_are_image_url = url_for(@home_page.who_we_are_image)
+        rescue => e
+          Rails.logger.debug("Unable to generate who_we_are image url: #{e.message}")
+          @who_we_are_image_url = @who_we_are_content["image_url"] || @who_we_are_content[:image_url]
+        end
+      else
+        @who_we_are_image_url = @who_we_are_content["image_url"] || @who_we_are_content[:image_url]
+      end
+    end
+
+    def update_who_we_are
+      payload = who_we_are_params
+      # Handle optional uploaded image file `who_we_are[image_file]`. If provided, attach to HomePage
+      if params[:who_we_are].present? && params[:who_we_are][:image_file].present?
+        begin
+          uploaded = params[:who_we_are][:image_file]
+          # attach the uploaded file to the homepage
+          @home_page.who_we_are_image.attach(uploaded)
+          # generate a URL for the attached blob and prefer it
+          payload[:image_url] = url_for(@home_page.who_we_are_image) if @home_page.who_we_are_image.attached?
+        rescue => e
+          Rails.logger.warn("WhoWeAre image attach failed: #{e.message}")
+        end
+      end
+
+      @home_content_json[:who_we_are] = payload
+      if @home_page.update(structured_content: @home_content_json.to_json)
+        redirect_to admin_homepage_who_we_are_path, notice: "Who we are updated", status: :see_other
+      else
+        flash.now[:alert] = "Unable to save Who We Are"
+        @who_we_are_content = payload
+        render :who_we_are, status: :unprocessable_entity
+      end
+    end
+
     def update_how_we_support
       incoming = params[:support_items] || {}
+      # `incoming` may be an ActionController::Parameters (unpermitted). Convert safely to a Hash.
+      if incoming.is_a?(ActionController::Parameters)
+        incoming = incoming.to_unsafe_h
+      end
       items = []
       # incoming expected as hash of indexed entries (0 => {title=>.., description=>..})
       if incoming.is_a?(ActionController::Parameters) || incoming.is_a?(Hash)
         incoming.to_h.each do |_idx, vals|
-          vals = vals.to_h
+          vals = vals.is_a?(ActionController::Parameters) ? vals.to_unsafe_h : vals.to_h
           items << {
             title: vals["title"].to_s.strip,
             description: vals["description"].to_s.strip,
@@ -214,6 +263,10 @@ module Admin
 
     def hero_params
       params.require(:hero).permit(:title, :subtitle, :image_url, :cta_text, :cta_link, secondary_cta: %i[label link])
+    end
+
+    def who_we_are_params
+      params.require(:who_we_are).permit(:title, :paragraph_one, :paragraph_two, :subheading, :cta_label, :cta_link, :image_url).to_h.with_indifferent_access
     end
 
     def bottom_cta_content

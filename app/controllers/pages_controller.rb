@@ -39,27 +39,21 @@ class PagesController < ApplicationController
 
   DEFAULT_SUPPORT_ITEMS = [
     {
-      title: "Create your founder profile",
-      description: "Set up your founder profile to unlock tools that track progress, surface opportunities, and pair you with the right mentors and programs.",
-      cta_label: "Set up profile",
-      cta_link: "/users/sign_up"
-    },
-    {
       title: "Find mentors",
-      description: "Book 1-on-1 sessions with experienced operators who help refine strategy, operations, product, and leadership.",
-      cta_label: "Book mentorship",
+      description: "Book 1-on-1 mentorship sessions and get personalized guidance from seasoned business leaders who've built and scaled successful startups across Africa and beyond.",
+      cta_label: "Support",
       cta_link: "/mentors"
     },
     {
       title: "Peer-to-peer network",
-      description: "Connect with fellow founders facing similar challenges, share insights, and build community across the continent.",
-      cta_label: "Join the community",
+      description: "Connect directly with fellow founders who understand your challenges. Share insights, exchange strategies, and build supportive relationships with peers on the same journey.",
+      cta_label: "Support",
       cta_link: "/startups"
     },
     {
       title: "Access growth resources",
-      description: "Browse curated templates, playbooks, funding leads, and invites to pitch days and accelerator opportunities.",
-      cta_label: "Explore resources",
+      description: "Get curated templates, playbooks, funding leads, and exclusive invites to events, pitch days, and accelerator opportunities.",
+      cta_label: "Support",
       cta_link: "/resources"
     }
   ].freeze

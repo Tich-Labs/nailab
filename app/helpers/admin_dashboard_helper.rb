@@ -15,7 +15,7 @@ module AdminDashboardHelper
         sections: [
           { label: "Hero Section", path: main_app.admin_homepage_hero_path, icon: "🌅" },
           { label: "Who We Are", path: main_app.admin_homepage_sections_edit_path(anchor: "section-who_we_are"), icon: "🤝" },
-          { label: "How Nailab Supports You", path: main_app.admin_homepage_sections_edit_path(anchor: "section-how_we_support"), icon: "💡" },
+          { label: "How Nailab Supports You", path: main_app.admin_homepage_how_we_support_path, icon: "💡" },
           { label: "Our Focus Areas", path: main_app.admin_homepage_focus_areas_path, icon: "🎯" },
           { label: "Connect. Grow. Impact.", path: main_app.admin_homepage_sections_edit_path(anchor: "section-connect_grow_impact"), icon: "🌱" },
           { label: "Testimonials", path: main_app.admin_testimonials_path, icon: "💬" },

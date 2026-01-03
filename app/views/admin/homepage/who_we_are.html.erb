@@ -1,0 +1,91 @@
+<h1 class="text-2xl font-bold mb-4">Who We Are — Editor & Preview</h1>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_homepage_who_we_are_update_path, method: :patch, local: true, html: { multipart: true } do %>
+        <p class="text-sm text-slate-600 mb-4">Edit the Who We Are section content.</p>
+        <div class="mb-3">
+          <%= label_tag 'who_we_are[title]', 'Title', class: 'block font-medium' %>
+          <%= text_field_tag 'who_we_are[title]', (@who_we_are_content && (@who_we_are_content['title'] || @who_we_are_content[:title])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'who_we_are[subheading]', 'Subheading', class: 'block font-medium' %>
+          <%= text_field_tag 'who_we_are[subheading]', (@who_we_are_content && (@who_we_are_content['subheading'] || @who_we_are_content[:subheading])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'who_we_are[paragraph_one]', 'Paragraph one', class: 'block font-medium' %>
+          <%= text_area_tag 'who_we_are[paragraph_one]', (@who_we_are_content && (@who_we_are_content['paragraph_one'] || @who_we_are_content[:paragraph_one])), class: 'w-full form-input admin-form-input', rows: 4 %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'who_we_are[paragraph_two]', 'Paragraph two', class: 'block font-medium' %>
+          <%= text_area_tag 'who_we_are[paragraph_two]', (@who_we_are_content && (@who_we_are_content['paragraph_two'] || @who_we_are_content[:paragraph_two])), class: 'w-full form-input admin-form-input', rows: 4 %>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <%= label_tag 'who_we_are[cta_label]', 'CTA label', class: 'block font-medium' %>
+            <%= text_field_tag 'who_we_are[cta_label]', (@who_we_are_content && (@who_we_are_content['cta_label'] || @who_we_are_content[:cta_label])), class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div>
+            <%= label_tag 'who_we_are[cta_link]', 'CTA link', class: 'block font-medium' %>
+            <%= text_field_tag 'who_we_are[cta_link]', (@who_we_are_content && (@who_we_are_content['cta_link'] || @who_we_are_content[:cta_link])), class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+        <div class="mb-4">
+          <%= label_tag 'who_we_are[image_url]', 'Image URL', class: 'block font-medium' %>
+          <%= text_field_tag 'who_we_are[image_url]', (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])), class: 'w-full form-input admin-form-input' %>
+        </div>
+        <% current_image = defined?(@who_we_are_image_url) ? @who_we_are_image_url : (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])) %>
+        <% if current_image.present? %>
+          <div class="mb-3">
+            <p class="text-sm font-medium mb-2">Current image</p>
+            <img src="<%= current_image %>" alt="Current Who We Are image" class="w-full h-40 object-cover rounded mb-2" />
+          </div>
+        <% end %>
+        <div class="mb-4">
+          <p class="text-sm text-slate-500 mb-2">Or upload an image</p>
+          <%= file_field_tag 'who_we_are[image_file]', accept: 'image/*', class: 'w-full' %>
+        </div>
+        <div class="flex gap-3">
+          <%= submit_tag 'Save Who We Are', class: 'btn btn-primary' %>
+          <%= link_to 'Preview live section', root_path(anchor: 'who-we-are'), class: 'btn btn-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <% content = @who_we_are_content || {} %>
+      <% image_url = defined?(@who_we_are_image_url) ? @who_we_are_image_url : (content['image_url'] || content[:image_url]) %>
+      <% if image_url.present? %>
+        <div class="mb-4">
+          <img src="<%= image_url %>" alt="<%= content['title'] || content[:title] || 'Who We Are' %>" class="w-full h-48 object-cover rounded" />
+        </div>
+      <% end %>
+      <% title = content['title'] || content[:title] || 'Who We Are' %>
+      <% subheading = content['subheading'] || content[:subheading] %>
+      <% paragraph_one = content['paragraph_one'] || content[:paragraph_one] %>
+      <% paragraph_two = content['paragraph_two'] || content[:paragraph_two] %>
+      <% cta_label = content['cta_label'] || content[:cta_label] %>
+      <% cta_link = content['cta_link'] || content[:cta_link] || '#' %>
+      <div class="space-y-4">
+        <h2 class="text-2xl font-bold"><%= title %></h2>
+        <% if subheading.present? %>
+          <p class="text-sm text-slate-600 font-semibold"><%= subheading %></p>
+        <% end %>
+        <% if paragraph_one.present? %>
+          <p class="text-sm text-slate-700"><%= paragraph_one %></p>
+        <% end %>
+        <% if paragraph_two.present? %>
+          <p class="text-sm text-slate-700"><%= paragraph_two %></p>
+        <% end %>
+        <% if cta_label.present? %>
+          <a href="<%= cta_link %>" class="text-purple-600 font-semibold"><%= cta_label %></a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
