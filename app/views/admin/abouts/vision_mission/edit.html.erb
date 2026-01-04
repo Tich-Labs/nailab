@@ -1,0 +1,28 @@
+<h3 class="text-lg font-semibold mb-4">Edit Vision & Mission Section</h3>
+<%= form_with url: admin_about_section_path(@section_key), method: :patch, local: true do |f| %>
+	<div class="mb-6 p-4 border rounded">
+		<h4 class="font-bold mb-2">Mission</h4>
+		<div class="mb-2">
+			<%= label_tag 'section_payload[mission][title]', 'Mission Title', class: 'block font-medium' %>
+			<%= text_field_tag 'section_payload[mission][title]', @mission_content["title"], class: 'w-full p-2 border rounded' %>
+		</div>
+		<div class="mb-2">
+			<%= label_tag 'section_payload[mission][description]', 'Mission Description', class: 'block font-medium' %>
+			<%= text_area_tag 'section_payload[mission][description]', @mission_content["description"], rows: 3, class: 'w-full p-2 border rounded' %>
+		</div>
+	</div>
+	<div class="mb-6 p-4 border rounded">
+		<h4 class="font-bold mb-2">Vision</h4>
+		<div class="mb-2">
+			<%= label_tag 'section_payload[vision][title]', 'Vision Title', class: 'block font-medium' %>
+			<%= text_field_tag 'section_payload[vision][title]', @vision_content["title"], class: 'w-full p-2 border rounded' %>
+		</div>
+		<div class="mb-2">
+			<%= label_tag 'section_payload[vision][description]', 'Vision Description', class: 'block font-medium' %>
+			<%= text_area_tag 'section_payload[vision][description]', @vision_content["description"], rows: 3, class: 'w-full p-2 border rounded' %>
+		</div>
+	</div>
+	<div>
+		<%= f.submit 'Save Vision & Mission', class: 'bg-blue-600 text-white px-4 py-2 rounded' %>
+	</div>
+<% end %>

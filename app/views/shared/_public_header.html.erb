@@ -11,12 +11,12 @@
       <!-- Main Navigation -->
       <nav class="hidden md:flex space-x-8">
         <% network_active = request.path.start_with?(startups_path) || request.path.start_with?(mentors_path) %>
-        <div class="relative group">
-          <span class="inline-flex items-center gap-1 cursor-pointer transition-colors px-3 py-2 text-sm font-medium #{network_active ? 'text-teal-600' : 'text-gray-700 hover:text-teal-600'}">
+        <div class="relative" data-controller="dropdown">
+          <button type="button" data-action="click->dropdown#toggle" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-sm font-medium w-full #{network_active ? 'text-teal-600' : 'text-gray-700 hover:text-teal-600'}">
             Our Network
             <span class="text-xs">▼</span>
-          </span>
-          <div class="absolute top-full left-0 mt-0 translate-y-1 w-48 bg-white rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all z-50">
+          </button>
+          <div data-dropdown-target="menu" class="hidden absolute top-full left-0 mt-0 translate-y-1 w-48 bg-white rounded-2xl shadow-2xl z-50">
             <%= link_to 'Startups', startups_path, class: "block px-4 py-2 transition-colors #{'bg-teal-50 text-teal-600 font-semibold' if request.path == startups_path}" %>
             <%= link_to 'Mentors', mentors_path, class: "block px-4 py-2 transition-colors #{'bg-teal-50 text-teal-600 font-semibold' if request.path == mentors_path}" %>
           </div>
@@ -24,12 +24,12 @@
         <%= link_to 'Programs', programs_path, class: "text-gray-700 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors #{request.path.start_with?(programs_path) ? 'text-teal-600' : ''}" %>
         <% current_resource_slug = params[:category].presence || @selected_category.presence || @resource_category_slug.presence || 'all' %>
         <% resources_active = request.path.start_with?(resources_path) %>
-        <div class="relative group">
-          <span class="inline-flex items-center gap-1 cursor-pointer transition-colors px-3 py-2 text-sm font-medium #{resources_active ? 'text-teal-600' : 'text-gray-700 hover:text-teal-600'}">
+        <div class="relative" data-controller="dropdown">
+          <button type="button" data-action="click->dropdown#toggle" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-sm font-medium w-full #{resources_active ? 'text-teal-600' : 'text-gray-700 hover:text-teal-600'}">
             Resources
             <span class="text-xs">▼</span>
-          </span>
-          <div class="absolute top-full left-0 mt-0 w-72 translate-y-1 bg-white rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all z-50">
+          </button>
+          <div data-dropdown-target="menu" class="hidden absolute top-full left-0 mt-0 w-72 translate-y-1 bg-white rounded-2xl shadow-2xl z-50">
             <%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-teal-50 text-teal-600 font-semibold' if current_resource_slug == 'blogs'}" %>
             <%= link_to 'Knowledge Hub', resources_category_path(category: 'knowledge-hub'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-teal-50 text-teal-600 font-semibold' if current_resource_slug == 'knowledge-hub'}" %>
             <%= link_to 'Opportunities', resources_category_path(category: 'opportunities'), class: "block px-4 py-2 text-gray-700 transition-colors #{'bg-teal-50 text-teal-600 font-semibold' if current_resource_slug == 'opportunities'}" %>

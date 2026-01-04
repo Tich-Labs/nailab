@@ -18,13 +18,21 @@ export default class extends Controller {
     this.menuTarget.classList.toggle("hidden")
 
     if (!this.menuTarget.classList.contains("hidden")) {
-      document.addEventListener("click", this.hideHandler)
+      // Set a flag to ignore the first document click after opening
+      this.ignoreNextDocumentClick = true;
+      setTimeout(() => {
+        document.addEventListener("click", this.hideHandler)
+      }, 0)
     } else {
       document.removeEventListener("click", this.hideHandler)
     }
   }
 
   hide(event) {
+    if (this.ignoreNextDocumentClick) {
+      this.ignoreNextDocumentClick = false;
+      return;
+    }
     if (!this.element.contains(event.target)) {
       this.menuTarget.classList.add("hidden")
       document.removeEventListener("click", this.hideHandler)
