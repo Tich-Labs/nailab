@@ -37,6 +37,20 @@ module Admin
         @section_content = { "title" => title, "paragraph_one" => body_text }.with_indifferent_access
       end
 
+      # Ensure our_impact always has title, description, and stats
+      if @section_key == "our_impact"
+        @section_content["title"] ||= "Our Impact"
+        @section_content["description"] ||= "We partner with founders, mentors and partners to support startups across Africa."
+        @section_content["stats"] ||= [
+          { value: "10+", label: "Years of Impact" },
+          { value: "54", label: "African Countries" },
+          { value: "30+", label: "Innovation Programs" },
+          { value: "$100M", label: "Funding Facilitated" },
+          { value: "1000", label: "Startups Supported" },
+          { value: "50+", label: "Partners" }
+        ]
+      end
+
       # Determine image URL: prefer attached ActiveStorage for why_nailab_exists, otherwise stored image_url key
       @section_image_url = nil
       if @section_key == "why_nailab_exists" && @about.respond_to?(:why_nailab_image) && @about.why_nailab_image.attached?
@@ -64,35 +78,25 @@ module Admin
       @section_key = params[:section]
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
-      section_params = params.require(:section_payload).permit(:title, :subheading, :paragraph_one, :paragraph_two, :paragraph_three, :image_url, :image_file)
+      section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ])
 
       payload = {
         "title" => section_params[:title].to_s.strip,
-        "subheading" => section_params[:subheading].to_s.strip,
-        "paragraph_one" => section_params[:paragraph_one].to_s.strip,
-        "paragraph_two" => section_params[:paragraph_two].to_s.strip,
-        "paragraph_three" => section_params[:paragraph_three].to_s.strip
+        "description" => section_params[:description].to_s.strip
       }
-      stored[@section_key] = payload
 
-      # Handle optional uploaded image file or image URL
-      if section_params[:image_file].present?
-        begin
-          if @section_key == "why_nailab_exists" && @about.respond_to?(:why_nailab_image)
-            @about.why_nailab_image.attach(section_params[:image_file])
-            if @about.why_nailab_image.attached?
-              stored["#{@section_key}_image_url"] = url_for(@about.why_nailab_image)
-            end
-          else
-            stored["#{@section_key}_image_url"] = section_params[:image_url].to_s.strip if section_params[:image_url].present?
-          end
-        rescue => e
-          Rails.logger.warn("About section image attach failed: #{e.message}")
+      if @section_key == "our_impact"
+        # Parse stats as array of hashes, handle ActionController::Parameters, Hash, or Array
+        stats = section_params[:stats] || []
+        if stats.is_a?(ActionController::Parameters)
+          stats = stats.to_unsafe_h.values
+        elsif stats.is_a?(Hash)
+          stats = stats.values
         end
-      elsif section_params[:image_url].present?
-        stored["#{@section_key}_image_url"] = section_params[:image_url].to_s.strip
+        payload["stats"] = stats.map { |s| { value: s["value"].to_s.strip, label: s["label"].to_s.strip } }
       end
 
+      stored[@section_key] = payload
       @about.update!(content: stored.to_json)
       redirect_to admin_about_section_edit_path(@section_key), notice: "Saved #{section_title_for(@section_key)}"
     end

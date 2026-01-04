@@ -8,7 +8,7 @@ module Admin
   class HomepageController < RailsAdmin::MainController
     include AdminLayoutData
       before_action :set_logos, only: %i[impact_network reorder toggle]
-      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are connect_grow_impact update_connect_grow_impact]
+      before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are connect_grow_impact update_connect_grow_impact our_impact update_our_impact]
       HERO_DEFAULT = {
         title: "Grow your startup with people who’ve done it before.",
         subtitle: "Book weekly 1-on-1 mentorship sessions with seasoned business leaders and build your startup alongside a supportive community of founders actively building high-growth, tech-enabled startups across Africa.",
@@ -245,6 +245,48 @@ module Admin
         @bottom_cta = bottom_cta_content
         flash.now[:alert] = "Unable to save CTA"
         render :cta
+      end
+    end
+
+    def our_impact
+      impact_json = @home_content_json[:our_impact].is_a?(Hash) ? @home_content_json[:our_impact] : {}
+      @impact_title = impact_json[:title].presence || "Our Impact"
+      @impact_intro = impact_json[:intro].presence || "We partner with founders, mentors and partners to support startups across Africa."
+      @impact_stats = impact_json[:stats].presence || [
+        { value: "10+", label: "Years of Impact" },
+        { value: "54", label: "African Countries" },
+        { value: "30+", label: "Innovation Programs" },
+        { value: "$100M", label: "Funding Facilitated" },
+        { value: "1000", label: "Startups Supported" },
+        { value: "50+", label: "Partners" }
+      ]
+    end
+
+    def update_our_impact
+      incoming = params[:impact] || {}
+      incoming = incoming.to_unsafe_h if incoming.is_a?(ActionController::Parameters)
+      title = incoming["title"].to_s.strip
+      intro = incoming["intro"].to_s.strip
+
+      if params[:impact_stats].present?
+        stats = Array.wrap(params[:impact_stats]).map do |s|
+          s = s.is_a?(ActionController::Parameters) ? s.to_unsafe_h : s
+          { value: s["value"].to_s, label: s["label"].to_s }
+        end
+        @home_content_json[:our_impact] ||= {}
+        @home_content_json[:our_impact][:stats] = stats
+      end
+
+      @home_content_json[:our_impact] ||= {}
+      @home_content_json[:our_impact][:title] = title
+      @home_content_json[:our_impact][:intro] = intro
+
+      if @home_page.update(structured_content: @home_content_json.to_json)
+        redirect_to admin_homepage_our_impact_path, notice: "Our Impact updated", status: :see_other
+      else
+        flash.now[:alert] = "Unable to save Our Impact."
+        @impact_intro = intro
+        render :our_impact, status: :unprocessable_entity
       end
     end
 

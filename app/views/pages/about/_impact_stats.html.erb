@@ -9,7 +9,23 @@
 <% end %>
 
 <% if stored['our_impact'].present? %>
-  <%= raw stored['our_impact'] %>
+  <% impact = stored['our_impact'] %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div class="flex flex-col md:col-span-4 justify-center pr-4">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900"><%= impact["title"] %></h2>
+        <p class="text-lg text-gray-700 leading-relaxed"><%= impact["description"] %></p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 md:col-span-8 gap-6">
+        <% (impact["stats"] || []).each do |stat| %>
+          <div class="value-card w-full bg-purple-100 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
+            <p class="text-purple-700 text-3xl md:text-4xl font-bold mb-2"><%= stat["value"] %></p>
+            <p class="text-sm md:text-sm font-base text-gray-700"><%= stat["label"] %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% else %>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">

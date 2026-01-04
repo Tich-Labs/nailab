@@ -101,6 +101,8 @@ Rails.application.routes.draw do
     get "about/sections/edit", to: "abouts#edit", as: :about_sections_edit
     get "about/sections/:section/edit", to: "abouts#edit_section", as: :about_section_edit
     patch "about/sections/:section", to: "abouts#update_section", as: :about_section_update
+    get "admin/homepage/our_impact", to: "admin/homepage#our_impact"
+    patch "admin/homepage/our_impact", to: "admin/homepage#update_our_impact"
   end
 
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
