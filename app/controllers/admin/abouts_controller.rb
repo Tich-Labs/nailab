@@ -14,14 +14,12 @@ module Admin
     def edit_section
       @section_key = params[:section]
       @section_title = section_title_for(@section_key)
-
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
       raw_section = stored[@section_key]
       if raw_section.is_a?(Hash)
         @section_content = raw_section.with_indifferent_access
       else
-        # Legacy: if stored as raw HTML/string, try to extract a heading as title and the rest as plain text paragraph(s)
         html = raw_section.to_s
         heading_match = html.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/m)
         if heading_match
@@ -31,10 +29,22 @@ module Admin
           title = nil
           body_html = html
         end
-        # Convert basic paragraph tags to newlines and strip remaining tags for plain text editing
         body_text = body_html.gsub(/<\s*\/p\s*>/i, "\n\n").gsub(/<br\s*\/?\s*>/i, "\n")
         body_text = ActionController::Base.helpers.strip_tags(body_text).strip
         @section_content = { "title" => title, "paragraph_one" => body_text }.with_indifferent_access
+      end
+
+      if @section_key == "what_drives_us"
+        @section_content["title"] ||= "What Drives Us"
+        @section_content["cards"] ||= [
+          { "title" => "Entrepreneur-First", "description" => "We prioritize the needs and growth of African entrepreneurs by offering support that is tailored, relevant, and results-driven." },
+          { "title" => "Innovation for Impact", "description" => "We champion bold thinking and creative solutions that address real-world challenges and deliver lasting, meaningful change across communities and sectors." },
+          { "title" => "Inclusion", "description" => "We strive to ensure that opportunities are accessible to all, ensuring that innovators of all backgrounds, especially youth and women, have equal access to resources and support they need." },
+          { "title" => "Collaboration", "description" => "We believe in the power of partnerships and collective action to drive greater impact and scale solutions across Africa." },
+          { "title" => "Integrity", "description" => "We operate with transparency, accountability, and a commitment to ethical practices in all that we do." },
+          { "title" => "Continuous Learning", "description" => "We foster a culture of curiosity, experimentation, and growth, always seeking to learn and improve." }
+        ]
+        render "admin/abouts/what_drives_us/edit" and return
       end
 
       # Ensure our_impact always has title, description, and stats
@@ -49,6 +59,18 @@ module Admin
           { value: "1000", label: "Startups Supported" },
           { value: "50+", label: "Partners" }
         ]
+      end
+
+      # Ensure our_mission and our_vision always have title and description
+      if @section_key == "our_mission"
+        @section_content["title"] ||= "Our Mission"
+        @section_content["description"] ||= "To be Africa's leading launchpad, empowering bold innovators with the knowledge, mentorship, and community to turn their ideas into scalable, tech-driven solutions that drive economic growth and address the continent's most pressing challenges."
+      elsif @section_key == "our_vision"
+        @section_content["title"] ||= "Our Vision"
+        @section_content["description"] ||= "To build an inclusive network that supports African founders through a collaborative platform where mentors, investors, and founders work together to scale innovative, tech-driven startups."
+      elsif @section_key == "vision_mission"
+        @mission_content = stored["our_mission"] || { "title" => "Our Mission", "description" => "To be Africa's leading launchpad, empowering bold innovators with the knowledge, mentorship, and community to turn their ideas into scalable, tech-driven solutions that drive economic growth and address the continent's most pressing challenges." }
+        @vision_content = stored["our_vision"] || { "title" => "Our Vision", "description" => "To build an inclusive network that supports African founders through a collaborative platform where mentors, investors, and founders work together to scale innovative, tech-driven startups." }
       end
 
       # Determine image URL: prefer attached ActiveStorage for why_nailab_exists, otherwise stored image_url key
@@ -78,12 +100,22 @@ module Admin
       @section_key = params[:section]
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
-      section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ])
+      section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ], cards: [ :title, :description ])
 
       payload = {
-        "title" => section_params[:title].to_s.strip,
-        "description" => section_params[:description].to_s.strip
+        "title" => section_params[:title].to_s.strip
       }
+      if @section_key == "what_drives_us"
+        cards = section_params[:cards] || []
+        if cards.is_a?(ActionController::Parameters)
+          cards = cards.to_unsafe_h.values
+        elsif cards.is_a?(Hash)
+          cards = cards.values
+        end
+        payload["cards"] = cards.map { |c| { "title" => c["title"].to_s.strip, "description" => c["description"].to_s.strip } }
+      else
+        payload["description"] = section_params[:description].to_s.strip
+      end
 
       if @section_key == "our_impact"
         # Parse stats as array of hashes, handle ActionController::Parameters, Hash, or Array
@@ -94,6 +126,17 @@ module Admin
           stats = stats.values
         end
         payload["stats"] = stats.map { |s| { value: s["value"].to_s.strip, label: s["label"].to_s.strip } }
+      elsif @section_key == "our_mission" || @section_key == "our_vision"
+        payload["title"] = section_params[:title].to_s.strip
+        payload["description"] = section_params[:description].to_s.strip
+      elsif @section_key == "vision_mission"
+        mission_params = params[:section_payload][:mission].permit(:title, :description)
+        vision_params = params[:section_payload][:vision].permit(:title, :description)
+        stored["our_mission"] = { "title" => mission_params[:title].to_s.strip, "description" => mission_params[:description].to_s.strip }
+        stored["our_vision"] = { "title" => vision_params[:title].to_s.strip, "description" => vision_params[:description].to_s.strip }
+        @about.update!(content: stored.to_json)
+        redirect_to admin_about_section_edit_path(@section_key), notice: "Saved Vision & Mission"
+        return
       end
 
       stored[@section_key] = payload

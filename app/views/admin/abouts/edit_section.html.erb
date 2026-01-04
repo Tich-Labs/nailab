@@ -4,43 +4,107 @@
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
     <div class="bg-white p-4 rounded shadow">
-      <%= form_with url: admin_about_section_update_path(section: @section_key), method: :patch, local: true, html: { multipart: true } do %>
-        <p class="text-sm text-slate-600 mb-4">Edit the <%= @section_title %> section content.</p>
-        <div class="mb-3">
-          <%= label_tag "section[title]", 'Title', class: 'block font-medium' %>
-          <%= text_field_tag 'section_payload[title]', (@section_content && (@section_content['title'] || @section_content[:title])), class: 'w-full form-input admin-form-input' %>
-        </div>
-        <div class="mb-3">
-          <%= label_tag "section[description]", 'Description', class: 'block font-medium' %>
-          <%= text_area_tag 'section_payload[description]', (@section_content && (@section_content['description'] || @section_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
-        </div>
-        <h3 class="font-semibold mt-6 mb-2">Stats / Cards</h3>
-        <div id="stats-fields" class="space-y-4">
-          <% stats = (@section_content && (@section_content['stats'] || @section_content[:stats])) || [
-            { value: "10+", label: "Years of Impact" },
-            { value: "54", label: "African Countries" },
-            { value: "30+", label: "Innovation Programs" },
-            { value: "$100M", label: "Funding Facilitated" },
-            { value: "1000", label: "Startups Supported" },
-            { value: "50+", label: "Partners" }
-          ] %>
-          <% 6.times do |i| %>
-            <div class="p-4 bg-gray-50 rounded-lg shadow">
-              <div class="mb-2">
-                <%= label_tag "section_payload[stats][#{i}][value]", "Value", class: "block text-sm font-medium text-gray-700" %>
-                <%= text_field_tag "section_payload[stats][#{i}][value]", stats[i] && stats[i][:value], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+      <% if @section_key == "our_impact" %>
+        <%= form_with url: admin_about_section_update_path(section: @section_key), method: :patch, local: true, html: { multipart: true } do %>
+          <p class="text-sm text-slate-600 mb-4">Edit the <%= @section_title %> section content.</p>
+          <div class="mb-3">
+            <%= label_tag "section[title]", 'Title', class: 'block font-medium' %>
+            <%= text_field_tag 'section_payload[title]', (@section_content && (@section_content['title'] || @section_content[:title])), class: 'w-full form-input admin-form-input' %>
+          </div>
+          <div class="mb-3">
+            <%= label_tag "section[description]", 'Description', class: 'block font-medium' %>
+            <%= text_area_tag 'section_payload[description]', (@section_content && (@section_content['description'] || @section_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
+          </div>
+          <h3 class="font-semibold mt-6 mb-2">Stats / Cards</h3>
+          <div id="stats-fields" class="space-y-4">
+            <% stats = (@section_content && (@section_content['stats'] || @section_content[:stats])) || [
+              { value: "10+", label: "Years of Impact" },
+              { value: "54", label: "African Countries" },
+              { value: "30+", label: "Innovation Programs" },
+              { value: "$100M", label: "Funding Facilitated" },
+              { value: "1000", label: "Startups Supported" },
+              { value: "50+", label: "Partners" }
+            ] %>
+            <% 6.times do |i| %>
+              <div class="p-4 bg-gray-50 rounded-lg shadow">
+                <div class="mb-2">
+                  <%= label_tag "section_payload[stats][#{i}][value]", "Value", class: "block text-sm font-medium text-gray-700" %>
+                  <%= text_field_tag "section_payload[stats][#{i}][value]", stats[i] && stats[i][:value], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+                <div>
+                  <%= label_tag "section_payload[stats][#{i}][label]", "Label", class: "block text-sm font-medium text-gray-700" %>
+                  <%= text_field_tag "section_payload[stats][#{i}][label]", stats[i] && stats[i][:label], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
               </div>
-              <div>
-                <%= label_tag "section_payload[stats][#{i}][label]", "Label", class: "block text-sm font-medium text-gray-700" %>
-                <%= text_field_tag "section_payload[stats][#{i}][label]", stats[i] && stats[i][:label], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
+            <% end %>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
+            <a class="btn btn-secondary" href="/about#<%= @section_key.to_s.tr('_','-') %>">Preview live section</a>
+          </div>
+        <% end %>
+      <% elsif @section_key == "our_mission" || @section_key == "our_vision" %>
+        <%= form_with url: admin_about_section_update_path(section: @section_key), method: :patch, local: true do %>
+          <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Our Mission</h2>
+            <div class="mb-3">
+              <%= label_tag "mission[title]", 'Title', class: 'block font-medium' %>
+              <%= text_field_tag 'mission[title]', (@mission_content && (@mission_content['title'] || @mission_content[:title])), class: 'w-full form-input admin-form-input' %>
             </div>
-          <% end %>
-        </div>
-        <div class="flex gap-3 mt-6">
-          <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
-          <a class="btn btn-secondary" href="/about#<%= @section_key.to_s.tr('_','-') %>">Preview live section</a>
-        </div>
+            <div class="mb-3">
+              <%= label_tag "mission[description]", 'Description', class: 'block font-medium' %>
+              <%= text_area_tag 'mission[description]', (@mission_content && (@mission_content['description'] || @mission_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
+            </div>
+          </div>
+          <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Our Vision</h2>
+            <div class="mb-3">
+              <%= label_tag "vision[title]", 'Title', class: 'block font-medium' %>
+              <%= text_field_tag 'vision[title]', (@vision_content && (@vision_content['title'] || @vision_content[:title])), class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div class="mb-3">
+              <%= label_tag "vision[description]", 'Description', class: 'block font-medium' %>
+              <%= text_area_tag 'vision[description]', (@vision_content && (@vision_content['description'] || @vision_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
+            </div>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
+            <a class="btn btn-secondary" href="/about#vision-mission">Preview live section</a>
+          </div>
+        <% end %>
+      <% elsif @section_key == "vision_mission" %>
+        <% unless defined?(@mission_content) && defined?(@vision_content) %>
+          <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">DEBUG: Mission or Vision content not loaded. Check controller.</div>
+        <% end %>
+        <%= form_with url: admin_about_section_update_path(section: @section_key), method: :post, local: true do %>
+          <%= hidden_field_tag :_method, 'patch' %>
+          <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Our Mission</h2>
+            <div class="mb-3">
+              <%= label_tag "section_payload[mission][title]", 'Title', class: 'block font-medium' %>
+              <%= text_field_tag 'section_payload[mission][title]', (@mission_content && (@mission_content['title'] || @mission_content[:title])), class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div class="mb-3">
+              <%= label_tag "section_payload[mission][description]", 'Description', class: 'block font-medium' %>
+              <%= text_area_tag 'section_payload[mission][description]', (@mission_content && (@mission_content['description'] || @mission_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
+            </div>
+          </div>
+          <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Our Vision</h2>
+            <div class="mb-3">
+              <%= label_tag "section_payload[vision][title]", 'Title', class: 'block font-medium' %>
+              <%= text_field_tag 'section_payload[vision][title]', (@vision_content && (@vision_content['title'] || @vision_content[:title])), class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div class="mb-3">
+              <%= label_tag "section_payload[vision][description]", 'Description', class: 'block font-medium' %>
+              <%= text_area_tag 'section_payload[vision][description]', (@vision_content && (@vision_content['description'] || @vision_content[:description])), class: 'w-full form-input admin-form-input', rows: 3 %>
+            </div>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
+            <a class="btn btn-secondary" href="/about#vision-mission">Preview live section</a>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -53,16 +117,31 @@
         <% if (content['description'] || content[:description]).present? %>
           <p class="text-sm text-slate-600 font-semibold"><%= content['description'] || content[:description] %></p>
         <% end %>
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <% stats = (content['stats'] || content[:stats]) || [] %>
-          <% 6.times do |i| %>
-            <% stat = stats[i] || {} %>
-            <div class="p-4 bg-gray-50 rounded-lg shadow">
-              <p class="text-2xl font-bold text-indigo-600"><%= stat[:value] %></p>
-              <p class="mt-1 text-sm text-gray-700"><%= stat[:label] %></p>
-            </div>
-          <% end %>
-        </div>
+        <% if @section_key == "our_impact" %>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% stats = (content['stats'] || content[:stats]) || [] %>
+            <% 6.times do |i| %>
+              <% stat = stats[i] || {} %>
+              <div class="p-4 bg-gray-50 rounded-lg shadow">
+                <p class="text-2xl font-bold text-indigo-600"><%= stat[:value] %></p>
+                <p class="mt-1 text-sm text-gray-700"><%= stat[:label] %></p>
+              </div>
+            <% end %>
+          </div>
+        <% elsif @section_key == "our_mission" %>
+          <div class="mt-4">
+            <h2 class="text-2xl font-bold"><%= @mission_content["title"] %></h2>
+            <p class="text-lg text-gray-700 leading-relaxed"><%= @mission_content["description"] %></p>
+          </div>
+        <% elsif @section_key == "our_vision" %>
+          <div class="mt-4">
+            <h2 class="text-2xl font-bold"><%= @vision_content["title"] %></h2>
+            <p class="text-lg text-gray-700 leading-relaxed"><%= @vision_content["description"] %></p>
+          </div>
+        <% elsif @section_key == "vision_mission" %>
+      <!-- 'What Drives Us' logic removed; now in its own partial -->
+          <!-- No extra preview for what_drives_us -->
+        <% end %>
       </div>
     </div>
   </div>
