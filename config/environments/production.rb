@@ -18,6 +18,10 @@ Rails.application.configure do
   # the built-in parser (SassC 2.x) cannot handle; this keeps assets:precompile happy.
   config.assets.css_compressor = nil
   
+  # Disable JavaScript precompilation entirely - use Importmap only
+  config.assets.compile = %w[ *.css ]
+  config.assets.js_compressor = nil
+  
   # Skip JavaScript precompilation - handled by Importmap
   config.assets.precompile += %w[ manifest.js ]
 
