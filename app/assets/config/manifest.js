@@ -8,5 +8,3 @@
 //= link @rails--actioncable--src.js
 //= link @rails--activestorage--src.js
 //= link @rails--ujs--src.js
-//= link admin.js
-//= link rails_admin/rails_admin.js
