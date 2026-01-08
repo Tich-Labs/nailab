@@ -1,4 +1,5 @@
 //= link_tree ../images
-//= link_tree ../stylesheets .css
+//= link actiontext.css
+//= link_tree ../stylesheets/rails_admin .css
 //= link_tree ../builds
 //= link_tree ../javascripts .js
