@@ -3,3 +3,4 @@
 //= link_tree ../stylesheets/rails_admin .css
 //= link_tree ../builds
 //= link_tree ../javascripts .js
+//= link swiper.js
