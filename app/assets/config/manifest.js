@@ -6,5 +6,3 @@
 //= link swiper.js
 //= link @hotwired--turbo.js
 //= link @rails--actioncable--src.js
-//= link @rails--activestorage--src.js
-//= link @rails--ujs--src.js
