@@ -56,12 +56,23 @@
           <% end %>
         </div>
 
-        <!-- FAQ Accordion -->
+        <!-- FAQ Grid (static content) -->
         <div class="bg-gray-50 rounded-2xl p-8">
-          <h2 class="text-3xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
-            <div class="space-y-4" data-controller="faq">
-              <% @faqs.each_with_index do |faq, idx| %>
-                <div id="faq-<%= faq.id %>" class="bg-white rounded-xl shadow-md overflow-hidden">
+          <h2 class="text-4xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+          <div class="space-y-4" data-controller="faq">
+            <% faqs = [
+              { question: '1. What kind of startups does Nailab support?', answer: 'Nailab supports early-stage and growth-stage startups leveraging innovation to tackle Africa’s most pressing social challenges across key sectors including fintech, agritech, healthtech, edtech, SaaS, cleantech, creative & mediatech, e-commerce & retailtech, mobility & logisticstech, and social impact. We partner with passionate founders with a clear vision and deep understanding of the challenges they are addressing.' },
+              { question: '2. How do I apply for Nailab’s programs?', answer: 'Interested in joining a Nailab program? We regularly announce application windows on our official website and social media platforms. You can find detailed information and application links for all our current opportunities on our Programs page.' },
+              { question: '3. What does a typical incubation and/or accelerator program involve?', answer: 'Our programs typically run for 3–6 months, depending on the specific focus and structure. They are designed to equip entrepreneurs with the tools, knowledge, and networks they need to build and scale sustainable businesses. Key components include mentorship, business development training, pitch coaching, access to investors, and seed funding where applicable.' },
+              { question: '4. What stage should my startup be at to apply for Nailab Programs?', answer: 'While some programs are tailored for early-stage entrepreneurs, others suit startups with a developed product and initial traction. Review eligibility in each program call for details.' },
+              { question: '5. Does Nailab provide funding to startups?', answer: 'Yes. Some programs provide seed funding or connect startups to investors through demo days and pitch sessions.' },
+              { question: '6. What are the benefits of joining the Nailab startup network?', answer: 'Access a thriving community of founders, expert mentors, and ecosystem partners, plus tools, templates, and curated resources to help you build and grow.' },
+              { question: '7. How can I become a Nailab mentor?', answer: 'We’re always looking for experienced mentors. Visit our Mentors page to apply or learn more.' },
+              { question: '8. How can I partner with Nailab?', answer: 'We collaborate with agencies, corporates, governments, and academia to co-create programs and support startups. Reach out via our Expertise page.' }
+            ] %>
+
+            <% faqs.each_with_index do |faq, idx| %>
+              <div id="faq-<%= idx %>" class="bg-white rounded-xl shadow-md overflow-hidden">
                 <button
                   type="button"
                   class="w-full px-6 py-5 flex justify-between items-center text-left font-semibold text-gray-900 hover:bg-gray-50 transition faq-toggle"
@@ -69,18 +80,17 @@
                   aria-controls="faq-answer-<%= idx %>"
                   data-faq-index="<%= idx %>"
                 >
-                    <span><%= faq.question %></span>
-                  <svg class="w-6 h-6 text-purple-600 transition-transform duration-200" 
-                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span><%= faq[:question] %></span>
+                  <svg class="w-6 h-6 text-purple-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div id="faq-answer-<%= idx %>" 
-                    class="px-6 pb-5 text-gray-700 hidden faq-answer">
-                  <%= simple_format(faq.answer) %>
+                <div id="faq-answer-<%= idx %>" class="px-6 pb-5 text-gray-700 hidden faq-answer">
+                  <%= simple_format(faq[:answer]) %>
                 </div>
               </div>
             <% end %>
+
             <script>
               document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.faq-toggle').forEach(function(btn) {
