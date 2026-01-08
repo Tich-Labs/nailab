@@ -5,3 +5,4 @@
 //= link_tree ../javascripts .js
 //= link swiper.js
 //= link @hotwired--turbo.js
+//= link @rails--actioncable--src.js
