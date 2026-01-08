@@ -17,6 +17,9 @@ Rails.application.configure do
   # Skip the default SassC compressor because Tailwind emits modern color() syntax that
   # the built-in parser (SassC 2.x) cannot handle; this keeps assets:precompile happy.
   config.assets.css_compressor = nil
+  
+  # Skip JavaScript precompilation - handled by Importmap
+  config.assets.precompile += %w[ manifest.js ]
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
