@@ -13,6 +13,3 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 # Admin JavaScript file with admin controllers
 pin "admin", to: "admin.js"
-
-# Configure custom manifest filename for production
-config.manifest_path = Rails.root.join("public/assets/manifest-#{Rails.env.short_version}-#{Digest::SHA256.hex(File.read(Rails.root.join("app/assets/config/manifest.js")))}.json")
