@@ -86,6 +86,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :logos, only: %i[index new create update destroy]
     resources :testimonials, only: %i[index new create edit update destroy]
+    resources :pricing_page, only: %i[edit update]
     # Friendly custom Focus Areas editor (override RailsAdmin path) - define before mounting RailsAdmin
     get "focus_area", to: "focus_areas#index", as: :focus_areas
     get "focus_area/new", to: "focus_areas#new", as: :new_focus_area
