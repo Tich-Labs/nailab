@@ -23,8 +23,12 @@ export default class extends Controller {
       setTimeout(() => {
         document.addEventListener("click", this.hideHandler)
       }, 0)
+      
+      // Add escape key listener
+      document.addEventListener("keydown", this.escapeHandler)
     } else {
       document.removeEventListener("click", this.hideHandler)
+      document.removeEventListener("keydown", this.escapeHandler)
     }
   }
 
@@ -41,9 +45,19 @@ export default class extends Controller {
 
   connect() {
     this.hideHandler = this.hide.bind(this)
+    this.escapeHandler = this.escape.bind(this)
   }
 
   disconnect() {
     document.removeEventListener("click", this.hideHandler)
+    document.removeEventListener("keydown", this.escapeHandler)
+  }
+
+  escape(event) {
+    if (event.key === 'Escape' && !this.menuTarget.classList.contains("hidden")) {
+      this.menuTarget.classList.add("hidden")
+      document.removeEventListener("click", this.hideHandler)
+      document.removeEventListener("keydown", this.escapeHandler)
+    }
   }
 }
