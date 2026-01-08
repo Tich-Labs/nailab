@@ -17,6 +17,7 @@
       })();
     </script>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_importmap_tags "admin" %>
     <title><%= content_for?(:title) ? yield(:title) : "Nailab Admin" %></title>
   </head>
   <body class="rails_admin bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
