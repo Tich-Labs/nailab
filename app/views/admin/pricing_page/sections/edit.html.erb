@@ -1,44 +1,277 @@
-<h1 class="text-2xl font-bold mb-6">Edit Pricing Tiers</h1>
-
-<%= form_with url: admin_pricing_page_sections_edit_path, method: :patch, local: true do |form| %>
-  <% @pricing_tiers.each_with_index do |tier, idx| %>
-    <div class="mb-8 p-6 bg-white rounded shadow">
-      <h2 class="text-xl font-semibold mb-4"><%= form.text_field "tiers[][name]", value: tier[:name], class: "font-bold text-xl w-full border rounded px-3 py-2 mb-2" %></h2>
-      <div class="mb-2">
-        <%= form.label "tiers[][price]", "Price", class: "block font-semibold mb-1" %>
-        <%= form.text_field "tiers[][price]", value: tier[:price], class: "w-full border rounded px-3 py-2" %>
-      </div>
-      <div class="mb-2">
-        <%= form.label "tiers[][description]", "Description", class: "block font-semibold mb-1" %>
-        <%= form.text_area "tiers[][description]", value: tier[:description], rows: 2, class: "w-full border rounded px-3 py-2" %>
-      </div>
-      <div class="mb-2">
-        <%= form.label "tiers[][features]", "Features (one per line)", class: "block font-semibold mb-1" %>
-        <%= form.text_area "tiers[][features]", value: Array(tier[:features]).join("\n"), rows: 4, class: "w-full border rounded px-3 py-2" %>
-      </div>
-      <div class="mb-2">
-        <%= form.label "tiers[][cta]", "CTA Button Text", class: "block font-semibold mb-1" %>
-        <%= form.text_field "tiers[][cta]", value: tier[:cta], class: "w-full border rounded px-3 py-2" %>
-      </div>
-      <div class="mb-2">
-        <%= form.label "tiers[][cta_link]", "CTA Link", class: "block font-semibold mb-1" %>
-        <%= form.text_field "tiers[][cta_link]", value: tier[:cta_link], class: "w-full border rounded px-3 py-2" %>
-      </div>
-      <div class="mb-2">
-        <%= form.label "tiers[][highlight]", "Highlight as Most Popular?", class: "block font-semibold mb-1" %>
-        <%= form.check_box "tiers[][highlight]", { checked: tier[:highlight] }, '1', '0' %>
-      </div>
+<%# Pricing page editor following Homepage patterns - implementing pricing card editing %>
+<h1 class="text-2xl font-bold mb-4">Edit: Pricing Page</h1>
+<div class="bg-gray-50 p-6 rounded-lg mb-6">
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-4">Hero Section</h2>
+    <div class="bg-white rounded-lg p-6 shadow">
+      <%= form_with url: admin_pricing_page_sections_update_path, method: :patch, local: true, class: "space-y-4" do |form| %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-medium mb-2' %>
+            <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+          </div>
+          <div>
+            <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-medium mb-2' %>
+            <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], rows: 3, class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+          </div>
+        </div>
+        <div class="mt-6">
+          <%= submit_tag 'Update Hero', class: 'bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 cursor-pointer' %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-  <div>
-    <%= form.submit "Save Tiers", class: "btn btn-primary" %>
-    <a class="btn btn-secondary ml-4" href="/pricing" target="_blank">Preview live page</a>
   </div>
-<% end %>
-
-<hr class="my-8">
-
-<h2 class="text-xl font-bold mb-4">Preview</h2>
-<div class="bg-white p-6 rounded shadow">
-  <%= render 'shared/pricing_grid', pricing_tiers: @pricing_tiers %>
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-4">Pricing Tiers</h2>
+    <div class="bg-white rounded-lg p-6 shadow">
+      <%= form_with url: admin_pricing_page_sections_update_path, method: :patch, local: true, class: "space-y-6" do |form| %>
+        <div class="mb-6">
+          <p class="text-sm text-gray-600 mb-4">Edit pricing tiers displayed as cards on the pricing page. Each tier has name, price, description, features, CTA, and highlight option.</p>
+        </div>
+        <div class="space-y-8" data-controller="pricing-tiers" data-pricing-tiers-count="<%= @pricing_tiers.count %>">
+          <% @pricing_tiers.each_with_index do |tier, index| %>
+            <div class="pricing-tier-card bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:border-purple-300 transition-colors" data-tier-index="<%= index %>">
+              <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm font-medium text-gray-500">Tier <%= index + 1 %></span>
+                  <%= content_tag(:span, "×", class: 'text-red-500 text-xl font-bold cursor-pointer hover:text-red-700 remove-tier', data: { action: 'remove-tier', index: index }) unless @pricing_tiers.count == 1 %>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm font-medium text-gray-500">Add tier</span>
+                  <%= content_tag(:span, "+", class: 'text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-tier', data: { action: 'add-tier', tier_index: index }) %>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <%= label_tag "pricing_content[tiers][#{index}][name]", "Tier Name", class: 'block font-medium mb-2' %>
+                  <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+                </div>
+                <div>
+                  <%= label_tag "pricing_content[tiers][#{index}][price]", "Price", class: 'block font-medium mb-2' %>
+                  <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <%= label_tag "pricing_content[tiers][#{index}][description]", "Description", class: 'block font-medium mb-2' %>
+                <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 4, class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-700 mb-3">Features (one per line)</h4>
+              <div class="features-list space-y-2" data-features-index="<%= index %>">
+                <% (tier[:features] || []).each_with_index do |feature, feature_index| %>
+                  <div class="flex items-center space-x-2">
+                    <%= content_tag(:span, "×", class: 'text-red-500 text-xl font-bold cursor-pointer hover:text-red-700 remove-feature', data: { action: 'remove-feature', tier_index: index, feature_index: feature_index }) unless (tier[:features] || []).size == 1 %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feature, class: 'w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+                  </div>
+                <% end %>
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm font-medium text-gray-500">Add feature</span>
+                  <%= content_tag(:span, "+", class: 'text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-feature', data: { action: 'add-feature', tier_index: index }) %>
+                  <%= text_field_tag "pricing_content[tiers][#{index}][features][]", "", class: 'w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][cta]", "CTA Text", class: 'block font-medium mb-2' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+              </div>
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][cta_link]", "CTA Link", class: 'block font-medium mb-2' %>
+                <%= url_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center space-x-2">
+                <%= check_box_tag "pricing_content[tiers][#{index}][highlight]", '1', tier[:highlight], class: 'w-4 h-4 text-purple-600 focus:ring-4 focus:ring-purple-100' %>
+                <span class="text-sm font-medium text-gray-700">Highlight this tier (shown as "Popular")</span>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="flex gap-4">
+        <%= submit_tag 'Save Pricing Tiers', class: 'bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 cursor-pointer' %>
+        <%= link_to 'Preview live page', '/pricing', class: 'bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300' %>
+      </div>
+    <% end %>
+  </div>
 </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const pricingTiersContainer = document.querySelector('[data-pricing-tiers-count]');
+
+    // Handle tier addition
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('.add-tier')) {
+        const action = e.target.dataset.action;
+        const tierIndex = parseInt(e.target.dataset.tierIndex);
+        const featuresList = document.querySelector(`[data-features-index="${tierIndex}"]`);
+
+        if (action === 'add-tier') {
+          // Add new tier
+          const newTierCard = createTierCard(pricingTiersContainer.children.length);
+          pricingTiersContainer.appendChild(newTierCard);
+          updateTierCount();
+        }
+      }
+    });
+
+    // Handle tier removal
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('.remove-tier')) {
+        const action = e.target.dataset.action;
+        const tierIndex = parseInt(e.target.dataset.tierIndex);
+        const tierCard = document.querySelector(`[data-tier-index="${tierIndex}"]`);
+
+        if (action === 'remove-tier' && tierCard) {
+          tierCard.remove();
+          updateTierNumbers();
+          updateTierCount();
+        }
+      }
+    });
+
+    // Handle feature addition
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('.add-feature')) {
+        const action = e.target.dataset.action;
+        const tierIndex = parseInt(e.target.dataset.tierIndex);
+        const featuresList = document.querySelector(`[data-features-index="${tierIndex}"]`);
+
+        if (action === 'add-feature') {
+          const newFeatureInput = createFeatureInput(featuresList.children.length);
+          featuresList.appendChild(newFeatureInput);
+        }
+      }
+    });
+
+    // Handle feature removal
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('.remove-feature')) {
+        const action = e.target.dataset.action;
+        const tierIndex = parseInt(e.target.dataset.tierIndex);
+        const featureIndex = parseInt(e.target.dataset.featureIndex);
+        const featureInput = document.querySelector(`[data-features-index="${tierIndex}"]`).children[featureIndex];
+
+        if (action === 'remove-feature' && featureInput) {
+          featureInput.remove();
+          updateFeatureNumbers(tierIndex);
+        }
+      }
+    });
+
+    function createTierCard(index) {
+      const newCard = document.createElement('div');
+      newCard.className = 'pricing-tier-card bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:border-purple-300 transition-colors';
+      newCard.setAttribute('data-tier-index', index);
+
+      newCard.innerHTML = `
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium text-gray-500">Tier ${index + 1}</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm font-medium text-gray-500">Add tier</span>
+              <span class="text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-tier" data-action="add-tier" data-tier-index="${index}">+</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium mb-2">Tier Name</label>
+              <input type="text" name="pricing_content[tiers][${index}][name]" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+            </div>
+
+            <div>
+              <label class="block font-medium mb-2">Price</label>
+              <input type="text" name="pricing_content[tiers][${index}][price]" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block font-medium mb-2">Description</label>
+            <textarea name="pricing_content[tiers][${index}][description]" rows="4" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition"></textarea>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h4 class="font-semibold text-gray-700 mb-3">Features</h4>
+          <div class="features-list space-y-2" data-features-index="${index}">
+            <div class="flex items-center space-x-2">
+              <span class="text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-feature" data-action="add-feature" data-tier-index="${index}">+</span>
+              <span class="text-sm font-medium text-gray-500">Add feature</span>
+              <input type="text" name="pricing_content[tiers][${index}][features][]" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-medium mb-2">CTA Text</label>
+            <input type="text" name="pricing_content[tiers][${index}][cta]" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+            </div>
+
+          <div>
+            <label class="block font-medium mb-2">CTA Link</label>
+            <input type="url" name="pricing_content[tiers][${index}][cta_link]" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <label class="flex items-center space-x-2">
+            <input type="checkbox" name="pricing_content[tiers][${index}][highlight]" class="w-4 h-4 text-purple-600 focus:ring-4 focus:ring-purple-100" />
+            <span class="text-sm font-medium text-gray-700">Highlight this tier (shown as "Popular")</span>
+          </label>
+        </div>
+      `;
+
+      return newCard;
+    }
+
+    function createFeatureInput(index) {
+      const newInput = document.createElement('div');
+      newInput.className = 'flex items-center space-x-2';
+      newInput.setAttribute('data-feature-index', index);
+
+      newInput.innerHTML = `
+        <span class="text-red-500 text-xl font-bold cursor-pointer hover:text-red-700 remove-feature" data-action="remove-feature" data-tier-index="\\${document.querySelector('[data-pricing-tiers-count]').dataset.pricingTiersCount - 1}" data-feature-index="${index}">×</span>
+        <span class="text-sm font-medium text-gray-500">Feature ${index + 1}</span>
+        <input type="text" name="pricing_content[tiers][\\${document.querySelector('[data-pricing-tiers-count]').dataset.pricingTiersCount - 1}][features][]" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition" />
+      `;
+
+      return newInput;
+    }
+
+    function updateTierNumbers() {
+      document.querySelectorAll('.pricing-tier-card').forEach((card, index) => {
+        const tierNumber = card.querySelector('.text-sm.font-medium.text-gray-500');
+        if (tierNumber) {
+          tierNumber.textContent = \`Tier \${index + 1}\`;
+        }
+      });
+    }
+
+    function updateFeatureNumbers(tierIndex) {
+      const featuresList = document.querySelector(\`[data-features-index="${tierIndex}"]\`);
+      if (featuresList) {
+        featuresList.querySelectorAll('.text-sm.font-medium.text-gray-500').forEach((label, index) => {
+          if (label) {
+            label.textContent = \`Feature \${index + 1}\`;
+          }
+        });
+      }
+    }
+
+    function updateTierCount() {
+      const container = document.querySelector('[data-pricing-tiers-count]');
+      const count = container.querySelectorAll('.pricing-tier-card').length;
+      container.setAttribute('data-pricing-tiers-count', count);
+    }
+  });
+</script>

@@ -245,8 +245,7 @@ class PagesController < ApplicationController
   end
 
   def pricing
-    # Pricing page temporarily disabled.
-    # load_pricing_content
+    load_pricing_content
   end
 
   def contact
