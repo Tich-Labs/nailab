@@ -17,6 +17,7 @@ module Admin
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
       raw_section = stored[@section_key]
+      
       if raw_section.is_a?(Hash)
         @section_content = raw_section.with_indifferent_access
       else
@@ -103,36 +104,10 @@ module Admin
       @section_key = params[:section]
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
-      section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ], cards: [ :title, :description ])
-
-      payload = {
-        "title" => section_params[:title].to_s.strip
-      }
-      if @section_key == "what_drives_us"
-        cards = section_params[:cards] || []
-        if cards.is_a?(ActionController::Parameters)
-          cards = cards.to_unsafe_h.values
-        elsif cards.is_a?(Hash)
-          cards = cards.values
-        end
-        payload["cards"] = cards.map { |c| { "title" => c["title"].to_s.strip, "description" => c["description"].to_s.strip } }
-      else
-        payload["description"] = section_params[:description].to_s.strip
-      end
-
-      if @section_key == "our_impact"
-        # Parse stats as array of hashes, handle ActionController::Parameters, Hash, or Array
-        stats = section_params[:stats] || []
-        if stats.is_a?(ActionController::Parameters)
-          stats = stats.to_unsafe_h.values
-        elsif stats.is_a?(Hash)
-          stats = stats.values
-        end
-        payload["stats"] = stats.map { |s| { value: s["value"].to_s.strip, label: s["label"].to_s.strip } }
-      elsif @section_key == "our_mission" || @section_key == "our_vision"
-        payload["title"] = section_params[:title].to_s.strip
-        payload["description"] = section_params[:description].to_s.strip
-      elsif @section_key == "vision_mission"
+      
+      # Handle different parameter structures for different sections
+      if @section_key == "vision_mission"
+        # Vision & Mission has special structure
         mission_params = params[:section_payload][:mission].permit(:title, :description)
         vision_params = params[:section_payload][:vision].permit(:title, :description)
         stored["our_mission"] = { "title" => mission_params[:title].to_s.strip, "description" => mission_params[:description].to_s.strip }
@@ -140,11 +115,44 @@ module Admin
         @about.update!(content: stored.to_json)
         redirect_to admin_about_section_edit_path(@section_key), notice: "Saved Vision & Mission"
         return
-      end
+      else
+        # Standard section structure
+        section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ], cards: [ :title, :description ])
 
-      stored[@section_key] = payload
-      @about.update!(content: stored.to_json)
-      redirect_to admin_about_section_edit_path(@section_key), notice: "Saved #{section_title_for(@section_key)}"
+        payload = {
+          "title" => section_params[:title].to_s.strip
+        }
+        
+        if @section_key == "what_drives_us"
+          cards = section_params[:cards] || []
+          if cards.is_a?(ActionController::Parameters)
+            cards = cards.to_unsafe_h.values
+          elsif cards.is_a?(Hash)
+            cards = cards.values
+          end
+          payload["cards"] = cards.map { |c| { "title" => c["title"].to_s.strip, "description" => c["description"].to_s.strip } }
+        else
+          payload["description"] = section_params[:description].to_s.strip
+        end
+
+        if @section_key == "our_impact"
+          # Parse stats as array of hashes, handle ActionController::Parameters, Hash, or Array
+          stats = section_params[:stats] || []
+          if stats.is_a?(ActionController::Parameters)
+            stats = stats.to_unsafe_h.values
+          elsif stats.is_a?(Hash)
+            stats = stats.values
+          end
+          payload["stats"] = stats.map { |s| { value: s["value"].to_s.strip, label: s["label"].to_s.strip } }
+        elsif @section_key == "our_mission" || @section_key == "our_vision"
+          payload["title"] = section_params[:title].to_s.strip
+          payload["description"] = section_params[:description].to_s.strip
+        end
+
+        stored[@section_key] = payload
+        @about.update!(content: stored.to_json)
+        redirect_to admin_about_section_edit_path(@section_key), notice: "Saved #{section_title_for(@section_key)}"
+      end
     end
 
     private

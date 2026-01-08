@@ -1,8 +1,15 @@
-<div class="mb-4">
-  <strong>Title:</strong>
-  <span><%= @section_content["title"] %></span>
-</div>
-<div class="mb-4">
-  <strong>Description:</strong>
-  <p><%= @section_content["paragraph_one"] %></p>
+<div class="bg-white p-6 rounded shadow space-y-5">
+  <div class="space-y-4">
+    <div class="space-y-4">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Section Title</p>
+        <h2 class="text-2xl font-bold text-slate-900"><%= @section_content["title"] %></h2>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Content</p>
+        <p class="text-sm text-slate-600"><%= @section_content["description"] || @section_content["paragraph_one"] %></p>
+      </div>
+    </div>
+  </div>
+  <p class="text-xs text-slate-500">Preview shows the main title and first paragraph. Additional paragraphs and images will appear on the live page.</p>
 </div>

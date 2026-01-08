@@ -24,12 +24,59 @@ module AdminDashboardHelper
         ]
       },
       {
-        title: "Content Management",
+        title: "About",
+        path: safe_path { main_app.admin_about_sections_edit_path },
         sections: [
-          { label: "Homepage Sections", path: main_app.admin_homepage_sections_edit_path },
-          { label: "About Sections", path: main_app.admin_about_sections_edit_path },
-          { label: "Pricing Page", path: main_app.admin_pricing_page_sections_edit_path },
-          { label: "Contact Page", path: main_app.admin_contact_us_sections_edit_path }
+          { label: "Why Nailab Exists", path: safe_path { main_app.admin_about_section_edit_path(section: "why_nailab_exists") }, icon: "❓" },
+          { label: "Our Impact", path: safe_path { main_app.admin_about_section_edit_path(section: "our_impact") }, icon: "📊" },
+          { label: "Vision & Mission", path: safe_path { main_app.admin_about_section_edit_path(section: "vision_mission") }, icon: "🎯" },
+          { label: "What Drives Us", path: safe_path { main_app.admin_about_section_edit_path(section: "what_drives_us") }, icon: "🔥" }
+        ]
+      },
+      {
+        title: "Pricing",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" }
+        ]
+      },
+      {
+        title: "Contact Us",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" }
+        ]
+      },
+      {
+        title: "Programs",
+        sections: [
+          { label: "Edit page", path: rails_admin.edit_path(model_name: "programs_page", id: 1), icon: "📚" }
+        ]
+      },
+      {
+        title: "Resources",
+        sections: [
+          { label: "Blog", path: rails_admin.edit_path(model_name: "blog_page", id: 1), icon: "📝" },
+          { label: "Knowledge Hub", path: rails_admin.edit_path(model_name: "knowledge_hub_page", id: 1), icon: "📚" },
+          { label: "Events & Webinars", path: rails_admin.edit_path(model_name: "events_webinars_page", id: 1), icon: "🎤" },
+          { label: "Opportunities", path: rails_admin.edit_path(model_name: "opportunities_page", id: 1), icon: "🎯" }
+        ]
+      },
+      {
+        title: "👥 Mentorship",
+        sections: [
+          { label: "Mentors", path: rails_admin.index_path(model_name: "mentor"), icon: "🧑‍🏫" },
+          { label: "Requests", path: rails_admin.index_path(model_name: "mentorship_request"), icon: "🧾", badge: @admin_pending_requests, description: "View mentorship requests with mentor, mentee, and details" }
+        ]
+      },
+      {
+        title: "💼 Startups",
+        sections: [
+          { label: "Startups", path: rails_admin.index_path(model_name: "startup_profile"), icon: "🚀" }
+        ]
+      },
+      {
+        title: "💬 Messaging & Comms",
+        sections: [
+          { label: "Support Tickets", path: rails_admin.index_path(model_name: "support_ticket"), icon: "🎫" }
         ]
       }
     ]
@@ -53,7 +100,7 @@ module AdminDashboardHelper
   end
 
   def admin_breadcrumbs
-    crumbs = [{ label: "Admin", path: rails_admin.dashboard_path }]
+    crumbs = [ { label: "Admin", path: rails_admin.dashboard_path } ]
     crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
     crumbs
   end

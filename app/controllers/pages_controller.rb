@@ -245,16 +245,30 @@ class PagesController < ApplicationController
   end
 
   def pricing
-    load_pricing_content
+    # Pricing page temporarily disabled.
+    # load_pricing_content
   end
 
   def contact
-    @faqs = Faq.active.order(:display_order)
+    # Contact page temporarily disabled.
+    # load_contact_content
   end
 
   def home_content_json
     @home_content_json
   end
+
+  # def load_contact_content
+  #   @contact_page = ContactPage.first || ContactPage.new(title: "Contact Us")
+  #   @contact_content = parse_contact_structured_content(@contact_page.content)
+  # end
+  #
+  # def load_pricing_content
+  #   @pricing_page = PricingPage.first || PricingPage.new(title: "Pricing")
+  #   @structured_content = parse_pricing_structured_content(@pricing_page.content)
+  #   @pricing_tiers = PricingContent.tiers(@structured_content)
+  #   @pricing_hero = PricingContent.hero(@structured_content)
+  # end
 
   private
 
