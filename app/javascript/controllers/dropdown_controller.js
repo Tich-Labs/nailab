@@ -7,6 +7,15 @@ export default class extends Controller {
     event.preventDefault()
     event.stopPropagation()
 
+    // Close mobile menu if open (avoid conflicts)
+    const mobileMenu = document.querySelector('[data-controller="mobile-menu"]')
+    if (mobileMenu) {
+      const mobileMenuController = this.application.getControllerForElementAndIdentifier(mobileMenu, 'mobile-menu')
+      if (mobileMenuController && mobileMenuController.close) {
+        mobileMenuController.close()
+      }
+    }
+
     // Close other dropdowns if any are open
     document.querySelectorAll("[data-controller='dropdown']").forEach((dropdown) => {
       if (dropdown !== this.element) {
@@ -41,6 +50,13 @@ export default class extends Controller {
       this.menuTarget.classList.add("hidden")
       document.removeEventListener("click", this.hideHandler)
     }
+  }
+
+  closeAllDropdowns() {
+    document.querySelectorAll("[data-controller='dropdown']").forEach((dropdown) => {
+      const menu = dropdown.querySelector("[data-dropdown-target='menu']")
+      if (menu) menu.classList.add("hidden")
+    })
   }
 
   connect() {
