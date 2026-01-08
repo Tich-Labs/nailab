@@ -249,18 +249,32 @@ class PagesController < ApplicationController
   end
 
   def contact
-    # Contact page temporarily disabled.
-    # load_contact_content
+    load_contact_content
   end
 
   def home_content_json
     @home_content_json
   end
 
-  # def load_contact_content
-  #   @contact_page = ContactPage.first || ContactPage.new(title: "Contact Us")
-  #   @contact_content = parse_contact_structured_content(@contact_page.content)
-  # end
+  def load_contact_content
+    @contact_page = ContactPage.first || ContactPage.new(title: "Contact Us")
+    @contact_content = parse_contact_structured_content(@contact_page.content)
+    @faqs = if @contact_content[:faqs].is_a?(Array)
+      @contact_content[:faqs].map { |f| f.is_a?(Hash) ? f.with_indifferent_access : {} }
+    else
+      [
+        { question: "How can I partner with Nailab?", answer: "Email partnerships at hello@nailab.africa or use the partner form." },
+        { question: "How do I apply to a program?", answer: "Visit the Programs page and select the program you are interested in, then click Apply." },
+        { question: "How do I become a mentor?", answer: "Sign up via the Mentor onboarding link and complete your profile." }
+      ]
+    end
+  end
+
+  def parse_contact_structured_content(content)
+    return {} unless content.present?
+    parsed = JSON.parse(content) rescue {}
+    parsed.is_a?(Hash) ? parsed.with_indifferent_access : {}
+  end
   #
   # def load_pricing_content
   #   @pricing_page = PricingPage.first || PricingPage.new(title: "Pricing")
