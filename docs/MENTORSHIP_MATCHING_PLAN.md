@@ -1,4 +1,7 @@
+
 # Mentorship Matching Roadmap
+
+**Note:** As features are implemented, update their status here and in [FEATURE_IMPLEMENTATION_AUDIT.md](FEATURE_IMPLEMENTATION_AUDIT.md).
 
 ## MVP
 - **Hard filters**: match mentors to founders by focus area overlap, industry, availability. Exclude mentors without confirmed availability or conflicting locations/time zones.

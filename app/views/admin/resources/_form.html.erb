@@ -1,0 +1,48 @@
+<%= form_with model: @resource, url: url_for([:admin, @resource.persisted? ? @resource : :resources]), local: true, html: { multipart: true } do |form| %>
+  <div class="mb-4">
+    <%= form.label :title, "Title", class: "block font-semibold mb-1" %>
+    <%= form.text_field :title, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :description, "Short Description", class: "block font-semibold mb-1" %>
+    <%= form.text_area :description, rows: 2, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :content, "Full Content (WYSIWYG)", class: "block font-semibold mb-1" %>
+    <%= form.text_area :content, rows: 8, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :resource_type, "Resource Type", class: "block font-semibold mb-1" %>
+    <%= form.select :resource_type, RESOURCE_CATEGORY_OPTIONS.reject { |o| o[:value] == 'all' }.map { |o| [o[:label], o[:value]] }, {}, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :published_at, "Published At", class: "block font-semibold mb-1" %>
+    <%= form.datetime_select :published_at, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :url, "External URL", class: "block font-semibold mb-1" %>
+    <%= form.text_field :url, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :hero_image, "Hero Image (Upload)", class: "block font-semibold mb-1" %>
+    <%= form.file_field :hero_image, direct_upload: true, class: "w-full border rounded px-3 py-2" %>
+    <%= form.label :hero_image_url, "Hero Image (URL)", class: "block font-semibold mb-1 mt-2" %>
+    <%= form.text_field :hero_image_url, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :inline_images, "Inline Images (Upload, multiple)", class: "block font-semibold mb-1" %>
+    <%= form.file_field :inline_images, multiple: true, direct_upload: true, class: "w-full border rounded px-3 py-2" %>
+    <%= form.label :inline_image_urls, "Inline Images (URLs, comma separated)", class: "block font-semibold mb-1 mt-2" %>
+    <%= form.text_area :inline_image_urls, rows: 2, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :active, "Active?", class: "block font-semibold mb-1" %>
+    <%= form.check_box :active %>
+  </div>
+  <div class="mb-4">
+    <%= form.submit @resource.persisted? ? "Update Resource" : "Create Resource", class: "btn btn-primary" %>
+    <% if @resource.persisted? %>
+      <%= link_to "Preview", preview_admin_resource_path(@resource), class: "btn btn-secondary ml-4", target: "_blank" %>
+    <% end %>
+  </div>
+<% end %>

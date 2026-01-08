@@ -1,0 +1,23 @@
+<%# app/views/admin/resources/_resource_list_by_type.html.erb %>
+<% RESOURCE_CATEGORY_OPTIONS.reject { |o| o[:value] == 'all' }.each do |category| %>
+  <div class="mb-6">
+    <div class="px-3 py-2 text-sm font-extrabold uppercase tracking-wide border-b border-slate-200 dark:border-slate-800 mb-2 text-purple-700 dark:text-purple-300">
+      <span class="text-sm font-extrabold uppercase tracking-wide"><%= category[:label] %></span>
+    </div>
+    <div class="space-y-1">
+      <%= link_to category[:label], url_for([:edit, :admin, category[:slug] + '_page', 1]), class: "flex items-center justify-between rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100 transition-colors no-underline" %>
+      <% resources = Resource.where(resource_type: category[:value]).order(created_at: :desc) %>
+      <% if resources.any? %>
+        <ul class="ml-4 mt-2 space-y-1">
+          <% resources.each do |resource| %>
+            <li>
+              <%= link_to resource.title, edit_admin_resource_path(resource), class: "text-sm text-blue-700 hover:underline" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="ml-4 text-xs text-slate-400">No resources created yet.</p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -6,25 +6,14 @@ RailsAdmin.config do |config|
   config.asset_source = :sprockets
 
   # Register content management page models for admin editing
-  %w[
-    Homepage
-    AboutPage
-    PricingPage
-    ContactPage
-    ProgramsPage
-    BlogPage
-    KnowledgeHubPage
-    EventsWebinarsPage
-    OpportunitiesPage
-  ].each_with_index do |model, idx|
-    config.model model do
-      navigation_label "Content Management"
-      weight idx
-      edit do
-        fields(*model.constantize.attribute_names.map(&:to_sym))
-      end
-    end
-  end
+
+  config.navigation_static_links = {
+    "Resources" => "/admin/resources",
+    "Blog" => "/admin/resources?resource_type=blog",
+    "Knowledge Hub" => "/admin/resources?resource_type=template",
+    "Events & Webinars" => "/admin/resources?resource_type=event",
+    "Opportunities" => "/admin/resources?resource_type=opportunity"
+  }
 
   config.actions do
     dashboard

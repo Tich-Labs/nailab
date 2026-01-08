@@ -5,12 +5,22 @@ A comprehensive Rails application connecting startups with experienced mentors t
 
 ## Features
 
+## 🚦 Implementation Status
+
+See [docs/FEATURE_IMPLEMENTATION_AUDIT.md](docs/FEATURE_IMPLEMENTATION_AUDIT.md) for a detailed, up-to-date audit of all features, their status (implemented, partial, missing), and evidence. This file is updated regularly as new features are completed.
+
+**Summary (as of Jan 2026):**
+- ✅ Implemented: 49
+- 🟡 Partial: 12
+- ❌ Missing: 8
+
+For missing or incomplete features, see [docs/MISSING_COMPONENTS_LIST.md](docs/MISSING_COMPONENTS_LIST.md).
+
+For planned improvements and admin UI work, see [docs/ADMIN_IMPROVEMENTS_BACKLOG.md](docs/ADMIN_IMPROVEMENTS_BACKLOG.md) and [docs/ADMIN_VIEWS_REFACTOR_PLAN.md](docs/ADMIN_VIEWS_REFACTOR_PLAN.md).
+
+For mentorship matching logic and roadmap, see [docs/MENTORSHIP_MATCHING_PLAN.md](docs/MENTORSHIP_MATCHING_PLAN.md).
+
 ### 🎯 Core Functionality
-- **Mentorship Matching**: AI-powered matching between founders and mentors
-- **Program Management**: Structured mentorship programs with milestones
-- **Resource Library**: Curated content for startup growth
-- **Progress Tracking**: Milestone and metric tracking for startups
-- **Community Features**: Peer connections and networking
 
 ### 💬 Support System
 - **Support Ticketing**: Full conversation system between users and admins

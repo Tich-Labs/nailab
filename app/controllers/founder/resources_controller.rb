@@ -19,8 +19,12 @@ class Founder::ResourcesController < Founder::BaseController
   end
 
   def download
-    # stub download logic
-    send_file @resource.file_path, type: "application/pdf", disposition: "attachment"
+    # Validate file path to prevent directory traversal
+    file_path = @resource.file_path
+    return redirect_back(alert: "Invalid file") unless file_path&.start_with?(Rails.root.join("storage").to_s)
+    return redirect_back(alert: "File not found") unless File.exist?(file_path)
+    
+    send_file file_path, type: "application/pdf", disposition: "attachment"
   end
 
   private

@@ -1,0 +1,27 @@
+<h1 class="text-2xl font-bold mb-6">Edit Pricing Page</h1>
+
+<%= form_with model: @pricing_page, url: admin_pricing_page_path(@pricing_page), method: :patch, local: true do |form| %>
+  <div class="mb-4">
+    <%= form.label :title, "Page Title", class: "block font-semibold mb-1" %>
+    <%= form.text_field :title, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :content, "Intro Content (HTML allowed)", class: "block font-semibold mb-1" %>
+    <%= form.text_area :content, rows: 6, class: "w-full border rounded px-3 py-2" %>
+  </div>
+  <div>
+    <%= form.submit "Save", class: "btn btn-primary" %>
+    <a class="btn btn-secondary ml-4" href="/pricing" target="_blank">Preview live page</a>
+  </div>
+<% end %>
+
+<hr class="my-8">
+
+<h2 class="text-xl font-bold mb-4">Preview</h2>
+<div class="bg-white p-6 rounded shadow">
+  <h1 class="text-4xl font-bold mb-6 text-center"><%= @pricing_page.title %></h1>
+  <div class="text-lg text-gray-700 text-center mb-8">
+    <%= raw(@pricing_page.content) %>
+  </div>
+  <%= render 'shared/pricing_grid', pricing_tiers: @pricing_tiers %>
+</div>

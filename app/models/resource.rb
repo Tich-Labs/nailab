@@ -1,4 +1,6 @@
 class Resource < ApplicationRecord
+  has_one_attached :hero_image
+  has_many_attached :inline_images
   before_validation :set_slug, on: :create
   validates :slug, presence: true, uniqueness: true
 

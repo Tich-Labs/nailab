@@ -66,6 +66,9 @@ module Admin
         @section_content["title"] ||= "Our Mission"
         @section_content["description"] ||= "To be Africa's leading launchpad, empowering bold innovators with the knowledge, mentorship, and community to turn their ideas into scalable, tech-driven solutions that drive economic growth and address the continent's most pressing challenges."
       elsif @section_key == "our_vision"
+        Rails.logger.info("[DEBUG] update_section called for section: #{@section_key}")
+        Rails.logger.info("[DEBUG] Raw params: #{params.inspect}")
+        Rails.logger.info("[DEBUG] Permitted section_params: #{section_params.inspect}")
         @section_content["title"] ||= "Our Vision"
         @section_content["description"] ||= "To build an inclusive network that supports African founders through a collaborative platform where mentors, investors, and founders work together to scale innovative, tech-driven startups."
       elsif @section_key == "vision_mission"

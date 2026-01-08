@@ -1,5 +1,7 @@
 # Missing / Incomplete Components
 
+**Note:** Please keep this file up to date as features are implemented. Remove items that are completed and add links to issues or PRs for any remaining items.
+
 ## Models
 
 - **OmniAuthCredential (or equivalent)** – needed for LinkedIn social sign-in so that mentors can persist `provider`, `uid`, and profile data. Attributes: `user_id`, `provider`, `uid`, `access_token`, `data` (jsonb).

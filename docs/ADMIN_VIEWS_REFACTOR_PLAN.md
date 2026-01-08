@@ -1,4 +1,16 @@
+
 # Admin Views Refactor Plan
+
+## Status
+- [ ] Standardize app/views/admin structure
+- [ ] Remove legacy duplicates
+- [ ] Document controller/view responsibilities
+- [ ] Consolidate preview partials
+- [ ] Standardize partial names
+- [ ] Add header comments to controllers
+- [ ] Run renderer checks and smoke tests
+
+**Instructions:** Check off each item above as it is completed. Move completed steps to a 'Completed' section if desired.
 
 Goal: standardize `app/views/admin` structure, remove legacy duplicates, and document controller/view responsibilities.
 

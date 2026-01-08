@@ -1,0 +1,44 @@
+<h1 class="text-2xl font-bold mb-6">Edit Pricing Tiers</h1>
+
+<%= form_with url: admin_pricing_page_sections_edit_path, method: :patch, local: true do |form| %>
+  <% @pricing_tiers.each_with_index do |tier, idx| %>
+    <div class="mb-8 p-6 bg-white rounded shadow">
+      <h2 class="text-xl font-semibold mb-4"><%= form.text_field "tiers[][name]", value: tier[:name], class: "font-bold text-xl w-full border rounded px-3 py-2 mb-2" %></h2>
+      <div class="mb-2">
+        <%= form.label "tiers[][price]", "Price", class: "block font-semibold mb-1" %>
+        <%= form.text_field "tiers[][price]", value: tier[:price], class: "w-full border rounded px-3 py-2" %>
+      </div>
+      <div class="mb-2">
+        <%= form.label "tiers[][description]", "Description", class: "block font-semibold mb-1" %>
+        <%= form.text_area "tiers[][description]", value: tier[:description], rows: 2, class: "w-full border rounded px-3 py-2" %>
+      </div>
+      <div class="mb-2">
+        <%= form.label "tiers[][features]", "Features (one per line)", class: "block font-semibold mb-1" %>
+        <%= form.text_area "tiers[][features]", value: Array(tier[:features]).join("\n"), rows: 4, class: "w-full border rounded px-3 py-2" %>
+      </div>
+      <div class="mb-2">
+        <%= form.label "tiers[][cta]", "CTA Button Text", class: "block font-semibold mb-1" %>
+        <%= form.text_field "tiers[][cta]", value: tier[:cta], class: "w-full border rounded px-3 py-2" %>
+      </div>
+      <div class="mb-2">
+        <%= form.label "tiers[][cta_link]", "CTA Link", class: "block font-semibold mb-1" %>
+        <%= form.text_field "tiers[][cta_link]", value: tier[:cta_link], class: "w-full border rounded px-3 py-2" %>
+      </div>
+      <div class="mb-2">
+        <%= form.label "tiers[][highlight]", "Highlight as Most Popular?", class: "block font-semibold mb-1" %>
+        <%= form.check_box "tiers[][highlight]", { checked: tier[:highlight] }, '1', '0' %>
+      </div>
+    </div>
+  <% end %>
+  <div>
+    <%= form.submit "Save Tiers", class: "btn btn-primary" %>
+    <a class="btn btn-secondary ml-4" href="/pricing" target="_blank">Preview live page</a>
+  </div>
+<% end %>
+
+<hr class="my-8">
+
+<h2 class="text-xl font-bold mb-4">Preview</h2>
+<div class="bg-white p-6 rounded shadow">
+  <%= render 'shared/pricing_grid', pricing_tiers: @pricing_tiers %>
+</div>

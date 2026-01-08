@@ -3,6 +3,9 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+          <div class="flex justify-end mb-6">
+        <a class="btn btn-secondary" href="/about#what-drives-us">Preview live section</a>
+      </div>
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_about_section_update_path(section: 'what_drives_us'), method: :patch, local: true do %>
         <p class="text-sm text-slate-600 mb-4">Edit the section title and each card's title and description.</p>
@@ -26,7 +29,6 @@
         <% end %>
         <div class="flex gap-3 mt-6">
           <input type="submit" name="commit" value="Save" class="btn btn-primary" data-disable-with="Save">
-          <a class="btn btn-secondary" href="/about#what-drives-us">Preview live section</a>
         </div>
       <% end %>
     </div>

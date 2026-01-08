@@ -6,7 +6,7 @@ module Api
         startups = startups.where(sector: params[:sector]) if params[:sector].present?
         startups = startups.where(stage: params[:stage]) if params[:stage].present?
         if params[:location].present?
-          startups = startups.where("location ILIKE ?", "%#{params[:location]}%")
+          startups = startups.where("location ILIKE ?", "%#{CGI.escapeHTML(params[:location])}%")
         end
         if params[:search].present?
           search_term = "%#{params[:search]}%"

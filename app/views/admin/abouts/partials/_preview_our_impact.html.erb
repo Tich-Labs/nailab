@@ -1,0 +1,19 @@
+
+<div class="mb-4">
+  <strong>Title:</strong>
+  <span><%= @section_content["title"] %></span>
+</div>
+<div class="mb-4">
+  <strong>Description:</strong>
+  <p><%= @section_content["description"] %></p>
+</div>
+<% if @section_content["stats"].present? %>
+  <div class="mb-4">
+    <strong>Impact Stats / Cards:</strong>
+    <ul class="list-disc pl-6">
+      <% @section_content["stats"].each do |stat| %>
+        <li><strong><%= stat["value"] || stat[:value] %></strong> &mdash; <%= stat["label"] || stat[:label] %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

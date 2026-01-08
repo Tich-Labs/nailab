@@ -10,13 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_03_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "about_pages", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "about_sections", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "section_type"
     t.string "title"
     t.datetime "updated_at", null: false
   end
@@ -367,6 +375,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_03_000001) do
     t.text "content"
     t.datetime "created_at", null: false
     t.text "description"
+    t.string "hero_image_url"
+    t.text "inline_image_urls", default: [], array: true
     t.datetime "published_at"
     t.string "resource_type"
     t.string "slug"

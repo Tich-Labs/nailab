@@ -1,4 +1,12 @@
+
 # ADMIN_IMPROVEMENTS_BACKLOG — Nailab RailsAdmin CMS
+
+**Instructions:**
+- Please move completed items to the 'Completed Improvements' section below.
+- Add links to issues/PRs for any in-progress or planned items.
+
+## Completed Improvements
+(Move completed 'Must have' or 'Should have' items here with date and reference)
 
 Based on the current RailsAdmin configuration and Nailab marketing/mentorship MVP requirements, the following prioritized backlog uses MoSCoW categories. Each item includes a rough effort level (S=small, M=medium, L=large).
 

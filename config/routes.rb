@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  # Custom admin pricing page sections editor (must be before RailsAdmin mount)
+  namespace :admin do
+    namespace :pricing_page do
+      get "sections/edit", to: "sections#edit", as: :pricing_page_sections_edit
+      patch "sections/edit", to: "sections#update"
+    end
+  end
+  namespace :admin do
+    resources :about_sections
+    resources :resources, param: :id do
+      member do
+        get :preview
+      end
+    end
+  end
   get "partner_onboarding", to: "partner_onboarding#show", as: :partner_onboarding
   put "partner_onboarding", to: "partner_onboarding#update"
   get "founder_onboarding", to: "founder_onboarding#show", as: :founder_onboarding
