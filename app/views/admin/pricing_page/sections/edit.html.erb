@@ -1,105 +1,133 @@
-<%# Pricing page editor following Homepage patterns - implementing pricing card editing %>
+<%# Pricing page editor following About/Home two-column pattern %>
 <h1 class="text-2xl font-bold mb-4">Edit: Pricing Page</h1>
-<div class="bg-gray-50 p-6 rounded-lg mb-6">
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-4">Hero Section</h2>
-    <div class="bg-white rounded-lg p-6 shadow">
-      <%= form_with url: admin_pricing_page_sections_update_path, method: :patch, local: true, class: "space-y-4" do |form| %>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-medium mb-2' %>
-            <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-          </div>
-          <div>
-            <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-medium mb-2' %>
-            <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], rows: 3, class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
+
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="flex justify-end mb-6">
+      <a class="btn btn-secondary" href="/pricing" target="_blank">Preview live page</a>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <%# Ensure we always have three tiers (Free, Basic, Premium) for editing %>
+      <% tiers = @pricing_tiers.to_a.dup %>
+      <% defaults = [
+        { name: 'Free', price: 'Ksh 0', description: 'Get started with Nailab and access our community, events, and select resources.', features: ['Access to Nailab community','Monthly events & webinars','Startup resources & guides','Newsletter & updates'], cta: 'Get Started', cta_link: '#' },
+        { name: 'Basic', price: 'Ksh 5,000', description: 'Unlock mentorship, business clinics, and exclusive partner offers.', features: ['Everything in Free','Mentorship sessions','Business clinics','Exclusive partner offers','Priority event access'], cta: 'Start Basic', cta_link: '#' },
+        { name: 'Premium', price: 'Ksh 15,000', description: 'Full access to Nailab programs, investor network, and personalized support.', features: ['Everything in Basic','Full program access','Investor introductions','Personalized support','Pitch coaching','Demo day invitations'], cta: 'Go Premium', cta_link: '#' }
+      ] %>
+      <% 3.times do |i| %>
+        <% tiers[i] ||= defaults[i] %>
+      <% end %>
+
+        <%= form_with url: main_app.admin_admin_pricing_page_simple_path, method: :patch, local: true, class: "space-y-4" do |form| %>
+        <p class="text-sm text-slate-600 mb-4">Edit the hero and pricing tiers for the Pricing page.</p>
+        <div class="mb-4">
+          <h3 class="font-semibold mb-2">Hero</h3>
+          <div class="grid grid-cols-1 gap-4">
+            <div>
+              <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-medium mb-2' %>
+              <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], id: 'pricing_hero_title', data: { preview_field: 'hero_title' }, class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div>
+              <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-medium mb-2' %>
+              <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], id: 'pricing_hero_subtitle', data: { preview_field: 'hero_subtitle' }, rows: 3, class: 'w-full form-input admin-form-input' %>
+            </div>
+            <div>
+              <%= submit_tag 'Update Hero', class: 'btn btn-primary' %>
+            </div>
           </div>
         </div>
-        <div class="mt-6">
-          <%= submit_tag 'Update Hero', class: 'bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 cursor-pointer' %>
+
+        <hr class="my-4">
+
+        <div>
+          <h3 class="font-semibold mb-3">Pricing Tiers</h3>
+          <p class="text-sm text-slate-600 mb-4">Edit pricing tiers displayed as cards on the pricing page. Each tier has name, price, description, features, CTA, and highlight option.</p>
+          <div class="space-y-6" data-controller="pricing-tiers" data-pricing-tiers-count="<%= @pricing_tiers.count %>">
+            <% tiers.each_with_index do |tier, index| %>
+              <div class="p-4 bg-gray-50 rounded-lg mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <%= label_tag "pricing_content[tiers][#{index}][name]", "Tier Name", class: 'block font-medium mb-2' %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'name' } %>
+                  </div>
+                  <div>
+                    <%= label_tag "pricing_content[tiers][#{index}][price]", "Price", class: 'block font-medium mb-2' %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'price' } %>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <%= label_tag "pricing_content[tiers][#{index}][description]", "Description", class: 'block font-medium mb-2' %>
+                  <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 3, class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'description' } %>
+                </div>
+                <div class="mt-3">
+                  <%= label_tag "pricing_content[tiers][#{index}][features][]", "Features (one per line)", class: 'block font-medium mb-2' %>
+                  <% (tier[:features] || []).each_with_index do |feature, fi| %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feature, class: 'w-full form-input admin-form-input mb-2', data: { preview_index: index, preview_field: 'feature' } %>
+                  <% end %>
+                  <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'feature' } %>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                  <div>
+                    <%= label_tag "pricing_content[tiers][#{index}][cta]", "CTA Text", class: 'block font-medium mb-2' %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta' } %>
+                  </div>
+                  <div>
+                    <%= label_tag "pricing_content[tiers][#{index}][cta_link]", "CTA Link", class: 'block font-medium mb-2' %>
+                    <%= text_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta_link' }, placeholder: '/users/sign_up or https://example.com' %>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <label class="flex items-center gap-2">
+                    <%= check_box_tag "pricing_content[tiers][#{index}][highlight]", '1', tier[:highlight] %>
+                    <span class="text-sm">Highlight this tier</span>
+                  </label>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <%= submit_tag 'Save Pricing', class: 'btn btn-primary' %>
+            <%= link_to 'Preview live page', '/pricing', class: 'btn btn-secondary' %>
+          </div>
         </div>
       <% end %>
     </div>
   </div>
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-4">Pricing Tiers</h2>
-    <div class="bg-white rounded-lg p-6 shadow">
-      <%= form_with url: admin_pricing_page_sections_update_path, method: :patch, local: true, class: "space-y-6" do |form| %>
-        <div class="mb-6">
-          <p class="text-sm text-gray-600 mb-4">Edit pricing tiers displayed as cards on the pricing page. Each tier has name, price, description, features, CTA, and highlight option.</p>
-        </div>
-        <div class="space-y-8" data-controller="pricing-tiers" data-pricing-tiers-count="<%= @pricing_tiers.count %>">
-          <% @pricing_tiers.each_with_index do |tier, index| %>
-            <div class="pricing-tier-card bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:border-purple-300 transition-colors" data-tier-index="<%= index %>">
-              <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center space-x-2">
-                  <span class="text-sm font-medium text-gray-500">Tier <%= index + 1 %></span>
-                  <%= content_tag(:span, "×", class: 'text-red-500 text-xl font-bold cursor-pointer hover:text-red-700 remove-tier', data: { action: 'remove-tier', index: index }) unless @pricing_tiers.count == 1 %>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <span class="text-sm font-medium text-gray-500">Add tier</span>
-                  <%= content_tag(:span, "+", class: 'text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-tier', data: { action: 'add-tier', tier_index: index }) %>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-4">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <%= label_tag "pricing_content[tiers][#{index}][name]", "Tier Name", class: 'block font-medium mb-2' %>
-                  <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-                </div>
-                <div>
-                  <%= label_tag "pricing_content[tiers][#{index}][price]", "Price", class: 'block font-medium mb-2' %>
-                  <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-                </div>
-              </div>
-              <div class="md:col-span-2">
-                <%= label_tag "pricing_content[tiers][#{index}][description]", "Description", class: 'block font-medium mb-2' %>
-                <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 4, class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-              </div>
-            </div>
-            <div class="space-y-4">
-              <h4 class="font-semibold text-gray-700 mb-3">Features (one per line)</h4>
-              <div class="features-list space-y-2" data-features-index="<%= index %>">
-                <% (tier[:features] || []).each_with_index do |feature, feature_index| %>
-                  <div class="flex items-center space-x-2">
-                    <%= content_tag(:span, "×", class: 'text-red-500 text-xl font-bold cursor-pointer hover:text-red-700 remove-feature', data: { action: 'remove-feature', tier_index: index, feature_index: feature_index }) unless (tier[:features] || []).size == 1 %>
-                    <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feature, class: 'w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-                  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <h1 class="text-4xl font-bold mb-6 text-center" id="pricing_preview_hero_title"><%= @pricing_hero[:title] || @pricing_page&.title || 'Pricing' %></h1>
+      <div class="text-lg text-gray-700 text-center mb-8" id="pricing_preview_hero_subtitle">
+        <%= @pricing_hero[:subtitle].presence || @pricing_page&.content.to_s.html_safe %>
+      </div>
+
+      <div class="space-y-6">
+        <% tiers.each_with_index do |tier, idx| %>
+          <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition" data-tier-index="<%= idx %>">
+            <h3 class="text-2xl font-bold text-gray-900 mb-2 tier-name"><%= tier[:name] %></h3>
+            <p class="text-xl text-purple-600 font-semibold mb-2 tier-price"><%= tier[:price] %></p>
+            <p class="text-gray-700 mb-3 tier-desc"><%= tier[:description] %></p>
+            <% if tier[:features].present? %>
+              <ul class="list-disc list-inside text-gray-700 mb-3 tier-features">
+                <% tier[:features].each do |f| %>
+                  <li><%= f %></li>
                 <% end %>
-                <div class="flex items-center space-x-2">
-                  <span class="text-sm font-medium text-gray-500">Add feature</span>
-                  <%= content_tag(:span, "+", class: 'text-green-500 text-xl font-bold cursor-pointer hover:text-green-700 add-feature', data: { action: 'add-feature', tier_index: index }) %>
-                  <%= text_field_tag "pricing_content[tiers][#{index}][features][]", "", class: 'w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <%= label_tag "pricing_content[tiers][#{index}][cta]", "CTA Text", class: 'block font-medium mb-2' %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-              </div>
-              <div>
-                <%= label_tag "pricing_content[tiers][#{index}][cta_link]", "CTA Link", class: 'block font-medium mb-2' %>
-                <%= url_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], class: 'w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-100 transition' %>
-              </div>
-            </div>
-            <div class="flex items-center space-x-4">
-              <label class="flex items-center space-x-2">
-                <%= check_box_tag "pricing_content[tiers][#{index}][highlight]", '1', tier[:highlight], class: 'w-4 h-4 text-purple-600 focus:ring-4 focus:ring-purple-100' %>
-                <span class="text-sm font-medium text-gray-700">Highlight this tier (shown as "Popular")</span>
-              </label>
-            </div>
+              </ul>
+            <% else %>
+              <ul class="list-disc list-inside text-gray-700 mb-3 tier-features"></ul>
+            <% end %>
+            <% if tier[:cta].present? %>
+              <%= link_to tier[:cta], (tier[:cta_link].presence || '#'), class: 'inline-block bg-purple-600 text-white px-4 py-2 rounded tier-cta' %>
+            <% else %>
+              <a class="inline-block bg-purple-600 text-white px-4 py-2 rounded tier-cta" href="#" style="display:none"></a>
+            <% end %>
           </div>
         <% end %>
       </div>
-      <div class="flex gap-4">
-        <%= submit_tag 'Save Pricing Tiers', class: 'bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 cursor-pointer' %>
-        <%= link_to 'Preview live page', '/pricing', class: 'bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300' %>
-      </div>
-    <% end %>
+    </div>
   </div>
-</div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -274,4 +302,76 @@
       container.setAttribute('data-pricing-tiers-count', count);
     }
   });
+</script>
+
+<script>
+  // Live preview: update preview elements as user types in the editor
+  document.addEventListener('input', function(e) {
+    const t = e.target;
+    if (!t) return;
+
+    // Hero fields
+    if (t.id === 'pricing_hero_title') {
+      const el = document.getElementById('pricing_preview_hero_title');
+      if (el) el.textContent = t.value || 'Pricing';
+      return;
+    }
+    if (t.id === 'pricing_hero_subtitle') {
+      const el = document.getElementById('pricing_preview_hero_subtitle');
+      if (el) el.innerHTML = (t.value || '').replace(/\n/g, '<br/>');
+      return;
+    }
+
+    // Tier fields (data-preview-index & data-preview-field)
+    const previewIndex = t.dataset.previewIndex;
+    const previewField = t.dataset.previewField;
+    if (previewIndex !== undefined && previewField) {
+      const idx = previewIndex;
+      const previewRoot = document.querySelector(`[data-tier-index="${idx}"]`);
+      if (!previewRoot) return;
+
+      if (previewField === 'name') {
+        const el = previewRoot.querySelector('.tier-name');
+        if (el) el.textContent = t.value || 'Tier name';
+      } else if (previewField === 'price') {
+        const el = previewRoot.querySelector('.tier-price');
+        if (el) el.textContent = t.value || '';
+      } else if (previewField === 'description') {
+        const el = previewRoot.querySelector('.tier-desc');
+        if (el) el.textContent = t.value || '';
+      } else if (previewField === 'feature') {
+        // rebuild feature list for this tier
+        const featureInputs = Array.from(document.querySelectorAll(`input[name^="pricing_content[tiers][${idx}][features]"]`));
+        const features = featureInputs.map(i => i.value).filter(v => v && v.trim().length > 0);
+        const ul = previewRoot.querySelector('.tier-features');
+        if (ul) {
+          ul.innerHTML = features.map(f => `<li>${escapeHtml(f)}</li>`).join('');
+        }
+      } else if (previewField === 'cta') {
+        const el = previewRoot.querySelector('.tier-cta');
+        if (el) {
+          if (t.value && t.value.trim().length > 0) {
+            el.textContent = t.value;
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      } else if (previewField === 'cta_link') {
+        const el = previewRoot.querySelector('.tier-cta');
+        if (el) {
+          el.href = t.value && t.value.trim().length > 0 ? t.value : '#';
+        }
+      }
+    }
+  });
+
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 </script>

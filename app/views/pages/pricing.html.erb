@@ -4,15 +4,9 @@
       <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 text-center">
         <%= (@pricing_hero || {})[:title] || "Pricing" %>
       </h1>
-      <% if @pricing_page&.content.present? %>
-        <div class="text-xl text-gray-700 text-center max-w-3xl mx-auto">
-          <%= raw(@pricing_page.content) %>
-        </div>
-      <% else %>
-        <p class="text-xl text-gray-700 text-center max-w-3xl mx-auto">
-          <%= (@pricing_hero || {})[:subtitle] || "" %>
-        </p>
-      <% end %>
+      <div class="text-xl text-gray-700 text-center max-w-3xl mx-auto">
+        <%= raw((@pricing_hero || {})[:subtitle].to_s.gsub(/\n/, '<br/>')) %>
+      </div>
     </div>
   </section>
   <section class="py-20 bg-white">

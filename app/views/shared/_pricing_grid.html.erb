@@ -1,22 +1,32 @@
-<div class="grid md:grid-cols-3 gap-10">
-  <% pricing_tiers.each do |tier| %>
+<%# pricing grid — accepts optional local `stacked: true` to render single-column cards for previews %>
+<% stacked = local_assigns[:stacked] %>
+<% grid_classes = stacked ? 'space-y-4' : 'grid md:grid-cols-3 gap-10' %>
+<div class="<%= grid_classes %>">
+  <% pricing_tiers.each_with_index do |tier, idx| %>
     <% highlight = tier.fetch(:highlight, false) %>
-    <div class="flex flex-col rounded-2xl shadow-lg border-2 <%= highlight ? 'border-purple-600 bg-purple-50 scale-105 z-10' : 'border-gray-200 bg-white' %> p-8 relative">
+    <% card_pad = stacked ? 'p-4' : 'p-8' %>
+    <% title_cls = stacked ? 'text-xl' : 'text-2xl' %>
+    <% price_cls = stacked ? 'text-2xl' : 'text-4xl' %>
+    <% desc_mb = stacked ? 'mb-4' : 'mb-6' %>
+    <% features_space = stacked ? 'space-y-2' : 'space-y-3' %>
+    <% cta_padding = stacked ? 'px-4 py-2 text-sm' : 'px-6 py-3' %>
+    <% card_border_bg = highlight ? 'border-purple-600 bg-purple-50 scale-105 z-10' : 'border-gray-200 bg-white' %>
+    <div class="flex flex-col rounded-2xl shadow-lg border-2 <%= card_border_bg %> <%= card_pad %> relative" data-tier-index="<%= idx %>">
       <% if highlight %>
-        <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow">Most Popular</span>
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-0.5 rounded-full shadow">Most Popular</span>
       <% end %>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center"><%= tier[:name] %></h2>
-      <div class="text-4xl font-extrabold text-purple-600 mb-2 text-center"><%= tier[:price] %></div>
-      <p class="text-gray-700 mb-6 text-center"><%= tier[:description] %></p>
-      <ul class="mb-8 space-y-3">
+      <h2 class="<%= title_cls %> font-bold text-gray-900 mb-2 text-center tier-name"><%= tier[:name] %></h2>
+      <div class="<%= price_cls %> font-extrabold text-purple-600 mb-2 text-center tier-price"><%= tier[:price] %></div>
+      <p class="text-gray-700 <%= desc_mb %> text-center tier-desc"><%= tier[:description] %></p>
+      <ul class="mb-6 <%= features_space %> tier-features">
         <% Array.wrap(tier[:features]).each do |feature| %>
-          <li class="flex items-center space-x-2">
-            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-gray-800"><%= feature %></span>
+          <li class="flex items-center <%= stacked ? 'space-x-3' : 'space-x-2' %>">
+            <svg class="w-4 h-4 <%= stacked ? 'text-teal-500' : 'text-teal-500' %> flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span class="text-gray-800 text-sm"><%= feature %></span>
           </li>
         <% end %>
       </ul>
-      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg hover:shadow-xl <%= highlight ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-teal-600 text-white hover:bg-teal-700' %>">
+      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= highlight ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-teal-600 text-white hover:bg-teal-700' %> tier-cta">
         <%= tier[:cta] || 'Choose Plan' %>
       </a>
     </div>

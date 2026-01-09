@@ -1,27 +1,261 @@
-<h1 class="text-2xl font-bold mb-6">Edit Pricing Page</h1>
+<h1 class="text-2xl font-bold mb-4">Edit Pricing Page</h1>
 
-<%= form_with model: @pricing_page, url: admin_pricing_page_path(@pricing_page), method: :patch, local: true do |form| %>
-  <div class="mb-4">
-    <%= form.label :title, "Page Title", class: "block font-semibold mb-1" %>
-    <%= form.text_field :title, class: "w-full border rounded px-3 py-2" %>
-  </div>
-  <div class="mb-4">
-    <%= form.label :content, "Intro Content (HTML allowed)", class: "block font-semibold mb-1" %>
-    <%= form.text_area :content, rows: 6, class: "w-full border rounded px-3 py-2" %>
-  </div>
+<div class="grid grid-cols-2 gap-8 mb-6">
   <div>
-    <%= form.submit "Save", class: "btn btn-primary" %>
-    <a class="btn btn-secondary ml-4" href="/pricing" target="_blank">Preview live page</a>
-  </div>
-<% end %>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="flex justify-end mb-6">
+      <a class="btn btn-secondary mr-2" href="/pricing" target="_blank">Preview live page</a>
+    </div>
 
-<hr class="my-8">
-
-<h2 class="text-xl font-bold mb-4">Preview</h2>
-<div class="bg-white p-6 rounded shadow">
-  <h1 class="text-4xl font-bold mb-6 text-center"><%= @pricing_page.title %></h1>
-  <div class="text-lg text-gray-700 text-center mb-8">
-    <%= raw(@pricing_page.content) %>
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: main_app.admin_admin_pricing_page_simple_path, method: :patch, local: true do |form| %>
+        <div class="mb-3">
+          <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-bold mb-1' %>
+          <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], id: 'pricing_hero_title', class: 'w-full form-input admin-form-input', data: { preview_field: 'hero_title' } %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-bold mb-1' %>
+          <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], id: 'pricing_hero_subtitle', rows: 3, class: 'w-full form-input admin-form-input', data: { preview_field: 'hero_subtitle' } %>
+        </div>
+        <hr class="my-4">
+        <h3 class="font-semibold mb-2">Pricing Tiers</h3>
+        <p class="text-sm text-slate-600 mb-3">Edit the tiers below; preview on the right updates as you type.</p>
+        <% @pricing_tiers.each_with_index do |tier, index| %>
+          <div class="p-3 bg-gray-50 rounded mb-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][name]", 'Tier Name', class: 'block font-medium mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'name' } %>
+              </div>
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][price]", 'Price', class: 'block font-medium mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'price' } %>
+              </div>
+            </div>
+            <div class="mt-2">
+              <%= label_tag "pricing_content[tiers][#{index}][description]", 'Description', class: 'block font-medium mb-1' %>
+              <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 2, class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'description' } %>
+            </div>
+            <div class="mt-2">
+              <%= label_tag "pricing_content[tiers][#{index}][features][]", 'Features (one per line)', class: 'block font-medium mb-1' %>
+              <% (tier[:features] || []).each do |feat| %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feat, class: 'w-full form-input admin-form-input mb-2', data: { preview_index: index, preview_field: 'feature' } %>
+              <% end %>
+              <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'feature' } %>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][cta]", 'CTA Text', class: 'block font-medium mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta' } %>
+              </div>
+              <div>
+                <%= label_tag "pricing_content[tiers][#{index}][cta_link]", 'CTA Link', class: 'block font-medium mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], placeholder: '/users/sign_up or https://example.com', class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta_link' } %>
+                <p class="text-xs text-slate-500 mt-1">Relative paths like <code>/users/sign_up</code> are allowed.</p>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="flex items-center gap-2">
+                <%= check_box_tag "pricing_content[tiers][#{index}][highlight]", '1', tier[:highlight] %>
+                <span class="text-sm">Highlight this tier</span>
+              </label>
+            </div>
+          </div>
+        <% end %>
+        <div>
+          <%= form.submit "Save", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <%= render 'shared/pricing_grid', pricing_tiers: @pricing_tiers %>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <%= render template: 'admin/pricing_page/preview' %>
+      <script>
+        window.__initialPricing = <%= raw((@pricing_tiers || []).to_json) %>;
+        window.__initialHero = <%= raw((@pricing_hero || {}).to_json) %>;
+
+        function escapeHtml(unsafe) {
+          return (unsafe || '')
+            .toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+        }
+
+        function buildPricingPreview(tiers, hero) {
+          const container = document.getElementById('pricing_page_preview_grid');
+          if (!container) return;
+          container.innerHTML = '';
+          const stacked = container.dataset.stacked === 'true';
+
+          tiers.forEach(function(tier, idx) {
+            const highlight = !!tier.highlight;
+            const card = document.createElement('div');
+            card.className = 'flex flex-col rounded-2xl shadow-lg border-2 ' + (highlight ? 'border-purple-600 bg-purple-50 scale-105 z-10' : 'border-gray-200 bg-white') + ' ' + (stacked ? 'p-4' : 'p-8') + ' relative';
+            card.setAttribute('data-tier-index', idx);
+
+            if (highlight) {
+              const badge = document.createElement('span');
+              badge.className = 'absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-0.5 rounded-full shadow';
+              badge.textContent = 'Most Popular';
+              card.appendChild(badge);
+            }
+
+            const title = document.createElement('h3');
+            title.className = (stacked ? 'text-xl' : 'text-2xl') + ' font-bold text-gray-900 mb-2 text-center tier-name';
+            title.innerText = tier.name || '';
+            card.appendChild(title);
+
+            const price = document.createElement('div');
+            price.className = (stacked ? 'text-2xl' : 'text-4xl') + ' font-extrabold text-purple-600 mb-2 text-center tier-price';
+            price.innerText = tier.price || '';
+            card.appendChild(price);
+
+            const desc = document.createElement('p');
+            desc.className = 'text-gray-700 ' + (stacked ? 'mb-4' : 'mb-6') + ' text-center tier-desc';
+            desc.innerText = tier.description || '';
+            card.appendChild(desc);
+
+            const ul = document.createElement('ul');
+            ul.className = 'mb-6 ' + (stacked ? 'space-y-2' : 'space-y-3') + ' tier-features';
+            (Array.isArray(tier.features) ? tier.features : []).forEach(function(f) {
+              const li = document.createElement('li');
+              li.className = 'flex items-center ' + (stacked ? 'space-x-3' : 'space-x-2');
+              li.innerHTML = '<svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-gray-800 text-sm">' + escapeHtml(f) + '</span>';
+              ul.appendChild(li);
+            });
+            card.appendChild(ul);
+
+            const a = document.createElement('a');
+            a.className = 'mt-auto block w-full text-center rounded-lg font-semibold transition-colors ' + (stacked ? 'px-4 py-2 text-sm shadow-sm' : 'px-6 py-3 shadow-lg hover:shadow-xl');
+            a.href = tier.cta_link || '#';
+            a.textContent = tier.cta || '';
+            if (!tier.cta || tier.cta.trim().length === 0) a.style.display = 'none';
+            card.appendChild(a);
+
+            container.appendChild(card);
+          });
+
+          // hero
+          const heroTitle = document.getElementById('pricing_page_preview_title');
+          const heroSubtitle = document.getElementById('pricing_page_preview_content');
+          if (heroTitle) heroTitle.textContent = hero && hero.title ? hero.title : (document.getElementById('pricing_page_title_input') ? document.getElementById('pricing_page_title_input').value : 'Pricing');
+          if (heroSubtitle) heroSubtitle.innerHTML = hero && hero.subtitle ? escapeHtml(hero.subtitle).replace(/\n/g,'<br/>') : (document.getElementById('pricing_page_content_input') ? escapeHtml(document.getElementById('pricing_page_content_input').value).replace(/\n/g,'<br/>') : '');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          buildPricingPreview(window.__initialPricing || [], window.__initialHero || {});
+        });
+      </script>
+    </div>
+  </div>
 </div>
+
+<script>
+  // read current editor values (hero + tiers) to build preview
+  function readEditorHero() {
+    const titleEl = document.getElementById('pricing_hero_title');
+    const subtitleEl = document.getElementById('pricing_hero_subtitle');
+    return {
+      title: titleEl ? titleEl.value : (window.__initialHero && window.__initialHero.title) || '',
+      subtitle: subtitleEl ? subtitleEl.value : (window.__initialHero && window.__initialHero.subtitle) || ''
+    };
+  }
+
+  function readEditorTiers() {
+    const nameInputs = Array.from(document.querySelectorAll('input[data-preview-field="name"]'));
+    const tiers = [];
+    nameInputs.forEach((nameInput, idx) => {
+      const base = `pricing_content[tiers][${idx}]`;
+      const priceEl = document.querySelector(`input[name="${base}[price]"]`);
+      const descEl = document.querySelector(`textarea[name="${base}[description]"]`);
+      const ctaEl = document.querySelector(`input[name="${base}[cta]"]`);
+      const ctaLinkEl = document.querySelector(`input[name="${base}[cta_link]"]`);
+      const featureEls = Array.from(document.querySelectorAll(`input[name^="${base}[features]"]`));
+      const highlightEl = document.querySelector(`input[name="${base}[highlight]"]`);
+
+      const features = featureEls.map(i => i.value).filter(v => v && v.trim().length > 0);
+
+      tiers.push({
+        name: nameInput.value || '',
+        price: priceEl ? priceEl.value : '',
+        description: descEl ? descEl.value : '',
+        features: features,
+        cta: ctaEl ? ctaEl.value : '',
+        cta_link: ctaLinkEl ? ctaLinkEl.value : '',
+        highlight: !!(highlightEl && highlightEl.checked)
+      });
+    });
+    return tiers;
+  }
+
+  document.addEventListener('input', function(e) {
+    const t = e.target;
+    if (!t) return;
+
+    // If number of editor tiers changed, rebuild preview from editor values
+    const editorTierCount = document.querySelectorAll('input[data-preview-field="name"]').length;
+    const previewTierCount = document.querySelectorAll('#pricing_page_preview_grid [data-tier-index]').length;
+    if (editorTierCount !== previewTierCount) {
+      buildPricingPreview(readEditorTiers(), readEditorHero());
+    }
+
+    // Basic hero/page fields
+    if (t.id === 'pricing_page_title_input' || t.id === 'pricing_hero_title') {
+      const el = document.getElementById('pricing_page_preview_title');
+      if (el) el.textContent = t.value || 'Pricing';
+    }
+    if (t.id === 'pricing_page_content_input' || t.id === 'pricing_hero_subtitle') {
+      const el = document.getElementById('pricing_page_preview_content');
+      if (el) el.innerHTML = (t.value || '').replace(/\n/g, '<br/>');
+    }
+
+    // Tier fields — if preview card exists, update in-place; otherwise rebuild
+    const previewIndex = t.dataset.previewIndex;
+    const previewField = t.dataset.previewField;
+    if (previewIndex !== undefined && previewField) {
+      const idx = previewIndex;
+      const previewRoot = document.querySelector(`[data-tier-index="${idx}"]`);
+      if (!previewRoot) {
+        buildPricingPreview(readEditorTiers(), readEditorHero());
+        return;
+      }
+
+      if (previewField === 'name') {
+        const el = previewRoot.querySelector('.tier-name');
+        if (el) el.textContent = t.value || 'Tier name';
+      } else if (previewField === 'price') {
+        const el = previewRoot.querySelector('.tier-price');
+        if (el) el.textContent = t.value || '';
+      } else if (previewField === 'description') {
+        const el = previewRoot.querySelector('.tier-desc');
+        if (el) el.textContent = t.value || '';
+      } else if (previewField === 'feature') {
+        const featureInputs = Array.from(document.querySelectorAll(`input[name^="pricing_content[tiers][${idx}][features]"]`));
+        const features = featureInputs.map(i => i.value).filter(v => v && v.trim().length > 0);
+        const ul = previewRoot.querySelector('.tier-features');
+        if (ul) {
+          ul.innerHTML = features.map(f => `<li>${escapeHtml(f)}</li>`).join('');
+        }
+      } else if (previewField === 'cta') {
+        const el = previewRoot.querySelector('.tier-cta');
+        if (el) {
+          if (t.value && t.value.trim().length > 0) {
+            el.textContent = t.value;
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      } else if (previewField === 'cta_link') {
+        const el = previewRoot.querySelector('.tier-cta');
+        if (el) el.href = t.value && t.value.trim().length > 0 ? t.value : '#';
+      }
+    }
+  });
+</script>

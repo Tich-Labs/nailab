@@ -1,11 +1,5 @@
 Rails.application.routes.draw do
-  # Custom admin pricing page sections editor (must be before RailsAdmin mount)
-  namespace :admin do
-    namespace :pricing_page do
-      get "sections/edit", to: "sections#edit", as: :pricing_page_sections_edit
-      patch "sections/edit", to: "sections#update"
-    end
-  end
+  # (Removed legacy admin/pricing_page/sections routes — pricing editor consolidated)
   namespace :admin do
     resources :about_sections
     resources :resources, param: :id do
@@ -84,6 +78,15 @@ Rails.application.routes.draw do
 
   # Custom admin homepage editors and logo management — define before mounting RailsAdmin
   namespace :admin do
+    # Friendly slug routes for pricing editor (allows /admin/pricing/pricing/edit)
+    # Simple routes for pricing editor (no redundant slug)
+    get "pricing/edit", to: "pricing_page#edit", as: :edit_admin_pricing_page_simple
+    patch "pricing", to: "pricing_page#update", as: :admin_pricing_page_simple
+
+    # Friendly slug routes for pricing editor (allows /admin/pricing/pricing/edit)
+    get "pricing/:slug/edit", to: "pricing_page#edit", as: :edit_admin_pricing_page_slug
+    patch "pricing/:slug", to: "pricing_page#update", as: :admin_pricing_page_slug
+
     resources :logos, only: %i[index new create update destroy]
     resources :testimonials, only: %i[index new create edit update destroy]
     resources :pricing_page, only: %i[edit update]

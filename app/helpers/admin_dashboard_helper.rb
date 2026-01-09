@@ -35,8 +35,9 @@ module AdminDashboardHelper
       },
       {
         title: "Pricing",
+        path: safe_path { main_app.admin_edit_admin_pricing_page_simple_path },
         sections: [
-          { label: "Edit page", path: rails_admin.edit_path(model_name: "pricing_page", id: 1), icon: "💰" }
+          { label: "Edit page", path: safe_path { main_app.admin_edit_admin_pricing_page_simple_path }, icon: "💰" }
         ]
       },
       {
@@ -96,7 +97,7 @@ module AdminDashboardHelper
   def safe_path
     yield
   rescue NameError, NoMethodError
-    "#"
+    nil
   end
 
   def admin_breadcrumbs
