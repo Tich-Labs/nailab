@@ -1,1 +1,58 @@
-<%= render 'admin/abouts/partials/edit_about_section', preview_url: '/about#why-nailab-exists', form_url: admin_about_section_update_path(section: 'why_nailab_exists'), section_content: @section_content %>
+<div class="bg-white p-4 rounded shadow">
+	<%= form_with url: admin_about_section_update_path(section: 'why_nailab_exists'), method: :patch, local: true do |form| %>
+		<p class="text-sm text-slate-600 mb-4">Update content for the Why Nailab Exists section. Enter multiple paragraphs separated by a blank line.</p>
+		<div class="mb-3">
+			<%= label_tag 'section_payload[title]', 'Title', class: 'block font-medium' %>
+			<%= text_field_tag 'section_payload[title]', @section_content["title"], class: 'w-full form-input admin-form-input' %>
+		</div>
+
+		<div class="mb-3">
+			<%= label_tag 'section_payload[description]', 'Content (you can paste multiple paragraphs)', class: 'block font-medium' %>
+			<% description_value = if @section_content["paragraph_one"].present?
+															 parts = [@section_content["paragraph_one"], @section_content["paragraph_two"], @section_content["paragraph_three"]].compact.join("\n\n")
+														 elsif @section_content["description"].present?
+															 @section_content["description"]
+														 else
+															 ""
+														 end %>
+			<%= text_area_tag 'section_payload[description]', description_value, rows: 10, class: 'w-full form-input admin-form-input' %>
+		</div>
+
+		<div class="flex gap-3">
+			<%= form.submit 'Save section', class: 'btn btn-primary' %>
+			<%= link_to 'Preview live section', '/about#why-nailab-exists', class: 'btn btn-secondary' %>
+		</div>
+	<% end %>
+</div>
+<script>
+	// Live update the preview as the editor types
+	document.addEventListener('DOMContentLoaded', function() {
+		var titleInput = document.querySelector('input[name="section_payload[title]"]');
+		var descInput = document.querySelector('textarea[name="section_payload[description]"]');
+		var previewTitle = document.getElementById('admin_preview_why_title');
+		var previewContent = document.getElementById('admin_preview_why_content');
+
+		function escapeHtml(s) {
+			return (s||'').toString()
+				.replace(/&/g,'&amp;')
+				.replace(/</g,'&lt;')
+				.replace(/>/g,'&gt;')
+				.replace(/"/g,'&quot;')
+				.replace(/'/g,'&#039;');
+		}
+
+		function buildPreview() {
+			if (previewTitle && titleInput) previewTitle.textContent = titleInput.value || 'Why Nailab Exists';
+			if (!previewContent || !descInput) return;
+			var parts = descInput.value.split(/\r?\n\r?\n+/).map(function(p){ return p.trim(); }).filter(Boolean);
+			if (parts.length === 0) {
+				previewContent.innerHTML = '';
+				return;
+			}
+			previewContent.innerHTML = parts.map(function(p){ return '<p>'+escapeHtml(p)+'</p>'; }).join('');
+		}
+
+		if (titleInput) titleInput.addEventListener('input', buildPreview);
+		if (descInput) descInput.addEventListener('input', buildPreview);
+	});
+</script>

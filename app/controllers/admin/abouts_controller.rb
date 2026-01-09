@@ -17,7 +17,7 @@ module Admin
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
       raw_section = stored[@section_key]
-      
+
       if raw_section.is_a?(Hash)
         @section_content = raw_section.with_indifferent_access
       else
@@ -104,7 +104,7 @@ module Admin
       @section_key = params[:section]
       @about = AboutPage.first_or_create!(title: "About")
       stored = parse_about_content_json(@about)
-      
+
       # Handle different parameter structures for different sections
       if @section_key == "vision_mission"
         # Vision & Mission has special structure
@@ -114,15 +114,15 @@ module Admin
         stored["our_vision"] = { "title" => vision_params[:title].to_s.strip, "description" => vision_params[:description].to_s.strip }
         @about.update!(content: stored.to_json)
         redirect_to admin_about_section_edit_path(@section_key), notice: "Saved Vision & Mission"
-        return
+        nil
       else
         # Standard section structure
-        section_params = params.require(:section_payload).permit(:title, :description, stats: [ :value, :label ], cards: [ :title, :description ])
+        section_params = params.require(:section_payload).permit(:title, :description, :paragraph_two, :paragraph_three, stats: [ :value, :label ], cards: [ :title, :description ])
 
         payload = {
           "title" => section_params[:title].to_s.strip
         }
-        
+
         if @section_key == "what_drives_us"
           cards = section_params[:cards] || []
           if cards.is_a?(ActionController::Parameters)
@@ -132,7 +132,20 @@ module Admin
           end
           payload["cards"] = cards.map { |c| { "title" => c["title"].to_s.strip, "description" => c["description"].to_s.strip } }
         else
-          payload["description"] = section_params[:description].to_s.strip
+          # For the 'why_nailab_exists' section the public template expects
+          # the first paragraph under the key `paragraph_one`. Map the
+          # editor's generic `description` field to `paragraph_one` so
+          # edits appear on the public /about page.
+          if @section_key == "why_nailab_exists"
+            # Accept a single textarea and split into up to three paragraphs.
+            desc = section_params[:description].to_s.strip
+            parts = desc.split(/\r?\n\r?\n+/).map(&:strip).reject(&:blank?)
+            payload["paragraph_one"] = parts[0] || ""
+            payload["paragraph_two"] = parts[1] || ""
+            payload["paragraph_three"] = parts[2] || ""
+          else
+            payload["description"] = section_params[:description].to_s.strip
+          end
         end
 
         if @section_key == "our_impact"

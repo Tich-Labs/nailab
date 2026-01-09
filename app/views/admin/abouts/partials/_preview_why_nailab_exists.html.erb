@@ -7,9 +7,26 @@
       </div>
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Content</p>
-        <p class="text-sm text-slate-600"><%= @section_content["description"] || @section_content["paragraph_one"] %></p>
+        <div class="text-sm text-slate-600 space-y-4">
+          <% if @section_content.present? %>
+            <% if @section_content["paragraph_one"].present? %>
+              <p><%= @section_content["paragraph_one"] %></p>
+              <% if @section_content["paragraph_two"].present? %>
+                <p><%= @section_content["paragraph_two"] %></p>
+              <% end %>
+              <% if @section_content["paragraph_three"].present? %>
+                <p><%= @section_content["paragraph_three"] %></p>
+              <% end %>
+            <% elsif @section_content["description"].present? %>
+              <%= raw(@section_content["description"].to_s.gsub(/\r?\n\r?\n/, '</p><p>')) %>
+            <% else %>
+              <p>Limited access to capital, knowledge, networks, and practical support are some of the biggest barriers for founders looking to launch and scale their startups.</p>
+              <p>For over a decade, Nailab has been committed to lowering these barriers for African startups. With more than 10 years of experience designing customized incubation and acceleration programs alongside partners across Africa and around the world, we continue to equip founders with the skills and support they need to build sustainable, tech-enabled businesses that address the challenges facing emerging markets.</p>
+              <p>As a startup incubator and accelerator, we provide founders with tailored coaching, practical training, and connections to investors, mentors, and strategic partners.</p>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
-  <p class="text-xs text-slate-500">Preview shows the main title and first paragraph. Additional paragraphs and images will appear on the live page.</p>
 </div>
