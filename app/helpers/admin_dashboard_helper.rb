@@ -42,9 +42,9 @@ module AdminDashboardHelper
       },
       {
         title: "Contact Us",
-        path: safe_path { "/admin/contact_page/1/edit" },
+        path: safe_path { "/admin/contact_page/edit" },
         sections: [
-          { label: "Edit page", path: "/admin/contact_page/1/edit", icon: "📞" }
+          { label: "Edit page", path: "/admin/contact_page/edit", icon: "📞" }
         ]
       },
       {
