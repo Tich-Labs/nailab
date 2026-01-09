@@ -10,13 +10,13 @@
     <% desc_mb = stacked ? 'mb-4' : 'mb-6' %>
     <% features_space = stacked ? 'space-y-2' : 'space-y-3' %>
     <% cta_padding = stacked ? 'px-4 py-2 text-sm' : 'px-6 py-3' %>
-    <% card_border_bg = highlight ? 'border-purple-600 bg-purple-50 scale-105 z-10' : 'border-gray-200 bg-white' %>
+    <% card_border_bg = highlight ? 'border-nailab-purple bg-nailab-purple/10 scale-105 z-10' : 'border-gray-200 bg-white' %>
     <div class="flex flex-col rounded-2xl shadow-lg border-2 <%= card_border_bg %> <%= card_pad %> relative" data-tier-index="<%= idx %>">
       <% if highlight %>
-        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-0.5 rounded-full shadow">Most Popular</span>
-      <% end %>
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-nailab-purple text-white text-xs font-bold px-3 py-0.5 rounded-full shadow">Most Popular</span>
+        <% end %>
       <h2 class="<%= title_cls %> font-bold text-gray-900 mb-2 text-center tier-name"><%= tier[:name] %></h2>
-      <div class="<%= price_cls %> font-extrabold text-purple-600 mb-2 text-center tier-price"><%= tier[:price] %></div>
+      <div class="<%= price_cls %> font-extrabold text-nailab-purple mb-2 text-center tier-price"><%= tier[:price] %></div>
       <p class="text-gray-700 <%= desc_mb %> text-center tier-desc"><%= tier[:description] %></p>
       <ul class="mb-6 <%= features_space %> tier-features">
         <% Array.wrap(tier[:features]).each do |feature| %>
@@ -26,7 +26,14 @@
           </li>
         <% end %>
       </ul>
-      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= highlight ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-teal-600 text-white hover:bg-teal-700' %> tier-cta">
+      <% cta_color = if highlight
+        'bg-nailab-purple text-white hover:bg-nailab-purple'
+      elsif tier[:name].to_s.strip.downcase == 'start basic'
+        'bg-nailab-purple text-white hover:bg-nailab-purple'
+      else
+        'bg-nailab-teal text-white hover:bg-nailab-teal'
+      end %>
+      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= cta_color %> tier-cta">
         <%= tier[:cta] || 'Choose Plan' %>
       </a>
     </div>

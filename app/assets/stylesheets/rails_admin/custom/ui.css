@@ -58,7 +58,7 @@
 .ra-form input:focus,
 .ra-form textarea:focus,
 .ra-form select:focus {
-  border-color: #6b21a8; /* purple-700 */
+  border-color: #913F98; /* nailab brand purple */
   box-shadow: 0 0 0 0.2rem rgba(107,33,168,0.12);
   outline: none;
 }

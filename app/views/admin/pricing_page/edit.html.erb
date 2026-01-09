@@ -96,12 +96,12 @@
           tiers.forEach(function(tier, idx) {
             const highlight = !!tier.highlight;
             const card = document.createElement('div');
-            card.className = 'flex flex-col rounded-2xl shadow-lg border-2 ' + (highlight ? 'border-purple-600 bg-purple-50 scale-105 z-10' : 'border-gray-200 bg-white') + ' ' + (stacked ? 'p-4' : 'p-8') + ' relative';
+            card.className = 'flex flex-col rounded-2xl shadow-lg border-2 ' + (highlight ? 'border-nailab-purple bg-nailab-purple/10 scale-105 z-10' : 'border-gray-200 bg-white') + ' ' + (stacked ? 'p-4' : 'p-8') + ' relative';
             card.setAttribute('data-tier-index', idx);
 
             if (highlight) {
               const badge = document.createElement('span');
-              badge.className = 'absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-0.5 rounded-full shadow';
+              badge.className = 'absolute -top-3 left-1/2 -translate-x-1/2 bg-nailab-purple text-white text-xs font-bold px-3 py-0.5 rounded-full shadow';
               badge.textContent = 'Most Popular';
               card.appendChild(badge);
             }
@@ -112,7 +112,7 @@
             card.appendChild(title);
 
             const price = document.createElement('div');
-            price.className = (stacked ? 'text-2xl' : 'text-4xl') + ' font-extrabold text-purple-600 mb-2 text-center tier-price';
+            price.className = (stacked ? 'text-2xl' : 'text-4xl') + ' font-extrabold text-nailab-purple mb-2 text-center tier-price';
             price.innerText = tier.price || '';
             card.appendChild(price);
 

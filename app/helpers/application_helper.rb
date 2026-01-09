@@ -13,7 +13,7 @@ module ApplicationHelper
     linked = escaped.gsub(/\[([^\]]+)\]\(([^\)]+)\)/) do
       label = Regexp.last_match(1)
       url = Regexp.last_match(2)
-      %(<a href="#{ERB::Util.html_escape(url)}" class="text-purple-600 font-bold">#{ERB::Util.html_escape(label)}</a>)
+      %(<a href="#{ERB::Util.html_escape(url)}" class="text-nailab-purple font-bold">#{ERB::Util.html_escape(label)}</a>)
     end
 
     # Preserve line breaks

@@ -25,7 +25,7 @@
           <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 text-sm font-semibold text-gray-700">
             Filters
             <% if active_filters.positive? %>
-              <span class="px-2 py-0.5 bg-teal-600 text-white text-xs rounded-full"><%= active_filters %></span>
+              <span class="px-2 py-0.5 bg-nailab-teal text-white text-xs rounded-full"><%= active_filters %></span>
             <% end %>
           </span>
           <%= link_to 'Clear filters', startups_path, class: 'text-sm text-gray-600 hover:text-gray-900' if active_filters.positive? %>
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-          <button type="submit" class="px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold shadow-lg hover:bg-teal-700 transition-colors">
+          <button type="submit" class="px-6 py-3 bg-nailab-teal text-white rounded-xl font-semibold shadow-lg hover:bg-nailab-teal transition-colors">
             Apply filters
           </button>
           <% if active_filters.positive? %>
@@ -65,7 +65,7 @@
           <% end %>
         </div>
         <% if @filters[:search].present? || active_filters.positive? %>
-          <%= link_to 'Remove all filters', startups_path, class: 'text-sm text-teal-600 font-semibold hover:text-teal-700' %>
+          <%= link_to 'Remove all filters', startups_path, class: 'text-sm text-nailab-teal font-semibold hover:text-nailab-teal' %>
         <% end %>
       </div>
       <% if @filtered_startups.any? %>
@@ -79,7 +79,7 @@
                 <div class="flex-1">
                   <h3 class="text-lg font-bold text-gray-900"><%= startup.startup_name %></h3>
                   <% if startup.stage.present? %>
-                    <span class="inline-flex items-center px-2 py-1 mt-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-700">
+                    <span class="inline-flex items-center px-2 py-1 mt-1 text-xs font-semibold rounded-full bg-teal-100 text-nailab-teal">
                       <%= startup_stage_label(startup.stage) %>
                     </span>
                   <% end %>
@@ -89,13 +89,13 @@
               <div class="space-y-2 text-sm text-gray-600 mb-4">
                 <% if startup.sector.present? %>
                   <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                    <span class="w-2 h-2 rounded-full bg-nailab-teal"></span>
                     <span><%= startup.sector %></span>
                   </div>
                 <% end %>
                 <% if startup.location.present? %>
                   <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-nailab-purple"></span>
                     <span><%= startup.location %></span>
                   </div>
                 <% end %>
@@ -112,7 +112,7 @@
               </div>
               <div class="mt-auto">
                 <% if startup.public_viewable? %>
-                  <%= link_to public_startup_profile_path(startup), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors' do %>
+                  <%= link_to public_startup_profile_path(startup), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-nailab-purple text-white font-semibold rounded-xl hover:opacity-90 transition-colors' do %>
                     View profile
                   <% end %>
                 <% else %>
@@ -125,7 +125,7 @@
       <% else %>
         <div class="text-center py-16">
           <p class="text-xl text-gray-600">No startups matched your criteria.</p>
-          <%= link_to 'Clear filters', startups_path, class: 'mt-4 inline-block text-teal-600 hover:text-teal-700 font-semibold' %>
+          <%= link_to 'Clear filters', startups_path, class: 'mt-4 inline-block text-nailab-teal hover:text-nailab-teal font-semibold' %>
         </div>
       <% end %>
     </div>

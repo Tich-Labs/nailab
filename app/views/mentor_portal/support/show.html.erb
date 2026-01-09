@@ -8,7 +8,7 @@
   <!-- Existing Support Tickets -->
   <% if @support_tickets.any? %>
   <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
-    <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
+    <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">
       <h3 class="text-2xl font-bold text-white">Your Support Tickets</h3>
     </div>
     <div class="p-8">
@@ -47,7 +47,7 @@
   <% end %>
 
   <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
       <h3 class="text-2xl font-bold text-white">Submit a Support Ticket</h3>
     </div>
     <div class="p-8">
@@ -69,7 +69,7 @@
         </div>
 
         <div class="flex justify-end">
-          <%= f.submit "Submit Ticket", class: "inline-flex items-center px-8 py-4 bg-teal-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-teal-700 transition-all" %>
+          <%= f.submit "Submit Ticket", class: "inline-flex items-center px-8 py-4 bg-nailab-teal text-white text-lg font-bold rounded-xl shadow-lg hover:bg-nailab-teal transition-all" %>
         </div>
       <% end %>
     </div>

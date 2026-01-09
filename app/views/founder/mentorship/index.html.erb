@@ -19,7 +19,7 @@
           </div>
           <div class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full flex items-center justify-center">
+              <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-nailab-teal rounded-full flex items-center justify-center">
                 <span class="text-white font-bold"><%= @selected_mentor.name.first %></span>
               </div>
               <div>
@@ -46,7 +46,7 @@
   <!-- Available Mentors -->
   <div class="lg:col-span-2">
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
         <h2 class="text-2xl font-bold text-white">Available Mentors</h2>
       </div>
       <div class="p-8">
@@ -54,7 +54,7 @@
           <% @mentors.each do |mentor| %>
             <div class="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl hover:from-purple-100 hover:to-teal-100 transition-all">
               <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full flex items-center justify-center">
+                <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-nailab-teal rounded-full flex items-center justify-center">
                   <span class="text-white font-bold text-xl"><%= mentor.name.first %></span>
                 </div>
                 <div>
@@ -69,7 +69,7 @@
               </div>
               <div class="flex space-x-3">
                 <%= link_to 'View Profile', founder_mentor_path(mentor), class: "inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
-                <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-all" %>
+                <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-4 py-2 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal transition-all" %>
               </div>
             </div>
           <% end %>
@@ -92,7 +92,7 @@
   <div class="space-y-8">
     <!-- My Requests -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
+      <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">
         <h3 class="text-2xl font-bold text-white">My Requests</h3>
       </div>
       <div class="p-8">
@@ -106,7 +106,7 @@
           <% if @mentorship_requests.empty? %>
             <div class="text-center py-8">
               <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
@@ -118,7 +118,7 @@
     </div>
     <!-- Upcoming Sessions -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
         <h3 class="text-2xl font-bold text-white">Upcoming Sessions</h3>
       </div>
       <div class="p-8">
@@ -127,7 +127,7 @@
             <div class="p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
               <p class="font-semibold text-gray-900"><%= session.mentor.name %></p>
               <p class="text-sm text-gray-600 mb-3"><%= session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %></p>
-              <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-all" %>
+              <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal transition-all" %>
             </div>
           <% end %>
           <% if @sessions.empty? %>

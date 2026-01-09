@@ -107,7 +107,7 @@
       var escaped = escapeHtml(text || '');
       // Convert [label](url) to a safe <a> tag.
       var withLinks = escaped.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, function(_, label, url) {
-        return '<a href="' + escapeHtml(url) + '" class="text-purple-600 font-bold">' + escapeHtml(label) + '</a>';
+        return '<a href="' + escapeHtml(url) + '" class="text-nailab-purple font-bold">' + escapeHtml(label) + '</a>';
       });
       return withLinks.replace(/\r?\n/g, '<br>');
     }

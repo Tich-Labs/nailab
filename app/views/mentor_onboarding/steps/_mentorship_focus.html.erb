@@ -14,7 +14,7 @@
           <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
             <%= check_box_tag 'user_profile[sectors][]', industry,
                               (@profile.sectors || []).include?(industry),
-                              class: 'rounded border-gray-300 text-teal-600 focus:ring-teal-500' %>
+                              class: 'rounded border-gray-300 text-nailab-teal focus:ring-teal-500' %>
             <span class="text-sm"><%= industry %></span>
           </label>
         <% end %>
@@ -32,7 +32,7 @@
           <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
             <%= check_box_tag 'user_profile[expertise][]', area,
                               (@profile.expertise || []).include?(area),
-                              class: 'rounded border-gray-300 text-teal-600 focus:ring-teal-500' %>
+                              class: 'rounded border-gray-300 text-nailab-teal focus:ring-teal-500' %>
             <span class="text-sm"><%= area %></span>
           </label>
         <% end %>
@@ -50,7 +50,7 @@
           <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
             <%= radio_button_tag 'user_profile[stage_preference][]', stage,
                                 (@profile.stage_preference || []).include?(stage),
-                                class: 'border-gray-300 text-teal-600 focus:ring-teal-500' %>
+                                class: 'border-gray-300 text-nailab-teal focus:ring-teal-500' %>
             <span class="text-sm"><%= stage %></span>
           </label>
         <% end %>

@@ -11,7 +11,7 @@
       <div class="bg-gray-50 rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <h3 class="text-lg font-semibold text-gray-900">Basic Details</h3>
-          <%= link_to mentor_onboarding_path(step: 'basic_details'), class: 'text-teal-600 hover:text-teal-700 text-sm' do %>
+          <%= link_to mentor_onboarding_path(step: 'basic_details'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
             <i class="fas fa-edit mr-1"></i> Edit
           <% end %>
         </div>
@@ -35,7 +35,7 @@
       <div class="bg-gray-50 rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <h3 class="text-lg font-semibold text-gray-900">Work & Experience</h3>
-          <%= link_to mentor_onboarding_path(step: 'work_experience'), class: 'text-teal-600 hover:text-teal-700 text-sm' do %>
+          <%= link_to mentor_onboarding_path(step: 'work_experience'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
             <i class="fas fa-edit mr-1"></i> Edit
           <% end %>
         </div>
@@ -59,7 +59,7 @@
       <div class="bg-gray-50 rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <h3 class="text-lg font-semibold text-gray-900">Mentorship Focus</h3>
-          <%= link_to mentor_onboarding_path(step: 'mentorship_focus'), class: 'text-teal-600 hover:text-teal-700 text-sm' do %>
+          <%= link_to mentor_onboarding_path(step: 'mentorship_focus'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
             <i class="fas fa-edit mr-1"></i> Edit
           <% end %>
         </div>
@@ -110,7 +110,7 @@
       <div class="bg-gray-50 rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <h3 class="text-lg font-semibold text-gray-900">Mentorship Style & Motivation</h3>
-          <%= link_to mentor_onboarding_path(step: 'mentorship_style'), class: 'text-teal-600 hover:text-teal-700 text-sm' do %>
+          <%= link_to mentor_onboarding_path(step: 'mentorship_style'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
             <i class="fas fa-edit mr-1"></i> Edit
           <% end %>
         </div>
@@ -130,7 +130,7 @@
       <div class="bg-gray-50 rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <h3 class="text-lg font-semibold text-gray-900">Availability & Pricing</h3>
-          <%= link_to mentor_onboarding_path(step: 'availability'), class: 'text-teal-600 hover:text-teal-700 text-sm' do %>
+          <%= link_to mentor_onboarding_path(step: 'availability'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
             <i class="fas fa-edit mr-1"></i> Edit
           <% end %>
         </div>
@@ -168,7 +168,7 @@
             <dt class="text-sm font-medium text-gray-500">LinkedIn/Profile</dt>
             <dd class="text-sm text-gray-900">
               <% if @profile.linkedin_url.present? %>
-                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', rel: 'noopener noreferrer', class: 'text-teal-600 hover:text-teal-700' %>
+                <%= link_to @profile.linkedin_url, @profile.linkedin_url, target: '_blank', rel: 'noopener noreferrer', class: 'text-nailab-teal hover:text-nailab-teal' %>
               <% else %>
                 Not provided
               <% end %>
@@ -185,7 +185,7 @@
         </div>
         <div class="ml-3">
           <h3 class="text-sm font-medium text-teal-800">Ready to submit?</h3>
-          <p class="mt-1 text-sm text-teal-700">
+          <p class="mt-1 text-sm text-nailab-teal">
             By completing your mentor profile, you'll be joining Nailab's mentor network and will be visible to startups looking for guidance.
           </p>
         </div>

@@ -17,7 +17,7 @@
         ] %>
         <% hours_options.each do |label, value| %>
           <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-            <%= f.radio_button :availability_hours_month, value, class: 'border-gray-300 text-teal-600 focus:ring-teal-500' %>
+            <%= f.radio_button :availability_hours_month, value, class: 'border-gray-300 text-nailab-teal focus:ring-teal-500' %>
             <span class="text-sm"><%= label %></span>
           </label>
         <% end %>
@@ -32,7 +32,7 @@
         <% modes = ['Virtual', 'In-person (where available)', 'Both', 'Other'] %>
         <% modes.each do |mode| %>
           <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-            <%= f.radio_button :preferred_mentorship_mode, mode, class: 'border-gray-300 text-teal-600 focus:ring-teal-500' %>
+            <%= f.radio_button :preferred_mentorship_mode, mode, class: 'border-gray-300 text-nailab-teal focus:ring-teal-500' %>
             <span class="text-sm"><%= mode %></span>
           </label>
         <% end %>
@@ -60,7 +60,7 @@
     </div>
     <div>
       <%= f.label :pro_bono, 'Are you willing to mentor pro bono?', class: 'flex items-center space-x-2' %>
-      <%= f.check_box :pro_bono, class: 'rounded border-gray-300 text-teal-600 focus:ring-teal-500' %>
+      <%= f.check_box :pro_bono, class: 'rounded border-gray-300 text-nailab-teal focus:ring-teal-500' %>
       <span class="text-sm text-gray-700">Yes, I'm willing to mentor startups for free</span>
     </div>
     <div>

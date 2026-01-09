@@ -5,7 +5,7 @@
     <p class="text-xl text-gray-600">Stay connected with your mentors and fellow founders</p>
   </div>
   <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
       <h2 class="text-2xl font-bold text-white">Conversations</h2>
     </div>
     <div class="divide-y divide-gray-100">
@@ -13,7 +13,7 @@
         <a href="<%= founder_conversation_path(conversation) %>" class="block p-6 hover:bg-gradient-to-r hover:from-purple-50 hover:to-teal-50 transition-all">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
-              <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-nailab-teal rounded-full flex items-center justify-center">
                 <span class="text-white font-bold text-xl"><%= conversation.other_participant(current_user).name.first %></span>
               </div>
               <div class="flex-1">
@@ -38,7 +38,7 @@
         </div>
         <h3 class="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
         <p class="text-gray-600 mb-6">Start a conversation by connecting with mentors or peers in the community.</p>
-        <%= link_to 'Browse Mentors', founder_mentorship_path, class: "inline-flex items-center px-6 py-3 bg-teal-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-teal-700 transition-all" %>
+        <%= link_to 'Browse Mentors', founder_mentorship_path, class: "inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-teal transition-all" %>
       </div>
     <% end %>
   </div>

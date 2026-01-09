@@ -15,7 +15,7 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Home', founder_root_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_root_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_root_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>
@@ -25,11 +25,11 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Startup Profile', founder_startup_profile_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_startup_profile_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_startup_profile_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
             <%= link_to 'Progress Tracker', founder_progress_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_progress_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_progress_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>
@@ -39,11 +39,11 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Mentorship', founder_mentorship_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_mentorship_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_mentorship_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
             <%= link_to 'Messages', founder_conversations_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?('/founder/messages') ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?('/founder/messages') ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>
@@ -53,11 +53,11 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Resource Library', founder_resources_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_resources_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_resources_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
             <%= link_to 'Opportunities', founder_opportunities_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_opportunities_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_opportunities_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>
@@ -67,7 +67,7 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Community & Peer Connections', founder_community_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_community_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_community_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>
@@ -77,15 +77,15 @@
         <ul class="space-y-1">
           <li>
             <%= link_to 'Account Settings', founder_account_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_account_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_account_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
             <%= link_to 'Subscription & Billing', current_user.subscription.present? ? founder_subscription_path : new_founder_subscription_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_subscription_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_subscription_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
             <%= link_to 'Support', founder_support_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_support_path) ? 'bg-teal-50 text-teal-700' : 'text-gray-700 hover:bg-gray-50'}" %>
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_support_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li class="pt-2">
             <%= button_to 'Log Out', destroy_user_session_path, method: :delete,

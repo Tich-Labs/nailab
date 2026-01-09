@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'nailab-purple': '#5b21b6',
-        'nailab-teal': '#14b8a6',
+        'nailab-purple': '#913F98',
+          'nailab-teal': '#50C6D8',
         'nailab-yellow': '#fbbf24'
       }
     },

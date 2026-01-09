@@ -90,7 +90,7 @@ class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-90
 ### **Color Scheme**
 - **Default**: `text-gray-700`
 - **Hover**: `text-gray-900` on `bg-gray-50`
-- **Active**: `text-teal-600` on `bg-teal-50`
+- **Active**: `text-nailab-teal` on `bg-nailab-teal/10`
 - **Border**: `border-gray-200` for subtle definition
 
 ### **Spacing System**

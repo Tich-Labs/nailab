@@ -67,7 +67,7 @@
               <div>
                 <%# highlight the group title when current_page? matches the group's path %>
                 <% active_group = group[:path].present? && current_page?(group[:path]) rescue false %>
-                <div class="px-3 py-2 text-sm font-extrabold uppercase tracking-wide border-b border-slate-200 dark:border-slate-800 mb-2 <%= active_group ? 'rounded-md ring-1 ring-black/10 text-black dark:text-white bg-transparent' : 'text-purple-700 dark:text-purple-300' %>">
+                <div class="px-3 py-2 text-sm font-extrabold uppercase tracking-wide border-b border-slate-200 dark:border-slate-800 mb-2 <%= active_group ? 'rounded-md ring-1 ring-black/10 text-black dark:text-white bg-transparent' : 'text-nailab-purple dark:text-nailab-purple/70' %>">
                   <%# ensure the link text inherits the container color using text-current %>
                   <% if group[:path].present? %>
                     <%= link_to group[:path], class: 'block text-current no-underline' do %>

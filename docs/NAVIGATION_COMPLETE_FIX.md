@@ -88,7 +88,7 @@ if (mobileMenuController && mobileMenuController.close) {
 - **Button Labels**: `text-sm font-medium`
 
 ### **Color Palette**
-- **Primary**: `text-teal-600` (active)
+- **Primary**: `text-nailab-teal` (active)
 - **Secondary**: `text-gray-700` (default)
 - **Hover**: `text-gray-900` on `bg-gray-50`
 - **Interactive**: Consistent hover states
@@ -120,10 +120,10 @@ if (mobileMenuController && mobileMenuController.close) {
 ### **Rails Helpers Used**
 ```erb
 <!-- Network Dropdown -->
-<%= link_to 'Startups', startups_path, class: "... #{'bg-teal-50 text-teal-600 font-semibold' if request.path == startups_path}" %>
+<%= link_to 'Startups', startups_path, class: "... #{'bg-nailab-teal/10 text-nailab-teal font-semibold' if request.path == startups_path}" %>
 
 <!-- Resources Dropdown -->
-<%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: "... #{'bg-teal-50 text-teal-600 font-semibold' if current_resource_slug == 'blogs'}" %>
+<%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: "... #{'bg-nailab-teal/10 text-nailab-teal font-semibold' if current_resource_slug == 'blogs'}" %>
 
 <!-- Active State Logic -->
 <% network_active = request.path.start_with?(startups_path) || request.path.start_with?(mentors_path) %>

@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-br from-purple-700 to-teal-600 py-12">
+<div class="bg-gradient-to-br from-nailab-purple to-nailab-teal py-12">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
     <h1 class="text-4xl font-bold"><%= @startup_profile.startup_name %></h1>
     <p class="mt-2 text-lg"><%= @startup_profile.value_proposition.presence || 'Building the next generation of African innovation.' %></p>
@@ -36,7 +36,7 @@
         <h3 class="text-lg font-semibold text-gray-900 mb-3">Mentorship focus</h3>
         <div class="space-y-2 text-gray-700 text-sm">
           <% Array(@startup_profile.mentorship_areas).each do |area| %>
-            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-50 text-purple-700">■ <%= area %></span>
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-nailab-purple/10 text-nailab-purple">■ <%= area %></span>
           <% end %>
         </div>
       </section>
@@ -49,7 +49,7 @@
             <li><strong>Location:</strong> <%= @startup_profile.location %></li>
           <% end %>
           <% if @startup_profile.website_url.present? %>
-            <li><strong>Website:</strong> <%= link_to @startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noreferrer', class: 'text-purple-600 hover:underline' %></li>
+            <li><strong>Website:</strong> <%= link_to @startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noreferrer', class: 'text-nailab-purple hover:underline' %></li>
           <% end %>
           <% if @startup_profile.founded_year.present? %>
             <li><strong>Founded:</strong> <%= @startup_profile.founded_year %></li>
@@ -110,10 +110,10 @@
         </div>
       <% end %>
       <% if @owner_viewing %>
-        <div class="bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-3xl p-6 shadow-lg">
+        <div class="bg-gradient-to-r from-nailab-purple to-teal-500 text-white rounded-3xl p-6 shadow-lg">
           <h3 class="text-lg font-semibold">You are viewing your public profile</h3>
           <p class="mt-2 text-sm">Toggle the visibility flag in your profile settings to hide or share this page.</p>
-          <%= link_to 'Edit Startup Profile', founder_startup_profile_path, class: 'mt-4 inline-flex px-4 py-2 bg-white text-purple-700 font-semibold rounded-full' %>
+          <%= link_to 'Edit Startup Profile', founder_startup_profile_path, class: 'mt-4 inline-flex px-4 py-2 bg-white text-nailab-purple font-semibold rounded-full' %>
         </div>
       <% end %>
     </div>

@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between mb-6">
     <h2 class="text-2xl font-bold text-gray-900">Recommended Mentors</h2>
     <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-      <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <svg class="w-6 h-6 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
       </svg>
     </div>
@@ -25,12 +25,12 @@
             <% end %>
           </div>
         </div>
-        <%= link_to 'View Profile', founder_mentor_path(mentor), class: 'inline-flex items-center px-5 py-2 bg-teal-700 text-white text-sm font-bold rounded-lg hover:bg-teal-800 transition-colors' %>
+        <%= link_to 'View Profile', founder_mentor_path(mentor), class: 'inline-flex items-center px-5 py-2 bg-nailab-teal text-white text-sm font-bold rounded-lg hover:bg-teal-800 transition-colors' %>
       </div>
     <% end %>
   </div>
   <div class="mt-8">
-    <%= link_to founder_mentorship_path, class: 'inline-flex items-center space-x-2 text-teal-600 font-semibold hover:text-teal-700 transition-colors group' do %>
+    <%= link_to founder_mentorship_path, class: 'inline-flex items-center space-x-2 text-nailab-teal font-semibold hover:text-nailab-teal transition-colors group' do %>
       <span>Browse All Mentors</span>
       <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>

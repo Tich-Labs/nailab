@@ -7,7 +7,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Milestones -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-8 py-6">
+      <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-bold text-white">Milestones</h2>
           <%= link_to 'Add Milestone', new_founder_milestone_path, class: "inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all" %>
@@ -45,14 +45,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No milestones yet</h3>
             <p class="text-gray-600 mb-6">Start tracking your progress by adding your first milestone.</p>
-            <%= link_to 'Create your first milestone', new_founder_milestone_path, class: "inline-flex items-center px-6 py-3 bg-teal-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-teal-700 transition-all" %>
+            <%= link_to 'Create your first milestone', new_founder_milestone_path, class: "inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-teal transition-all" %>
           </div>
         <% end %>
       </div>
     </div>
     <!-- Monthly Metrics -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-teal-600 to-purple-600 px-8 py-6">
+      <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-bold text-white">Monthly Metrics</h2>
           <%= link_to 'Add Metrics', new_founder_monthly_metric_path, class: "inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all" %>
@@ -65,7 +65,7 @@
               <h3 class="text-lg font-semibold text-gray-900 mb-4"><%= metric.month.strftime('%B %Y') %></h3>
               <div class="grid grid-cols-2 gap-4">
                 <div class="text-center">
-                  <p class="text-2xl font-bold text-teal-600">$<%= number_with_delimiter(metric.revenue) %></p>
+                  <p class="text-2xl font-bold text-nailab-teal">$<%= number_with_delimiter(metric.revenue) %></p>
                   <p class="text-sm text-gray-600">Revenue</p>
                 </div>
                 <div class="text-center">
@@ -74,7 +74,7 @@
                 </div>
               </div>
               <div class="mt-4 flex justify-end">
-                <%= link_to 'Edit', edit_founder_monthly_metric_path(metric), class: "text-teal-600 hover:text-teal-800 text-sm font-medium" %>
+                <%= link_to 'Edit', edit_founder_monthly_metric_path(metric), class: "text-nailab-teal hover:text-teal-800 text-sm font-medium" %>
               </div>
             </div>
           <% end %>
@@ -82,7 +82,7 @@
         <% if @monthly_metrics.empty? %>
           <div class="text-center py-12">
             <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg class="w-8 h-8 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
               </svg>
             </div>

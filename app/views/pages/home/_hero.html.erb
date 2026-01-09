@@ -10,7 +10,7 @@
 
 <div class="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
   <div class="hero-layout flex flex-col md:flex-row items-start md:items-center gap-12 md:gap-20 py-20">
-  <div class="hero-col flex-1 min-w-0 text-purple-700">
+  <div class="hero-col flex-1 min-w-0 text-nailab-purple">
       <h1 class="font-medium mb-6 text-4xl md:text-5xl">
         <%= hero_title %>
       </h1>
@@ -18,10 +18,10 @@
         <%= hero_subtitle %>
       </p>
       <div class="flex flex-row gap-4 items-center">
-        <a href="<%= hero_cta_link %>" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-purple-600 text-white font-bold hover:bg-purple-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+        <a href="<%= hero_cta_link %>" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-nailab-purple text-white font-bold hover:opacity-90 hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
           <%= hero_cta_text %>
         </a>
-        <a href="<%= secondary_cta['link'] %>" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-yellow-300 text-purple-700 font-bold hover:bg-yellow-400 hover:text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+        <a href="<%= secondary_cta['link'] %>" class="w-48 h-12 rounded-md inline-flex items-center justify-center bg-yellow-300 text-nailab-purple font-bold hover:bg-yellow-400 hover:text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
           <%= secondary_cta['label'] %>
         </a>
       </div>
@@ -31,7 +31,7 @@
       <div class="relative rounded-2xl overflow-hidden shadow-xl w-full max-w-lg">
         <%= image_tag hero_image_url, alt: hero_title, class: 'w-full h-[300px] md:h-auto object-cover' %>
       </div>
-      <div class="absolute -bottom-4 -right-4 w-40 h-40 bg-purple-100 rounded-2xl -z-10"></div>
+      <div class="absolute -bottom-4 -right-4 w-40 h-40 bg-nailab-purple/10 rounded-2xl -z-10"></div>
       <div class="absolute -top-4 -left-4 w-40 h-40 bg-teal-100 rounded-2xl -z-10"></div>
     </div>
   </div>
@@ -40,7 +40,7 @@
     <% stats.each do |s| %>
       <div class="text-center">
         <div class="text-4xl lg:text-5xl font-bold text-gray-700 mb-2"><%= s.is_a?(Hash) ? (s[:value] || s['value']) : s %></div>
-        <div class="text-purple-600 font-bold"><%= s.is_a?(Hash) ? (s[:label] || s['label']) : '' %></div>
+        <div class="text-nailab-purple font-bold"><%= s.is_a?(Hash) ? (s[:label] || s['label']) : '' %></div>
       </div>
     <% end %>
   </div>

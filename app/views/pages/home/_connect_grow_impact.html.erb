@@ -8,9 +8,9 @@
     <div class="grid lg:grid-cols-3 gap-8">
       <% @connect_cards.each_with_index do |card, idx| %>
         <% btn_class, svg_color = case idx
-          when 0 then ['bg-teal-600 hover:bg-teal-700', '#14b8a6']    # Founder
+          when 0 then ['bg-nailab-teal hover:bg-nailab-teal', '#14b8a6']    # Founder
           when 1 then ['bg-orange-600 hover:bg-orange-700', '#f97316'] # Mentor
-          else      ['bg-purple-600 hover:bg-purple-700', '#a78bfa']   # Partner (default)
+          else      ['bg-nailab-purple hover:bg-nailab-purple', '#a78bfa']   # Partner (default)
         end %>
         <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col h-full">
           <!-- Icon removed as requested -->

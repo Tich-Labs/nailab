@@ -1,7 +1,7 @@
 <!-- app/views/pages/contact.html.erb -->
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <section class="py-20 bg-gradient-to-br from-purple-50 to-teal-50">
+  <section class="py-20 bg-gradient-to-br from-nailab-purple/10 to-teal-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
         <%= @contact_content[:title].presence || 'Contact Us' %>
@@ -15,7 +15,7 @@
         <div>
           <h3 class="text-lg font-semibold text-gray-900">Email</h3>
           <% email = (@contact_content[:email].presence || 'ceo@nailab.co.ke').to_s %>
-          <a href="mailto:<%= email %>" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
+          <a href="mailto:<%= email %>" class="text-xl text-nailab-purple hover:opacity-90 transition-colors">
             <%= email %>
           </a>
         </div>
@@ -23,7 +23,7 @@
           <h3 class="text-lg font-semibold text-gray-900">Phone</h3>
           <% phone_display = (@contact_content[:phone].presence || '+254 790 492 467').to_s %>
           <% phone_href = phone_display.gsub(/[^\d\+]/, '') %>
-          <a href="tel:<%= phone_href %>" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
+          <a href="tel:<%= phone_href %>" class="text-xl text-nailab-purple hover:opacity-90 transition-colors">
             <%= phone_display %>
           </a>
         </div>
@@ -41,21 +41,21 @@
           <%= form_with url: '#', local: true, class: "space-y-6" do |f| %>
             <div>
               <%= f.label :name, "Name", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_field :name, required: true, autofocus: true, placeholder: "Your full name", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition" %>
+              <%= f.text_field :name, required: true, autofocus: true, placeholder: "Your full name", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
             </div>
             <div>
               <%= f.label :email, "Email", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.email_field :email, required: true, placeholder: "you@example.com", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition" %>
+              <%= f.email_field :email, required: true, placeholder: "you@example.com", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
             </div>
             <div>
               <%= f.label :subject, "Subject", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_field :subject, required: true, placeholder: "e.g. Partnership Inquiry", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition" %>
+              <%= f.text_field :subject, required: true, placeholder: "e.g. Partnership Inquiry", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
             </div>
             <div>
               <%= f.label :message, "Message", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_area :message, required: true, rows: 6, placeholder: "Tell us how we can help...", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition resize-none" %>
+              <%= f.text_area :message, required: true, rows: 6, placeholder: "Tell us how we can help...", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition resize-none" %>
             </div>
-            <%= f.submit "Send Message", class: "w-full bg-purple-600 text-white py-4 rounded-lg font-semibold hover:bg-purple-700 hover:-translate-y-0.5 shadow-lg hover:shadow-xl transition-all cursor-pointer" %>
+            <%= f.submit "Send Message", class: "w-full bg-nailab-purple text-white py-4 rounded-lg font-semibold hover:opacity-90 hover:-translate-y-0.5 shadow-lg hover:shadow-xl transition-all cursor-pointer" %>
           <% end %>
         </div>
 
@@ -73,7 +73,7 @@
                   data-faq-index="<%= idx %>"
                 >
                   <span><%= faq[:question] || faq['question'] %></span>
-                  <svg class="w-6 h-6 text-purple-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 text-nailab-purple transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
