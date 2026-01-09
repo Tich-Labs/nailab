@@ -91,7 +91,7 @@ module Admin
       end
 
       begin
-        section_params = params.require(:section_payload).permit(:title, :description, :paragraph_two, :paragraph_three, stats: [ :value, :label ], cards: [ :title, :description ])
+        section_params = params.require(:section_payload).permit(:title, :description, :paragraph_two, :paragraph_three, :image, :image_url, stats: [ :value, :label ], cards: [ :title, :description ])
       rescue ActionController::ParameterMissing => e
         Rails.logger.info("[DEBUG] Missing section_payload for section=#{@section_key}; full params: #{params.inspect}")
         redirect_to admin_about_section_edit_path(@section_key), alert: "No data received from the form. Please try again.", status: :see_other and return
@@ -127,6 +127,19 @@ module Admin
       elsif @section_key == "our_mission" || @section_key == "our_vision"
         payload["title"] = section_params[:title].to_s.strip
         payload["description"] = section_params[:description].to_s.strip
+      end
+
+      if @section_key == "why_nailab_exists"
+        begin
+          if section_params[:image].present? && @about.respond_to?(:why_nailab_image)
+            @about.why_nailab_image.attach(section_params[:image])
+            stored.delete("#{@section_key}_image_url")
+          elsif section_params[:image_url].present?
+            stored["#{@section_key}_image_url"] = section_params[:image_url].to_s.strip
+          end
+        rescue => e
+          Rails.logger.info("[DEBUG] why_nailab_exists image update failed: #{e.class}: #{e.message}")
+        end
       end
 
       stored[@section_key] = payload

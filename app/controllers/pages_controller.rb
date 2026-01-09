@@ -259,15 +259,49 @@ class PagesController < ApplicationController
   def load_contact_content
     @contact_page = ContactPage.first || ContactPage.new(title: "Contact Us")
     @contact_content = parse_contact_structured_content(@contact_page.content)
-    @faqs = if @contact_content[:faqs].is_a?(Array)
+    default_faqs = [
+      {
+        question: "1. What kind of startups does Nailab support?",
+        answer: "Nailab supports early-stage and growth-stage startups leveraging innovation to tackle Africa’s most pressing social challenges across key sectors including fintech, agritech, healthtech, edtech, SaaS, cleantech, creative & mediatech, e-commerce & retailtech, mobility & logisticstech, and social impact. We partner with passionate founders with a clear vision and deep understanding of the challenges they are addressing."
+      },
+      {
+        question: "2. How do I apply for Nailab’s programs?",
+        answer: "Interested in joining a Nailab program? We regularly announce application windows on our official website and social media platforms. You can find detailed information and application links for all our current opportunities on our Programs page."
+      },
+      {
+        question: "3. What does a typical incubation and/or accelerator program involve?",
+        answer: "Our programs typically run for 3–6 months, depending on the specific focus and structure. They are designed to equip entrepreneurs with the tools, knowledge, and networks they need to build and scale sustainable businesses. Key components include mentorship, business development training, pitch coaching, access to investors, and seed funding where applicable."
+      },
+      {
+        question: "4. What stage should my startup be at to apply for Nailab Programs?",
+        answer: "While some programs are tailored for early-stage entrepreneurs, others suit startups with a developed product and initial traction. Review eligibility in each program call for details."
+      },
+      {
+        question: "5. Does Nailab provide funding to startups?",
+        answer: "Yes. Some programs provide seed funding or connect startups to investors through demo days and pitch sessions."
+      },
+      {
+        question: "6. What are the benefits of joining the Nailab startup network?",
+        answer: "Access a thriving community of founders, expert mentors, and ecosystem partners, plus tools, templates, and curated resources to help you build and grow."
+      },
+      {
+        question: "7. How can I become a Nailab mentor?",
+        answer: "We’re always looking for experienced mentors. Visit our Mentors page to learn more and apply."
+      },
+      {
+        question: "8. How can I partner with Nailab?",
+        answer: "We collaborate with agencies, corporates, governments, and academia to co-create programs and support startups. Reach out via our Expertise page."
+      }
+    ]
+
+    @faqs = if @contact_content[:faqs].is_a?(Array) && @contact_content[:faqs].any?
       @contact_content[:faqs].map { |f| f.is_a?(Hash) ? f.with_indifferent_access : {} }
     else
-      [
-        { question: "How can I partner with Nailab?", answer: "Email partnerships at hello@nailab.africa or use the partner form." },
-        { question: "How do I apply to a program?", answer: "Visit the Programs page and select the program you are interested in, then click Apply." },
-        { question: "How do I become a mentor?", answer: "Sign up via the Mentor onboarding link and complete your profile." }
-      ]
+      default_faqs.map(&:with_indifferent_access)
     end
+
+    @faqs = @faqs.first(8)
+    @faqs << {} while @faqs.size < 8
   end
 
   def parse_contact_structured_content(content)

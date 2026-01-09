@@ -60,7 +60,7 @@
       </div>
 
       <div class="flex items-center">
-        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= submit_tag 'Save', class: 'btn btn-success text-white font-bold' %>
         <%= button_tag 'Cancel', type: 'button', id: 'testimonial-cancel', class: 'ml-2 btn btn-secondary' %>
       </div>
       <% end %>
@@ -279,7 +279,6 @@
       // ensure sync after row/preview updates
       var originalHandlePreview = handlePreview;
       window.setTimeout(function() { /* safe no-op to keep lint happy */ }, 0);
-
-    wireButtons();
+    }
   })();
 </script>

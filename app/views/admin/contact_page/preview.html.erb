@@ -12,25 +12,12 @@
       <p class="font-semibold mt-3">Phone</p>
       <p class="text-sm text-slate-700"><%= @contact_content["phone"].presence || '+254 790 492 467' %></p>
     </div>
-
-    <div class="p-4 rounded border">
-      <p class="font-semibold mb-2">Send us a message</p>
-      <form>
-        <div class="grid grid-cols-1 gap-2">
-          <input placeholder="<%= (@contact_content[:form] || {})[\"name_placeholder\"] || 'Your full name' %>" class="w-full form-input admin-form-input mb-2" />
-          <input placeholder="<%= (@contact_content[:form] || {})[\"email_placeholder\"] || 'you@example.com' %>" class="w-full form-input admin-form-input mb-2" />
-          <input placeholder="<%= (@contact_content[:form] || {})[\"subject_placeholder\"] || 'e.g. Partnership Inquiry' %>" class="w-full form-input admin-form-input mb-2" />
-          <textarea placeholder="<%= (@contact_content[:form] || {})[\"message_placeholder\"] || 'Tell us how we can help...' %>" rows="4" class="w-full form-input admin-form-input"></textarea>
-          <button class="btn btn-primary mt-2"><%= (@contact_content[:form] || {})['submit_label'].presence || 'Send Message' %></button>
-        </div>
-      </form>
-    </div>
   </div>
 
   <div>
     <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Frequently Asked Questions</p>
     <div class="space-y-3 mt-3">
-      <% (@contact_content[:faqs] || []).each do |f| %>
+      <% (@contact_content[:faqs] || []).first(8).each do |f| %>
         <div>
           <p class="font-semibold"><%= f[:question] || f['question'] %></p>
           <p class="text-sm text-slate-600"><%= f[:answer] || f['answer'] %></p>

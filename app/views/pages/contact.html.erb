@@ -4,24 +4,27 @@
   <section class="py-20 bg-gradient-to-br from-purple-50 to-teal-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-        Contact Us
+        <%= @contact_content[:title].presence || 'Contact Us' %>
       </h1>
       <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-12">
-        Have a question, partnership inquiry, or want to get in touch? We'd love to hear from you.
+        <%= @contact_content[:intro].presence || "Have a question, partnership inquiry, or want to get in touch? We'd love to hear from you." %>
       </p>
 
       <!-- Contact Info Card -->
       <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 space-y-6">
         <div>
           <h3 class="text-lg font-semibold text-gray-900">Email</h3>
-          <a href="mailto:info@nailab.co.ke" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
-            ceo@nailab.co.ke
+          <% email = (@contact_content[:email].presence || 'ceo@nailab.co.ke').to_s %>
+          <a href="mailto:<%= email %>" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
+            <%= email %>
           </a>
         </div>
         <div>
           <h3 class="text-lg font-semibold text-gray-900">Phone</h3>
-          <a href="tel:+254790492467" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
-            +254 790 492 467
+          <% phone_display = (@contact_content[:phone].presence || '+254 790 492 467').to_s %>
+          <% phone_href = phone_display.gsub(/[^\d\+]/, '') %>
+          <a href="tel:<%= phone_href %>" class="text-xl text-purple-600 hover:text-purple-700 transition-colors">
+            <%= phone_display %>
           </a>
         </div>
       </div>
@@ -60,18 +63,7 @@
         <div class="bg-gray-50 rounded-2xl p-8">
           <h2 class="text-4xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
           <div class="space-y-4" data-controller="faq">
-            <% faqs = [
-              { question: '1. What kind of startups does Nailab support?', answer: 'Nailab supports early-stage and growth-stage startups leveraging innovation to tackle Africa’s most pressing social challenges across key sectors including fintech, agritech, healthtech, edtech, SaaS, cleantech, creative & mediatech, e-commerce & retailtech, mobility & logisticstech, and social impact. We partner with passionate founders with a clear vision and deep understanding of the challenges they are addressing.' },
-              { question: '2. How do I apply for Nailab’s programs?', answer: "Interested in joining a Nailab program? We regularly announce application windows on our official website and social media platforms. You can find detailed information and application links for all our current opportunities on our" },
-              { question: '3. What does a typical incubation and/or accelerator program involve?', answer: 'Our programs typically run for 3–6 months, depending on the specific focus and structure. They are designed to equip entrepreneurs with the tools, knowledge, and networks they need to build and scale sustainable businesses. Key components include mentorship, business development training, pitch coaching, access to investors, and seed funding where applicable.' },
-              { question: '4. What stage should my startup be at to apply for Nailab Programs?', answer: 'While some programs are tailored for early-stage entrepreneurs, others suit startups with a developed product and initial traction. Review eligibility in each program call for details.' },
-              { question: '5. Does Nailab provide funding to startups?', answer: 'Yes. Some programs provide seed funding or connect startups to investors through demo days and pitch sessions.' },
-              { question: '6. What are the benefits of joining the Nailab startup network?', answer: 'Access a thriving community of founders, expert mentors, and ecosystem partners, plus tools, templates, and curated resources to help you build and grow.' },
-              { question: '7. How can I become a Nailab mentor?', answer: "We’re always looking for experienced mentors. Visit our" },
-              { question: '8. How can I partner with Nailab?', answer: 'We collaborate with agencies, corporates, governments, and academia to co-create programs and support startups. Reach out via our Expertise page.' }
-            ] %>
-
-            <% faqs.each_with_index do |faq, idx| %>
+              <% (@faqs || []).first(8).each_with_index do |faq, idx| %>
               <div id="faq-<%= idx %>" class="bg-white rounded-xl shadow-md overflow-hidden">
                 <button
                   type="button"
@@ -80,19 +72,13 @@
                   aria-controls="faq-answer-<%= idx %>"
                   data-faq-index="<%= idx %>"
                 >
-                  <span><%= faq[:question] %></span>
+                  <span><%= faq[:question] || faq['question'] %></span>
                   <svg class="w-6 h-6 text-purple-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 <div id="faq-answer-<%= idx %>" class="px-6 pb-5 text-gray-700 hidden faq-answer">
-                  <% answer_html = faq[:answer].to_s %>
-                  <% if idx == 1 %>
-                    <% answer_html = (faq[:answer] + ' ' + link_to('Programs page', '/programs', class: 'text-purple-600 font-bold')) %>
-                  <% elsif idx == 6 %>
-                    <% answer_html = (faq[:answer] + ' ' + link_to('Mentors page', '/mentors', class: 'text-purple-600 font-bold')) %>
-                  <% end %>
-                  <%= simple_format(answer_html.to_s.html_safe) %>
+                  <%= faq_answer_html(faq[:answer] || faq['answer']) %>
                 </div>
               </div>
             <% end %>

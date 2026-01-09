@@ -25,7 +25,7 @@
         <%= text_area_tag 'section_payload[vision][description]', (vision['description'] || vision[:description]), id: 'editor_vision_description', rows: 4, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <div class="flex gap-3">
-        <%= form.submit 'Save Vision & Mission', class: 'btn btn-primary' %>
+        <%= form.submit 'Save Vision & Mission', class: 'btn btn-success text-white font-bold' %>
         </div>
     <% end %>
 </div>

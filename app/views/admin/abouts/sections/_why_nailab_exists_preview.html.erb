@@ -1,6 +1,12 @@
 <h2 class="font-semibold mt-2 mb-16">Preview</h2>
 <div class="bg-white p-6 rounded shadow space-y-5">
     <div class="space-y-4">
+                <% if @section_image_url.present? %>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Image</p>
+                        <img src="<%= @section_image_url %>" alt="Why Nailab Exists image" class="max-h-40 rounded border border-slate-200" />
+                    </div>
+                <% end %>
         <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Section Title</p>
         <h2 id="preview_why_title" class="text-2xl font-bold text-slate-900"><%= (@section_content && (@section_content['title'] || @section_content[:title])) %></h2>

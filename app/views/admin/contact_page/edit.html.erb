@@ -2,9 +2,18 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-3">
+      <%= link_to 'Preview live page', contact_path, class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
+    </div>
+
     <div class="bg-white p-4 rounded shadow">
-      <%= form_with url: edit_admin_contact_page_path(@contact_page), method: :patch, local: true do |form| %>
+      <%= form_with url: admin_contact_page_path(@contact_page), method: :patch, local: true do |form| %>
         <p class="text-sm text-slate-600 mb-4">Update the Contact page content and FAQs.</p>
+            <div class="mb-4 text-sm text-slate-600">
+      <p class="mb-1"><span class="font-semibold">Tip:</span> To add a clickable link inside an FAQ answer, use this format:</p>
+      <p class="font-mono text-xs bg-slate-50 border border-slate-200 rounded px-2 py-1 inline-block">[Link text](URL)</p>
+      <p class="mt-2">Example: <span class="font-mono text-xs bg-slate-50 border border-slate-200 rounded px-2 py-1 inline-block">Visit our [Mentors page](/mentors) to learn more.</span></p>
+    </div>
 
         <%= render 'admin/partials/admin_form_field', name: 'contact_content[title]', value: @contact_content["title"], label_text: 'Page Title' %>
 
@@ -19,77 +28,49 @@
             </div>
         </div>
 
-        <div class="mb-3">
-          <p class="font-medium mb-2">Contact Form Placeholders</p>
-          <div class="grid grid-cols-2 gap-3">
-            <%= text_field_tag 'contact_content[form][name_placeholder]', (@contact_content[:form] || {})["name_placeholder"], placeholder: 'Name placeholder', class: 'w-full form-input admin-form-input' %>
-            <%= text_field_tag 'contact_content[form][email_placeholder]', (@contact_content[:form] || {})["email_placeholder"], placeholder: 'Email placeholder', class: 'w-full form-input admin-form-input' %>
-            <%= text_field_tag 'contact_content[form][subject_placeholder]', (@contact_content[:form] || {})["subject_placeholder"], placeholder: 'Subject placeholder', class: 'w-full form-input admin-form-input' %>
-            <%= text_field_tag 'contact_content[form][message_placeholder]', (@contact_content[:form] || {})["message_placeholder"], placeholder: 'Message placeholder', class: 'w-full form-input admin-form-input' %>
-          </div>
-        </div>
-
         <div class="mb-4">
           <p class="font-medium mb-2">Frequently Asked Questions</p>
-          <% (@faqs || []).each_with_index do |f, i| %>
+          <% 8.times do |i| %>
+            <% f = (@faqs || [])[i] || {} %>
             <div class="mb-2 border rounded p-3">
-              <%= render 'admin/partials/admin_form_field', name: "contact_content[faqs][#{i}][question]", value: (f[:question] || f['question']), label_text: 'Question' %>
-              <%= render 'admin/partials/admin_form_textarea', name: "contact_content[faqs][#{i}][answer]", value: (f[:answer] || f['answer']), label_text: 'Answer', rows: 3 %>
+              <%= render 'admin/partials/admin_form_field', name: "contact_content[faqs][#{i}][question]", value: (f[:question] || f['question']), label_text: "Question #{i + 1}" %>
+              <%= render 'admin/partials/admin_form_textarea', name: "contact_content[faqs][#{i}][answer]", value: (f[:answer] || f['answer']), label_text: "Answer #{i + 1}", rows: 3 %>
             </div>
           <% end %>
-          <div class="mb-2 border rounded p-3">
-            <span class="text-sm text-slate-500">Add a new FAQ</span>
-            <%= render 'admin/partials/admin_form_field', name: 'contact_content[faqs][new][question]', value: '', label_text: 'Question' %>
-            <%= render 'admin/partials/admin_form_textarea', name: 'contact_content[faqs][new][answer]', value: '', label_text: 'Answer', rows: 3 %>
-          </div>
         </div>
 
         <div class="flex gap-3">
-          <%= form.submit 'Save Contact Page', class: 'btn btn-primary' %>
-          <%= link_to 'Preview live page', contact_path, class: 'btn btn-secondary' %>
+          <%= form.submit 'Save Contact Page', class: 'btn btn-success text-white font-bold' %>
         </div>
       <% end %>
     </div>
   </div>
 
   <div>
-    <h2 class="font-semibold mb-3">Preview</h2>
+    <h2 class="font-semibold mb-16">Preview</h2>
     <div class="bg-white p-6 rounded shadow space-y-5">
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Page Title</p>
-        <h2 class="text-2xl font-bold text-slate-900"><%= @contact_content["title"].presence || 'Contact Us' %></h2>
-        <p class="text-sm text-slate-600 mt-2"><%= @contact_content["intro"].presence || 'Have a question, partnership inquiry, or want to get in touch? We\'d love to hear from you.' %></p>
+        <h2 class="text-2xl font-bold text-slate-900" id="contact_preview_title"><%= @contact_content["title"].presence || 'Contact Us' %></h2>
+        <p class="text-sm text-slate-600 mt-2" id="contact_preview_intro"><%= @contact_content["intro"].presence || 'Have a question, partnership inquiry, or want to get in touch? We\'d love to hear from you.' %></p>
       </div>
 
       <div class="grid grid-cols-1 gap-4">
         <div class="p-4 bg-slate-50 rounded">
           <p class="font-semibold">Email</p>
-          <p class="text-sm text-slate-700"><%= @contact_content["email"].presence || 'ceo@nailab.co.ke' %></p>
+          <p class="text-sm text-slate-700" id="contact_preview_email"><%= @contact_content["email"].presence || 'ceo@nailab.co.ke' %></p>
           <p class="font-semibold mt-3">Phone</p>
-          <p class="text-sm text-slate-700"><%= @contact_content["phone"].presence || '+254 790 492 467' %></p>
-        </div>
-
-        <div class="p-4 rounded border">
-          <p class="font-semibold mb-2">Send us a message</p>
-          <form>
-            <div class="grid grid-cols-1 gap-2">
-              <input placeholder="<%= (@contact_content[:form] || {})['name_placeholder'] || 'Your full name' %>" class="w-full form-input admin-form-input mb-2" />
-              <input placeholder="<%= (@contact_content[:form] || {})['email_placeholder'] || 'you@example.com' %>" class="w-full form-input admin-form-input mb-2" />
-              <input placeholder="<%= (@contact_content[:form] || {})['subject_placeholder'] || 'e.g. Partnership Inquiry' %>" class="w-full form-input admin-form-input mb-2" />
-              <textarea placeholder="<%= (@contact_content[:form] || {})['message_placeholder'] || 'Tell us how we can help...' %>" rows="4" class="w-full form-input admin-form-input"></textarea>
-              <button class="btn btn-primary mt-2"><%= (@contact_content[:form] || {})['submit_label'].presence || 'Send Message' %></button>
-            </div>
-          </form>
+          <p class="text-sm text-slate-700" id="contact_preview_phone"><%= @contact_content["phone"].presence || '+254 790 492 467' %></p>
         </div>
       </div>
 
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Frequently Asked Questions</p>
         <div class="space-y-3 mt-3">
-          <% (@contact_content[:faqs] || []).each do |f| %>
+          <% (@contact_content[:faqs] || []).first(8).each_with_index do |f, i| %>
             <div>
-              <p class="font-semibold"><%= f[:question] || f['question'] %></p>
-              <p class="text-sm text-slate-600"><%= f[:answer] || f['answer'] %></p>
+              <p class="font-semibold" id="contact_preview_faq_q_<%= i %>"><%= f[:question] || f['question'] %></p>
+              <p class="text-sm text-slate-600" id="contact_preview_faq_a_<%= i %>"><%= faq_answer_html(f[:answer] || f['answer']) %></p>
             </div>
           <% end %>
         </div>
@@ -99,4 +80,75 @@
     <p class="text-xs text-slate-500 mt-6">Preview reflects current contact page content.</p>
   </div>
 </div>
+
+<script>
+  function bindContactAdminLivePreview() {
+    if (window.__contactAdminPreviewBound) return;
+    window.__contactAdminPreviewBound = true;
+
+    function setText(id, value, fallback) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var v = (value || '').toString();
+      el.textContent = (v.trim().length > 0) ? v : (fallback || '');
+    }
+
+    function escapeHtml(unsafe) {
+      return (unsafe || '')
+        .toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderMarkdownLinks(text) {
+      var escaped = escapeHtml(text || '');
+      // Convert [label](url) to a safe <a> tag.
+      var withLinks = escaped.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, function(_, label, url) {
+        return '<a href="' + escapeHtml(url) + '" class="text-purple-600 font-bold">' + escapeHtml(label) + '</a>';
+      });
+      return withLinks.replace(/\r?\n/g, '<br>');
+    }
+
+    document.addEventListener('input', function(e) {
+      var t = e.target;
+      if (!t) return;
+      var name = t.getAttribute('name') || '';
+
+      if (name === 'contact_content[title]') {
+        setText('contact_preview_title', t.value, 'Contact Us');
+        return;
+      }
+      if (name === 'contact_content[intro]') {
+        setText('contact_preview_intro', t.value, "Have a question, partnership inquiry, or want to get in touch? We'd love to hear from you.");
+        return;
+      }
+      if (name === 'contact_content[email]') {
+        setText('contact_preview_email', t.value, 'ceo@nailab.co.ke');
+        return;
+      }
+      if (name === 'contact_content[phone]') {
+        setText('contact_preview_phone', t.value, '+254 790 492 467');
+        return;
+      }
+
+      var faqMatch = name.match(/^contact_content\[faqs\]\[(\d+)\]\[(question|answer)\]$/);
+      if (faqMatch) {
+        var idx = faqMatch[1];
+        var field = faqMatch[2];
+        if (field === 'answer') {
+          var el = document.getElementById('contact_preview_faq_a_' + idx);
+          if (el) el.innerHTML = renderMarkdownLinks(t.value);
+        } else {
+          setText('contact_preview_faq_q_' + idx, t.value, '');
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', bindContactAdminLivePreview);
+  document.addEventListener('turbo:load', bindContactAdminLivePreview);
+</script>
 

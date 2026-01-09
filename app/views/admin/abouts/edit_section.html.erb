@@ -25,7 +25,7 @@
           <%= text_area_tag 'section_payload[description]', @section_content["description"], rows: 6, class: 'w-full form-input admin-form-input' %>
         </div>
         <div class="flex gap-3">
-          <%= form.submit 'Save ' + @section_key.gsub('_', ' ').titleize, class: 'btn btn-primary' %>
+          <%= form.submit 'Save ' + @section_key.gsub('_', ' ').titleize, class: 'btn btn-success text-white font-bold' %>
           <%= link_to 'Preview live section', about_path(anchor: @section_key.to_s.tr('_', '-')), class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
         </div>
       <% end %>
