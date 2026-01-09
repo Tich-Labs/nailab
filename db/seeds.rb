@@ -706,5 +706,5 @@ end
 puts "✅ Seeded Support Tickets."
 
 # Load program seeds if present (keeps programs data available when running `rails db:seed`).
-programs_seed = Rails.root.join('db','seeds','programs.rb')
+programs_seed = Rails.root.join('db', 'seeds', 'programs.rb')
 require_relative 'seeds/programs' if File.exist?(programs_seed)
