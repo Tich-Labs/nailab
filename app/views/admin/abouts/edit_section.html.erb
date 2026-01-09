@@ -1,6 +1,7 @@
 <%# Homepage Sections Editor - following same pattern as individual editors %>
 <h1 class="text-2xl font-bold mb-4">Edit: <%= @section_title %></h1>
 <div class="grid grid-cols-2 gap-8 mb-6">
+
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
     <% if ['why_nailab_exists','our_impact','vision_mission'].include?(@section_key) %>
@@ -84,8 +85,10 @@
         </div>
       <% end %>
     </div>
-  </div>
-  <div>
+    </div>
+  
+</div>
+<div>
     <h2 class="font-semibold mb-16">Preview</h2>
     <div class="bg-white p-6 rounded shadow space-y-5">
       <% if @section_key == 'why_nailab_exists' %>
@@ -158,4 +161,3 @@
     </div>
     <p class="text-xs text-slate-500 mt-6">Preview shows the current section content. Actual styling may vary on the live About page.</p>
   </div>
-</div>
