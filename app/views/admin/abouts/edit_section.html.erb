@@ -26,7 +26,7 @@
         </div>
         <div class="flex gap-3">
           <%= form.submit 'Save ' + @section_key.gsub('_', ' ').titleize, class: 'btn btn-primary' %>
-          <%= link_to 'Preview live section', about_path(@section_key), class: 'btn btn-secondary' %>
+          <%= link_to 'Preview live section', about_path(anchor: @section_key.to_s.tr('_', '-')), class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
         </div>
       <% end %>
     </div>
@@ -36,7 +36,14 @@
 <%# Inline live-preview mirroring script for editor -> preview (works for the 3 key sections) %>
 <% if ['why_nailab_exists','our_impact','vision_mission'].include?(@section_key) %>
   <script>
-    document.addEventListener('DOMContentLoaded', function(){
+    function bindMirror(inputEl, previewEl) {
+      if (!inputEl || !previewEl) return;
+      if (inputEl.dataset.mirrorBound === '1') return;
+      inputEl.dataset.mirrorBound = '1';
+      inputEl.addEventListener('input', function(e){ previewEl.textContent = e.target.value; });
+    }
+
+    function initAboutSectionPreviewMirror(){
       try {
         var section = '<%= @section_key %>';
         if(section === 'why_nailab_exists'){
@@ -44,16 +51,16 @@
           var descInput = document.getElementById('editor_why_description');
           var pTitle = document.getElementById('preview_why_title');
           var pDesc = document.getElementById('preview_why_description');
-          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
-          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+          bindMirror(titleInput, pTitle);
+          bindMirror(descInput, pDesc);
         }
         if(section === 'our_impact'){
           var titleInput = document.getElementById('editor_our_impact_title');
           var descInput = document.getElementById('editor_our_impact_description');
           var pTitle = document.getElementById('preview_our_impact_title');
           var pDesc = document.getElementById('preview_our_impact_description');
-          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
-          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+          bindMirror(titleInput, pTitle);
+          bindMirror(descInput, pDesc);
           // mirror stats: assume matching index-based preview elements
           var idx = 0;
           while(true){
@@ -62,8 +69,8 @@
             var prevVal = document.getElementById('preview_our_impact_stat_value_' + idx);
             var prevLabel = document.getElementById('preview_our_impact_stat_label_' + idx);
             if(!inputVal && !inputLabel) break;
-            if(inputVal && prevVal){ (function(iV, pV){ iV.addEventListener('input', function(e){ pV.textContent = e.target.value; }); })(inputVal, prevVal); }
-            if(inputLabel && prevLabel){ (function(iL, pL){ iL.addEventListener('input', function(e){ pL.textContent = e.target.value; }); })(inputLabel, prevLabel); }
+            bindMirror(inputVal, prevVal);
+            bindMirror(inputLabel, prevLabel);
             idx += 1;
           }
         }
@@ -76,12 +83,15 @@
           var pMDesc = document.getElementById('preview_mission_description');
           var pVTitle = document.getElementById('preview_vision_title');
           var pVDesc = document.getElementById('preview_vision_description');
-          if(mTitle && pMTitle){ mTitle.addEventListener('input', function(e){ pMTitle.textContent = e.target.value; }); }
-          if(mDesc && pMDesc){ mDesc.addEventListener('input', function(e){ pMDesc.textContent = e.target.value; }); }
-          if(vTitle && pVTitle){ vTitle.addEventListener('input', function(e){ pVTitle.textContent = e.target.value; }); }
-          if(vDesc && pVDesc){ vDesc.addEventListener('input', function(e){ pVDesc.textContent = e.target.value; }); }
+          bindMirror(mTitle, pMTitle);
+          bindMirror(mDesc, pMDesc);
+          bindMirror(vTitle, pVTitle);
+          bindMirror(vDesc, pVDesc);
         }
       } catch(err){ console.error('Preview mirror init error', err); }
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAboutSectionPreviewMirror);
+    document.addEventListener('turbo:load', initAboutSectionPreviewMirror);
   </script>
 <% end %>

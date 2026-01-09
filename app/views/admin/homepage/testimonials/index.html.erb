@@ -7,7 +7,7 @@
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
     <div class="mb-4">
-      <%= link_to 'Preview live section', root_path(anchor: 'testimonials'), class: 'btn btn-secondary' %>
+      <%= link_to 'Preview live section', root_path(anchor: 'testimonials'), class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
     </div>
     <div id="testimonial-editor" class="bg-white p-4 rounded shadow" style="min-height:520px;">
       <%= form_with url: admin_testimonials_path, id: 'testimonial-form', local: true, html: { multipart: true } do |f| %>

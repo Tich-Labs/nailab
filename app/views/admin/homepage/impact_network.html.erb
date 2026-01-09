@@ -8,7 +8,7 @@
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
     <div class="mb-4">
-      <%= link_to "Preview live section", root_path(anchor: "impact_network"), class: "btn btn-secondary" %>
+      <%= link_to "Preview live section", root_path(anchor: "impact_network"), class: "btn btn-secondary", target: '_blank', rel: 'noopener' %>
     </div>
     <div id="logo-editor" class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_logos_path, id: 'logo-form', local: true, html: { multipart: true } do |f| %>

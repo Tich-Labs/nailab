@@ -2,15 +2,18 @@
 <div class="bg-white p-6 rounded shadow space-y-5">
   <div class="space-y-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <%# Prefer controller-provided @mission_content/@vision_content, fallback to @section_content %>
+      <% mission = (@mission_content || (@section_content && (@section_content['mission'] || @section_content[:mission])) || {}) %>
+      <% vision = (@vision_content || (@section_content && (@section_content['vision'] || @section_content[:vision])) || {}) %>
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Mission</p>
-        <h2 id="preview_mission_title" class="text-2xl font-bold text-slate-900"><%= (@section_content["mission"] || {})[:title] %></h2>
-        <p id="preview_mission_description" class="text-sm text-slate-600"><%= (@section_content["mission"] || {})[:description] %></p>
+        <h2 id="preview_mission_title" class="text-2xl font-bold text-slate-900"><%= (mission['title'] || mission[:title]) %></h2>
+        <p id="preview_mission_description" class="text-sm text-slate-600"><%= (mission['description'] || mission[:description]) %></p>
       </div>
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Vision</p>
-        <h2 id="preview_vision_title" class="text-2xl font-bold text-slate-900"><%= (@section_content["vision"] || {})[:title] %></h2>
-        <p id="preview_vision_description" class="text-sm text-slate-600"><%= (@section_content["vision"] || {})[:description] %></p>
+        <h2 id="preview_vision_title" class="text-2xl font-bold text-slate-900"><%= (vision['title'] || vision[:title]) %></h2>
+        <p id="preview_vision_description" class="text-sm text-slate-600"><%= (vision['description'] || vision[:description]) %></p>
       </div>
     </div>
   </div>
