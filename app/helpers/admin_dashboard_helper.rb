@@ -48,20 +48,17 @@ module AdminDashboardHelper
         ]
       },
       {
-        title: "Programs",
-        path: safe_path { "/admin/programs_page/1/edit" },
+        title: "Programs (Coming soon)",
+        path: safe_path { "#" },
         sections: [
-          { label: "Edit page", path: "/admin/programs_page/1/edit" }
+          { label: "Coming soon", path: "#" }
         ]
       },
       {
-        title: "Resources",
-        path: safe_path { "/admin/blog_page/1/edit" },
+        title: "Resources (Coming soon)",
+        path: safe_path { "#" },
         sections: [
-          { label: "Blog", path: "/admin/blog_page/1/edit" },
-          { label: "Knowledge Hub", path: "/admin/knowledge_hub_page/1/edit" },
-          { label: "Events & Webinars", path: "/admin/events_webinars_page/1/edit" },
-          { label: "Opportunities", path: "/admin/opportunities_page/1/edit" }
+          { label: "Coming soon", path: "#" }
         ]
       },
       {
