@@ -3,6 +3,9 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live page', '/contact', class: 'btn btn-secondary' %>
+    </div>
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_contact_us_sections_update_path, method: :patch, local: true do |form| %>
         <p class="text-sm text-slate-600 mb-4">Update the contact information displayed on the Contact Us page.</p>
@@ -11,56 +14,55 @@
           <h3 class="font-bold mb-3">Contact Information</h3>
           <div class="grid grid-cols-2 gap-4 mb-3">
             <div class="mb-3">
-              <%= label_tag 'contact_content[email]', 'Email Address', class: 'block font-medium' %>
-              <%= email_field_tag 'contact_content[email]', @structured_content[:email], class: 'w-full form-input admin-form-input' %>
+              <%= label_tag 'contact_content[email]', 'Email Address', class: 'block font-bold text-black' %>
+              <%= email_field_tag 'contact_content[email]', @structured_content[:email], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
             </div>
             <div class="mb-3">
-              <%= label_tag 'contact_content[phone]', 'Phone Number', class: 'block font-medium' %>
-              <%= telephone_field_tag 'contact_content[phone]', @structured_content[:phone], class: 'w-full form-input admin-form-input' %>
+              <%= label_tag 'contact_content[phone]', 'Phone Number', class: 'block font-bold text-black' %>
+              <%= telephone_field_tag 'contact_content[phone]', @structured_content[:phone], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
             </div>
           </div>
           <div class="mb-3">
-            <%= label_tag 'contact_content[address]', 'Physical Address', class: 'block font-medium' %>
-            <%= text_area_tag 'contact_content[address]', @structured_content[:address], rows: 3, class: 'w-full form-input admin-form-input' %>
+            <%= label_tag 'contact_content[address]', 'Physical Address', class: 'block font-bold text-black' %>
+            <%= text_area_tag 'contact_content[address]', @structured_content[:address], rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
           </div>
         </div>
         <!-- Map Section -->
         <div class="mb-6 p-4 border rounded">
           <h3 class="font-bold mb-3">Map Location</h3>
-          <div class="mb-3">
-            <%= label_tag 'contact_content[map_embed_code]', 'Map Embed Code', class: 'block font-medium' %>
-            <%= text_area_tag 'contact_content[map_embed_code]', @structured_content[:map_embed_code], rows: 4, class: 'w-full form-input admin-form-input', placeholder: 'Paste Google Maps embed code or iframe' %>
-          </div>
-          <div class="mb-3">
-            <%= label_tag 'contact_content[map_url]', 'Or Map URL', class: 'block font-medium' %>
-            <%= url_field_tag 'contact_content[map_url]', @structured_content[:map_url], class: 'w-full form-input admin-form-input', placeholder: 'https://maps.google.com/...' %>
-          </div>
+            <div class="mb-3">
+              <%= label_tag 'contact_content[map_embed_code]', 'Map Embed Code', class: 'block font-bold text-black' %>
+              <%= text_area_tag 'contact_content[map_embed_code]', @structured_content[:map_embed_code], rows: 4, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'Paste Google Maps embed code or iframe' %>
+            </div>
+            <div class="mb-3">
+              <%= label_tag 'contact_content[map_url]', 'Or Map URL', class: 'block font-bold text-black' %>
+              <%= url_field_tag 'contact_content[map_url]', @structured_content[:map_url], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'https://maps.google.com/...' %>
+            </div>
         </div>
         <!-- Social Media Links -->
         <div class="mb-6 p-4 border rounded">
           <h3 class="font-bold mb-3">Social Media Links</h3>
           <div class="space-y-3">
             <div class="mb-3">
-              <%= label_tag 'contact_content[social_links][twitter]', 'Twitter', class: 'block font-medium' %>
-              <%= url_field_tag 'contact_content[social_links][twitter]', @structured_content.dig(:social_links, :twitter), class: 'w-full form-input admin-form-input', placeholder: 'https://twitter.com/...' %>
+              <%= label_tag 'contact_content[social_links][twitter]', 'Twitter', class: 'block font-bold text-black' %>
+              <%= url_field_tag 'contact_content[social_links][twitter]', @structured_content.dig(:social_links, :twitter), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'https://twitter.com/...' %>
             </div>
             <div class="mb-3">
-              <%= label_tag 'contact_content[social_links][linkedin]', 'LinkedIn', class: 'block font-medium' %>
-              <%= url_field_tag 'contact_content[social_links][linkedin]', @structured_content.dig(:social_links, :linkedin), class: 'w-full form-input admin-form-input', placeholder: 'https://linkedin.com/...' %>
+              <%= label_tag 'contact_content[social_links][linkedin]', 'LinkedIn', class: 'block font-bold text-black' %>
+              <%= url_field_tag 'contact_content[social_links][linkedin]', @structured_content.dig(:social_links, :linkedin), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'https://linkedin.com/...' %>
             </div>
             <div class="mb-3">
-              <%= label_tag 'contact_content[social_links][facebook]', 'Facebook', class: 'block font-medium' %>
-              <%= url_field_tag 'contact_content[social_links][facebook]', @structured_content.dig(:social_links, :facebook), class: 'w-full form-input admin-form-input', placeholder: 'https://facebook.com/...' %>
+              <%= label_tag 'contact_content[social_links][facebook]', 'Facebook', class: 'block font-bold text-black' %>
+              <%= url_field_tag 'contact_content[social_links][facebook]', @structured_content.dig(:social_links, :facebook), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'https://facebook.com/...' %>
             </div>
             <div class="mb-3">
-              <%= label_tag 'contact_content[social_links][instagram]', 'Instagram', class: 'block font-medium' %>
-              <%= url_field_tag 'contact_content[social_links][instagram]', @structured_content.dig(:social_links, :instagram), class: 'w-full form-input admin-form-input', placeholder: 'https://instagram.com/...' %>
+              <%= label_tag 'contact_content[social_links][instagram]', 'Instagram', class: 'block font-bold text-black' %>
+              <%= url_field_tag 'contact_content[social_links][instagram]', @structured_content.dig(:social_links, :instagram), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', placeholder: 'https://instagram.com/...' %>
             </div>
           </div>
         </div>
         <div class="flex gap-3">
           <%= form.submit 'Save Contact Page', class: 'btn btn-primary' %>
-          <%= link_to 'Preview live page', '/contact', class: 'btn btn-secondary' %>
         </div>
       <% end %>
     </div>

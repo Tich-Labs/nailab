@@ -66,13 +66,19 @@
 /* Specific admin form input helpers */
 .admin-form-input {
   @apply rounded-md border p-2; /* works if Tailwind is available in build */
-  border-color: #e6e1ef;
+  /* Fallback explicit styles in case Tailwind @apply isn't processed */
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e6e1ef;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16,24,40,0.06);
 }
 
 .admin-form-textarea {
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #e6e1ef;
-  padding: 8px 12px;
+  padding: 10px 14px;
+  background: #ffffff;
 }
 
 /* Improve panel layouts */

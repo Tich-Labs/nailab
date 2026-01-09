@@ -3,27 +3,27 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
-          <div class="flex justify-end mb-6">
-        <a class="btn btn-secondary" href="/about#what-drives-us">Preview live section</a>
-      </div>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', '/about#what-drives-us', class: 'btn btn-secondary' %>
+    </div>
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_about_section_update_path(section: 'what_drives_us'), method: :patch, local: true do %>
         <p class="text-sm text-slate-600 mb-4">Edit the section title and each card's title and description.</p>
         <div class="mb-3">
-          <%= label_tag "section[title]", 'Section Title', class: 'block font-medium' %>
-          <%= text_field_tag 'section_payload[title]', (@section_content && (@section_content['title'] || @section_content[:title])), class: 'w-full form-input admin-form-input' %>
+          <%= label_tag "section[title]", 'Section Title', class: 'block font-bold text-black' %>
+          <%= text_field_tag 'section_payload[title]', (@section_content && (@section_content['title'] || @section_content[:title])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <h3 class="font-semibold mt-6 mb-2">Cards</h3>
         <% cards = (@section_content && (@section_content['cards'] || @section_content[:cards])) || [] %>
         <% 6.times do |i| %>
-          <div class="p-4 bg-gray-50 rounded-lg shadow mb-4">
+          <div class="p-4 bg-white rounded-lg shadow border border-gray-100 mb-4">
             <div class="mb-2">
-              <%= label_tag "section_payload[cards][#{i}][title]", "Card Title", class: "block text-sm font-medium text-gray-700" %>
-              <%= text_field_tag "section_payload[cards][#{i}][title]", cards[i] && (cards[i]['title'] || cards[i][:title]), class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              <%= label_tag "section_payload[cards][#{i}][title]", "Card Title", class: "block text-sm font-bold text-black" %>
+              <%= text_field_tag "section_payload[cards][#{i}][title]", cards[i] && (cards[i]['title'] || cards[i][:title]), class: "w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2" %>
             </div>
-            <div>
-              <%= label_tag "section_payload[cards][#{i}][description]", "Card Description", class: "block text-sm font-medium text-gray-700" %>
-              <%= text_area_tag "section_payload[cards][#{i}][description]", cards[i] && (cards[i]['description'] || cards[i][:description]), class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", rows: 2 %>
+              <div>
+              <%= label_tag "section_payload[cards][#{i}][description]", "Card Description", class: "block text-sm font-bold text-black" %>
+              <%= text_area_tag "section_payload[cards][#{i}][description]", cards[i] && (cards[i]['description'] || cards[i][:description]), class: "w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2", rows: 2 %>
             </div>
           </div>
         <% end %>

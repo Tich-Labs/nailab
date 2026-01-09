@@ -4,12 +4,12 @@
   <%= form_with model: @focus_area, url: admin_create_focus_area_path, local: true do |f| %>
     <div class="mb-4">
       <%= f.label :title, class: 'block font-medium' %>
-      <%= f.text_field :title, class: 'w-full form-input admin-form-input' %>
+      <%= f.text_field :title, input_html: { class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' } %>
     </div>
 
     <div class="mb-4">
       <%= f.label :description, class: 'block font-medium' %>
-      <%= f.text_area :description, rows: 4, class: 'w-full form-textarea admin-form-textarea' %>
+      <%= f.text_area :description, rows: 4, input_html: { class: 'w-full form-textarea admin-form-textarea bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' } %>
     </div>
 
     <div class="mb-4">

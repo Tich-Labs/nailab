@@ -3,6 +3,17 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-4">
+      <% if @section_key == 'why_nailab_exists' %>
+        <%= link_to 'Preview live section', '/about#why-nailab-exists', class: 'btn btn-secondary' %>
+      <% elsif @section_key == 'our_impact' %>
+        <%= link_to 'Preview live section', '/about#our-impact', class: 'btn btn-secondary' %>
+      <% elsif @section_key == 'vision_mission' %>
+        <%= link_to 'Preview live section', '/about#vision-mission', class: 'btn btn-secondary' %>
+      <% elsif @section_key == 'what_drives_us' %>
+        <%= link_to 'Preview live section', '/about#what-drives-us', class: 'btn btn-secondary' %>
+      <% end %>
+    </div>
     <% if @section_key == "why_nailab_exists" %>
       <%= render template: "admin/abouts/why_nailab_exists/edit" %>
     <% elsif @section_key == "our_impact" %>

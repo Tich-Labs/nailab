@@ -66,7 +66,9 @@ class PricingContent
 
     def hero(structured_content)
       normalized = normalized_structured_content(structured_content)
-      DEFAULT_HERO.merge(normalized[:hero].presence || {})
+      # Ensure we merge with indifferent access so string-keyed JSON
+      # keys override the symbol-keyed DEFAULT_HERO values.
+      DEFAULT_HERO.with_indifferent_access.merge((normalized[:hero].presence || {})).with_indifferent_access
     end
 
     private

@@ -4,28 +4,27 @@
     <div class="mb-6 p-4 border rounded">
       <h4 class="font-bold mb-2">Mission</h4>
       <div class="mb-3">
-        <%= label_tag 'section_payload[mission][title]', 'Mission Title', class: 'block font-medium' %>
-        <%= text_field_tag 'section_payload[mission][title]', @mission_content["title"], class: 'w-full form-input admin-form-input' %>
+        <%= label_tag 'section_payload[mission][title]', 'Mission Title', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'section_payload[mission][title]', @mission_content["title"], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
       <div class="mb-3">
-        <%= label_tag 'section_payload[mission][description]', 'Mission Description', class: 'block font-medium' %>
-        <%= text_area_tag 'section_payload[mission][description]', @mission_content["description"], rows: 3, class: 'w-full form-input admin-form-input' %>
+        <%= label_tag 'section_payload[mission][description]', 'Mission Description', class: 'block font-bold text-black' %>
+        <%= text_area_tag 'section_payload[mission][description]', @mission_content["description"], rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
     </div>
     <div class="mb-6 p-4 border rounded">
       <h4 class="font-bold mb-2">Vision</h4>
       <div class="mb-3">
-        <%= label_tag 'section_payload[vision][title]', 'Vision Title', class: 'block font-medium' %>
-        <%= text_field_tag 'section_payload[vision][title]', @vision_content["title"], class: 'w-full form-input admin-form-input' %>
+        <%= label_tag 'section_payload[vision][title]', 'Vision Title', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'section_payload[vision][title]', @vision_content["title"], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
       <div class="mb-3">
-        <%= label_tag 'section_payload[vision][description]', 'Vision Description', class: 'block font-medium' %>
-        <%= text_area_tag 'section_payload[vision][description]', @vision_content["description"], rows: 3, class: 'w-full form-input admin-form-input' %>
+        <%= label_tag 'section_payload[vision][description]', 'Vision Description', class: 'block font-bold text-black' %>
+        <%= text_area_tag 'section_payload[vision][description]', @vision_content["description"], rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
     </div>
     <div class="flex gap-3">
       <%= f.submit 'Save Vision & Mission', class: 'btn btn-primary' %>
-      <%= link_to 'Preview live section', '/about#vision-mission', class: 'btn btn-secondary' %>
     </div>
   <% end %>
 </div>

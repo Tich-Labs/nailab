@@ -1,60 +1,62 @@
 <h1 class="text-2xl font-bold mb-4">Testimonials — Manage</h1>
 
 <div class="mb-4">
-  <%= link_to "Preview live section", root_path(anchor: "testimonials"), class: "ml-2 btn btn-secondary" %>
 </div>
 
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', root_path(anchor: 'testimonials'), class: 'btn btn-secondary' %>
+    </div>
     <div id="testimonial-editor" class="bg-white p-4 rounded shadow" style="min-height:520px;">
       <%= form_with url: admin_testimonials_path, id: 'testimonial-form', local: true, html: { multipart: true } do |f| %>
       <%= hidden_field_tag :testimonial_id, nil, id: 'testimonial-id' %>
       <%= hidden_field_tag :_method, nil, id: 'testimonial-method' %>
 
       <div class="mb-2">
-        <%= label_tag :author_name, 'Author', class: 'block font-medium' %>
-        <%= text_field_tag 'testimonial[author_name]', nil, id: 'testimonial-author', class: 'w-full form-input' %>
+        <%= label_tag :author_name, 'Author', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'testimonial[author_name]', nil, id: 'testimonial-author', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :quote, 'Quote', class: 'block font-medium' %>
-        <%= text_area_tag 'testimonial[quote]', nil, id: 'testimonial-quote', class: 'w-full form-input', rows: 3 %>
+        <%= label_tag :quote, 'Quote', class: 'block font-bold text-black' %>
+        <%= text_area_tag 'testimonial[quote]', nil, id: 'testimonial-quote', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 3 %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :author_role, 'Role', class: 'block font-medium' %>
-        <%= text_field_tag 'testimonial[author_role]', nil, id: 'testimonial-role', class: 'w-full form-input' %>
+        <%= label_tag :author_role, 'Role', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'testimonial[author_role]', nil, id: 'testimonial-role', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :organization, 'Organization', class: 'block font-medium' %>
-        <%= text_field_tag 'testimonial[organization]', nil, id: 'testimonial-organization', class: 'w-full form-input' %>
+        <%= label_tag :organization, 'Organization', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'testimonial[organization]', nil, id: 'testimonial-organization', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :photo_url, 'Photo URL (or leave blank for asset)', class: 'block font-medium' %>
-        <%= text_field_tag 'testimonial[photo_url]', nil, id: 'testimonial-photo', class: 'w-full form-input' %>
+        <%= label_tag :photo_url, 'Photo URL (or leave blank for asset)', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'testimonial[photo_url]', nil, id: 'testimonial-photo', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :photo_upload, 'Upload Photo (optional)', class: 'block font-medium' %>
+        <%= label_tag :photo_upload, 'Upload Photo (optional)', class: 'block font-bold text-black' %>
         <%= file_field_tag 'testimonial[photo]', id: 'testimonial-photo-file', class: 'w-full form-input' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :website_url, 'Website', class: 'block font-medium' %>
-        <%= text_field_tag 'testimonial[website_url]', nil, id: 'testimonial-website', class: 'w-full form-input' %>
+        <%= label_tag :website_url, 'Website', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'testimonial[website_url]', nil, id: 'testimonial-website', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
 
       <div class="mb-2">
-        <%= label_tag :display_order, 'Order', class: 'block font-medium' %>
+        <%= label_tag :display_order, 'Order', class: 'block font-bold text-black' %>
         <%= number_field_tag 'testimonial[display_order]', 0, id: 'testimonial-order', class: 'w-32 form-input' %>
       </div>
 
       <div class="mb-2">
         <%= check_box_tag 'testimonial[active]', '1', true, id: 'testimonial-active' %>
-        <%= label_tag 'testimonial-active', 'Active', class: 'ml-2' %>
+        <%= label_tag 'testimonial-active', 'Active', class: 'ml-2 font-bold text-black' %>
       </div>
 
       <div class="flex items-center">

@@ -2,19 +2,22 @@
 
 <div class="grid grid-cols-2 gap-8 mb-6">
     <div>
-        <h2 class="font-semibold mb-3">Editor</h2>
-        <div class="bg-white p-4 rounded shadow">
+                <h2 class="font-semibold mb-3">Editor</h2>
+                <div class="mb-4">
+                    <%= link_to 'Preview live section', root_path(anchor: 'connect-grow-impact'), class: 'btn btn-secondary' %>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
         <%= form_with url: admin_homepage_connect_grow_impact_update_path, method: :patch, local: true do %>
             <p class="text-sm text-slate-600 mb-4">Edit the intro and the three Connect. Grow. Impact. cards.</p>
 
             <div class="mb-4">
-            <%= label_tag "connect[title]", 'Section title', class: 'block font-medium' %>
-            <%= text_field_tag "connect[title]", (@connect_title || 'Connect. Grow. Impact.'), class: 'w-full form-input admin-form-input' %>
+            <%= label_tag "connect[title]", 'Section title', class: 'block font-bold text-black' %>
+            <%= text_field_tag "connect[title]", (@connect_title || 'Connect. Grow. Impact.'), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
             </div>
 
             <div class="mb-4">
-            <%= label_tag "connect[intro]", 'Intro copy', class: 'block font-medium' %>
-            <%= text_area_tag "connect[intro]", (@connect_intro || PagesController::DEFAULT_CONNECT_INTRO), class: 'w-full form-input admin-form-input', rows: 3 %>
+            <%= label_tag "connect[intro]", 'Intro copy', class: 'block font-bold text-black' %>
+            <%= text_area_tag "connect[intro]", (@connect_intro || PagesController::DEFAULT_CONNECT_INTRO), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 3 %>
             </div>
 
             <% cards = @connect_cards || PagesController::DEFAULT_CONNECT_CARDS %>
@@ -22,21 +25,21 @@
             <div class="mb-4 border rounded p-3">
                 <p class="text-xs font-semibold mb-2">Card <%= idx + 1 %></p>
                 <div class="mb-2">
-                <%= label_tag "connect[cards][#{idx}][title]", 'Title', class: 'block font-medium' %>
-                <%= text_field_tag "connect[cards][#{idx}][title]", (card.is_a?(Hash) ? (card['title'] || card[:title]) : card[:title]), class: 'w-full form-input admin-form-input' %>
+                <%= label_tag "connect[cards][#{idx}][title]", 'Title', class: 'block font-bold text-black' %>
+                <%= text_field_tag "connect[cards][#{idx}][title]", (card.is_a?(Hash) ? (card['title'] || card[:title]) : card[:title]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
                 </div>
                 <div class="mb-2">
-                <%= label_tag "connect[cards][#{idx}][description]", 'Description', class: 'block font-medium' %>
-                <%= text_area_tag "connect[cards][#{idx}][description]", (card.is_a?(Hash) ? (card['description'] || card[:description]) : card[:description]), class: 'w-full form-input admin-form-input', rows: 3 %>
+                <%= label_tag "connect[cards][#{idx}][description]", 'Description', class: 'block font-bold text-black' %>
+                <%= text_area_tag "connect[cards][#{idx}][description]", (card.is_a?(Hash) ? (card['description'] || card[:description]) : card[:description]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 3 %>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <%= label_tag "connect[cards][#{idx}][cta_label]", 'CTA label', class: 'block font-medium' %>
-                    <%= text_field_tag "connect[cards][#{idx}][cta_label]", (card.is_a?(Hash) ? (card['cta_label'] || card[:cta_label]) : card[:cta_label]), class: 'w-full form-input admin-form-input' %>
+                    <%= label_tag "connect[cards][#{idx}][cta_label]", 'CTA label', class: 'block font-bold text-black' %>
+                    <%= text_field_tag "connect[cards][#{idx}][cta_label]", (card.is_a?(Hash) ? (card['cta_label'] || card[:cta_label]) : card[:cta_label]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
                 </div>
                 <div>
-                    <%= label_tag "connect[cards][#{idx}][cta_link]", 'CTA link', class: 'block font-medium' %>
-                    <%= text_field_tag "connect[cards][#{idx}][cta_link]", (card.is_a?(Hash) ? (card['cta_link'] || card[:cta_link]) : card[:cta_link]), class: 'w-full form-input admin-form-input' %>
+                    <%= label_tag "connect[cards][#{idx}][cta_link]", 'CTA link', class: 'block font-bold text-black' %>
+                    <%= text_field_tag "connect[cards][#{idx}][cta_link]", (card.is_a?(Hash) ? (card['cta_link'] || card[:cta_link]) : card[:cta_link]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
                 </div>
                 </div>
             </div>
@@ -44,7 +47,6 @@
 
             <div class="flex gap-3">
             <%= submit_tag 'Save Connect cards', class: 'btn btn-primary' %>
-            <%= link_to 'Preview live section', root_path(anchor: 'connect-grow-impact'), class: 'btn btn-secondary' %>
             </div>
         <% end %>
         </div>

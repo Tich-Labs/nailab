@@ -3,54 +3,54 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
-    <div class="flex justify-end mb-6">
-      <a class="btn btn-secondary mr-2" href="/pricing" target="_blank">Preview live page</a>
+    <div class="mb-4">
+      <a class="btn btn-secondary" href="/pricing" target="_blank">Preview live page</a>
     </div>
 
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: main_app.admin_admin_pricing_page_simple_path, method: :patch, local: true do |form| %>
         <div class="mb-3">
-          <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-bold mb-1' %>
-          <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], id: 'pricing_hero_title', class: 'w-full form-input admin-form-input', data: { preview_field: 'hero_title' } %>
+          <%= label_tag 'pricing_content[hero][title]', 'Hero Title', class: 'block font-bold text-black mb-1' %>
+          <%= text_field_tag 'pricing_content[hero][title]', @pricing_hero[:title], id: 'pricing_hero_title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_field: 'hero_title' } %>
         </div>
         <div class="mb-3">
-          <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-bold mb-1' %>
-          <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], id: 'pricing_hero_subtitle', rows: 3, class: 'w-full form-input admin-form-input', data: { preview_field: 'hero_subtitle' } %>
+          <%= label_tag 'pricing_content[hero][subtitle]', 'Hero Subtitle', class: 'block font-bold text-black mb-1' %>
+          <%= text_area_tag 'pricing_content[hero][subtitle]', @pricing_hero[:subtitle], id: 'pricing_hero_subtitle', rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_field: 'hero_subtitle' } %>
         </div>
         <hr class="my-4">
         <h3 class="font-semibold mb-2">Pricing Tiers</h3>
         <p class="text-sm text-slate-600 mb-3">Edit the tiers below; preview on the right updates as you type.</p>
         <% @pricing_tiers.each_with_index do |tier, index| %>
-          <div class="p-3 bg-gray-50 rounded mb-3">
+          <div class="p-3 bg-white rounded mb-3 border border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <%= label_tag "pricing_content[tiers][#{index}][name]", 'Tier Name', class: 'block font-medium mb-1' %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'name' } %>
+                <%= label_tag "pricing_content[tiers][#{index}][name]", 'Tier Name', class: 'block font-bold text-black mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][name]", tier[:name], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'name' } %>
               </div>
               <div>
-                <%= label_tag "pricing_content[tiers][#{index}][price]", 'Price', class: 'block font-medium mb-1' %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'price' } %>
+                <%= label_tag "pricing_content[tiers][#{index}][price]", 'Price', class: 'block font-bold text-black mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][price]", tier[:price], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'price' } %>
               </div>
             </div>
             <div class="mt-2">
-              <%= label_tag "pricing_content[tiers][#{index}][description]", 'Description', class: 'block font-medium mb-1' %>
-              <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 2, class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'description' } %>
+              <%= label_tag "pricing_content[tiers][#{index}][description]", 'Description', class: 'block font-bold text-black mb-1' %>
+              <%= text_area_tag "pricing_content[tiers][#{index}][description]", tier[:description], rows: 2, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'description' } %>
             </div>
             <div class="mt-2">
-              <%= label_tag "pricing_content[tiers][#{index}][features][]", 'Features (one per line)', class: 'block font-medium mb-1' %>
+              <%= label_tag "pricing_content[tiers][#{index}][features][]", 'Features (one per line)', class: 'block font-bold text-black mb-1' %>
               <% (tier[:features] || []).each do |feat| %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feat, class: 'w-full form-input admin-form-input mb-2', data: { preview_index: index, preview_field: 'feature' } %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feat, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm mb-2', data: { preview_index: index, preview_field: 'feature' } %>
               <% end %>
-              <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'feature' } %>
+              <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'feature' } %>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
               <div>
-                <%= label_tag "pricing_content[tiers][#{index}][cta]", 'CTA Text', class: 'block font-medium mb-1' %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta' } %>
+                <%= label_tag "pricing_content[tiers][#{index}][cta]", 'CTA Text', class: 'block font-bold text-black mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][cta]", tier[:cta], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'cta' } %>
               </div>
               <div>
-                <%= label_tag "pricing_content[tiers][#{index}][cta_link]", 'CTA Link', class: 'block font-medium mb-1' %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], placeholder: '/users/sign_up or https://example.com', class: 'w-full form-input admin-form-input', data: { preview_index: index, preview_field: 'cta_link' } %>
+                <%= label_tag "pricing_content[tiers][#{index}][cta_link]", 'CTA Link', class: 'block font-bold text-black mb-1' %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][cta_link]", tier[:cta_link], placeholder: '/users/sign_up or https://example.com', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'cta_link' } %>
                 <p class="text-xs text-slate-500 mt-1">Relative paths like <code>/users/sign_up</code> are allowed.</p>
               </div>
             </div>

@@ -3,6 +3,9 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', root_path(anchor: 'how-we-support'), class: 'btn btn-secondary' %>
+    </div>
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_homepage_how_we_support_update_path, method: :patch, local: true do %>
         <p class="text-sm text-slate-600 mb-4">Edit the support items that appear on the homepage.</p>
@@ -10,28 +13,27 @@
           <div class="mb-4 border rounded p-3">
             <p class="text-xs font-semibold mb-2">Item <%= idx + 1 %></p>
             <div class="mb-2">
-              <%= label_tag "support_items[#{idx}][title]", 'Title', class: 'block font-medium' %>
-              <%= text_field_tag "support_items[#{idx}][title]", (item.is_a?(Hash) ? (item['title'] || item[:title]) : item[:title]), class: 'w-full form-input admin-form-input' %>
+              <%= label_tag "support_items[#{idx}][title]", 'Title', class: 'block font-bold text-black' %>
+              <%= text_field_tag "support_items[#{idx}][title]", (item.is_a?(Hash) ? (item['title'] || item[:title]) : item[:title]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
             </div>
             <div class="mb-2">
-              <%= label_tag "support_items[#{idx}][description]", 'Description', class: 'block font-medium' %>
-              <%= text_area_tag "support_items[#{idx}][description]", (item.is_a?(Hash) ? (item['description'] || item[:description]) : item[:description]), class: 'w-full form-input admin-form-input', rows: 3 %>
+              <%= label_tag "support_items[#{idx}][description]", 'Description', class: 'block font-bold text-black' %>
+              <%= text_area_tag "support_items[#{idx}][description]", (item.is_a?(Hash) ? (item['description'] || item[:description]) : item[:description]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 3 %>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <%= label_tag "support_items[#{idx}][cta_label]", 'CTA label', class: 'block font-medium' %>
-                <%= text_field_tag "support_items[#{idx}][cta_label]", (item.is_a?(Hash) ? (item['cta_label'] || item[:cta_label]) : item[:cta_label]), class: 'w-full form-input admin-form-input' %>
+                <%= label_tag "support_items[#{idx}][cta_label]", 'CTA label', class: 'block font-bold text-black' %>
+                <%= text_field_tag "support_items[#{idx}][cta_label]", (item.is_a?(Hash) ? (item['cta_label'] || item[:cta_label]) : item[:cta_label]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
               </div>
               <div>
-                <%= label_tag "support_items[#{idx}][cta_link]", 'CTA link', class: 'block font-medium' %>
-                <%= text_field_tag "support_items[#{idx}][cta_link]", (item.is_a?(Hash) ? (item['cta_link'] || item[:cta_link]) : item[:cta_link]), class: 'w-full form-input admin-form-input' %>
+                <%= label_tag "support_items[#{idx}][cta_link]", 'CTA link', class: 'block font-bold text-black' %>
+                <%= text_field_tag "support_items[#{idx}][cta_link]", (item.is_a?(Hash) ? (item['cta_link'] || item[:cta_link]) : item[:cta_link]), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
               </div>
             </div>
           </div>
         <% end %>
         <div class="flex gap-3">
           <%= submit_tag 'Save support items', class: 'btn btn-primary' %>
-          <%= link_to 'Preview live section', root_path(anchor: 'how-we-support'), class: 'btn btn-secondary' %>
         </div>
       <% end %>
     </div>

@@ -1,71 +1,13 @@
 module Admin
   module PricingPage
+    # Legacy controller removed — any requests to this controller should return 404.
     class SectionsController < RailsAdmin::MainController
-      include ::PricingPageConcern
-
-      # GET /admin/pricing_page/sections/edit
-      def edit
-        @pricing_page = ::PricingPage.find_by(id: 1) || ::PricingPage.first_or_create!(title: "Pricing")
-        structured = parse_pricing_structured_content(@pricing_page.content)
-        @pricing_tiers = ::PricingContent.tiers(structured)
-        @pricing_hero = ::PricingContent.hero(structured)
-      end
-
-      # PATCH /admin/pricing_page/sections/edit
-      def update
-        @pricing_page = ::PricingPage.find_by(id: 1) || ::PricingPage.first_or_create!(title: "Pricing")
-
-        content = parse_pricing_structured_content(@pricing_page.content)
-
-        if params[:pricing_content].present?
-          pc = params.require(:pricing_content).permit!
-
-          # Hero
-          if pc[:hero].present?
-            content[:hero] = {
-              title: pc[:hero][:title].to_s,
-              subtitle: pc[:hero][:subtitle].to_s
-            }
-          end
-
-          # Tiers - accept array or hash with numeric keys
-          tiers_param = pc[:tiers] || []
-          tiers = []
-          if tiers_param.is_a?(Hash)
-            tiers_param.to_a.sort_by { |k, _| k.to_i }.each do |_, t|
-              tiers << normalize_tier_params(t)
-            end
-          elsif tiers_param.is_a?(Array)
-            tiers_param.each do |t|
-              tiers << normalize_tier_params(t)
-            end
-          end
-
-          content[:pricing_tiers] = tiers
-        end
-
-        @pricing_page.update!(content: content.to_json)
-
-        redirect_to "/admin/pricing_page/sections/edit", notice: "Pricing sections saved"
-      end
+      before_action :not_found
 
       private
 
-      def normalize_tier_params(t)
-        t = t.to_unsafe_h if t.respond_to?(:to_unsafe_h)
-        features = t.fetch("features", t.fetch(:features, [])) || []
-        features = features.values if features.is_a?(Hash)
-        features = Array(features).map(&:to_s).map(&:strip).reject(&:blank?)
-
-        {
-          name: (t["name"] || t[:name] || "").to_s,
-          price: (t["price"] || t[:price] || "").to_s,
-          description: (t["description"] || t[:description] || "").to_s,
-          features: features,
-          cta: (t["cta"] || t[:cta] || "").to_s,
-          cta_link: (t["cta_link"] || t[:cta_link] || "").to_s,
-          highlight: (t["highlight"].to_s == "1")
-        }
+      def not_found
+        raise ActionController::RoutingError.new("Not Found")
       end
     end
   end

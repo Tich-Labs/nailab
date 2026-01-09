@@ -2,35 +2,37 @@
 
 <div class="mb-4">
   <%= link_to 'Edit focus areas in CMS', rails_admin.index_path(model_name: 'focus_area'), class: 'btn btn-primary' %>
-  <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'ml-2 btn btn-secondary' %>
 </div>
 
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'btn btn-secondary' %>
+    </div>
     <div id="focus-area-editor" class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_focus_areas_path, id: 'focus-area-form', local: true do |f| %>
       <%= hidden_field_tag :focus_area_id, nil, id: 'focus-area-id' %>
       <%= hidden_field_tag :_method, nil, id: 'focus-area-method' %>
       <div class="mb-2">
-        <%= label_tag :title, 'Title', class: 'block font-medium' %>
-        <%= text_field_tag 'focus_area[title]', nil, id: 'focus-area-title', class: 'w-full form-input admin-form-input' %>
+        <%= label_tag :title, 'Title', class: 'block font-bold text-black' %>
+         <%= text_field_tag 'focus_area[title]', nil, id: 'focus-area-title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm' %>
       </div>
       <div class="mb-2">
-        <%= label_tag :description, 'Description', class: 'block font-medium' %>
-        <%= text_area_tag 'focus_area[description]', nil, id: 'focus-area-description', rows: 4, class: 'w-full form-textarea admin-form-textarea' %>
+        <%= label_tag :description, 'Description', class: 'block font-bold text-black' %>
+         <%= text_area_tag 'focus_area[description]', nil, id: 'focus-area-description', rows: 4, class: 'w-full form-textarea admin-form-textarea bg-white border border-gray-200 shadow-sm' %>
       </div>
       <div class="mb-2">
-        <%= label_tag :icon, 'Icon', class: 'block font-medium' %>
-        <%= text_field_tag 'focus_area[icon]', nil, id: 'focus-area-icon', class: 'w-full form-input admin-form-input' %>
+        <%= label_tag :icon, 'Icon', class: 'block font-bold text-black' %>
+         <%= text_field_tag 'focus_area[icon]', nil, id: 'focus-area-icon', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm' %>
       </div>
       <div class="mb-2">
-        <%= label_tag :display_order, 'Order', class: 'block font-medium' %>
+        <%= label_tag :display_order, 'Order', class: 'block font-bold text-black' %>
         <%= number_field_tag 'focus_area[display_order]', 0, id: 'focus-area-order', class: 'w-32 form-input' %>
       </div>
       <div class="mb-2">
         <%= check_box_tag 'focus_area[active]', '1', true, id: 'focus-area-active' %>
-        <%= label_tag 'focus-area-active', 'Active', class: 'ml-2' %>
+        <%= label_tag 'focus-area-active', 'Active', class: 'ml-2 font-bold text-black' %>
       </div>
       <div class="flex items-center">
         <%= submit_tag 'Save', class: 'btn btn-primary' %>

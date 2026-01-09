@@ -3,38 +3,41 @@
 <div class="grid grid-cols-2 gap-8 mb-6">
   <div>
     <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', root_path(anchor: 'who-we-are'), class: 'btn btn-secondary' %>
+    </div>
     <div class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_homepage_who_we_are_update_path, method: :patch, local: true, html: { multipart: true } do %>
         <p class="text-sm text-slate-600 mb-4">Edit the Who We Are section content.</p>
         <div class="mb-3">
-          <%= label_tag 'who_we_are[title]', 'Title', class: 'block font-medium' %>
-          <%= text_field_tag 'who_we_are[title]', (@who_we_are_content && (@who_we_are_content['title'] || @who_we_are_content[:title])), class: 'w-full form-input admin-form-input' %>
+          <%= label_tag 'who_we_are[title]', 'Title', class: 'block font-bold text-black' %>
+          <%= text_field_tag 'who_we_are[title]', (@who_we_are_content && (@who_we_are_content['title'] || @who_we_are_content[:title])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <div class="mb-3">
-          <%= label_tag 'who_we_are[subheading]', 'Subheading', class: 'block font-medium' %>
-          <%= text_field_tag 'who_we_are[subheading]', (@who_we_are_content && (@who_we_are_content['subheading'] || @who_we_are_content[:subheading])), class: 'w-full form-input admin-form-input' %>
+          <%= label_tag 'who_we_are[subheading]', 'Subheading', class: 'block font-bold text-black' %>
+          <%= text_field_tag 'who_we_are[subheading]', (@who_we_are_content && (@who_we_are_content['subheading'] || @who_we_are_content[:subheading])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <div class="mb-3">
-          <%= label_tag 'who_we_are[paragraph_one]', 'Paragraph one', class: 'block font-medium' %>
-          <%= text_area_tag 'who_we_are[paragraph_one]', (@who_we_are_content && (@who_we_are_content['paragraph_one'] || @who_we_are_content[:paragraph_one])), class: 'w-full form-input admin-form-input', rows: 4 %>
+          <%= label_tag 'who_we_are[paragraph_one]', 'Paragraph one', class: 'block font-bold text-black' %>
+          <%= text_area_tag 'who_we_are[paragraph_one]', (@who_we_are_content && (@who_we_are_content['paragraph_one'] || @who_we_are_content[:paragraph_one])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 4 %>
         </div>
         <div class="mb-3">
-          <%= label_tag 'who_we_are[paragraph_two]', 'Paragraph two', class: 'block font-medium' %>
-          <%= text_area_tag 'who_we_are[paragraph_two]', (@who_we_are_content && (@who_we_are_content['paragraph_two'] || @who_we_are_content[:paragraph_two])), class: 'w-full form-input admin-form-input', rows: 4 %>
+          <%= label_tag 'who_we_are[paragraph_two]', 'Paragraph two', class: 'block font-bold text-black' %>
+          <%= text_area_tag 'who_we_are[paragraph_two]', (@who_we_are_content && (@who_we_are_content['paragraph_two'] || @who_we_are_content[:paragraph_two])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 4 %>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <%= label_tag 'who_we_are[cta_label]', 'CTA label', class: 'block font-medium' %>
-            <%= text_field_tag 'who_we_are[cta_label]', (@who_we_are_content && (@who_we_are_content['cta_label'] || @who_we_are_content[:cta_label])), class: 'w-full form-input admin-form-input' %>
+            <%= label_tag 'who_we_are[cta_label]', 'CTA label', class: 'block font-bold text-black' %>
+            <%= text_field_tag 'who_we_are[cta_label]', (@who_we_are_content && (@who_we_are_content['cta_label'] || @who_we_are_content[:cta_label])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
           </div>
           <div>
-            <%= label_tag 'who_we_are[cta_link]', 'CTA link', class: 'block font-medium' %>
-            <%= text_field_tag 'who_we_are[cta_link]', (@who_we_are_content && (@who_we_are_content['cta_link'] || @who_we_are_content[:cta_link])), class: 'w-full form-input admin-form-input' %>
+            <%= label_tag 'who_we_are[cta_link]', 'CTA link', class: 'block font-bold text-black' %>
+            <%= text_field_tag 'who_we_are[cta_link]', (@who_we_are_content && (@who_we_are_content['cta_link'] || @who_we_are_content[:cta_link])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
           </div>
         </div>
         <div class="mb-4">
-          <%= label_tag 'who_we_are[image_url]', 'Image URL', class: 'block font-medium' %>
-          <%= text_field_tag 'who_we_are[image_url]', (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])), class: 'w-full form-input admin-form-input' %>
+          <%= label_tag 'who_we_are[image_url]', 'Image URL', class: 'block font-bold text-black' %>
+          <%= text_field_tag 'who_we_are[image_url]', (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <% current_image = defined?(@who_we_are_image_url) ? @who_we_are_image_url : (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])) %>
         <% if current_image.present? %>
@@ -49,7 +52,6 @@
         </div>
         <div class="flex gap-3">
           <%= submit_tag 'Save Who We Are', class: 'btn btn-primary' %>
-          <%= link_to 'Preview live section', root_path(anchor: 'who-we-are'), class: 'btn btn-secondary' %>
         </div>
       <% end %>
     </div>

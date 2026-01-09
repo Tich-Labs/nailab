@@ -1,13 +1,13 @@
 <%# Shared partial for About section edit forms - following Homepage patterns %>
 <div class="bg-white p-4 rounded shadow">
   <%= form_with url: local_assigns[:form_url], method: :patch, local: true do |form| %>
-    <p class="text-sm text-slate-600 mb-4">Update content for this About page section.</p>
+    <p class="text-sm text-slate-600 mb-4">Update content for Our Impact section.</p>
     <div class="mb-3">
-      <%= label_tag 'section_payload[title]', 'Title', class: 'block font-medium' %>
-      <%= text_field_tag 'section_payload[title]', local_assigns[:section_content]["title"], class: 'w-full form-input admin-form-input' %>
+      <%= label_tag 'section_payload[title]', 'Title', class: 'block font-bold text-black' %>
+      <%= text_field_tag 'section_payload[title]', local_assigns[:section_content]["title"], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
     </div>
     <div class="mb-3">
-      <%= label_tag 'section_payload[description]', 'Description', class: 'block font-medium' %>
+      <%= label_tag 'section_payload[description]', 'Description', class: 'block font-bold text-black' %>
       <% 
         # Priority: description first, then paragraph_one as fallback, then empty string
         description_value = if local_assigns[:section_content]["description"].present?
@@ -18,7 +18,7 @@
                            ""
                          end
       %>
-      <%= text_area_tag 'section_payload[description]', description_value, rows: 6, class: 'w-full form-input admin-form-input' %>
+      <%= text_area_tag 'section_payload[description]', description_value, rows: 6, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
     </div>
     <% if local_assigns[:stats] %>
       <div class="mb-4">
@@ -26,8 +26,8 @@
         <div class="space-y-2">
           <% local_assigns[:stats].each_with_index do |stat, idx| %>
             <div class="grid grid-cols-2 gap-3">
-              <%= text_field_tag 'section_payload[stats][][value]', stat[:value] || stat["value"], placeholder: 'Value (e.g. 10+)', class: 'w-full form-input admin-form-input' %>
-              <%= text_field_tag 'section_payload[stats][][label]', stat[:label] || stat["label"], placeholder: 'Label (e.g. Years of Impact)', class: 'w-full form-input admin-form-input' %>
+                <%= text_field_tag 'section_payload[stats][][value]', stat[:value] || stat["value"], placeholder: 'Value (e.g. 10+)', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+              <%= text_field_tag 'section_payload[stats][][label]', stat[:label] || stat["label"], placeholder: 'Label (e.g. Years of Impact)', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
             </div>
           <% end %>
         </div>
@@ -35,7 +35,6 @@
     <% end %>
     <div class="flex gap-3">
       <%= form.submit 'Save section', class: 'btn btn-primary' %>
-      <%= link_to 'Preview live section', local_assigns[:preview_url], class: 'btn btn-secondary' %>
     </div>
   <% end %>
 </div>
