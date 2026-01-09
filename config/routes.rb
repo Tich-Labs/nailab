@@ -87,9 +87,14 @@ Rails.application.routes.draw do
     get "pricing/:slug/edit", to: "pricing_page#edit", as: :edit_admin_pricing_page_slug
     patch "pricing/:slug", to: "pricing_page#update", as: :admin_pricing_page_slug
 
+    # Friendly slug routes for contact editor (allows /admin/contact_page/contact/edit)
+    get "contact_page/:slug/edit", to: "contact_page#edit", as: :edit_admin_contact_page_slug
+    patch "contact_page/:slug", to: "contact_page#update", as: :admin_contact_page_slug
+
     resources :logos, only: %i[index new create update destroy]
     resources :testimonials, only: %i[index new create edit update destroy]
     resources :pricing_page, only: %i[edit update]
+    resources :contact_page, only: %i[edit update]
     # Friendly custom Focus Areas editor (override RailsAdmin path) - define before mounting RailsAdmin
     get "focus_area", to: "focus_areas#index", as: :focus_areas
     get "focus_area/new", to: "focus_areas#new", as: :new_focus_area

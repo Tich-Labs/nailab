@@ -1,0 +1,41 @@
+<div class="bg-white p-6 rounded shadow space-y-5">
+  <div>
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Page Title</p>
+    <h2 class="text-2xl font-bold text-slate-900"><%= @contact_content["title"].presence || 'Contact Us' %></h2>
+    <p class="text-sm text-slate-600 mt-2"><%= @contact_content["intro"].presence || 'Have a question, partnership inquiry, or want to get in touch? We\'d love to hear from you.' %></p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4">
+    <div class="p-4 bg-slate-50 rounded">
+      <p class="font-semibold">Email</p>
+      <p class="text-sm text-slate-700"><%= @contact_content["email"].presence || 'ceo@nailab.co.ke' %></p>
+      <p class="font-semibold mt-3">Phone</p>
+      <p class="text-sm text-slate-700"><%= @contact_content["phone"].presence || '+254 790 492 467' %></p>
+    </div>
+
+    <div class="p-4 rounded border">
+      <p class="font-semibold mb-2">Send us a message</p>
+      <form>
+        <div class="grid grid-cols-1 gap-2">
+          <input placeholder="<%= (@contact_content[:form] || {})[\"name_placeholder\"] || 'Your full name' %>" class="w-full form-input admin-form-input mb-2" />
+          <input placeholder="<%= (@contact_content[:form] || {})[\"email_placeholder\"] || 'you@example.com' %>" class="w-full form-input admin-form-input mb-2" />
+          <input placeholder="<%= (@contact_content[:form] || {})[\"subject_placeholder\"] || 'e.g. Partnership Inquiry' %>" class="w-full form-input admin-form-input mb-2" />
+          <textarea placeholder="<%= (@contact_content[:form] || {})[\"message_placeholder\"] || 'Tell us how we can help...' %>" rows="4" class="w-full form-input admin-form-input"></textarea>
+          <button class="btn btn-primary mt-2"><%= (@contact_content[:form] || {})['submit_label'].presence || 'Send Message' %></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Frequently Asked Questions</p>
+    <div class="space-y-3 mt-3">
+      <% (@contact_content[:faqs] || []).each do |f| %>
+        <div>
+          <p class="font-semibold"><%= f[:question] || f['question'] %></p>
+          <p class="text-sm text-slate-600"><%= f[:answer] || f['answer'] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

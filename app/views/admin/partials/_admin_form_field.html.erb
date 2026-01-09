@@ -1,0 +1,10 @@
+<div class="mb-3">
+  <%# locals: name, value, label_text, placeholder, type %>
+  <%= label_tag local_assigns[:name], (local_assigns[:label_text] || ''), class: 'block font-medium text-black' %>
+  <% field_type = (local_assigns[:type] || 'text') %>
+  <% if field_type == 'text' %>
+    <%= text_field_tag local_assigns[:name], (local_assigns[:value] || ''), placeholder: (local_assigns[:placeholder] || ''), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+  <% else %>
+    <%= text_field_tag local_assigns[:name], (local_assigns[:value] || ''), placeholder: (local_assigns[:placeholder] || ''), type: field_type, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+  <% end %>
+</div>
