@@ -32,3 +32,56 @@
     </div>
   </div>
 <% end %>
+
+<%# Inline live-preview mirroring script for editor -> preview (works for the 3 key sections) %>
+<% if ['why_nailab_exists','our_impact','vision_mission'].include?(@section_key) %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      try {
+        var section = '<%= @section_key %>';
+        if(section === 'why_nailab_exists'){
+          var titleInput = document.getElementById('editor_why_title');
+          var descInput = document.getElementById('editor_why_description');
+          var pTitle = document.getElementById('preview_why_title');
+          var pDesc = document.getElementById('preview_why_description');
+          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
+          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+        }
+        if(section === 'our_impact'){
+          var titleInput = document.getElementById('editor_our_impact_title');
+          var descInput = document.getElementById('editor_our_impact_description');
+          var pTitle = document.getElementById('preview_our_impact_title');
+          var pDesc = document.getElementById('preview_our_impact_description');
+          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
+          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+          // mirror stats: assume matching index-based preview elements
+          var idx = 0;
+          while(true){
+            var inputVal = document.getElementById('editor_our_impact_stat_value_' + idx);
+            var inputLabel = document.getElementById('editor_our_impact_stat_label_' + idx);
+            var prevVal = document.getElementById('preview_our_impact_stat_value_' + idx);
+            var prevLabel = document.getElementById('preview_our_impact_stat_label_' + idx);
+            if(!inputVal && !inputLabel) break;
+            if(inputVal && prevVal){ (function(iV, pV){ iV.addEventListener('input', function(e){ pV.textContent = e.target.value; }); })(inputVal, prevVal); }
+            if(inputLabel && prevLabel){ (function(iL, pL){ iL.addEventListener('input', function(e){ pL.textContent = e.target.value; }); })(inputLabel, prevLabel); }
+            idx += 1;
+          }
+        }
+        if(section === 'vision_mission'){
+          var mTitle = document.getElementById('editor_mission_title');
+          var mDesc = document.getElementById('editor_mission_description');
+          var vTitle = document.getElementById('editor_vision_title');
+          var vDesc = document.getElementById('editor_vision_description');
+          var pMTitle = document.getElementById('preview_mission_title');
+          var pMDesc = document.getElementById('preview_mission_description');
+          var pVTitle = document.getElementById('preview_vision_title');
+          var pVDesc = document.getElementById('preview_vision_description');
+          if(mTitle && pMTitle){ mTitle.addEventListener('input', function(e){ pMTitle.textContent = e.target.value; }); }
+          if(mDesc && pMDesc){ mDesc.addEventListener('input', function(e){ pMDesc.textContent = e.target.value; }); }
+          if(vTitle && pVTitle){ vTitle.addEventListener('input', function(e){ pVTitle.textContent = e.target.value; }); }
+          if(vDesc && pVDesc){ vDesc.addEventListener('input', function(e){ pVDesc.textContent = e.target.value; }); }
+        }
+      } catch(err){ console.error('Preview mirror init error', err); }
+    });
+  </script>
+<% end %>

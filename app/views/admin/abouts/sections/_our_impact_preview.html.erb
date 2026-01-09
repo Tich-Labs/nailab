@@ -1,0 +1,24 @@
+<h2 class="font-semibold mt-2 mb-16">Preview</h2>
+<div class="bg-white p-6 rounded shadow space-y-5">
+  <div class="space-y-4">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Section Title</p>
+      <h2 id="preview_our_impact_title" class="text-2xl font-bold text-slate-900"><%= @section_content["title"] %></h2>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Description</p>
+      <p id="preview_our_impact_description" class="text-sm text-slate-600"><%= @section_content["description"] %></p>
+    </div>
+    <div class="space-y-4 bg-slate-50 p-4 rounded-xl">
+      <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Impact Stats</p>
+      <div class="flex flex-row justify-center items-center gap-6 flex-wrap">
+        <% (@section_content["stats"] || []).each_with_index do |stat, idx| %>
+          <div class="text-center">
+            <p id="preview_our_impact_stat_value_<%= idx %>" class="text-3xl font-bold text-slate-800"><%= stat[:value] || stat["value"] %></p>
+            <p id="preview_our_impact_stat_label_<%= idx %>" class="text-xs font-semibold uppercase tracking-wider text-slate-500"><%= stat[:label] || stat["label"] %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
