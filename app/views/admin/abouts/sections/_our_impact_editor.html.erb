@@ -1,36 +1,36 @@
 <h2 class="font-semibold mb-3">Editor</h2>
 <div class="mb-4 text-left">
-  <%= link_to 'Preview live section', about_path('our_impact'), class: 'btn btn-secondary' %>
-</div>
-<div class="bg-white p-4 rounded shadow">
-  <%= form_with url: admin_about_section_update_path(section: 'our_impact'), method: :patch, local: true do |form| %>
-    <p class="text-sm text-slate-600 mb-4">Update the our impact section content.</p>
-    <div class="mb-3">
-      <%= label_tag 'section_payload[title]', 'Title', class: 'block font-bold text-black' %>
-      <%= text_field_tag 'section_payload[title]', @section_content["title"], id: 'editor_our_impact_title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+    <%= link_to 'Preview live section', about_path(anchor: 'our-impact'), class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
     </div>
-    <div class="mb-3">
-      <%= label_tag 'section_payload[description]', 'Description', class: 'block font-bold text-black' %>
-      <%= text_area_tag 'section_payload[description]', @section_content["description"], id: 'editor_our_impact_description', rows: 6, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-    </div>
-    <div class="mb-3">
-      <label class="block font-bold text-black mb-2">Impact Stats</label>
-      <% (@section_content["stats"] || []).each_with_index do |stat, idx| %>
-        <div class="flex gap-3 mb-2">
-          <%= text_field_tag "section_payload[stats][#{idx}][value]", stat[:value] || stat["value"], id: "editor_our_impact_stat_value_#{idx}", placeholder: 'Value (e.g. 10+)', class: 'w-24 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-          <%= text_field_tag "section_payload[stats][#{idx}][label]", stat[:label] || stat["label"], id: "editor_our_impact_stat_label_#{idx}", placeholder: 'Label (e.g. Years of Impact)', class: 'flex-1 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+    <div class="bg-white p-4 rounded shadow">
+    <%= form_with url: admin_about_section_update_path(section: 'our_impact'), method: :patch, local: true do |form| %>
+        <p class="text-sm text-slate-600 mb-4">Update the our impact section content.</p>
+        <div class="mb-3">
+        <%= label_tag 'section_payload[title]', 'Title', class: 'block font-bold text-black' %>
+        <%= text_field_tag 'section_payload[title]', @section_content["title"], id: 'editor_our_impact_title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
-      <% end %>
-      <div class="mb-3">
-        <span class="text-sm font-medium text-gray-500">Add stat</span>
+        <div class="mb-3">
+        <%= label_tag 'section_payload[description]', 'Description', class: 'block font-bold text-black' %>
+        <%= text_area_tag 'section_payload[description]', @section_content["description"], id: 'editor_our_impact_description', rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+        </div>
+        <div class="mb-3">
+        <label class="block font-bold text-black mb-2">Impact Stats</label>
+        <% (@section_content["stats"] || []).each_with_index do |stat, idx| %>
+            <div class="flex gap-3 mb-2">
+            <%= text_field_tag 'section_payload[stats][][value]', stat[:value] || stat["value"], id: "editor_our_impact_stat_value_#{idx}", placeholder: 'Value (e.g. 10+)', class: 'w-24 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+            <%= text_field_tag 'section_payload[stats][][label]', stat[:label] || stat["label"], id: "editor_our_impact_stat_label_#{idx}", placeholder: 'Label (e.g. Years of Impact)', class: 'flex-1 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+            </div>
+        <% end %>
+        <div class="mb-3">
+            <span class="text-sm font-medium text-gray-500">Add stat</span>
+            <div class="flex gap-3">
+            <%= text_field_tag 'section_payload[stats][][value]', "", id: 'editor_our_impact_stat_value_new', placeholder: 'Value (e.g. 10+)', class: 'w-24 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+            <%= text_field_tag 'section_payload[stats][][label]', "", id: 'editor_our_impact_stat_label_new', placeholder: 'Label (e.g. Years of Impact)', class: 'flex-1 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+            </div>
+        </div>
+        </div>
         <div class="flex gap-3">
-          <%= text_field_tag 'section_payload[stats][][value]', "", id: 'editor_our_impact_stat_value_new', placeholder: 'Value (e.g. 10+)', class: 'w-24 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-          <%= text_field_tag 'section_payload[stats][][label]', "", id: 'editor_our_impact_stat_label_new', placeholder: 'Label (e.g. Years of Impact)', class: 'flex-1 form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+        <%= form.submit 'Save Our Impact', class: 'btn btn-primary' %>
         </div>
-      </div>
-    </div>
-    <div class="flex gap-3">
-      <%= form.submit 'Save Our Impact', class: 'btn btn-primary' %>
-    </div>
-  <% end %>
+    <% end %>
 </div>

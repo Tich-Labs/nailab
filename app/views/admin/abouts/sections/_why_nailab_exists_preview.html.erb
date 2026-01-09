@@ -3,11 +3,26 @@
     <div class="space-y-4">
         <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Section Title</p>
-        <h2 id="preview_why_title" class="text-2xl font-bold text-slate-900"><%= @section_content["title"] %></h2>
+        <h2 id="preview_why_title" class="text-2xl font-bold text-slate-900"><%= (@section_content && (@section_content['title'] || @section_content[:title])) %></h2>
         </div>
         <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Content</p>
-        <p id="preview_why_description" class="text-sm text-slate-600"><%= @section_content["description"] %></p>
+        <% 
+            parts = []
+            if @section_content && (@section_content['description'].present? || @section_content[:description].present?)
+            desc = (@section_content['description'] || @section_content[:description]).to_s
+            parts = desc.split(/\r?\n\r?\n+/).map(&:strip).reject(&:blank?)
+            else
+            parts << (@section_content['paragraph_one'] || @section_content[:paragraph_one]) if @section_content && ((@section_content['paragraph_one'] || @section_content[:paragraph_one]).present?)
+            parts << (@section_content['paragraph_two'] || @section_content[:paragraph_two]) if @section_content && ((@section_content['paragraph_two'] || @section_content[:paragraph_two]).present?)
+            parts << (@section_content['paragraph_three'] || @section_content[:paragraph_three]) if @section_content && ((@section_content['paragraph_three'] || @section_content[:paragraph_three]).present?)
+            end
+        %>
+        <div id="preview_why_description">
+            <% parts.each do |p| %>
+            <p class="text-sm text-slate-600"><%= p %></p>
+            <% end %>
+        </div>
         </div>
     </div>
 </div>

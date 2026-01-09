@@ -3,7 +3,7 @@
   <div>
     <h2 class="font-semibold mb-2">Editor</h2>
     <div class="mb-4">
-      <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'btn btn-secondary' %>
+      <%= link_to 'Preview live section', root_path(anchor: 'focus-areas'), class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
     </div>
     <div id="editor" class="bg-white p-4 rounded shadow">
       <%= form_with url: admin_focus_areas_path, id: 'focus-area-form', local: true, html: { multipart: true } do |f| %>
