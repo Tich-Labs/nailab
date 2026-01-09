@@ -1,6 +1,10 @@
 
   class ApplicationController < ActionController::Base
-    helper AdminDashboardHelper
+    begin
+      helper AdminDashboardHelper
+    rescue NameError
+      # AdminDashboardHelper not yet loaded during initialization; helper will be autoloaded when needed
+    end
     before_action :redirect_to_onboarding_if_needed, unless: :devise_controller?
     before_action :store_return_to, if: :devise_controller?
     protect_from_forgery with: :exception

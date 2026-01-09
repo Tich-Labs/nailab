@@ -11,73 +11,79 @@ module AdminDashboardHelper
     [
       {
         title: "🏠 Homepage",
-        path: safe_path { main_app.admin_homepage_sections_edit_path },
+        path: safe_path { "/admin/homepage/sections/edit" },
         sections: [
-          { label: "Hero Section", path: main_app.admin_homepage_hero_path, icon: "🌅" },
-          { label: "Who We Are", path: main_app.admin_homepage_who_we_are_path, icon: "🤝" },
-          { label: "How Nailab Supports You", path: main_app.admin_homepage_how_we_support_path, icon: "💡" },
-          { label: "Our Focus Areas", path: main_app.admin_homepage_focus_areas_path, icon: "🎯" },
-          { label: "Connect. Grow. Impact.", path: main_app.admin_homepage_connect_grow_impact_path, icon: "🌱" },
-          { label: "Testimonials", path: main_app.admin_testimonials_path, icon: "💬" },
-          { label: "Impact Network (Logos)", path: main_app.admin_homepage_impact_network_path, icon: "🏷️" },
-          { label: "CTA Section", path: main_app.admin_homepage_cta_path, icon: "📣" }
+          { label: "Hero Section", path: "/admin/homepage/hero", icon: "🌅" },
+          { label: "Who We Are", path: "/admin/homepage/who_we_are", icon: "🤝" },
+          { label: "How Nailab Supports You", path: "/admin/homepage/how_we_support", icon: "💡" },
+          { label: "Our Focus Areas", path: "/admin/homepage/focus_areas", icon: "🎯" },
+          { label: "Connect. Grow. Impact.", path: "/admin/homepage/connect_grow_impact", icon: "🌱" },
+          { label: "Testimonials", path: "/admin/testimonials", icon: "💬" },
+          { label: "Impact Network (Logos)", path: "/admin/homepage/impact_network", icon: "🏷️" },
+          { label: "CTA Section", path: "/admin/homepage/cta", icon: "📣" }
         ]
       },
       {
         title: "About",
-        path: safe_path { main_app.admin_about_sections_edit_path },
+        path: safe_path { "/admin/about/sections/edit" },
         sections: [
-          { label: "Why Nailab Exists", path: safe_path { main_app.admin_about_section_edit_path(section: "why_nailab_exists") }, icon: "❓" },
-          { label: "Our Impact", path: safe_path { main_app.admin_about_section_edit_path(section: "our_impact") }, icon: "📊" },
-          { label: "Vision & Mission", path: safe_path { main_app.admin_about_section_edit_path(section: "vision_mission") }, icon: "🎯" },
-          { label: "What Drives Us", path: safe_path { main_app.admin_about_section_edit_path(section: "what_drives_us") }, icon: "🔥" }
+          { label: "Why Nailab Exists", path: "/admin/about/sections/why_nailab_exists/edit", icon: "❓" },
+          { label: "Our Impact", path: "/admin/about/sections/our_impact/edit", icon: "📊" },
+          { label: "Vision & Mission", path: "/admin/about/sections/vision_mission/edit", icon: "🎯" },
+          { label: "What Drives Us", path: "/admin/about/sections/what_drives_us/edit", icon: "🔥" }
         ]
       },
       {
         title: "Pricing",
-        path: safe_path { main_app.admin_edit_admin_pricing_page_simple_path },
+        path: safe_path { "/admin/pricing/edit" },
         sections: [
-          { label: "Edit page", path: safe_path { main_app.admin_edit_admin_pricing_page_simple_path }, icon: "💰" }
+          { label: "Edit page", path: "/admin/pricing/edit", icon: "💰" }
         ]
       },
       {
         title: "Contact Us",
+        path: safe_path { "/admin/contact_page/1/edit" },
         sections: [
-          { label: "Edit page", path: rails_admin.edit_path(model_name: "contact_page", id: 1), icon: "📞" }
+          { label: "Edit page", path: "/admin/contact_page/1/edit", icon: "📞" }
         ]
       },
       {
         title: "Programs",
+        path: safe_path { "/admin/programs_page/1/edit" },
         sections: [
-          { label: "Edit page", path: rails_admin.edit_path(model_name: "programs_page", id: 1), icon: "📚" }
+          { label: "Edit page", path: "/admin/programs_page/1/edit" }
         ]
       },
       {
         title: "Resources",
+        path: safe_path { "/admin/blog_page/1/edit" },
         sections: [
-          { label: "Blog", path: rails_admin.edit_path(model_name: "blog_page", id: 1), icon: "📝" },
-          { label: "Knowledge Hub", path: rails_admin.edit_path(model_name: "knowledge_hub_page", id: 1), icon: "📚" },
-          { label: "Events & Webinars", path: rails_admin.edit_path(model_name: "events_webinars_page", id: 1), icon: "🎤" },
-          { label: "Opportunities", path: rails_admin.edit_path(model_name: "opportunities_page", id: 1), icon: "🎯" }
+          { label: "Blog", path: "/admin/blog_page/1/edit" },
+          { label: "Knowledge Hub", path: "/admin/knowledge_hub_page/1/edit" },
+          { label: "Events & Webinars", path: "/admin/events_webinars_page/1/edit" },
+          { label: "Opportunities", path: "/admin/opportunities_page/1/edit" }
         ]
       },
       {
         title: "👥 Mentorship",
+        path: safe_path { "/admin/mentor" },
         sections: [
-          { label: "Mentors", path: rails_admin.index_path(model_name: "mentor"), icon: "🧑‍🏫" },
-          { label: "Requests", path: rails_admin.index_path(model_name: "mentorship_request"), icon: "🧾", badge: @admin_pending_requests, description: "View mentorship requests with mentor, mentee, and details" }
+          { label: "Mentors", path: "/admin/mentor" },
+          { label: "Requests", path: "/admin/mentorship_request", badge: @admin_pending_requests }
         ]
       },
       {
         title: "💼 Startups",
+        path: safe_path { "/admin/startup_profile" },
         sections: [
-          { label: "Startups", path: rails_admin.index_path(model_name: "startup_profile"), icon: "🚀" }
+          { label: "Startups", path: "/admin/startup_profile" }
         ]
       },
       {
         title: "💬 Messaging & Comms",
+        path: safe_path { "/admin/support_ticket" },
         sections: [
-          { label: "Support Tickets", path: rails_admin.index_path(model_name: "support_ticket"), icon: "🎫" }
+          { label: "Support Tickets", path: "/admin/support_ticket" }
         ]
       }
     ]
@@ -93,16 +99,46 @@ module AdminDashboardHelper
     content_tag(:span, status.to_s.humanize, class: "rounded-full px-2 py-0.5 text-xs font-semibold #{color}")
   end
 
-  # Accept a block that returns a path; if the helper or route is missing, return fallback '#'
-  def safe_path
-    yield
+  def safe_path(&block)
+    if block.respond_to?(:call)
+      yield block
+    else
+      "#"
+    end
   rescue NameError, NoMethodError
-    nil
+    "#"
   end
 
   def admin_breadcrumbs
     crumbs = [ { label: "Admin", path: rails_admin.dashboard_path } ]
-    crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
+    if params[:controller]&.start_with?("rails_admin/")
+      if params[:model_name].present?
+        model_label = if @object.respond_to?(:full_name) && @object.full_name.present?
+          @object.full_name
+        elsif @object.respond_to?(:name) && @object.name.present?
+          @object.email
+        elsif @object.respond_to?(:id)
+          "##{@object.class.name} #{@object.id}"
+        else
+          @object.to_s
+        end
+
+        crumbs << { label: model_label, path: model_path }
+      end
+    elsif params[:controller] == "admin/homepage"
+      crumbs << { label: "Homepage", path: admin_homepage_sections_edit_path }
+      section_label = HOMEPAGE_SECTION_LABELS[params[:action]] || action_name.titleize
+      crumbs << { label: section_label, path: request.path }
+    elsif params[:controller] == "admin/homepages" && params[:action] == "edit"
+      begin
+        crumbs << { label: "Sections", path: admin_homepage_sections_edit_path }
+      rescue StandardError
+        crumbs << { label: "Sections", path: request.path }
+      end
+      crumbs << { label: action_name.titleize, path: request.path }
+    else
+      crumbs << { label: action_name.titleize, path: request.path } unless action_name == "dashboard"
+    end
     crumbs
   end
 end

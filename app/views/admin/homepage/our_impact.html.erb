@@ -1,49 +1,16 @@
-<h1>Edit Our Impact</h1>
+<h1 class="text-2xl font-bold mb-4">Edit: Our Impact</h1>
 
-<%= form_with url: admin_about_sections_our_impact_path, method: :patch, local: true do |form| %>
-  <div class="mb-4">
-    <%= form.label :title, "Title", class: "block text-sm font-medium text-gray-700" %>
-    <%= form.text_field :title, value: @impact_title, class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow">
+      <%= render partial: "admin/abouts/partials/edit_our_impact" %>
+    </div>
   </div>
-
-  <div class="mb-4">
-    <%= form.label :intro, "Description", class: "block text-sm font-medium text-gray-700" %>
-    <%= form.text_area :intro, value: @impact_intro, class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-  </div>
-
-  <h2 class="text-lg font-medium leading-6 text-gray-900">Cards</h2>
-  <div id="stats-fields" class="space-y-4">
-    <% @impact_stats.each_with_index do |stat, index| %>
-      <div class="p-4 bg-white rounded-lg shadow border border-gray-100">
-        <div class="mb-2">
-          <%= form.label "impact_stats[#{index}][value]", "Value", class: "block text-sm font-medium text-gray-700" %>
-          <%= form.text_field "impact_stats[#{index}][value]", value: stat[:value], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-        </div>
-
-        <div>
-          <%= form.label "impact_stats[#{index}][label]", "Label", class: "block text-sm font-medium text-gray-700" %>
-          <%= form.text_field "impact_stats[#{index}][label]", value: stat[:label], class: "mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="mt-6">
-    <%= form.submit "Save Changes", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-  </div>
-<% end %>
-
-<h2 class="mt-2 mb-16 text-lg font-medium leading-6 text-gray-900">Preview</h2>
-<div class="mt-4 p-6 bg-white shadow rounded-lg">
-  <h3 class="text-xl font-bold text-gray-900"><%= @impact_title %></h3>
-  <p class="mt-2 text-gray-700"><%= @impact_intro %></p>
-
-  <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <% @impact_stats.each do |stat| %>
-      <div class="p-4 bg-white rounded-lg shadow border border-gray-100">
-        <p class="text-2xl font-bold text-indigo-600"><%= stat[:value] %></p>
-        <p class="mt-1 text-sm text-gray-700"><%= stat[:label] %></p>
-      </div>
-    <% end %>
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow">
+      <%= render partial: "admin/abouts/our_impact/preview" %>
+    </div>
   </div>
 </div>

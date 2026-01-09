@@ -1,0 +1,20 @@
+<h2 class="font-semibold mb-3">Editor</h2>
+<div class="mb-4 text-left">
+  <%= link_to 'Preview live section', about_path('why_nailab_exists'), class: 'btn btn-secondary' %>
+</div>
+<div class="bg-white p-4 rounded shadow">
+  <%= form_with url: admin_about_section_update_path(section: 'why_nailab_exists'), method: :patch, local: true do |form| %>
+    <p class="text-sm text-slate-600 mb-4">Update the Why Nailab Exists section content.</p>
+    <div class="mb-3">
+      <%= label_tag 'section_payload[title]', 'Title', class: 'block font-bold text-black' %>
+      <%= text_field_tag 'section_payload[title]', @section_content["title"], id: 'editor_why_title', class: 'w-full form-input admin-form-input' %>
+    </div>
+    <div class="mb-3">
+      <%= label_tag 'section_payload[description]', 'Description', class: 'block font-bold text-black' %>
+      <%= text_area_tag 'section_payload[description]', @section_content["description"], id: 'editor_why_description', rows: 6, class: 'w-full form-input admin-form-input' %>
+    </div>
+    <div class="flex gap-3">
+      <%= form.submit 'Save Why Nailab Exists', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

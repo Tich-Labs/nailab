@@ -1,0 +1,102 @@
+<h1 class="text-2xl font-bold mb-4">Edit: Contact Page</h1>
+<div class="grid grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: edit_admin_contact_page_path(@contact_page), method: :patch, local: true do |form| %>
+        <p class="text-sm text-slate-600 mb-4">Update the Contact page content and FAQs.</p>
+
+        <%= render 'admin/partials/admin_form_field', name: 'contact_content[title]', value: @contact_content["title"], label_text: 'Page Title' %>
+
+        <%= render 'admin/partials/admin_form_textarea', name: 'contact_content[intro]', value: @contact_content["intro"], label_text: 'Intro / Lead', rows: 4 %>
+
+        <div class="mb-3 grid grid-cols-2 gap-3">
+            <div>
+              <%= render 'admin/partials/admin_form_field', name: 'contact_content[email]', value: @contact_content["email"], label_text: 'Email' %>
+            </div>
+            <div>
+              <%= render 'admin/partials/admin_form_field', name: 'contact_content[phone]', value: @contact_content["phone"], label_text: 'Phone' %>
+            </div>
+        </div>
+
+        <div class="mb-3">
+          <p class="font-medium mb-2">Contact Form Placeholders</p>
+          <div class="grid grid-cols-2 gap-3">
+            <%= text_field_tag 'contact_content[form][name_placeholder]', (@contact_content[:form] || {})["name_placeholder"], placeholder: 'Name placeholder', class: 'w-full form-input admin-form-input' %>
+            <%= text_field_tag 'contact_content[form][email_placeholder]', (@contact_content[:form] || {})["email_placeholder"], placeholder: 'Email placeholder', class: 'w-full form-input admin-form-input' %>
+            <%= text_field_tag 'contact_content[form][subject_placeholder]', (@contact_content[:form] || {})["subject_placeholder"], placeholder: 'Subject placeholder', class: 'w-full form-input admin-form-input' %>
+            <%= text_field_tag 'contact_content[form][message_placeholder]', (@contact_content[:form] || {})["message_placeholder"], placeholder: 'Message placeholder', class: 'w-full form-input admin-form-input' %>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <p class="font-medium mb-2">Frequently Asked Questions</p>
+          <% (@faqs || []).each_with_index do |f, i| %>
+            <div class="mb-2 border rounded p-3">
+              <%= render 'admin/partials/admin_form_field', name: "contact_content[faqs][#{i}][question]", value: (f[:question] || f['question']), label_text: 'Question' %>
+              <%= render 'admin/partials/admin_form_textarea', name: "contact_content[faqs][#{i}][answer]", value: (f[:answer] || f['answer']), label_text: 'Answer', rows: 3 %>
+            </div>
+          <% end %>
+          <div class="mb-2 border rounded p-3">
+            <span class="text-sm text-slate-500">Add a new FAQ</span>
+            <%= render 'admin/partials/admin_form_field', name: 'contact_content[faqs][new][question]', value: '', label_text: 'Question' %>
+            <%= render 'admin/partials/admin_form_textarea', name: 'contact_content[faqs][new][answer]', value: '', label_text: 'Answer', rows: 3 %>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <%= form.submit 'Save Contact Page', class: 'btn btn-primary' %>
+          <%= link_to 'Preview live page', contact_path, class: 'btn btn-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow space-y-5">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Page Title</p>
+        <h2 class="text-2xl font-bold text-slate-900"><%= @contact_content["title"].presence || 'Contact Us' %></h2>
+        <p class="text-sm text-slate-600 mt-2"><%= @contact_content["intro"].presence || 'Have a question, partnership inquiry, or want to get in touch? We\'d love to hear from you.' %></p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4">
+        <div class="p-4 bg-slate-50 rounded">
+          <p class="font-semibold">Email</p>
+          <p class="text-sm text-slate-700"><%= @contact_content["email"].presence || 'ceo@nailab.co.ke' %></p>
+          <p class="font-semibold mt-3">Phone</p>
+          <p class="text-sm text-slate-700"><%= @contact_content["phone"].presence || '+254 790 492 467' %></p>
+        </div>
+
+        <div class="p-4 rounded border">
+          <p class="font-semibold mb-2">Send us a message</p>
+          <form>
+            <div class="grid grid-cols-1 gap-2">
+              <input placeholder="<%= (@contact_content[:form] || {})['name_placeholder'] || 'Your full name' %>" class="w-full form-input admin-form-input mb-2" />
+              <input placeholder="<%= (@contact_content[:form] || {})['email_placeholder'] || 'you@example.com' %>" class="w-full form-input admin-form-input mb-2" />
+              <input placeholder="<%= (@contact_content[:form] || {})['subject_placeholder'] || 'e.g. Partnership Inquiry' %>" class="w-full form-input admin-form-input mb-2" />
+              <textarea placeholder="<%= (@contact_content[:form] || {})['message_placeholder'] || 'Tell us how we can help...' %>" rows="4" class="w-full form-input admin-form-input"></textarea>
+              <button class="btn btn-primary mt-2"><%= (@contact_content[:form] || {})['submit_label'].presence || 'Send Message' %></button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Frequently Asked Questions</p>
+        <div class="space-y-3 mt-3">
+          <% (@contact_content[:faqs] || []).each do |f| %>
+            <div>
+              <p class="font-semibold"><%= f[:question] || f['question'] %></p>
+              <p class="text-sm text-slate-600"><%= f[:answer] || f['answer'] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <p class="text-xs text-slate-500 mt-6">Preview reflects current contact page content.</p>
+  </div>
+</div>
+

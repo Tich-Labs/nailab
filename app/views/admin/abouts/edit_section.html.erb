@@ -1,39 +1,87 @@
+<%# Homepage Sections Editor - separate partials for editor and preview for key sections %>
 <h1 class="text-2xl font-bold mb-4">Edit: <%= @section_title %></h1>
 
-<div class="grid grid-cols-2 gap-8 mb-6">
-  <div>
-    <h2 class="font-semibold mb-3">Editor</h2>
-    <div class="mb-4">
-      <% if @section_key == 'why_nailab_exists' %>
-        <%= link_to 'Preview live section', '/about#why-nailab-exists', class: 'btn btn-secondary' %>
-      <% elsif @section_key == 'our_impact' %>
-        <%= link_to 'Preview live section', '/about#our-impact', class: 'btn btn-secondary' %>
-      <% elsif @section_key == 'vision_mission' %>
-        <%= link_to 'Preview live section', '/about#vision-mission', class: 'btn btn-secondary' %>
-      <% elsif @section_key == 'what_drives_us' %>
-        <%= link_to 'Preview live section', '/about#what-drives-us', class: 'btn btn-secondary' %>
+<% if ['why_nailab_exists','our_impact','vision_mission'].include?(@section_key) %>
+  <div class="grid grid-cols-2 gap-8 mb-6">
+    <div>
+      <%= render "admin/abouts/sections/#{@section_key}_editor" %>
+    </div>
+    <div>
+      <%= render "admin/abouts/sections/#{@section_key}_preview" %>
+      <p class="text-xs text-slate-500 mt-6">Preview shows the current section content. Actual styling may vary on the live About page.</p>
+    </div>
+  </div>
+<% else %>
+  <div class="space-y-6 mb-6">
+    <div class="bg-white p-4 rounded shadow">
+      <%= form_with url: admin_about_section_update_path(section: @section_key), method: :patch, local: true do |form| %>
+        <p class="text-sm text-slate-600 mb-4">Update the <%= @section_key.gsub('_', ' ').downcase %> section content.</p>
+        <div class="mb-3">
+          <%= label_tag 'section_payload[title]', 'Title', class: 'block font-bold text-black' %>
+          <%= text_field_tag 'section_payload[title]', @section_content["title"], class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag 'section_payload[description]', 'Description', class: 'block font-bold text-black' %>
+          <%= text_area_tag 'section_payload[description]', @section_content["description"], rows: 6, class: 'w-full form-input admin-form-input' %>
+        </div>
+        <div class="flex gap-3">
+          <%= form.submit 'Save ' + @section_key.gsub('_', ' ').titleize, class: 'btn btn-primary' %>
+          <%= link_to 'Preview live section', about_path(@section_key), class: 'btn btn-secondary' %>
+        </div>
       <% end %>
     </div>
-    <% if @section_key == "why_nailab_exists" %>
-      <%= render template: "admin/abouts/why_nailab_exists/edit" %>
-    <% elsif @section_key == "our_impact" %>
-      <%= render template: "admin/abouts/our_impact/edit" %>
-    <% elsif @section_key == "vision_mission" %>
-      <%= render template: "admin/abouts/vision_mission/edit" %>
-    <% elsif @section_key == "what_drives_us" %>
-      <%= render template: "admin/abouts/what_drives_us/edit" %>
-    <% end %>
   </div>
-  <div>
-    <h2 class="font-semibold mt-2 mb-16">Preview</h2>
-    <% if @section_key == "why_nailab_exists" %>
-      <%= render template: "admin/abouts/why_nailab_exists/preview" %>
-    <% elsif @section_key == "our_impact" %>
-      <%= render template: "admin/abouts/our_impact/preview" %>
-    <% elsif @section_key == "vision_mission" %>
-      <%= render template: "admin/abouts/vision_mission/preview" %>
-    <% elsif @section_key == "what_drives_us" %>
-      <%= render template: "admin/abouts/what_drives_us/preview" %>
-    <% end %>
-  </div>
-</div>
+<% end %>
+
+<%# Inline live-preview mirroring script for editor -> preview (works for the 3 key sections) %>
+<% if ['why_nailab_exists','our_impact','vision_mission'].include?(@section_key) %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      try {
+        var section = '<%= @section_key %>';
+        if(section === 'why_nailab_exists'){
+          var titleInput = document.getElementById('editor_why_title');
+          var descInput = document.getElementById('editor_why_description');
+          var pTitle = document.getElementById('preview_why_title');
+          var pDesc = document.getElementById('preview_why_description');
+          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
+          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+        }
+        if(section === 'our_impact'){
+          var titleInput = document.getElementById('editor_our_impact_title');
+          var descInput = document.getElementById('editor_our_impact_description');
+          var pTitle = document.getElementById('preview_our_impact_title');
+          var pDesc = document.getElementById('preview_our_impact_description');
+          if(titleInput && pTitle){ titleInput.addEventListener('input', function(e){ pTitle.textContent = e.target.value; }); }
+          if(descInput && pDesc){ descInput.addEventListener('input', function(e){ pDesc.textContent = e.target.value; }); }
+          // mirror stats: assume matching index-based preview elements
+          var idx = 0;
+          while(true){
+            var inputVal = document.getElementById('editor_our_impact_stat_value_' + idx);
+            var inputLabel = document.getElementById('editor_our_impact_stat_label_' + idx);
+            var prevVal = document.getElementById('preview_our_impact_stat_value_' + idx);
+            var prevLabel = document.getElementById('preview_our_impact_stat_label_' + idx);
+            if(!inputVal && !inputLabel) break;
+            if(inputVal && prevVal){ (function(iV, pV){ iV.addEventListener('input', function(e){ pV.textContent = e.target.value; }); })(inputVal, prevVal); }
+            if(inputLabel && prevLabel){ (function(iL, pL){ iL.addEventListener('input', function(e){ pL.textContent = e.target.value; }); })(inputLabel, prevLabel); }
+            idx += 1;
+          }
+        }
+        if(section === 'vision_mission'){
+          var mTitle = document.getElementById('editor_mission_title');
+          var mDesc = document.getElementById('editor_mission_description');
+          var vTitle = document.getElementById('editor_vision_title');
+          var vDesc = document.getElementById('editor_vision_description');
+          var pMTitle = document.getElementById('preview_mission_title');
+          var pMDesc = document.getElementById('preview_mission_description');
+          var pVTitle = document.getElementById('preview_vision_title');
+          var pVDesc = document.getElementById('preview_vision_description');
+          if(mTitle && pMTitle){ mTitle.addEventListener('input', function(e){ pMTitle.textContent = e.target.value; }); }
+          if(mDesc && pMDesc){ mDesc.addEventListener('input', function(e){ pMDesc.textContent = e.target.value; }); }
+          if(vTitle && pVTitle){ vTitle.addEventListener('input', function(e){ pVTitle.textContent = e.target.value; }); }
+          if(vDesc && pVDesc){ vDesc.addEventListener('input', function(e){ pVDesc.textContent = e.target.value; }); }
+        }
+      } catch(err){ console.error('Preview mirror init error', err); }
+    });
+  </script>
+<% end %>

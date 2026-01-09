@@ -1,1 +1,19 @@
-<%= render partial: "admin/abouts/partials/edit_why_nailab_exists" %>
+<h1 class="text-2xl font-bold mb-4">Edit: Why Nailab Exists</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+	<div>
+		<h2 class="font-semibold mb-3">Editor</h2>
+		<div class="mb-4 text-left">
+			<%= link_to 'Preview live section', '/about#why-nailab-exists', class: 'inline-block text-sm text-slate-600' %>
+		</div>
+		<div class="bg-white p-4 rounded shadow">
+			<%= render partial: "admin/abouts/partials/edit_why_nailab_exists" %>
+		</div>
+	</div>
+	<div>
+		<h2 class="font-semibold mb-3">Preview</h2>
+		<div class="bg-white p-6 rounded shadow">
+			<%= render partial: "admin/abouts/why_nailab_exists/preview" %>
+		</div>
+	</div>
+</div>

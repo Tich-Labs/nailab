@@ -1,30 +1,19 @@
-<div class="bg-white p-4 rounded shadow">
-  <%= form_with url: admin_about_section_update_path(section: 'vision_mission'), method: :patch, local: true do |f| %>
-    <p class="text-sm text-slate-600 mb-4">Update the Mission and Vision statements for the About page.</p>
-    <div class="mb-6 p-4 border rounded">
-      <h4 class="font-bold mb-2">Mission</h4>
-      <div class="mb-3">
-        <%= label_tag 'section_payload[mission][title]', 'Mission Title', class: 'block font-bold text-black' %>
-        <%= text_field_tag 'section_payload[mission][title]', @mission_content["title"], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
-      <div class="mb-3">
-        <%= label_tag 'section_payload[mission][description]', 'Mission Description', class: 'block font-bold text-black' %>
-        <%= text_area_tag 'section_payload[mission][description]', @mission_content["description"], rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
+<h1 class="text-2xl font-bold mb-4">Edit: Vision &amp; Mission</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+  <div>
+    <h2 class="font-semibold mb-3">Editor</h2>
+    <div class="mb-4">
+      <%= link_to 'Preview live section', '/about#vision-mission', class: 'btn btn-secondary' %>
     </div>
-    <div class="mb-6 p-4 border rounded">
-      <h4 class="font-bold mb-2">Vision</h4>
-      <div class="mb-3">
-        <%= label_tag 'section_payload[vision][title]', 'Vision Title', class: 'block font-bold text-black' %>
-        <%= text_field_tag 'section_payload[vision][title]', @vision_content["title"], class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
-      <div class="mb-3">
-        <%= label_tag 'section_payload[vision][description]', 'Vision Description', class: 'block font-bold text-black' %>
-        <%= text_area_tag 'section_payload[vision][description]', @vision_content["description"], rows: 3, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
+    <div class="bg-white p-4 rounded shadow">
+      <%= render 'admin/abouts/partials/edit_vision_mission' %>
     </div>
-    <div class="flex gap-3">
-      <%= f.submit 'Save Vision & Mission', class: 'btn btn-primary' %>
+  </div>
+  <div>
+    <h2 class="font-semibold mb-3">Preview</h2>
+    <div class="bg-white p-6 rounded shadow">
+      <%= render 'admin/abouts/partials/preview_vision_mission' %>
     </div>
-  <% end %>
+  </div>
 </div>
