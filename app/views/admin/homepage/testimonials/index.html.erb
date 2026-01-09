@@ -68,7 +68,7 @@
   </div>
 
   <div>
-    <h2 class="font-semibold mb-2">Preview</h2>
+    <h2 class="font-semibold mb-16">Preview</h2>
     <div id="testimonial-preview" class="bg-white p-4 rounded shadow admin-preview-scroll" style="min-height:520px;">
       <%= render partial: 'admin/homepage/testimonials/preview', locals: { testimonials: (@preview_testimonials || Testimonial.where(active: true).order(:display_order)) } %>
     </div>
