@@ -39,9 +39,9 @@
             <div class="mt-2">
               <%= label_tag "pricing_content[tiers][#{index}][features][]", 'Features (one per line)', class: 'block font-bold text-black mb-1' %>
               <% (tier[:features] || []).each do |feat| %>
-                <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feat, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm mb-2', data: { preview_index: index, preview_field: 'feature' } %>
+                <%= text_field_tag "pricing_content[tiers][#{index}][features][]", feat, class: 'w-full form-input admin-form-input bg-white text-black border border-gray-200 shadow-sm rounded-md px-3 py-2 mb-2', data: { preview_index: index, preview_field: 'feature' } %>
               <% end %>
-              <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'feature' } %>
+              <%= text_field_tag "pricing_content[tiers][#{index}][features][]", '', class: 'w-full form-input admin-form-input bg-white text-black border border-gray-200 shadow-sm rounded-md px-3 py-2', data: { preview_index: index, preview_field: 'feature' } %>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
               <div>
