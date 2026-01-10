@@ -40,3 +40,8 @@
 !/app/assets/builds/.keep
 
 vendor/bundle/
+
+# Ignore docs folder (we don't need docs in repository for gh-pages)
+docs/
+
+
