@@ -26,6 +26,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable, :omniauthable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+  # Enforce stronger password complexity in addition to Devise's length checks.
+  validate :password_complexity, if: -> { password.present? }
   has_one :user_profile, dependent: :destroy
   has_one :startup_profile, dependent: :destroy
   has_one :startup, dependent: :destroy
@@ -63,6 +65,22 @@ class User < ApplicationRecord
         linkedin_url: auth.info.urls&.public_profile,
         bio: auth.info.description
       )
+    end
+  end
+
+  private
+
+  def password_complexity
+    return if password.blank?
+
+    missing = []
+    missing << "one lowercase letter" unless password =~ /[a-z]/
+    missing << "one uppercase letter" unless password =~ /[A-Z]/
+    missing << "one digit" unless password =~ /\d/
+    missing << "one special character (e.g. !@#$%^&*)" unless password =~ /[^A-Za-z0-9]/
+
+    if missing.any?
+      errors.add(:password, "must include at least #{missing.to_sentence}")
     end
   end
 end

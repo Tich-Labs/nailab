@@ -23,16 +23,27 @@
         <%= f.label :email, class: 'block text-sm font-semibold text-slate-600' %>
         <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
       </div>
-      <div>
+      <div data-controller="password-visibility">
         <%= f.label :password, class: 'block text-sm font-semibold text-slate-600' %>
         <% if @minimum_password_length %>
           <p class="text-xs text-slate-500"><%= @minimum_password_length %> characters minimum</p>
         <% end %>
-        <%= f.password_field :password, autocomplete: 'new-password', class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+        <div class="relative">
+          <%= f.password_field :password, autocomplete: 'new-password', data: { 'password-visibility-target': 'field' }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-12 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+          <button type="button" data-action="password-visibility#toggle" data-password-visibility-target="toggle" aria-pressed="false" class="absolute inset-y-0 right-3 flex items-center text-slate-500">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </button>
+        </div>
+        <%= render 'devise/shared/password_rules' %>
       </div>
-      <div>
+      <div data-controller="password-visibility">
         <%= f.label :password_confirmation, class: 'block text-sm font-semibold text-slate-600' %>
-        <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+        <div class="relative">
+          <%= f.password_field :password_confirmation, autocomplete: 'new-password', data: { 'password-visibility-target': 'field' }, class: 'mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-12 text-base text-slate-900 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-300' %>
+          <button type="button" data-action="password-visibility#toggle" data-password-visibility-target="toggle" aria-pressed="false" class="absolute inset-y-0 right-3 flex items-center text-slate-500">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </button>
+        </div>
       </div>
       <div>
         <%= f.submit 'Sign up', class: 'w-full rounded-2xl bg-purple-600 px-4 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-purple-700' %>
@@ -41,3 +52,21 @@
   <% end %>
   <%= render 'devise/shared/links' %>
 <% end %>
+
+<script>
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('button[data-action*="password-visibility#toggle"]');
+  if(!btn) return;
+  const root = btn.closest('[data-controller="password-visibility"]');
+  if(!root) return;
+  const fields = root.querySelectorAll('[data-password-visibility-target="field"]');
+  fields.forEach(f => {
+    try{
+      const current = f.getAttribute('type') || f.type || 'password';
+      const next = current === 'password' ? 'text' : 'password';
+      f.setAttribute('type', next);
+      if(f.type !== next) try { f.type = next } catch(_) {}
+    }catch(_){/* ignore */}
+  });
+});
+</script>

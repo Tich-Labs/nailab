@@ -177,12 +177,12 @@ module Admin
 
     def default_what_drives_us_cards
       [
-        { "title" => "Entrepreneur-First", "description" => "We prioritize the needs and growth of African entrepreneurs by offering support that is tailored, relevant, and results-driven." },
-        { "title" => "Innovation for Impact", "description" => "We champion bold thinking and creative solutions that address real-world challenges and deliver lasting, meaningful change across communities and sectors." },
-        { "title" => "Inclusion", "description" => "We strive to ensure that opportunities are accessible to all, ensuring that innovators of all backgrounds, especially youth and women, have equal access to resources and support they need." },
-        { "title" => "Collaboration", "description" => "We believe in the power of partnerships and collective action to drive greater impact and scale solutions across Africa." },
-        { "title" => "Integrity", "description" => "We operate with transparency, accountability, and a commitment to ethical practices in all that we do." },
-        { "title" => "Continuous Learning", "description" => "We foster a culture of curiosity, experimentation, and growth, always seeking to learn and improve." }
+        { "id" => "entrepreneur-first", "title" => "Entrepreneur-First", "description" => "We prioritize the needs and growth of African entrepreneurs by offering support that is tailored, relevant, and results-driven." },
+        { "id" => "innovation-for-impact", "title" => "Innovation for Impact", "description" => "We champion bold thinking and creative solutions that address real-world challenges and deliver lasting, meaningful change across communities and sectors." },
+        { "id" => "inclusion", "title" => "Inclusion", "description" => "We strive to ensure that opportunities are accessible to all, ensuring that innovators of all backgrounds, especially youth and women, have equal access to resources and support they need." },
+        { "id" => "collaboration", "title" => "Collaboration", "description" => "We believe in the power of partnerships and collective action to drive greater impact and scale solutions across Africa." },
+        { "id" => "integrity", "title" => "Integrity", "description" => "We operate with transparency, accountability, and a commitment to ethical practices in all that we do." },
+        { "id" => "continuous-learning", "title" => "Continuous Learning", "description" => "We foster a culture of curiosity, experimentation, and growth, always seeking to learn and improve." }
       ]
     end
 

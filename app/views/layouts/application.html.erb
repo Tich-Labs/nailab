@@ -9,7 +9,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
+    <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-white text-gray-900">
