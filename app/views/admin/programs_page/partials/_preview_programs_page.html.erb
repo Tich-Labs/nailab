@@ -1,0 +1,105 @@
+<div class="bg-white p-4 rounded shadow">
+  <h2 id="preview_programs_title" class="text-xl font-semibold"><%= programs_page.title.presence || (stored.is_a?(Hash) && stored['title']) || 'Programs' %></h2>
+  <div id="preview_programs_intro" class="mt-3 text-slate-700">
+    <%# If stored looks like structured JSON use an intro_html or content_html key, otherwise render ActionText intro or legacy content %>
+    <% content_source = if stored.is_a?(Hash) && stored['intro_html'].present?
+                         stored['intro_html'].to_s
+                       elsif stored.is_a?(Hash) && stored['content_html'].present?
+                         stored['content_html'].to_s
+                       else
+                         (programs_page.respond_to?(:intro) && programs_page.intro.present?) ? programs_page.intro.body.to_s : (programs_page.content || '').to_s
+                       end %>
+
+    <% if content_source.present? %>
+      <%# Replace tokens like [program:123] with the program card HTML %>
+      <% rendered = content_source.gsub(/\[program:(\d+)\]/) do |_m|
+           id = Regexp.last_match(1).to_i
+           prog = Program.find_by(id: id)
+           if prog
+             render(partial: 'admin/programs_page/partials/program_card', locals: { program: prog })
+           else
+             "<div class='text-sm text-gray-500'>Program #{id} not found</div>"
+           end
+         end
+      %>
+
+      <div class="mb-3 flex items-center justify-between">
+        <div class="text-sm text-slate-600" id="program-preview-counter" style="display:none">Showing 1 of 1</div>
+        <div class="flex gap-2">
+          <button type="button" id="program-prev" class="btn btn-secondary" style="display:none">Prev</button>
+          <button type="button" id="program-next" class="btn btn-secondary" style="display:none">Next</button>
+        </div>
+      </div>
+
+      <div id="rendered-content"><%= rendered.html_safe %></div>
+
+      <script>
+        (function(){
+          var container = document.getElementById('rendered-content');
+          if (!container) return;
+          // Find program card items inside rendered content
+          var cards = Array.from(container.querySelectorAll('.program-card-item'));
+          var counter = document.getElementById('program-preview-counter');
+          var prevBtn = document.getElementById('program-prev');
+          var nextBtn = document.getElementById('program-next');
+          if (!cards.length) return;
+          // show only the first card initially
+          var idx = 0;
+          function show(i){
+            cards.forEach(function(c, j){ c.style.display = (j===i)?'block':'none'; });
+            if (counter){ counter.style.display = 'block'; counter.textContent = 'Showing ' + (i+1) + ' of ' + cards.length; }
+            if (prevBtn) prevBtn.style.display = (cards.length>1)?'inline-block':'none';
+            if (nextBtn) nextBtn.style.display = (cards.length>1)?'inline-block':'none';
+          }
+          function next(){ idx = (idx + 1) % cards.length; show(idx); }
+          function prev(){ idx = (idx - 1 + cards.length) % cards.length; show(idx); }
+          if (nextBtn) nextBtn.addEventListener('click', next);
+          if (prevBtn) prevBtn.addEventListener('click', prev);
+          show(0);
+        })();
+      </script>
+
+    <% else %>
+      <%# No stored content — render a list but only show one at a time with controls %>
+      <% if defined?(@programs) && @programs.present? %>
+        <div class="mb-3 flex items-center justify-between">
+          <div class="text-sm text-slate-600" id="program-preview-counter-fallback">Showing 1 of <%= @programs.size %></div>
+          <div class="flex gap-2">
+            <button type="button" id="program-prev-fallback" class="btn btn-secondary">Prev</button>
+            <button type="button" id="program-next-fallback" class="btn btn-secondary">Next</button>
+          </div>
+        </div>
+
+        <div id="fallback-cards">
+          <% @programs.each_with_index do |program, i| %>
+            <div class="program-card-item" style="display:<%= i==0 ? 'block' : 'none' %>">
+              <%= render partial: 'admin/programs_page/partials/program_card', locals: { program: program } %>
+            </div>
+          <% end %>
+        </div>
+
+        <script>
+          (function(){
+            var container = document.getElementById('fallback-cards');
+            if (!container) return;
+            var cards = Array.from(container.querySelectorAll('.program-card-item'));
+            var counter = document.getElementById('program-preview-counter-fallback');
+            var prevBtn = document.getElementById('program-prev-fallback');
+            var nextBtn = document.getElementById('program-next-fallback');
+            var idx = 0;
+            function show(i){
+              cards.forEach(function(c, j){ c.style.display = (j===i)?'block':'none'; });
+              if (counter){ counter.textContent = 'Showing ' + (i+1) + ' of ' + cards.length; }
+            }
+            function next(){ idx = (idx + 1) % cards.length; show(idx); }
+            function prev(){ idx = (idx - 1 + cards.length) % cards.length; show(idx); }
+            nextBtn.addEventListener('click', next);
+            prevBtn.addEventListener('click', prev);
+          })();
+        </script>
+      <% else %>
+        <div class="text-gray-600">No programs to display.</div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

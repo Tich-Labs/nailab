@@ -4,111 +4,81 @@ class FounderOnboardingController < ApplicationController
   STEPS = %w[personal startup professional mentorship confirm]
 
   def show
+    # Prepare view state from session store (guest) or persisted models (actor)
     @step = params[:step] || session[:founder_onboarding_step] || STEPS.first
     if current_user
       @user_profile = current_user.user_profile || current_user.build_user_profile
-      case @step
-      when "personal"
-        # @user_profile already set above
-      when "startup", "professional", "mentorship", "confirm"
-        @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-      end
+      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
       @user_profile.update(onboarding_step: @step) unless @user_profile.onboarding_step == @step
     else
-      @user_profile = OpenStruct.new(session[:founder_onboarding_user_profile] || {})
-      @startup_profile = OpenStruct.new(session[:founder_onboarding_startup_profile] || {})
+      session_store = Onboarding::SessionStore.new(session, namespace: :founders)
+      up = session_store.to_h.select { |k, _| %w[full_name phone country city email].include?(k) }
+      sp = session_store.to_h.reject { |k, _| %w[full_name phone country city email].include?(k) }
+      @user_profile = OpenStruct.new(up || {})
+      @startup_profile = OpenStruct.new(sp || {})
       session[:founder_onboarding_step] = @step
     end
   def update
     @step = params[:step] || STEPS.first
-    if current_user
-      @user_profile = current_user.user_profile || current_user.build_user_profile
-      case @step
-      when "personal"
-        if @user_profile.update(personal_params)
-          redirect_to founder_onboarding_path(step: "startup")
+
+    step_params = case @step
+    when "personal" then personal_params
+    when "startup" then startup_params
+    when "professional" then professional_params
+    when "mentorship" then mentorship_params
+    else {}
+    end
+
+    service_result = Onboarding::Core.call(actor: current_user, role: :founders, step: @step, params: step_params, session: session)
+
+    if service_result.success?
+      if service_result.completed?
+        if current_user
+          payload = service_result.respond_to?(:changed_models) ? service_result.changed_models : {}
+          Notifications::OnboardingNotifier.notify_user_on_completion(user: current_user, role: :founders, payload: payload)
+          Notifications::OnboardingNotifier.notify_admin_of_submission(user: current_user, role: :founders, payload: payload)
+          Jobs::SendWelcomeEmailJob.perform_later(current_user.id, "founder", payload) if defined?(Jobs::SendWelcomeEmailJob)
+          if defined?(Analytics::Tracker)
+            Analytics::Tracker.track(event: "onboarding_completed", user_id: current_user.id, role: "founder", payload: payload)
+          end
+          redirect_to founder_root_path, notice: "Welcome! Your founder profile has been created."
         else
-          render :show, status: :unprocessable_entity
+          redirect_to founder_onboarding_completed_path
         end
-      when "startup"
-        @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-        if @startup_profile.update(startup_params)
-          redirect_to founder_onboarding_path(step: "professional")
-        else
-          render :show, status: :unprocessable_entity
-        end
-      when "professional"
-        @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-        if @startup_profile.update(professional_params)
-          redirect_to founder_onboarding_path(step: "mentorship")
-        else
-          render :show, status: :unprocessable_entity
-        end
-      when "mentorship"
-        @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-        if @startup_profile.update(mentorship_params)
-          redirect_to founder_onboarding_path(step: "confirm")
-        else
-          render :show, status: :unprocessable_entity
-        end
-      when "confirm"
-        @user_profile.update(onboarding_completed: true)
-        redirect_to founder_root_path
+      else
+        redirect_to founder_onboarding_path(step: service_result.next_step)
       end
     else
-      # Unauthenticated: store data in session
-      case @step
-      when "personal"
-        session[:founder_onboarding_user_profile] = personal_params.to_h
-        redirect_to founder_onboarding_path(step: "startup")
-      when "startup"
-        session[:founder_onboarding_startup_profile] ||= {}
-        session[:founder_onboarding_startup_profile].merge!(startup_params.to_h)
-        redirect_to founder_onboarding_path(step: "professional")
-      when "professional"
-        session[:founder_onboarding_startup_profile] ||= {}
-        session[:founder_onboarding_startup_profile].merge!(professional_params.to_h)
-        redirect_to founder_onboarding_path(step: "mentorship")
-      when "mentorship"
-        session[:founder_onboarding_startup_profile] ||= {}
-        session[:founder_onboarding_startup_profile].merge!(mentorship_params.to_h)
-        redirect_to founder_onboarding_path(step: "confirm")
-      when "confirm"
-        # At this point, onboarding is complete but user is not registered
-        redirect_to new_founder_registration_path, notice: "Please create an account to complete your onboarding."
-      end
-      session[:founder_onboarding_step] = @step
+      # render with errors
+      @errors = service_result.errors
+      @step = @step
+      render :show, status: :unprocessable_entity
     end
   end
   end
 
   def save_and_exit
-    @user_profile = current_user.user_profile || current_user.build_user_profile
     @step = params[:step] || STEPS.first
-
-    # Save current step data before exiting
-    success = case @step
-    when "personal"
-      @user_profile.update(personal_params)
-    when "startup"
-      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-      @startup_profile.update(startup_params)
-    when "professional"
-      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-      @startup_profile.update(professional_params)
-    when "mentorship"
-      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-      @startup_profile.update(mentorship_params)
-    else
-      true
+    step_params = case @step
+    when "personal" then personal_params
+    when "startup" then startup_params
+    when "professional" then professional_params
+    when "mentorship" then mentorship_params
+    else {}
     end
 
-    if success
-      @user_profile.update(onboarding_step: @step)
+    service_result = Onboarding::Core.call(actor: current_user, role: :founders, step: @step, params: step_params, session: session)
+
+    if service_result.success?
       redirect_to founder_root_path, notice: "Your progress has been saved. You can continue onboarding later."
     else
+      @errors = service_result.errors
       render :show, status: :unprocessable_entity
     end
+  end
+
+  def completed
+    render "mentor_onboarding/completed"
   end
 
   private

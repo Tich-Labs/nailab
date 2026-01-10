@@ -1,0 +1,30 @@
+<div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 program-card" data-program-id="<%= program.id %>">
+  <div class="relative aspect-w-16 aspect-h-9 overflow-hidden">
+    <img
+      src="<%= program.respond_to?(:primary_image_url) ? program.primary_image_url : (program.cover_image_url.presence || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=1200') %>"
+      alt="<%= program.title %>"
+      loading="lazy"
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute top-4 left-4">
+      <span class="inline-block px-4 py-1 bg-nailab-teal text-white text-sm font-semibold rounded-lg shadow-lg">
+        <%= (program.categories.first&.name.presence) || program.program_type&.titleize || 'Uncategorized' %>
+      </span>
+    </div>
+  </div>
+  <div class="p-6 md:p-8">
+    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2"><%= program.title %></h3>
+    <div class="mb-2">
+      <span class="inline-block px-3 py-1 bg-gray-100 text-nailab-purple text-xs font-semibold rounded-lg">
+        <%= (program.categories.first&.name.presence) || program.program_type&.titleize || 'Uncategorized' %>
+      </span>
+    </div>
+    <p class="text-gray-700 leading-relaxed mb-6 line-clamp-3">
+      <%= program.short_summary.presence || strip_tags(program.description&.body&.to_trix_html || program.description.to_s) %>
+    </p>
+    <%= link_to program_detail_path(program.slug), class: 'inline-flex items-center space-x-2 text-nailab-purple font-semibold hover:text-nailab-purple transition-colors group', aria: { label: "Learn more about #{program.title}" } do %>
+      <span>Learn more</span>
+      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <% end %>
+  </div>
+</div>

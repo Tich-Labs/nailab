@@ -36,6 +36,17 @@ module Admin
         @hero_slides = hero_slides_from_json(@hero_content)
         @hero_secondary_cta = (@hero_content[:secondary_cta].is_a?(Hash) ? @hero_content[:secondary_cta] : {}).with_indifferent_access
         @preview_hero = @hero_slides.first
+        # prefer attached hero image if present
+        if @home_page.respond_to?(:hero_image) && @home_page.hero_image.attached?
+          begin
+            @hero_image_url = url_for(@home_page.hero_image)
+          rescue => e
+            Rails.logger.debug("Unable to generate hero image url: #{e.message}")
+            @hero_image_url = @hero_content[:image_url]
+          end
+        else
+          @hero_image_url = @hero_content[:image_url]
+        end
         connect_json = @home_content_json[:connect_grow_impact].is_a?(Hash) ? @home_content_json[:connect_grow_impact] : {}
         @connect_stats = connect_json[:stats].presence || PagesController::DEFAULT_CONNECT_STATS
     end
@@ -53,6 +64,17 @@ module Admin
             end
             @home_content_json[:connect_grow_impact] ||= {}
             @home_content_json[:connect_grow_impact][:stats] = stats
+          end
+          # handle optional uploaded hero image file `hero[image_file]`
+          if params[:hero].present? && params[:hero][:image_file].present?
+            begin
+              uploaded = params[:hero][:image_file]
+              @home_page.hero_image.attach(uploaded)
+              # update stored payload to prefer attached image
+              @home_content_json[:hero][:image_url] = url_for(@home_page.hero_image) if @home_page.hero_image.attached?
+            rescue => e
+              Rails.logger.warn("Hero image attach failed: #{e.message}")
+            end
           end
           if @home_page.update(structured_content: @home_content_json.to_json)
             redirect_to admin_homepage_hero_path, notice: "Hero updated", status: :see_other

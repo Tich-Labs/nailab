@@ -2,11 +2,10 @@
 <div class="max-w-4xl mx-auto py-8 px-4">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Account</h1>
   <div class="bg-white shadow rounded-lg p-6">
-    <form action="<%= founder_account_path %>" method="post" class="space-y-6">
-      <input type="hidden" name="_method" value="patch" />
+    <%= form_with url: founder_account_path, method: :patch, local: false, html: { class: 'space-y-6', id: 'founder-account-form' } do %>
       <div>
-        <label for="user_name" class="block text-sm font-medium text-gray-700">Name</label>
-        <input type="text" name="user[name]" id="user_name" value="<%= current_user.name %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <label for="user_full_name" class="block text-sm font-medium text-gray-700">Name</label>
+        <input type="text" name="user[user_profile][full_name]" id="user_full_name" value="<%= current_user.user_profile&.full_name %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
       </div>
       <div>
         <label for="user_email" class="block text-sm font-medium text-gray-700">Email</label>
@@ -24,10 +23,34 @@
         <label for="user_password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
         <input type="password" name="user[password_confirmation]" id="user_password_confirmation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
       </div>
+      <div>
+        <label for="user_bio" class="block text-sm font-medium text-gray-700">Bio</label>
+        <textarea name="user[user_profile][bio]" id="user_bio" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"><%= current_user.user_profile&.bio %></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="user_city" class="block text-sm font-medium text-gray-700">City</label>
+          <input type="text" name="user[user_profile][city]" id="user_city" value="<%= current_user.user_profile&.city %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+        <div>
+          <label for="user_country" class="block text-sm font-medium text-gray-700">Country</label>
+          <input type="text" name="user[user_profile][country]" id="user_country" value="<%= current_user.user_profile&.country %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        </div>
+      </div>
+
+      <div>
+        <label for="user_website" class="block text-sm font-medium text-gray-700">Website</label>
+        <input type="url" name="user[user_profile][professional_website]" id="user_website" value="<%= current_user.user_profile&.professional_website %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+      </div>
+
       <div class="flex justify-end space-x-4">
         <a href="<%= founder_account_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
         <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Update Account</button>
       </div>
-    </form>
+    <% end %>
+  </div>
+
+  <div id="ajax-flash" class="fixed top-6 right-6 z-50"></div>
   </div>
 </div>

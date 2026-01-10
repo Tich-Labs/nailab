@@ -36,3 +36,21 @@ end
 Capybara.register_driver :desktop do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu window-size=1920,1080]))
 end
+
+# Provide test-friendly no-op stubs for notifier/jobs used by onboarding flows
+module Notifications
+  unless const_defined?(:OnboardingNotifier)
+    class OnboardingNotifier
+      def self.notify_user_on_completion(user:, role:, payload: {}); end
+      def self.notify_admin_of_submission(user:, role:, payload: {}); end
+    end
+  end
+end
+
+module Jobs
+  unless const_defined?(:SendWelcomeEmailJob)
+    class SendWelcomeEmailJob
+      def self.perform_later(*_args); end
+    end
+  end
+end

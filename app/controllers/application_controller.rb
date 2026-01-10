@@ -14,10 +14,23 @@
     def redirect_to_onboarding_if_needed
       return if devise_controller?
       return unless user_signed_in?
-      return if request.path == founder_onboarding_path || request.path.start_with?("/api")
+      return if request.path.start_with?("/api")
+
       user_profile = current_user.user_profile
-      unless user_profile&.onboarding_completed?
-        redirect_to founder_onboarding_path unless request.path == founder_onboarding_path
+      return if user_profile&.onboarding_completed?
+
+      target = onboarding_path_for(user_profile)
+      redirect_to target unless request.path == target
+    end
+
+    def onboarding_path_for(user_profile)
+      case user_profile&.role.to_s
+      when "mentor"
+        mentor_onboarding_path
+      when "partner"
+        partner_onboarding_path
+      else
+        founder_onboarding_path
       end
     end
 
@@ -34,7 +47,23 @@
     end
 
     def after_sign_in_path_for(resource)
-      session.delete(:user_return_to) || stored_location_for(resource) || founder_root_path
+      # Merge any guest onboarding data into the returning user's profiles
+      begin
+        Onboarding::SessionMerger.merge(resource, session)
+      rescue => e
+        Rails.logger.error("Onboarding session merge failed: #{e.message}")
+      end
+
+      session.delete(:user_return_to) || stored_location_for(resource) || begin
+        case resource.user_profile&.role.to_s
+        when "mentor"
+          mentor_root_path
+        when "partner"
+          (defined?(partner_root_path) ? partner_root_path : founder_root_path)
+        else
+          founder_root_path
+        end
+      end
     end
 
     def after_sign_out_path_for(resource_or_scope)

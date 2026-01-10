@@ -1,0 +1,83 @@
+<header data-controller="notifications" class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-4">
+    <!-- Optional left side content (breadcrumbs/title) -->
+    <h2 class="text-lg font-semibold text-gray-800">Dashboard</h2>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <!-- Notification bell -->
+    <div class="relative">
+      <% user = defined?(current_user) ? current_user : @user %>
+      <% unread_count = (user&.notifications&.where(read: false)&.count) || 0 %>
+        <button id="notifications-link" type="button" class="relative inline-flex items-center p-2 text-gray-500 hover:text-gray-700" aria-label="Notifications" data-action="click->notifications#toggleDropdown">
+        <!-- Bell SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z" />
+        </svg>
+        <span class="sr-only"><%= unread_count %> unread notifications</span>
+      </a>
+
+      <% if unread_count.positive? %>
+        <!-- Ping animation behind the badge for attention -->
+        <span id="notifications-badge" class="absolute -top-1 -right-1 inline-flex" aria-hidden="true">
+          <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-red-400 opacity-75"></span>
+          <span id="notifications-count" class="relative inline-flex items-center justify-center h-3 min-w-3 px-1 text-xs font-semibold leading-none text-white bg-red-600 rounded-full"> <%= unread_count %> </span>
+        </span>
+        <!-- assistive live region for dynamic updates -->
+        <span id="notifications-live" class="sr-only" aria-live="polite">You have <%= unread_count %> unread notifications</span>
+      <% end %>
+      <div id="notifications-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" data-notifications-target="dropdown">
+        <div id="notifications-list" class="p-3">
+          <%= render partial: 'notifications/preview', locals: { notifications: current_user&.notifications&.order(created_at: :desc)&.limit(5) || [] } %>
+        </div>
+        <div class="border-t p-2 text-center">
+          <%= link_to 'View all', notifications_path, class: 'text-sm text-gray-600 hover:underline' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatar -->
+    <div>
+      <% avatar_url = user&.user_profile&.photo_url rescue nil %>
+      <% if avatar_url.present? && (avatar_url =~ %r{\Ahttps?://} || avatar_url.start_with?("/") || avatar_url.include?("blob") || avatar_url.start_with?("data:")) %>
+        <%= link_to (image_tag avatar_url, alt: "Profile", class: "h-9 w-9 rounded-full object-cover border transition-transform transform hover:scale-105"), profile_path, aria: { label: "Account settings" } %>
+      <% else %>
+        <% initials = (user&.user_profile&.full_name || user&.email || "U").split(" ").map(&:first).join.upcase[0,2] %>
+        <%= link_to(profile_path || "/profile", aria: { label: "Account settings" }, class: "inline-flex") do %>
+          <div class="h-9 w-9 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-semibold transition-transform transform hover:scale-105"> <%= initials %> </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <script>
+    // expose current user id for ActionCable subscription
+    window.currentUserId = <%= user&.id || 'null' %>;
+    document.addEventListener('DOMContentLoaded', function () {
+      var link = document.getElementById('notifications-link');
+      if (!link) return;
+      link.addEventListener('click', function (e) {
+        // Fire mark-all-read but still follow link to notifications page
+        try {
+          var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          fetch('<%= mark_all_read_notifications_path %>', {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': token, 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            credentials: 'same-origin'
+          }).then(function (resp) {
+            return resp.json();
+          }).then(function (json) {
+            var badge = document.getElementById('notifications-badge');
+            var count = document.getElementById('notifications-count');
+            var live = document.getElementById('notifications-live');
+            if (badge && count) {
+              badge.style.display = 'none';
+            }
+            if (live) {
+              live.textContent = 'You have 0 unread notifications';
+            }
+          }).catch(function () {});
+        } catch (err) {}
+      });
+    });
+  </script>
+</header>

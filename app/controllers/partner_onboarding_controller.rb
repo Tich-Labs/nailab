@@ -5,7 +5,8 @@ class PartnerOnboardingController < ApplicationController
     @step = params[:step] || STEPS.first
     @step_index = STEPS.index(@step) || 0
     @percent_complete = ((@step_index + 1).to_f / STEPS.size * 100).round
-    @partner_onboarding = OpenStruct.new(session[:partner_onboarding] || {})
+    session_store = Onboarding::SessionStore.new(session, namespace: :partners)
+    @partner_onboarding = OpenStruct.new(session_store.to_h || {})
   end
 
   def create
@@ -16,22 +17,21 @@ class PartnerOnboardingController < ApplicationController
 
   def update
     @step = params[:step] || STEPS.first
-    @step_index = STEPS.index(@step) || 0
-    @partner_onboarding = OpenStruct.new(session[:partner_onboarding] || {})
-    @partner_onboarding.assign_attributes(partner_onboarding_params)
-    session[:partner_onboarding] = @partner_onboarding.to_h
-    if params[:save_and_exit]
-      session[:partner_onboarding] = @partner_onboarding.to_h
-      flash[:notice] = "Your progress has been saved. Please create an account to continue later."
-      redirect_to new_user_registration_path and return
-    end
-    if @step_index < STEPS.size - 1
-      redirect_to partner_onboarding_path(step: STEPS[@step_index + 1])
+    step_params = partner_onboarding_params
+
+    service_result = Onboarding::Core.call(actor: nil, role: :partners, step: @step, params: step_params, session: session)
+
+    if service_result.success?
+      if service_result.completed?
+        # Optionally persisted to Partner or stored in session by the adapter
+        redirect_to partner_onboarding_completed_path
+      else
+        redirect_to partner_onboarding_path(step: service_result.next_step)
+      end
     else
-      # Final step: clear session and redirect to sign up
-      session.delete(:partner_onboarding)
-      flash[:notice] = "Thank you for your interest in partnering with Nailab! Please create an account to continue."
-      redirect_to new_user_registration_path
+      @errors = service_result.errors
+      @partner_onboarding = OpenStruct.new(session[:partner_onboarding] || {})
+      render :show, status: :unprocessable_entity
     end
   end
 

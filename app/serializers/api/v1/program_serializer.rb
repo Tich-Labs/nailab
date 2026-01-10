@@ -14,7 +14,7 @@ module Api
             description: program.description,
             content: program.content,
             cover_image_url: program.cover_image_url,
-            category: program.category,
+            category: (program.categories.map(&:name)),
             start_date: program.start_date,
             end_date: program.end_date,
             created_at: program.created_at

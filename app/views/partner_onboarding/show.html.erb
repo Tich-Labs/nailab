@@ -105,11 +105,11 @@
           </div>
           <div>
             <p class="font-semibold text-gray-800">Focus Sectors</p>
-            <p class="text-gray-700"><%= @partner_onboarding.focus_sectors.join(', ') %></p>
+            <p class="text-gray-700"><%= Array(@partner_onboarding&.focus_sectors).join(', ') %></p>
           </div>
           <div>
             <p class="font-semibold text-gray-800">Collaboration Areas</p>
-            <p class="text-gray-700"><%= @partner_onboarding.collaboration_areas.join(', ') %></p>
+            <p class="text-gray-700"><%= Array(@partner_onboarding&.collaboration_areas).join(', ') %></p>
           </div>
         </div>
       <% end %>

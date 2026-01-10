@@ -35,13 +35,8 @@
       </div>
 
       <div class="mb-2">
-        <%= label_tag :photo_url, 'Photo URL (or leave blank for asset)', class: 'block font-bold text-black' %>
-        <%= text_field_tag 'testimonial[photo_url]', nil, id: 'testimonial-photo', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
-
-      <div class="mb-2">
-        <%= label_tag :photo_upload, 'Upload Photo (optional)', class: 'block font-bold text-black' %>
-        <%= file_field_tag 'testimonial[photo]', id: 'testimonial-photo-file', class: 'w-full form-input' %>
+        <%= label_tag :photo_upload, 'Upload Photo', class: 'block font-bold text-black' %>
+        <%= file_field_tag 'testimonial[photo]', id: 'testimonial-photo-file', direct_upload: true, class: 'w-full form-input' %>
       </div>
 
       <div class="mb-2">

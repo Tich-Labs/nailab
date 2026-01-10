@@ -38,13 +38,7 @@
 
       <div class="mb-2">
         <%= label_tag 'section_payload[image]', 'Upload image', class: 'block font-bold text-black' %>
-        <%= file_field_tag 'section_payload[image]', accept: 'image/*', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-      </div>
-
-      <div>
-        <%= label_tag 'section_payload[image_url]', 'Or image URL', class: 'block font-bold text-black' %>
-        <%= text_field_tag 'section_payload[image_url]', @section_image_url, placeholder: 'https://...', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-        <p class="text-xs text-slate-500 mt-1">If you paste a URL, it will be used as the image source.</p>
+        <%= file_field_tag 'section_payload[image]', accept: 'image/*', direct_upload: true, class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
       </div>
     </div>
 

@@ -2,7 +2,7 @@
 <h3>Founder Profile</h3>
 <ul>
   <li><strong>Name:</strong> <%= user_profile.full_name %></li>
-  <li><strong>Email:</strong> <%= user_profile.user&.email || current_user.email %></li>
+  <li><strong>Email:</strong> <%= user_profile.user&.email || current_user&.email || session.dig(:founder_onboarding_user_profile, :email) || 'Not provided' %></li>
   <li><strong>Phone:</strong> <%= user_profile.phone %></li>
   <li><strong>Country:</strong> <%= user_profile.country %></li>
   <li><strong>City:</strong> <%= user_profile.city %></li>

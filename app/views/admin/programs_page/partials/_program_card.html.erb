@@ -1,0 +1,58 @@
+<div class="program-card-item bg-white rounded overflow-hidden shadow-sm">
+  <%# Cover image if available (ActiveStorage) %>
+  <% if program.respond_to?(:cover_image) && program.cover_image.respond_to?(:attached) && program.cover_image.attached? %>
+    <div class="h-40 bg-gray-100 overflow-hidden">
+      <%= image_tag url_for(program.cover_image), alt: program.title, class: "w-full h-full object-cover" %>
+    </div>
+  <% else %>
+    <div class="h-40 bg-gray-100 flex items-center justify-center text-gray-400">No image</div>
+  <% end %>
+
+  <div class="p-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold"><%= h(program.title || 'Untitled') %></h3>
+    </div>
+
+    <%# Category tags (defensive) %>
+    <% categories = if program.respond_to?(:categories) && program.categories.respond_to?(:map)
+                      program.categories.map { |c| c.respond_to?(:name) ? c.name : c.to_s }
+                    elsif program.respond_to?(:category)
+                      [program.category]
+                    else
+                      []
+                    end %>
+    <% if categories.present? %>
+      <div class="mt-2 flex gap-2">
+        <% categories.each do |cat| %>
+          <span class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded"><%= h(cat) %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <p class="mt-3 text-sm text-slate-700"><%= simple_format(h(program.try(:summary) || program.try(:excerpt) || program.try(:description) || 'No summary available')) %></p>
+
+    <div class="mt-4">
+      <% begin %>
+        <% preview_path = Rails.application.routes.url_helpers.program_detail_path(program.slug) if program.slug.present? %>
+      <% rescue StandardError %>
+        <% preview_path = Rails.application.routes.url_helpers.programs_path %>
+      <% end %>
+      <a href="<%= preview_path || Rails.application.routes.url_helpers.programs_path %>" class="text-teal-600 hover:underline">Learn more</a>
+      <button type="button" class="ml-3 text-sm text-slate-600 view-details">View details</button>
+      <div class="program-full-details mt-3" style="display:none">
+        <div class="prose text-slate-700"><%= program.description.to_s.html_safe %></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', function(e){
+    if (!e.target.classList.contains('view-details')) return;
+    var wrapper = e.target.closest('.program-card-item');
+    if (!wrapper) return;
+    var details = wrapper.querySelector('.program-full-details');
+    if (!details) return;
+    details.style.display = (details.style.display === 'none') ? 'block' : 'none';
+  });
+</script>

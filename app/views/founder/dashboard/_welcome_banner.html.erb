@@ -1,10 +1,17 @@
-<section class="bg-gradient-to-br from-purple-600 to-nailab-teal rounded-2xl p-8 lg:p-12 text-white shadow-xl">
-  <div class="max-w-4xl">
-    <h1 class="text-4xl lg:text-5xl font-bold mb-4">
-      Welcome back, <%= @user.user_profile&.full_name || @user.email %>!
-    </h1>
-    <p class="text-xl lg:text-2xl text-white/90 leading-relaxed">
-      Nailab Website Project Weekly Update
-    </p>
+<section class="bg-gradient-to-br from-purple-600 to-nailab-teal rounded-2xl p-6 lg:p-10 text-white shadow-xl">
+  <div class="max-w-4xl flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl lg:text-4xl font-bold mb-2">
+        Welcome back, <%= (defined?(current_user) && current_user) ? (current_user.user_profile&.full_name || current_user.email) : (@user&.user_profile&.full_name || @user&.email) %> 👋
+      </h1>
+      <p class="text-sm lg:text-base text-white/90 leading-relaxed">
+        Profile <strong><%= profile_completion_percent(current_user || @user) %>%</strong> complete — <%= profile_steps_left(current_user || @user) %> steps left
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= link_to 'Complete profile', next_onboarding_path_for(current_user || @user), class: 'inline-flex items-center px-4 py-2 bg-white text-nailab-teal rounded-lg font-semibold hover:bg-gray-100 transition-colors' %>
+      <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-3 py-2 border border-white/30 rounded-lg text-white/95 hover:bg-white/10 transition-colors' %>
+    </div>
   </div>
 </section>

@@ -6,3 +6,6 @@ import "controllers";
 const application = Application.start();
 application.debug = false; // Disable debug in production
 window.Stimulus = application;
+
+import "trix"
+import "@rails/actiontext"

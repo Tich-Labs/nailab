@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Nailab | Africa's Startup Network</title>
+    <title><%= content_for?(:title) ? yield(:title) : 'Nailab' %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : 'Nailab — supporting founders with programs, mentorship, and funding across Africa.' %>" />
+    <%= yield :head %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />

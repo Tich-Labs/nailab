@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
     t.string "section_type"
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -71,6 +81,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
     t.bigint "user_id", null: false
     t.index ["resource_id"], name: "index_bookmarks_on_resource_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "categories_programs", id: false, force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.bigint "program_id", null: false
+    t.index ["category_id", "program_id"], name: "index_categories_programs_on_category_id_and_program_id", unique: true
+    t.index ["program_id"], name: "index_categories_programs_on_program_id"
   end
 
   create_table "connections", force: :cascade do |t|
@@ -336,12 +361,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
 
   create_table "programs", force: :cascade do |t|
     t.boolean "active", default: true, null: false
-    t.string "category"
     t.text "content"
     t.string "cover_image_url"
     t.datetime "created_at", null: false
     t.text "description"
     t.date "end_date"
+    t.text "inline_image_urls", default: [], array: true
     t.string "program_type"
     t.text "short_summary"
     t.string "slug", null: false
@@ -349,6 +374,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
     t.string "status", default: "completed"
     t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.string "video_url"
     t.index ["active"], name: "index_programs_on_active"
     t.index ["slug"], name: "index_programs_on_slug", unique: true
   end
@@ -356,6 +382,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_120000) do
   create_table "programs_pages", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
+    t.string "intro_title"
     t.string "title"
     t.datetime "updated_at", null: false
   end

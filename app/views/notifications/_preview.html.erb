@@ -1,0 +1,15 @@
+<%# Simple partial to show recent notifications %>
+<% if notifications.blank? %>
+  <p class="text-sm text-gray-500">No recent notifications</p>
+<% else %>
+  <ul class="space-y-2">
+    <% notifications.each do |n| %>
+      <li data-notification-id="<%= n.id %>" data-notification-link="<%= n.link %>" class="flex items-start space-x-3 cursor-pointer <%= 'bg-gray-50' unless n.read? %> p-2 rounded" data-action="click->notifications#handleNotificationClick">
+        <div class="flex-1">
+          <div class="text-sm font-medium text-gray-900"><%= n.title || truncate(n.message, length: 60) %></div>
+          <div class="text-xs text-gray-500"><%= time_ago_in_words(n.created_at) %> ago</div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

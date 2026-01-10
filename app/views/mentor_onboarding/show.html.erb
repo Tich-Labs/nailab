@@ -24,32 +24,28 @@
     <div class="flex justify-between mt-8">
       <% if @step_index > 1 %>
         <%= link_to mentor_onboarding_path(step: MentorOnboardingController::STEPS[@step_index - 2]),
-                    class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                    class: "btn btn-outline border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold" do %>
           <i class="fas fa-arrow-left mr-2"></i> Previous
         <% end %>
       <% else %>
         <div></div>
       <% end %>
-      <div class="flex gap-4">
-        <%= button_tag type: 'submit', form: 'mentor-onboarding-save-exit-form',
-                       class: "px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
-          <i class="fas fa-save mr-2"></i> Save & Exit
-        <% end %>
-        <% if @step == 'review' %>
-          <% unless current_user %>
-            <div class="mt-8 p-6 bg-orange-50 rounded-lg text-center">
-              <h3 class="text-xl font-bold mb-2 text-orange-700">Thank you for completing the onboarding form!</h3>
-              <p class="mb-4 text-gray-700">To finish, please create an account. You will receive a confirmation email after registration.</p>
-              <%= link_to 'Create Account', new_mentor_registration_path, class: 'btn btn-primary bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
-            </div>
+      <div class="flex gap-4 items-center">
+        <% if @step != 'review' %>
+          <%= button_tag type: 'submit', form: 'mentor-onboarding-save-exit-form',
+                         class: "btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold" do %>
+            <i class="fas fa-save mr-2"></i> Save & Exit
           <% end %>
+        <% end %>
+
+        <% if @step == 'review' %>
           <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
-                         class: "px-6 py-3 bg-nailab-teal text-white rounded-lg hover:bg-nailab-teal transition-colors" do %>
-            <i class="fas fa-check mr-2"></i> Complete Onboarding
+                         class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' do %>
+            <i class="fas fa-check mr-2"></i> Submit
           <% end %>
         <% else %>
           <%= button_tag type: 'submit', form: 'mentor-onboarding-form',
-                         class: "px-6 py-3 bg-nailab-teal text-white rounded-lg hover:bg-nailab-teal transition-colors" do %>
+                         class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' do %>
             Save & Continue <i class="fas fa-arrow-right ml-2"></i>
           <% end %>
         <% end %>

@@ -130,7 +130,101 @@
     <% elsif @step == 'confirm' %>
       <h2 class="text-2xl font-semibold mb-6">Review & Confirm</h2>
       <p class="mb-4">Please review your details before submitting.</p>
-      <%= render partial: 'summary', locals: { user_profile: @user_profile, startup_profile: @startup_profile } %>
+
+      <div class="space-y-8">
+        <!-- Founder Profile -->
+        <div class="bg-gray-50 rounded-lg p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Founder Profile</h3>
+            <%= link_to founder_onboarding_path(step: 'personal'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
+              <i class="fas fa-edit mr-1"></i> Edit
+            <% end %>
+          </div>
+          <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Name:</dt>
+              <dd class="text-sm text-gray-900"><%= @user_profile.full_name || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Email:</dt>
+              <dd class="text-sm text-gray-900"><%= @user_profile.user&.email || current_user&.email || session.dig(:founder_onboarding_user_profile, :email) || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Phone:</dt>
+              <dd class="text-sm text-gray-900"><%= @user_profile.phone || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Country:</dt>
+              <dd class="text-sm text-gray-900"><%= @user_profile.country || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">City:</dt>
+              <dd class="text-sm text-gray-900"><%= @user_profile.city || 'Not provided' %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Startup Profile -->
+        <div class="bg-gray-50 rounded-lg p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Startup Profile</h3>
+            <%= link_to founder_onboarding_path(step: 'startup'), class: 'text-nailab-teal hover:text-nailab-teal text-sm' do %>
+              <i class="fas fa-edit mr-1"></i> Edit
+            <% end %>
+          </div>
+          <dl class="space-y-4">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Startup Name:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.startup_name || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Description:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.description || 'Not provided' %></dd>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Stage:</dt>
+                <dd class="text-sm text-gray-900"><%= @startup_profile&.stage || 'Not provided' %></dd>
+              </div>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Target Market:</dt>
+                <dd class="text-sm text-gray-900"><%= @startup_profile&.target_market || 'Not provided' %></dd>
+              </div>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Unique Value Proposition:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.value_proposition || 'Not provided' %></dd>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Sector:</dt>
+                <dd class="text-sm text-gray-900"><%= @startup_profile&.sector || 'Not provided' %></dd>
+              </div>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Funding Stage:</dt>
+                <dd class="text-sm text-gray-900"><%= @startup_profile&.funding_stage || 'Not provided' %></dd>
+              </div>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Funding Raised:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.funding_raised || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Mentorship Areas:</dt>
+              <dd class="text-sm text-gray-900"><%= Array(@startup_profile&.mentorship_areas).join(', ').presence || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Challenge Details:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.challenge_details || 'Not provided' %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Preferred Mentorship Mode:</dt>
+              <dd class="text-sm text-gray-900"><%= @startup_profile&.preferred_mentorship_mode || 'Not provided' %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
       <% unless current_user %>
         <div class="mt-8 p-6 bg-teal-50 rounded-lg text-center">
           <h3 class="text-xl font-bold mb-2 text-nailab-teal">Thank you for completing the onboarding form!</h3>
@@ -150,7 +244,13 @@
                        class: "btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold" do %>
           <i class="fas fa-save mr-2"></i> Save & Exit
         <% end %>
-        <%= f.submit (@step == 'confirm' ? 'Finish' : 'Next'), class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+        <% if @step == 'confirm' %>
+          <% if current_user %>
+            <%= f.submit 'Finish', class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+          <% end %>
+        <% else %>
+          <%= f.submit 'Next', class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+        <% end %>
       </div>
     </div>
   <% end %>

@@ -1,12 +1,17 @@
 <% filter_categories = ['All'] + (@program_categories || []) %>
-<section class="py-12 bg-white sticky top-16 z-40 shadow-sm">
+<section class="py-12 bg-white sticky top-16 z-40 shadow-sm" role="region" aria-label="Program categories" data-controller="program-filter">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-wrap gap-3 justify-center">
+    <div class="flex flex-wrap gap-3 justify-center" data-program-filter-target="list" data-action="keydown->program-filter#onKeydown">
       <% selected = params[:category].presence || 'All' %>
       <% filter_categories.each do |category| %>
+        <% link_path = category == 'All' ? programs_path : url_for(request.query_parameters.merge(category: category)) %>
         <%= link_to category,
-          category == 'All' ? programs_path : url_for(request.query_parameters.merge(category: category)),
-          class: "px-6 py-3 rounded-lg font-semibold transition-all capitalize #{selected == category ? 'bg-nailab-teal text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-nailab-purple/30' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+          link_path,
+          role: 'button',
+          tabindex: 0,
+          aria: { pressed: (selected == category).to_s },
+          class: "px-6 py-3 rounded-lg font-semibold transition-all capitalize focus:outline-none focus:ring-2 focus:ring-nailab-purple/30 #{selected == category ? 'bg-nailab-teal text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}",
+          data: { action: 'click->program-filter#filter keydown->program-filter#onKeydown', category: category }
         %>
       <% end %>
     </div>

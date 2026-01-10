@@ -32,6 +32,7 @@ class User < ApplicationRecord
   has_one :mentor, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   has_many :mentorship_requests, foreign_key: :founder_id, dependent: :destroy
   has_many :received_mentorship_requests, class_name: "MentorshipRequest", foreign_key: :mentor_id, dependent: :destroy
   has_many :sessions, dependent: :destroy

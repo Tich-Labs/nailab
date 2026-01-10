@@ -21,6 +21,11 @@ RailsAdmin.config do |config|
     new
     export
     bulk_delete
+    begin
+      broadcast_notifications
+    rescue NameError
+      # Broadcast action not registered yet; skipping
+    end
     show
     edit
     delete
@@ -181,6 +186,39 @@ RailsAdmin.config do |config|
   config.model "Program" do
     navigation_label "Marketing"
     weight 10
+    list do
+      field :id
+      field :title
+      field :slug
+      field :active
+      field :start_date
+      field :end_date
+      field :status
+      field :categories do
+        pretty_value do
+          bindings[:object].categories.map(&:name).join(", ")
+        end
+      end
+    end
+
+    edit do
+      field :title
+      field :slug
+      field :active
+      field :start_date
+      field :end_date
+      field :status
+      field :cover_image_url
+      field :video_url
+      field :inline_image_urls
+      field :short_summary
+      field :description, :action_text
+      field :categories do
+        associated_collection_scope do
+          Proc.new { |scope| scope.order(:name) }
+        end
+      end
+    end
   end
 
   # Expose HeroSlide in Content Management

@@ -36,8 +36,8 @@
           </div>
         </div>
         <div class="mb-4">
-          <%= label_tag 'who_we_are[image_url]', 'Image URL', class: 'block font-bold text-black' %>
-          <%= text_field_tag 'who_we_are[image_url]', (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+          <p class="text-sm font-medium mb-2">Image</p>
+          <%= file_field_tag 'who_we_are[image_file]', accept: 'image/*', direct_upload: true, class: 'w-full' %>
         </div>
         <% current_image = defined?(@who_we_are_image_url) ? @who_we_are_image_url : (@who_we_are_content && (@who_we_are_content['image_url'] || @who_we_are_content[:image_url])) %>
         <% if current_image.present? %>
@@ -47,8 +47,8 @@
           </div>
         <% end %>
         <div class="mb-4">
-          <p class="text-sm text-slate-500 mb-2">Or upload an image</p>
-          <%= file_field_tag 'who_we_are[image_file]', accept: 'image/*', class: 'w-full' %>
+          <p class="text-sm text-slate-500 mb-2">Upload an image</p>
+          <%= file_field_tag 'who_we_are[image_file]', accept: 'image/*', direct_upload: true, class: 'w-full' %>
         </div>
         <div class="flex gap-3">
           <%= submit_tag 'Save Who We Are', class: 'btn btn-success text-white font-bold' %>

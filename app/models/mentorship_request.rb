@@ -6,6 +6,8 @@ class MentorshipRequest < ApplicationRecord
 
   validates :mentor_id, presence: true
 
+  after_create :notify_mentor
+
   scope :for_mentor, ->(mentor_id) { where(mentor_id: mentor_id).order(created_at: :desc) }
   scope :recent, -> { order(created_at: :desc) }
 
@@ -19,5 +21,15 @@ class MentorshipRequest < ApplicationRecord
 
   def propose_reschedule!(proposed_time:, reason:, requested_at: Time.current)
     update!(status: :reschedule_requested, reschedule_reason: reason, reschedule_requested_at: requested_at, proposed_time: proposed_time)
+  end
+
+  private
+
+  def notify_mentor
+    begin
+      Notification.create!(user: mentor, title: "New mentorship request", message: "#{founder.name} requested mentorship: #{message.to_s.truncate(200)}", link: "/mentor/mentorship_requests/#{id}")
+    rescue => _e
+      # avoid raising errors from notification failures
+    end
   end
 end

@@ -6,7 +6,82 @@ class MentorOnboardingController < ApplicationController
   STEPS = %w[basic_details work_experience mentorship_focus mentorship_style availability review]
 
   def show
-    @step = params[:step] || session[:mentor_onboarding_step] || STEPS.first
+    prepare_show_state(params[:step])
+  end
+
+  def update
+    @step = params[:step]
+    unless STEPS.include?(@step)
+      redirect_to mentor_onboarding_path(step: STEPS.first)
+      return
+    end
+    service_result = Onboarding::Core.call(actor: current_user, role: :mentors, step: @step, params: mentor_params_for_step(@step), session: session)
+
+    if service_result.success?
+      if service_result.completed?
+        # Completed flow: enqueue side-effects (only when completed and actor exists)
+        if current_user
+          payload = service_result.respond_to?(:changed_models) ? service_result.changed_models : {}
+          Notifications::OnboardingNotifier.notify_user_on_completion(user: current_user, role: :mentors, payload: payload)
+          Notifications::OnboardingNotifier.notify_admin_of_submission(user: current_user, role: :mentors, payload: payload)
+          if defined?(Analytics::Tracker)
+            Analytics::Tracker.track(event: "onboarding_completed", user_id: current_user.id, role: "mentor", payload: payload)
+          else
+            Rails.logger.info("[MentorOnboarding] onboarding_completed user=#{current_user.id} role=mentor")
+          end
+        end
+
+        if current_user
+          redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
+        else
+          # Guest completed onboarding: show a friendly completion page that prompts
+          # the user to create an account. This avoids redirecting guests to auth-protected
+          # mentor areas which render the generic Devise sign-in requirement.
+          redirect_to mentor_onboarding_completed_path
+        end
+      else
+        redirect_to mentor_onboarding_path(step: service_result.next_step)
+      end
+    else
+      prepare_show_state(@step)
+      @errors = service_result.errors
+      render :show, status: :unprocessable_entity
+    end
+  end
+
+  def save_and_exit
+    @step = params[:step]
+    # Delegate persistence to orchestrator; keep controller thin
+    service_result = Onboarding::Core.call(actor: current_user, role: :mentors, step: @step, params: mentor_params_for_step(@step), session: session)
+
+    if service_result.success?
+      # If this call completed the onboarding, run the same completion side-effects
+      if service_result.respond_to?(:completed?) && service_result.completed?
+        if current_user
+          payload = service_result.respond_to?(:changed_models) ? service_result.changed_models : {}
+          Notifications::OnboardingNotifier.notify_user_on_completion(user: current_user, role: :mentors, payload: payload)
+          Notifications::OnboardingNotifier.notify_admin_of_submission(user: current_user, role: :mentors, payload: payload)
+          if defined?(Analytics::Tracker)
+            Analytics::Tracker.track(event: "onboarding_completed", user_id: current_user.id, role: "mentor", payload: payload)
+          else
+            Rails.logger.info("[MentorOnboarding] onboarding_completed user=#{current_user.id} role=mentor")
+          end
+        end
+      end
+
+      redirect_to mentor_root_path, notice: "Your progress has been saved. You can continue onboarding later."
+    else
+      prepare_show_state(@step)
+      @errors = service_result.errors
+      render :show, status: :unprocessable_entity
+    end
+  end
+
+  # Prepare instance state expected by the `show` view so update/save_and_exit
+  # can render the same template when validations fail. Keeps rendering logic
+  # in one place and keeps controller actions thin.
+  def prepare_show_state(requested_step)
+    @step = requested_step || session[:mentor_onboarding_step] || STEPS.first
     unless STEPS.include?(@step)
       redirect_to mentor_onboarding_path(step: STEPS.first)
       return
@@ -16,64 +91,23 @@ class MentorOnboardingController < ApplicationController
       @profile = current_user.user_profile || current_user.build_user_profile
       @profile.update(onboarding_step: @step) unless @profile.onboarding_step == @step
     else
-      # For guests, provide a dummy model with param_key for form_with compatibility
-      profile_data = session[:mentor_onboarding_profile] || {}
+      # Read guest data from the onboarding session namespace so adapter writes
+      # (which use Onboarding::SessionStore) are visible here.
+      session_store = Onboarding::SessionStore.new(session, namespace: :mentors)
+      profile_data = session_store.to_h || {}
       @profile = OpenStruct.new(profile_data)
       def @profile.model_name
         ActiveModel::Name.new(OpenStruct, nil, "user_profile")
       end
       def @profile.to_key; nil; end
       def @profile.persisted?; false; end
+      def @profile.errors
+        @_errors ||= Hash.new { |h, k| [] }
+      end
       session[:mentor_onboarding_step] = @step
     end
 
     @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-  end
-
-  def update
-    @step = params[:step]
-    unless STEPS.include?(@step)
-      redirect_to mentor_onboarding_path(step: STEPS.first)
-      return
-    end
-
-    if current_user
-      @profile = current_user.user_profile || current_user.build_user_profile
-      if @profile.update(mentor_params_for_step(@step))
-        next_step = next_step(@step)
-        if next_step
-          redirect_to mentor_onboarding_path(step: next_step)
-        else
-          complete_onboarding
-        end
-      else
-        @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-        render :show
-      end
-    else
-      # Unauthenticated: store data in session
-      session[:mentor_onboarding_profile] ||= {}
-      session[:mentor_onboarding_profile].merge!(mentor_params_for_step(@step).to_h)
-      next_step = next_step(@step)
-      if next_step
-        session[:mentor_onboarding_step] = next_step
-        redirect_to mentor_onboarding_path(step: next_step)
-      else
-        # At this point, onboarding is complete but user is not registered
-        redirect_to new_mentor_registration_path, notice: "Please create an account to complete your onboarding."
-      end
-    end
-  end
-
-  def save_and_exit
-    @step = params[:step]
-    if @profile.update(mentor_params_for_step(@step))
-      @profile.update(onboarding_step: @step)
-      redirect_to mentor_root_path, notice: "Your progress has been saved. You can continue onboarding later."
-    else
-      @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
-      render :show
-    end
   end
 
   private

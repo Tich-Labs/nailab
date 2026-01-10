@@ -44,4 +44,7 @@ vendor/bundle/
 # Ignore docs folder (we don't need docs in repository for gh-pages)
 docs/
 
+# Do not track the gh-pages site folder in `main` (served from `gh-pages` branch)
+gh-pages/
+
 

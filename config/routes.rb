@@ -16,6 +16,14 @@ Rails.application.routes.draw do
   get "mentor_onboarding", to: "mentor_onboarding#show", as: :mentor_onboarding
   put "mentor_onboarding", to: "mentor_onboarding#update"
   patch "mentor_onboarding/save_and_exit", to: "mentor_onboarding#save_and_exit", as: :mentor_onboarding_save_and_exit
+  get "mentor_onboarding/completed", to: "mentor_onboarding#completed", as: :mentor_onboarding_completed
+  get "founder_onboarding/completed", to: "founder_onboarding#completed", as: :founder_onboarding_completed
+  get "partner_onboarding/completed", to: "partner_onboarding#completed", as: :partner_onboarding_completed
+
+  # Development/test helper: confirm email in-browser by token for testing flows.
+  if Rails.env.development? || Rails.env.test?
+    get "dev/confirm_email/:token", to: "dev_confirmations#confirm", as: :dev_confirm_email
+  end
   missing_font = lambda do |_env|
     [ 204, { "Content-Type" => "font/woff2", "Cache-Control" => "public, max-age=86400" }, [] ]
   end
@@ -34,6 +42,11 @@ Rails.application.routes.draw do
     post "founders", to: "registrations#create", as: :founder_registration, defaults: { role: "founder" }
     post "sign_in", to: "sessions#create"
     delete "sign_out", to: "sessions#destroy"
+  end
+
+  resources :notifications, only: [ :index ] do
+    post :mark_all_read, on: :collection
+     post :mark_read, on: :member
   end
 
   # ActiveStorage routes

@@ -18,8 +18,8 @@
           <%= text_area_tag 'hero[subtitle]', @hero_content[:subtitle], id: 'hero_subtitle', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2', rows: 3 %>
         </div>
         <div class="mb-3">
-          <%= label_tag 'hero_image_url', 'Image URL', class: 'block font-bold text-black' %>
-          <%= text_field_tag 'hero[image_url]', @hero_content[:image_url], id: 'hero_image_url', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+          <p class="text-sm font-medium mb-2">Hero image</p>
+          <%= file_field_tag 'hero[image_file]', accept: 'image/*', direct_upload: true, id: 'hero_image_file', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-3">
           <div>
@@ -65,7 +65,7 @@
       <div class="space-y-5">
         <div class="space-y-4">
           <div class="relative rounded-2xl overflow-hidden shadow-xl">
-            <%= image_tag @hero_content[:image_url], alt: 'Hero preview', class: 'w-full h-56 object-cover' %>
+            <%= image_tag (@hero_image_url.presence || @hero_content[:image_url]), alt: 'Hero preview', class: 'w-full h-56 object-cover' %>
           </div>
           <div>
             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Hero copy</p>

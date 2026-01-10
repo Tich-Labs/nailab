@@ -1,0 +1,434 @@
+<div class="bg-white p-4 rounded shadow">
+  <% if programs_page && programs_page.persisted? %>
+    <% form_url = "/admin/programs_page/#{programs_page.id}" %>
+    <% form_method = :patch %>
+  <% else %>
+    <% form_url = "/admin/programs_page" %>
+    <% form_method = :post %>
+  <% end %>
+  <%= form_with url: form_url, method: form_method, local: true, multipart: true do |form| %>
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <div class="flex-1">
+        <%= form.label :title, 'Programs Page Title', class: 'block font-bold text-black' %>
+        <%= form.text_field :title, value: programs_page&.title, id: 'editor_programs_title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= form.submit 'Save Programs Page', class: 'btn btn-success text-white font-bold', id: 'save-programs-page' %>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <%= form.label :intro_title, 'Introduction Title', class: 'block text-sm font-medium' %>
+      <%= form.text_field :intro_title, value: programs_page&.intro_title, id: 'editor_programs_intro_title', class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2 mb-3' %>
+
+      <%= form.label :intro, 'Introduction Content', class: 'block font-bold text-black' %>
+      <%= form.rich_text_area :intro, id: 'editor_programs_intro', class: 'w-full bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2 mb-3' %>
+      <p class="text-xs text-gray-500 mt-2">The pillars paragraph + category explanation.</p>
+    </div>
+
+    <!-- Current Programs list removed from editor per request -->
+
+    <div id="structured-live-preview" class="hidden mt-4"></div>
+
+  <% end %>
+
+  <script>
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      // insert into ActionText/Trix editor if present
+      var trixEditor = document.querySelector('trix-editor[input="editor_programs_intro"]');
+      if (target.classList.contains('insert-program-full')) {
+        var full = target.dataset.programFull || '';
+        if (trixEditor && trixEditor.editor) {
+          trixEditor.editor.insertHTML(full);
+        } else {
+          var ta = document.getElementById('editor_programs_intro'); if (ta) ta.value = (ta.value||'') + full;
+        }
+        return;
+      }
+
+      if (target.classList.contains('insert-program')) {
+        var token = "[program:" + (target.dataset.programId || '') + "]";
+        if (trixEditor && trixEditor.editor) {
+          trixEditor.editor.insertString(token);
+        } else {
+          var ta = document.getElementById('editor_programs_intro'); if (ta) ta.value = (ta.value||'') + token;
+        }
+      }
+    });
+  </script>
+  <!-- New program creation JS removed because Current Programs list is not shown -->
+  <script>
+    // Structured editor: parse program HTML and present simple fields for editing sections
+    function parseProgramHtml(html) {
+      try {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var out = { headline: '', partner: '', paragraphs: [], impacts: [] };
+        // headline: first strong or h* inside first paragraph
+        var firstP = doc.querySelector('p');
+        if (firstP) {
+          var strong = firstP.querySelector('strong');
+          out.headline = strong ? strong.textContent.trim() : firstP.textContent.trim();
+        }
+        // cover image: first image src if present
+        var firstImg = doc.querySelector('img');
+        if (firstImg && firstImg.src) { out.cover = firstImg.src; }
+        // Partner: look for a paragraph starting with 'Partner:'
+        var ps = Array.from(doc.querySelectorAll('p'));
+        ps.forEach(function(p){
+          var t = p.textContent.trim();
+          if (/^Partner[:\s]/i.test(t)) { out.partner = t.replace(/^Partner[:\s]*/i,'').trim(); }
+        });
+        // body paragraphs: paragraphs that are not headline/partner
+        ps.forEach(function(p){
+          var t = p.textContent.trim();
+          if (!t) return;
+          if (out.headline && t.indexOf(out.headline)===0) return;
+          if (out.partner && t.indexOf('Partner')===0) return;
+          out.paragraphs.push(t);
+        });
+        // impacts: list items inside any ul
+        var lis = Array.from(doc.querySelectorAll('ul li'));
+        lis.forEach(function(li){ out.impacts.push(li.textContent.trim()); });
+        return out;
+      } catch(err) { return { headline:'', partner:'', paragraphs:[], impacts:[] }; }
+    }
+
+    function buildProgramHtml(obj) {
+      var html = '<div class="trix-content">';
+      if (obj.headline) html += '<p><strong>' + obj.headline + '</strong></p>';
+      if (obj.partner) html += '<p>Partner: ' + obj.partner + '</p>';
+      (obj.paragraphs||[]).forEach(function(p){ html += '<p>' + p + '</p>'; });
+      if ((obj.impacts||[]).length) {
+        html += '<p><strong>Impact</strong></p><ul>' + (obj.impacts.map(function(i){ return '<li>' + i + '</li>'; }).join('')) + '</ul>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    document.addEventListener('click', function(e){
+      var target = e.target;
+      if (!target.classList.contains('edit-program-structured')) return;
+      // avoid multiple forms
+      var existing = document.getElementById('structured-editor');
+      if (existing) existing.remove();
+      var programFull = target.dataset.programFull || '';
+      var programSummary = target.dataset.programSummary || '';
+      var programTitle = target.dataset.programTitle || '';
+      var programCategory = target.dataset.programCategory || '';
+      var programCover = target.dataset.programCover || '';
+      var parsed = parseProgramHtml(programFull);
+      var CATEGORIES = <%= raw PagesController::PROGRAM_CATEGORIES.to_json %>;
+      var container = document.createElement('div');
+      container.id = 'structured-editor';
+      container.className = 'mt-4 p-4 border rounded bg-slate-50';
+      // build category options
+      var categoryOptions = CATEGORIES.map(function(c){
+        var selected = (c === programCategory) ? ' selected' : '';
+        return '<option value="' + c + '"' + selected + '>' + c + '</option>';
+      }).join('');
+
+      container.innerHTML = '' +
+        '<div class="mb-2"><label class="block text-sm font-medium">Title</label><input id="structured-title" class="w-full form-input admin-form-input bg-gray-50 px-3 py-2" value="' + (programTitle || parsed.headline || '') + '"></div>' +
+        '<div class="mb-2"><label class="block text-sm font-medium">Category</label><select id="structured-category" class="w-full form-input admin-form-input bg-gray-50">' + categoryOptions + '</select></div>' +
+        '<div class="mb-2"><label class="block text-sm font-medium">Cover image URL</label><input id="structured-cover" class="w-full form-input admin-form-input bg-gray-50 px-3 py-2" value="' + (programCover || '') + '"></div>' +
+        '<div class="mb-2 flex items-center gap-3"><label class="text-sm text-slate-600">Or upload:</label><input id="structured-cover-file-dyn" type="file" accept="image/*" class="form-input" /></div>' +
+        '<div class="mb-2"><label class="block text-sm font-medium">Summary (short)</label><textarea id="structured-summary" rows="2" class="w-full form-input admin-form-input bg-gray-50 px-3 py-3 rounded-md">' + (programSummary || '') + '</textarea></div>' +
+        '<div class="mb-2"><label class="block text-sm font-medium">Details (HTML allowed)</label><textarea id="structured-details" class="w-full form-input admin-form-input bg-gray-50 px-3 py-4 rounded-md" rows="6">' + (programFull || parsed.paragraphs.join('\n')||'') + '</textarea></div>' +
+        '<div class="mb-2 flex items-center gap-3"><label class="text-sm text-slate-600">Add image to details:</label><input id="structured-details-file-dyn" type="file" accept="image/*" class="form-input" /></div>' +
+        '<div class="flex gap-2"><button id="structured-insert" class="btn btn-success">Insert Structured</button><button id="structured-cancel" class="btn btn-secondary">Cancel</button></div>';
+      // place form into a centered modal for a cleaner editor UX
+      function openStructuredModal(contentEl) {
+        // remove existing modal if present
+        var existingModal = document.getElementById('structured-editor-modal');
+        if (existingModal) existingModal.remove();
+        var modal = document.createElement('div');
+        modal.id = 'structured-editor-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.right = '0';
+        modal.style.bottom = '0';
+        modal.style.background = 'rgba(0,0,0,0.4)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '1200';
+
+        var dialog = document.createElement('div');
+        dialog.style.width = 'min(900px, 96%)';
+        dialog.style.maxHeight = '90vh';
+        dialog.style.overflow = 'auto';
+        dialog.style.background = 'white';
+        dialog.style.padding = '20px';
+        dialog.style.borderRadius = '8px';
+        dialog.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+
+        // header with close
+        var header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.style.marginBottom = '12px';
+        var title = document.createElement('div');
+        title.innerHTML = '<strong class="text-lg">Edit Program Sections</strong>';
+        var close = document.createElement('button');
+        close.className = 'btn btn-secondary';
+        close.textContent = 'Close';
+        close.addEventListener('click', function(){ modal.remove(); });
+        header.appendChild(title); header.appendChild(close);
+
+        dialog.appendChild(header);
+        dialog.appendChild(contentEl);
+        modal.appendChild(dialog);
+        document.body.appendChild(modal);
+      }
+
+      openStructuredModal(container);
+
+      // live preview sync
+      var livePreview = document.getElementById('structured-live-preview');
+      function updateLivePreview() {
+        if (!livePreview) return;
+        var titleVal = document.getElementById('structured-title').value.trim();
+        var categoryVal = document.getElementById('structured-category').value;
+        var summaryVal = document.getElementById('structured-summary').value.trim();
+        var detailsVal = document.getElementById('structured-details').value || '';
+        var coverVal = (document.getElementById('structured-cover') && document.getElementById('structured-cover').value) ? document.getElementById('structured-cover').value.trim() : '';
+        var html = '<div class="bg-white p-4 rounded shadow'>" +
+                  (coverVal ? ('<div class="h-40 bg-gray-100 mb-4"><img src="' + coverVal + '" alt="' + (titleVal||'') + '" class="w-full h-full object-cover"/></div>') : '') +
+                  '<h2 class="text-xl font-semibold">' + (titleVal || '&nbsp;') + '</h2>' +
+                  '<div class="text-sm text-slate-500">' + (categoryVal ? categoryVal : '') + '</div>' +
+                  '<div class="mt-3 prose max-w-none text-slate-700">' + (summaryVal ? '<p>' + summaryVal + '</p>' : '') + detailsVal + '</div>' +
+                  '</div>';
+        livePreview.style.display = 'block';
+        livePreview.innerHTML = html;
+      }
+
+      // handlers
+      document.getElementById('structured-cancel').addEventListener('click', function(){ container.remove(); if (livePreview) livePreview.style.display = 'none'; });
+      document.getElementById('structured-insert').addEventListener('click', function(){
+        function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        var titleVal = document.getElementById('structured-title').value.trim();
+        var categoryVal = document.getElementById('structured-category').value;
+        var summaryVal = document.getElementById('structured-summary').value.trim();
+        var detailsVal = document.getElementById('structured-details').value || '';
+        var coverVal = document.getElementById('structured-cover') ? document.getElementById('structured-cover').value.trim() : '';
+        var html = '<div class="trix-content">';
+        if (coverVal) html += '<p><img src="' + escapeHtml(coverVal) + '" alt="' + escapeHtml(titleVal||'') + '"/></p>';
+        if (titleVal) html += '<p><strong>' + escapeHtml(titleVal) + '</strong></p>';
+        if (categoryVal) html += '<p>Category: ' + escapeHtml(categoryVal) + '</p>';
+        if (summaryVal) html += '<p>' + escapeHtml(summaryVal) + '</p>';
+        // detailsVal may contain HTML from ActionText; insert as-is
+        html += detailsVal;
+        html += '</div>';
+        var trixEditor = document.querySelector('trix-editor[input="editor_programs_intro"]');
+        if (trixEditor && trixEditor.editor) {
+          trixEditor.editor.insertHTML(html);
+        } else {
+          var textarea = document.getElementById('editor_programs_intro');
+          if (!textarea) return;
+          var start = textarea.selectionStart || 0;
+          var end = textarea.selectionEnd || 0;
+          var before = textarea.value.substring(0, start);
+          var after = textarea.value.substring(end);
+          textarea.value = before + html + after;
+          var newPos = before.length + html.length;
+          textarea.setSelectionRange(newPos, newPos);
+          textarea.focus();
+        }
+        container.remove();
+        if (livePreview) livePreview.style.display = 'none';
+      });
+      // attach input listeners for live preview
+      ['structured-title','structured-category','structured-summary','structured-details','structured-cover'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateLivePreview);
+      });
+      // dynamic file inputs: cover upload and details image insert
+      var dynCoverFile = document.getElementById('structured-cover-file-dyn');
+      if (dynCoverFile) {
+        dynCoverFile.addEventListener('change', function(e){
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          // Active Storage DirectUpload if available, otherwise fallback to data URL
+          if (window.ActiveStorage && window.ActiveStorage.DirectUpload) {
+            var upload = new ActiveStorage.DirectUpload(f, '<%= rails_direct_uploads_url %>');
+            upload.create(function(error, blob) {
+              if (error) { console.error('direct upload failed', error); alert('Upload failed'); return; }
+              var cov = document.getElementById('structured-cover'); if (cov) {
+                cov.value = '/rails/active_storage/blobs/redirect/' + encodeURIComponent(blob.signed_id) + '/' + encodeURIComponent(f.name);
+                cov.dataset.signedId = blob.signed_id;
+                cov.dispatchEvent(new Event('input'));
+              }
+              updateLivePreview();
+            });
+          } else {
+            var reader = new FileReader();
+            reader.onload = function(ev){
+              var url = ev.target.result;
+              var cov = document.getElementById('structured-cover'); if (cov) { cov.value = url; cov.dispatchEvent(new Event('input')); }
+              updateLivePreview();
+            };
+            reader.readAsDataURL(f);
+          }
+        });
+      }
+      var dynDetailsFile = document.getElementById('structured-details-file-dyn');
+      if (dynDetailsFile) {
+        dynDetailsFile.addEventListener('change', function(e){
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          if (window.ActiveStorage && window.ActiveStorage.DirectUpload) {
+            var upload = new ActiveStorage.DirectUpload(f, '<%= rails_direct_uploads_url %>');
+            upload.create(function(error, blob) {
+              if (error) { console.error('direct upload failed', error); alert('Upload failed'); return; }
+              var det = document.getElementById('structured-details');
+              if (!det) return;
+              var url = '/rails/active_storage/blobs/redirect/' + encodeURIComponent(blob.signed_id) + '/' + encodeURIComponent(f.name);
+              var insertHtml = '<p><img src="' + url + '" alt="' + (document.getElementById('structured-title') ? document.getElementById('structured-title').value : '') + '"/></p>';
+              det.value = det.value + '\n' + insertHtml;
+              updateLivePreview();
+            });
+          } else {
+            var reader = new FileReader();
+            reader.onload = function(ev){
+              var url = ev.target.result;
+              var det = document.getElementById('structured-details');
+              if (!det) return;
+              var insertHtml = '<p><img src="' + url + '" alt="' + (document.getElementById('structured-title') ? document.getElementById('structured-title').value : '') + '"/></p>';
+              det.value = det.value + '\n' + insertHtml;
+              updateLivePreview();
+            };
+            reader.readAsDataURL(f);
+          }
+        });
+      }
+      // initial preview fill
+      updateLivePreview();
+    });
+    // static structured form insert/clear handlers
+    document.addEventListener('click', function(e){
+      if (e.target && e.target.id === 'structured-form-insert') {
+        var titleVal = document.getElementById('structured-form-title').value.trim();
+        var coverVal = document.getElementById('structured-form-cover').value.trim();
+        var categoryVal = document.getElementById('structured-form-category').value;
+        var summaryVal = document.getElementById('structured-form-summary').value.trim();
+        var detailsVal = document.getElementById('structured-form-details').value || '';
+        function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        var html = '<div class="trix-content">';
+        if (coverVal) html += '<p><img src="' + escapeHtml(coverVal) + '" alt="' + escapeHtml(titleVal||'') + '"/></p>';
+        if (titleVal) html += '<p><strong>' + escapeHtml(titleVal) + '</strong></p>';
+        if (categoryVal) html += '<p>Category: ' + escapeHtml(categoryVal) + '</p>';
+        if (summaryVal) html += '<p>' + escapeHtml(summaryVal) + '</p>';
+        html += detailsVal;
+        html += '</div>';
+        var trixEditor = document.querySelector('trix-editor[input="editor_programs_intro"]');
+        if (trixEditor && trixEditor.editor) {
+          trixEditor.editor.insertHTML(html);
+        } else {
+          var textarea = document.getElementById('editor_programs_intro');
+          if (!textarea) return;
+          var start = textarea.selectionStart || 0;
+          var end = textarea.selectionEnd || 0;
+          var before = textarea.value.substring(0, start);
+          var after = textarea.value.substring(end);
+          textarea.value = before + html + after;
+          var newPos = before.length + html.length;
+          textarea.setSelectionRange(newPos, newPos);
+          textarea.focus();
+        }
+      }
+      if (e.target && e.target.id === 'structured-form-clear') {
+        document.getElementById('structured-form-title').value = '';
+        var cov = document.getElementById('structured-form-cover'); if (cov) cov.value = '';
+        document.getElementById('structured-form-summary').value = '';
+        document.getElementById('structured-form-details').value = '';
+        document.getElementById('structured-form-category').selectedIndex = 0;
+      }
+
+      // Prefill static structured form when selecting a program button
+      var sel = e.target;
+      if (sel && (sel.classList.contains('insert-program') || sel.classList.contains('insert-program-full') || sel.classList.contains('edit-program-structured'))) {
+        try {
+          var t = sel.dataset.programTitle || '';
+          var c = sel.dataset.programCategory || '';
+          var s = sel.dataset.programSummary || '';
+          var d = sel.dataset.programFull || '';
+          var cv = sel.dataset.programCover || '';
+          var titleEl = document.getElementById('structured-form-title');
+          var catEl = document.getElementById('structured-form-category');
+          var sumEl = document.getElementById('structured-form-summary');
+          var detEl = document.getElementById('structured-form-details');
+          var covEl = document.getElementById('structured-form-cover');
+          if (titleEl) titleEl.value = t;
+          if (catEl && c) {
+            for (var i=0;i<catEl.options.length;i++){ if (catEl.options[i].value==c){ catEl.selectedIndex=i; break; } }
+          }
+          if (sumEl) sumEl.value = s;
+          if (detEl) detEl.value = d;
+          if (covEl) covEl.value = cv;
+        } catch(err) { console.error('prefill static structured form', err); }
+      }
+    });
+  </script>
+  <script>
+    (function(){
+      var coverFile = document.getElementById('structured-form-cover-file');
+      if (coverFile) {
+        coverFile.addEventListener('change', function(e){
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          if (window.ActiveStorage && window.ActiveStorage.DirectUpload) {
+            var upload = new ActiveStorage.DirectUpload(f, '<%= rails_direct_uploads_url %>');
+            upload.create(function(error, blob) {
+              if (error) { console.error('direct upload failed', error); alert('Upload failed'); return; }
+              var cov = document.getElementById('structured-form-cover');
+              if (cov) {
+                cov.value = '/rails/active_storage/blobs/redirect/' + encodeURIComponent(blob.signed_id) + '/' + encodeURIComponent(f.name);
+                cov.dataset.signedId = blob.signed_id;
+              }
+            });
+          } else {
+            var reader = new FileReader();
+            reader.onload = function(ev){
+              var url = ev.target.result;
+              var cov = document.getElementById('structured-form-cover');
+              if (cov) cov.value = url;
+            };
+            reader.readAsDataURL(f);
+          }
+        });
+      }
+      var detailsFile = document.getElementById('structured-form-details-file');
+      if (detailsFile) {
+        detailsFile.addEventListener('change', function(e){
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          if (window.ActiveStorage && window.ActiveStorage.DirectUpload) {
+            var upload = new ActiveStorage.DirectUpload(f, '<%= rails_direct_uploads_url %>');
+            upload.create(function(error, blob) {
+              if (error) { console.error('direct upload failed', error); alert('Upload failed'); return; }
+              var det = document.getElementById('structured-form-details');
+              if (!det) return;
+              var url = '/rails/active_storage/blobs/redirect/' + encodeURIComponent(blob.signed_id) + '/' + encodeURIComponent(f.name);
+              var insertHtml = '<p><img src="' + url + '" alt="' + (document.getElementById('structured-form-title') ? document.getElementById('structured-form-title').value : '') + '"/></p>';
+              det.value = det.value + '\n' + insertHtml;
+            });
+          } else {
+            var reader = new FileReader();
+            reader.onload = function(ev){
+              var url = ev.target.result;
+              var det = document.getElementById('structured-form-details');
+              if (!det) return;
+              var insertHtml = '<p><img src="' + url + '" alt="' + (document.getElementById('structured-form-title') ? document.getElementById('structured-form-title').value : '') + '"/></p>';
+              det.value = det.value + '\n' + insertHtml;
+            };
+            reader.readAsDataURL(f);
+          }
+        });
+      }
+    })();
+  </script>
+</div>

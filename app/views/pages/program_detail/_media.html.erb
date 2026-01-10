@@ -1,0 +1,29 @@
+<%# Media partial: renders responsive video or primary image and thumbnails when available %>
+<div class="relative bg-gray-900">
+  <% if @program.video_url.present? %>
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="aspect-w-16 aspect-h-9 rounded-md overflow-hidden">
+        <iframe src="<%= @program.video_url %>" title="<%= @program.title %>" class="w-full h-full" frameborder="0" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  <% else %>
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="aspect-w-16 aspect-h-9 rounded-md overflow-hidden relative">
+        <%= image_tag(@program.primary_image_url, alt: @program.title, class: 'w-full h-full object-cover opacity-80', loading: 'lazy') %>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @program.image_urls.size > 1 %>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="grid grid-cols-3 gap-3">
+        <% @program.image_urls.each do |img| %>
+          <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-md">
+            <img src="<%= img %>" alt="<%= @program.title %>" class="w-full h-full object-cover" loading="lazy"/>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
