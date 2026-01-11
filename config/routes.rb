@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   get "/favicon.ico", to: missing_favicon
   get "/assets/fonts/gotham/*font", to: missing_font
 
-  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks", passwords: "passwords" }
   devise_scope :user do
     get "mentors/sign_up", to: "registrations#new", as: :new_mentor_registration, defaults: { role: "mentor" }
     post "mentors", to: "registrations#create", as: :mentor_registration, defaults: { role: "mentor" }
