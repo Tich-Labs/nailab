@@ -1,23 +1,14 @@
+require "ostruct"
+
 class FounderOnboardingController < ApplicationController
   include CountryHelper
 
   STEPS = %w[personal startup professional mentorship confirm]
 
   def show
-    # Prepare view state from session store (guest) or persisted models (actor)
-    @step = params[:step] || session[:founder_onboarding_step] || STEPS.first
-    if current_user
-      @user_profile = current_user.user_profile || current_user.build_user_profile
-      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
-      @user_profile.update(onboarding_step: @step) unless @user_profile.onboarding_step == @step
-    else
-      session_store = Onboarding::SessionStore.new(session, namespace: :founders)
-      up = session_store.to_h.select { |k, _| %w[full_name phone country city email].include?(k) }
-      sp = session_store.to_h.reject { |k, _| %w[full_name phone country city email].include?(k) }
-      @user_profile = OpenStruct.new(up || {})
-      @startup_profile = OpenStruct.new(sp || {})
-      session[:founder_onboarding_step] = @step
-    end
+    prepare_profiles
+  end
+
   def update
     @step = params[:step] || STEPS.first
 
@@ -31,6 +22,8 @@ class FounderOnboardingController < ApplicationController
 
     service_result = Onboarding::Core.call(actor: current_user, role: :founders, step: @step, params: step_params, session: session)
 
+    Rails.logger.info("[FounderOnboarding] service_result: #{service_result.inspect}")
+
     if service_result.success?
       if service_result.completed?
         if current_user
@@ -43,6 +36,7 @@ class FounderOnboardingController < ApplicationController
           end
           redirect_to founder_root_path, notice: "Welcome! Your founder profile has been created."
         else
+          Rails.logger.info("[FounderOnboarding] guest completed onboarding — redirecting to completed page")
           redirect_to founder_onboarding_completed_path
         end
       else
@@ -51,10 +45,12 @@ class FounderOnboardingController < ApplicationController
     else
       # render with errors
       @errors = service_result.errors
+      Rails.logger.warn("[FounderOnboarding] onboarding failed: ")
+      Rails.logger.warn(@errors.inspect)
       @step = @step
+      prepare_profiles unless defined?(@user_profile) && @user_profile
       render :show, status: :unprocessable_entity
     end
-  end
   end
 
   def save_and_exit
@@ -73,6 +69,7 @@ class FounderOnboardingController < ApplicationController
       redirect_to founder_root_path, notice: "Your progress has been saved. You can continue onboarding later."
     else
       @errors = service_result.errors
+      prepare_profiles unless defined?(@user_profile) && @user_profile
       render :show, status: :unprocessable_entity
     end
   end
@@ -100,6 +97,22 @@ class FounderOnboardingController < ApplicationController
 
   def mentorship_params
     params.require(:founder_onboarding).require(:startup_profile).permit(:mentorship_areas, :challenge_details, :preferred_mentorship_mode)
+  end
+
+  def prepare_profiles
+    @step = params[:step] || session[:founder_onboarding_step] || STEPS.first
+    if current_user
+      @user_profile = current_user.user_profile || current_user.build_user_profile
+      @startup_profile = current_user.startup_profile || current_user.build_startup_profile
+      @user_profile.update(onboarding_step: @step) unless @user_profile.onboarding_step == @step
+    else
+      session_store = Onboarding::SessionStore.new(session, namespace: :founders)
+      up = session_store.to_h.select { |k, _| %w[full_name phone country city email].include?(k) }
+      sp = session_store.to_h.reject { |k, _| %w[full_name phone country city email].include?(k) }
+      @user_profile = ::OpenStruct.new(up || {})
+      @startup_profile = ::OpenStruct.new(sp || {})
+      session[:founder_onboarding_step] = @step
+    end
   end
 
   def cast_boolean_param(attributes, key)

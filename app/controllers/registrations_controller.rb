@@ -8,12 +8,34 @@ class RegistrationsController < Devise::RegistrationsController
 
       # Attach founder data if present
       if fs.to_h.present?
+        # Ensure the user record is persisted so associations get a user_id
+        unless user.persisted?
+          saved = user.save
+          unless saved
+            Rails.logger.error("Registrations#create: could not persist user before creating profiles: ")
+            Rails.logger.error(user.errors.full_messages.join("; "))
+            next
+          end
+        end
+
         up_attrs = fs.to_h.slice("full_name", "phone", "country", "city", "email") rescue fs.to_h
         sp_attrs = fs.to_h.except(*up_attrs.keys) rescue fs.to_h
-        user_profile = user.build_user_profile(up_attrs.merge(role: "founder"))
-        user_profile.save
-        startup_profile = user.build_startup_profile(sp_attrs)
-        startup_profile.save
+        user_profile = user.create_user_profile(up_attrs.merge(role: "founder"))
+        unless user_profile&.persisted?
+          Rails.logger.error("Registrations#create: failed to create user_profile: #{user_profile&.errors&.full_messages}")
+        end
+        startup_profile = user.create_startup_profile(sp_attrs)
+        unless startup_profile&.persisted?
+          Rails.logger.error("Registrations#create: failed to create startup_profile: #{startup_profile&.errors&.full_messages}")
+        end
+
+        # Notify admins about new founder submission for review
+        begin
+          payload = { user_profile: user_profile&.attributes, startup_profile: startup_profile&.attributes }
+          Notifications::OnboardingNotifier.notify_admin_of_submission(user: user, role: :founders, payload: payload)
+        rescue => e
+          Rails.logger.error("Registrations#create: failed to notify admin of submission: #{e.message}")
+        end
       end
 
       # Attach mentor data if present
@@ -29,8 +51,9 @@ class RegistrationsController < Devise::RegistrationsController
         end
       end
 
-      # If onboarding data existed, auto-confirm the user so they can continue in-browser
-      if fs.to_h.present? || ms.to_h.present? || ps.to_h.present?
+      # If onboarding data existed, auto-confirm mentors/partners and sign them in.
+      # Founders should NOT be auto-confirmed — they must wait for approval email.
+      if ms.to_h.present? || ps.to_h.present?
         if user.respond_to?(:confirm)
           user.confirm
         elsif user.respond_to?(:confirmed_at)
@@ -38,6 +61,9 @@ class RegistrationsController < Devise::RegistrationsController
         end
         # Sign in the user (bypass Devise confirmable gate if we just confirmed)
         sign_in(resource_name, user) unless user_signed_in?
+      elsif fs.to_h.present?
+        # Founders: leave unconfirmed in production and show a pending notice
+        flash[:notice] = "Thanks for signing up. We'll review your application and send an approval email shortly."
       end
 
       # Clear onboarding session namespaces
@@ -60,6 +86,10 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  # Page shown to users whose sign up is pending manual approval/confirmation
+  def pending
+    render :pending
+  end
   protected
 
   def after_sign_up_path_for(resource)

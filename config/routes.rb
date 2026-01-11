@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     post "mentors", to: "registrations#create", as: :mentor_registration, defaults: { role: "mentor" }
     get "founders/sign_up", to: "registrations#new", as: :new_founder_registration, defaults: { role: "founder" }
     post "founders", to: "registrations#create", as: :founder_registration, defaults: { role: "founder" }
+    get "registrations/pending", to: "registrations#pending", as: :registrations_pending
     post "sign_in", to: "sessions#create"
     delete "sign_out", to: "sessions#destroy"
   end
