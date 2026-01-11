@@ -166,8 +166,8 @@ Rails.application.routes.draw do
   post "/admin/startup_profile/:id/approve", to: "admin/startup_profiles#approve", as: :approve_admin_startup_profile
   post "/admin/startup_profile/:id/reject", to: "admin/startup_profiles#reject", as: :reject_admin_startup_profile
   post "/admin/startup_profile/:id/archive", to: "admin/startup_profiles#archive", as: :archive_admin_startup_profile
-  get "/admin/startup_profile/:id", to: "admin/startup_profiles#show"
-  patch "/admin/startup_profile/:id", to: "admin/startup_profiles#update"
+  get "/admin/startup_profile/:id", to: "admin/startup_profiles#show", as: :admin_startup_profile_show
+  patch "/admin/startup_profile/:id", to: "admin/startup_profiles#update", as: :admin_startup_profile_update
 
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
 
