@@ -160,7 +160,7 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <% collection.each do |startup| %>
         <article class="relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 focus-within:ring-2 focus-within:ring-nailab-teal focus-within:ring-offset-2 group">
-          <%= link_to rails_admin.show_path(model_name: 'startup_profile', id: startup.id),
+          <%= link_to admin_startup_profile_path(startup),
                       class: 'absolute inset-0 z-0',
                       aria: { label: "View details of #{startup.startup_name}" } do %>
             <span class="sr-only">View <%= startup.startup_name %> details</span>
