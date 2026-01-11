@@ -1,0 +1,285 @@
+<%# app/views/admin/startup_profiles/index.html.erb %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header + Quick Tabs -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Startup Profiles</h1>
+
+    <div class="flex items-center gap-2 flex-wrap">
+      <% all_count = (@startups || []).size %>
+      <% pending_count = (@startups || []).count do |s|
+           status = if s.respond_to?(:active) && s.active
+             'approved'
+           elsif s.user&.user_profile&.profile_approval_status == 'approved'
+             'approved'
+           elsif s.respond_to?(:archived) && s.archived
+             'archived'
+           else
+             'pending'
+           end
+           status == 'pending'
+         end %>
+
+      <%= link_to "All (#{all_count})",
+                  url_for(params.permit!.except(:tab).merge(tab: nil)),
+                  class: "px-4 py-1.5 text-sm font-medium rounded-full transition-colors #{params[:tab].blank? ? 'bg-nailab-teal text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" %>
+
+      <%= link_to "Pending (#{pending_count})",
+                  url_for(params.permit!.except(:tab).merge(tab: 'pending')),
+                  class: "px-4 py-1.5 text-sm font-medium rounded-full transition-colors #{params[:tab] == 'pending' ? 'bg-nailab-teal text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" %>
+    </div>
+  </div>
+
+  <!-- Filters & Search -->
+  <%= form_with url: admin_startup_profiles_path, method: :get, local: true, class: 'space-y-4' do |f| %>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <!-- Main search field - takes priority -->
+      <div class="flex-1 min-w-0">
+        <%= f.label :q, "Search startups...", class: "sr-only" %>
+        <%= f.search_field :q,
+            value: params[:q],
+            placeholder: "Search by name, sector, founder, description...",
+            class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-3 text-base shadow-sm focus:border-nailab-teal focus:ring-2 focus:ring-nailab-teal/30 dark:focus:ring-nailab-teal/40 dark:text-gray-100 transition-all",
+            aria: { describedby: "search-desc" } %>
+        <p id="search-desc" class="sr-only">Press Enter or click Filter to search</p>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex items-center gap-3 flex-wrap">
+        <%= f.submit "Filter", class: "px-6 py-3 bg-nailab-teal text-white font-medium rounded-xl hover:bg-nailab-teal/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-nailab-teal transition-colors shadow-sm" %>
+
+        <%= link_to "Reset", admin_startup_profiles_path, 
+                    class: "px-5 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" %>
+      </div>
+    </div>
+
+    <!-- Secondary filters - compact row -->
+    <div class="flex flex-wrap gap-3">
+      <div class="min-w-[160px]">
+        <%= f.label :sector, "Sector", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :sector,
+            options_for_select([['All sectors', '']] + SECTOR_OPTIONS.map { |s| [s, s] }, params[:sector]),
+            {}, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-nailab-teal focus:ring-2 focus:ring-nailab-teal/30 transition-colors" %>
+      </div>
+
+      <div class="min-w-[140px]">
+        <%= f.label :stage, "Stage", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :stage,
+            options_for_select([['Any stage', '']] + STAGE_OPTIONS.map { |s| [s, s] }, params[:stage]),
+            {}, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-nailab-teal focus:ring-2 focus:ring-nailab-teal/30 transition-colors" %>
+      </div>
+
+      <div class="min-w-[140px]">
+        <%= f.label :visibility, "Status", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :visibility,
+            options_for_select([['Any', ''], ['Approved', 'approved'], ['Pending', 'pending'], ['Archived', 'archived']], params[:visibility]),
+            {}, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-nailab-teal focus:ring-2 focus:ring-nailab-teal/30 transition-colors" %>
+      </div>
+
+      <div class="min-w-[160px]">
+        <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.text_field :location,
+            value: params[:location],
+            placeholder: "e.g. Nairobi, Lagos",
+            class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-nailab-teal focus:ring-2 focus:ring-nailab-teal/30 transition-colors" %>
+      </div>
+    </div>
+
+    <!-- Active filters chips -->
+    <% active_filters = params.slice(:q, :sector, :stage, :location, :visibility, :funding).to_h.select { |_, v| v.present? } %>
+    <% if active_filters.any? %>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <% active_filters.each do |key, value| %>
+          <% next if value.blank? %>
+          <%= link_to "× #{value.truncate(20)}",
+                      url_for(params.permit!.except(key)),
+                      class: "inline-flex items-center gap-1.5 px-3 py-1 text-sm rounded-full bg-nailab-teal/10 text-nailab-teal hover:bg-nailab-teal/20 transition-colors" %>
+        <% end %>
+
+        <%= link_to "Clear all filters",
+                    admin_startup_profiles_path,
+                    class: "text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 underline" %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <!-- Bulk Actions Bar (shown via JS when any checkbox is selected) -->
+  <form id="bulk-actions-form" 
+        action="<%= bulk_admin_startup_profiles_path rescue '#' %>" 
+        method="post" 
+        class="hidden mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm"
+        data-controller="bulk-actions">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+      <div class="flex items-center gap-4">
+        <label class="inline-flex items-center gap-2">
+          <input type="checkbox" id="select-all" class="h-5 w-5 text-nailab-teal focus:ring-nailab-teal border-gray-300 rounded" data-action="change->bulk-actions#toggleAll" aria-label="Select all visible startups">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Select All</span>
+        </label>
+        <span class="text-sm text-gray-500 dark:text-gray-400" data-bulk-actions-target="count">0 selected</span>
+      </div>
+
+      <div class="flex items-center gap-3 flex-wrap">
+        <button type="submit" name="bulk_action" value="approve" 
+                formaction="<%= bulk_admin_startup_profiles_path(action: 'approve') rescue '#' %>"
+                class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 transition-colors"
+                aria-label="Approve selected startups">
+          Approve
+        </button>
+        <button type="submit" name="bulk_action" value="archive"
+                formaction="<%= bulk_admin_startup_profiles_path(action: 'archive') rescue '#' %>"
+                class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-colors"
+                aria-label="Archive selected startups">
+          Archive
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Startup Cards Grid -->
+  <% collection = (@startups || @filtered_startups || []) %>
+  <% if params[:tab] == 'pending' %>
+    <% collection = collection.select do |s|
+         status = if s.respond_to?(:active) && s.active
+           'approved'
+         elsif s.user&.user_profile&.profile_approval_status == 'approved'
+           'approved'
+         elsif s.respond_to?(:archived) && s.archived
+           'archived'
+         else
+           'pending'
+         end
+         status == 'pending'
+       end %>
+  <% end %>
+
+  <% if collection.empty? %>
+    <div class="text-center py-16 text-gray-500 dark:text-gray-400">
+      <p class="text-lg">No startup profiles found matching your criteria.</p>
+      <%= link_to "Clear all filters", admin_startup_profiles_path, class: "mt-4 inline-block text-nailab-teal hover:underline" %>
+    </div>
+  <% else %>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <% collection.each do |startup| %>
+        <article class="relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 focus-within:ring-2 focus-within:ring-nailab-teal focus-within:ring-offset-2 group">
+          <%= link_to rails_admin.show_path(model_name: 'startup_profile', id: startup.id),
+                      class: 'absolute inset-0 z-0',
+                      aria: { label: "View details of #{startup.startup_name}" } do %>
+            <span class="sr-only">View <%= startup.startup_name %> details</span>
+          <% end %>
+
+          <div class="p-5 flex flex-col h-full">
+            <div class="flex items-start gap-4 mb-4 relative z-10">
+              <div class="flex-shrink-0">
+                <input type="checkbox" 
+                       name="startup_ids[]" 
+                       value="<%= startup.id %>" 
+                       class="h-5 w-5 text-nailab-teal focus:ring-nailab-teal border-gray-300 rounded"
+                       aria-label="Select <%= startup.startup_name %>" 
+                       data-bulk-actions-target="checkbox">
+              </div>
+
+              <div class="w-14 h-14 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden flex-shrink-0">
+                <% logo_src = startup.logo_url.presence || "https://picsum.photos/seed/startup-#{startup.id}/120/120" %>
+                <%= image_tag logo_src, alt: "#{startup.startup_name} logo", class: "w-full h-full object-contain" %>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-lg text-gray-900 dark:text-white truncate"><%= startup.startup_name %></h3>
+                <div class="mt-1 flex flex-wrap gap-2">
+                  <% if startup.sector.present? %>
+                    <span class="px-2.5 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"><%= startup.sector %></span>
+                  <% end %>
+                  <% if startup.location.present? %>
+                    <span class="px-2.5 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"><%= startup.location.truncate(20) %></span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4"><%= startup.description.presence || "No description provided" %></p>
+
+            <div class="mt-auto flex items-center justify-between text-sm relative z-10">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 text-xs rounded-full <%= stage_badge_class(startup.stage) %>">
+                  <%= startup.stage.presence || "—" %>
+                </span>
+              </div>
+
+              <span class="px-2.5 py-0.5 text-xs rounded-full <%= status_badge_class(startup) %>">
+                <%= startup_visibility_status(startup).titleize %>
+              </span>
+            </div>
+
+            <!-- Founder info -->
+            <% if startup.user&.user_profile.present? %>
+              <div class="mt-4 flex items-center gap-3 relative z-10">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex-shrink-0">
+                  <% if startup.user.user_profile.photo_url.present? %>
+                    <%= image_tag startup.user.user_profile.photo_url, alt: startup.user.user_profile.full_name, class: "w-full h-full object-cover" %>
+                  <% else %>
+                    <div class="w-full h-full flex items-center justify-center text-xs font-medium text-gray-500 dark:text-gray-400">
+                      <%= startup.user.user_profile.full_name&.first&.upcase || "?" %>
+                    </div>
+                  <% end %>
+                </div>
+                <span class="text-sm text-gray-700 dark:text-gray-300 truncate"><%= startup.user.user_profile.full_name %></span>
+              </div>
+            <% end %>
+
+            <!-- Quick Actions -->
+            <div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-2 relative z-10">
+              <div class="flex items-center gap-3" role="group" aria-label="Profile actions">
+                <%= button_to approve_admin_startup_profile_path(startup), method: :post,
+                    class: "p-3 rounded-lg text-green-700 bg-white/0 hover:bg-green-50 dark:hover:bg-green-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 transition-colors",
+                    form: { data: { turbo: false } },
+                    data: { turbo: false },
+                    aria: { label: "Approve #{startup.startup_name}" } do %>
+                  <svg class="w-5 h-5" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span class="sr-only">Approve <%= startup.startup_name %></span>
+                <% end %>
+
+                <%= button_to reject_admin_startup_profile_path(startup), method: :post,
+                    class: "p-3 rounded-lg text-red-700 bg-white/0 hover:bg-red-50 dark:hover:bg-red-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors",
+                    form: { data: { turbo: false } },
+                    data: { turbo: false },
+                    aria: { label: "Reject #{startup.startup_name}" } do %>
+                  <svg class="w-5 h-5" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  <span class="sr-only">Reject <%= startup.startup_name %></span>
+                <% end %>
+
+                <%= button_to archive_admin_startup_profile_path(startup), method: :post,
+                    class: "p-3 rounded-lg text-gray-700 bg-white/0 hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 transition-colors",
+                    form: { data: { turbo: false } },
+                    data: { turbo: false },
+                    aria: { label: "Archive #{startup.startup_name}" } do %>
+                  <svg class="w-5 h-5" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7m5-4h4l1 4H9l1-4z"/></svg>
+                  <span class="sr-only">Archive <%= startup.startup_name %></span>
+                <% end %>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <%= link_to message_href_for(startup), 
+                    class: "p-3 rounded-lg text-blue-600 bg-white/0 hover:bg-blue-50 dark:hover:bg-blue-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors",
+                    aria: { label: "Message founder of #{startup.startup_name}" } do %>
+                  <svg class="w-5 h-5" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2z"/></svg>
+                  <span class="sr-only">Message founder of <%= startup.startup_name %></span>
+                <% end %>
+
+                <%= link_to public_profile_path_for(startup), target: "_blank", rel: "noopener",
+                    class: "p-3 rounded-lg text-gray-700 bg-white/0 hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 transition-colors",
+                    aria: { label: "View public profile of #{startup.startup_name}" } do %>
+                  <svg class="w-5 h-5" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  <span class="sr-only">View public profile of <%= startup.startup_name %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Pagination -->
+  <div class="mt-10 flex justify-center">
+    <%= paginate(@startups) if defined?(paginate) && @startups.respond_to?(:current_page) %>
+  </div>
+</div>

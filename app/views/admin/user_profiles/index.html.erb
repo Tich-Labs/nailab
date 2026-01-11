@@ -1,0 +1,26 @@
+<h1 class="text-2xl font-semibold mb-4">Pending Profile Approvals</h1>
+<table class="min-w-full bg-white">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">Founder</th>
+      <th class="px-4 py-2">Submitted at</th>
+      <th class="px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @profiles.each do |p| %>
+      <tr class="border-t">
+        <td class="px-4 py-2"><%= p.user&.email %> — <%= p.full_name %></td>
+        <td class="px-4 py-2"><%= p.updated_at.strftime('%F %T') %></td>
+        <td class="px-4 py-2">
+          <%= link_to 'View', admin_user_profile_path(p), class: 'px-3 py-1 bg-gray-100 rounded' %>
+          <%= button_to 'Approve', approve_admin_user_profile_path(p), method: :post, data: { confirm: 'Approve this profile?' }, class: 'px-3 py-1 bg-green-100 rounded' %>
+          <%= form_with url: reject_admin_user_profile_path(p), method: :post, local: true, style: 'display:inline-block' do |f| %>
+            <%= f.hidden_field :reason, value: 'Does not meet community guidelines' %>
+            <%= f.submit 'Reject', data: { confirm: 'Reject this profile?' }, class: 'px-3 py-1 bg-red-100 rounded' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

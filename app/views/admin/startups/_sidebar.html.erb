@@ -1,0 +1,62 @@
+<%# app/views/admin/startups/_sidebar.html.erb - Moderation controls and quick edits %>
+<div class="sticky top-6">
+  <section aria-labelledby="moderation-heading" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 shadow-sm">
+    <h2 id="moderation-heading" class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Moderation</h2>
+
+    <%= form_with url: (startup.present? ? "/admin/startup_profile/#{startup.to_param}" : '#'), method: :patch, local: true do |f| %>
+      <div class="space-y-4">
+        <div>
+          <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :status, options_for_select([['Pending','pending'], ['Approved','approved'], ['Rejected','rejected'], ['Archived','archived']], (startup.user&.user_profile&.profile_approval_status || 'pending')), {}, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-nailab-teal/30 focus:border-nailab-teal" %>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <label class="flex items-center gap-2">
+              <%= f.check_box :public_profile, { checked: startup_visibility_status(startup) == 'approved' }, '1', '0' %>
+              <span class="text-sm text-gray-700 dark:text-gray-300">Profile public</span>
+            </label>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Toggle whether this profile appears on the public directory.</p>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :notes, "Moderator notes", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.text_area :notes, value: (startup.try(:moderator_notes) || ''), rows: 4, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-nailab-teal/30" %>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <%= f.submit "Save changes", class: "px-4 py-2 bg-nailab-teal text-white rounded-lg font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nailab-teal" %>
+          <%= button_to (defined?(archive_admin_startup_profile_path) ? archive_admin_startup_profile_path(startup) : '#'), method: :post, form: { data: { turbo: false } }, class: "px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-500" do %>
+            Archive
+          <% end %>
+        </div>
+
+        <div class="border-t border-gray-100 dark:border-gray-800 pt-3">
+          <div class="flex flex-col gap-2">
+            <a href="<%= (defined?(message_href_for) ? message_href_for(startup) : '#') %>" class="px-3 py-2 text-sm text-blue-600 hover:underline focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Message founder</a>
+            <a href="#" class="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:underline focus-visible:ring-2 focus-visible:ring-gray-500 rounded">View support tickets</a>
+            <a href="#" class="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:underline focus-visible:ring-2 focus-visible:ring-gray-500 rounded">View metrics</a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <!-- Activity log -->
+  <section class="mt-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 shadow-sm" aria-labelledby="activity-heading">
+    <h3 id="activity-heading" class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Activity</h3>
+    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-3">
+      <% if startup.respond_to?(:profile_audits) && startup.profile_audits.any? %>
+        <% startup.profile_audits.order(created_at: :desc).limit(10).each do |a| %>
+          <li class="border-l-2 border-gray-200 dark:border-gray-700 pl-3">
+            <div class="text-xs text-gray-500 dark:text-gray-400"><%= a.created_at.strftime('%b %d, %Y %H:%M') %> — <%= a.action %></div>
+            <div class="text-sm"><%= a.notes.presence || a.summary.presence || a.user&.email || '—' %></div>
+          </li>
+        <% end %>
+      <% else %>
+        <li class="text-sm text-gray-500 dark:text-gray-400">No recent activity.</li>
+      <% end %>
+    </ul>
+  </section>
+</div>

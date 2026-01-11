@@ -148,6 +148,27 @@ Rails.application.routes.draw do
     patch "admin/homepage/our_impact", to: "admin/homepage#update_our_impact"
   end
 
+  namespace :admin do
+    resources :user_profiles, only: %i[index show] do
+      member do
+        post :approve
+        post :reject
+      end
+    end
+  end
+
+  # Redirect the plural admin path to RailsAdmin's singular model path
+  get "/admin/startup_profiles", to: redirect("/admin/startup_profile")
+
+  # Serve a custom admin grid for StartupProfile at the RailsAdmin model path
+  # This route must come before mounting the RailsAdmin engine so it takes precedence.
+  get "/admin/startup_profile", to: "admin/startup_profiles#index"
+  post "/admin/startup_profile/:id/approve", to: "admin/startup_profiles#approve", as: :approve_admin_startup_profile
+  post "/admin/startup_profile/:id/reject", to: "admin/startup_profiles#reject", as: :reject_admin_startup_profile
+  post "/admin/startup_profile/:id/archive", to: "admin/startup_profiles#archive", as: :archive_admin_startup_profile
+  get "/admin/startup_profile/:id", to: "admin/startup_profiles#show"
+  patch "/admin/startup_profile/:id", to: "admin/startup_profiles#update"
+
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
 
   # Admin support ticket replies

@@ -73,7 +73,7 @@ module AdminDashboardHelper
         title: "💼 Startups",
         path: safe_path { "/admin/startup_profile" },
         sections: [
-          { label: "Startups", path: "/admin/startup_profile" }
+          { label: "Startups", path: "/admin/startup_profile", badge: @admin_pending_startup_approvals }
         ]
       },
       {
@@ -120,7 +120,17 @@ module AdminDashboardHelper
           @object.to_s
         end
 
-        crumbs << { label: model_label, path: model_path }
+        begin
+          admin_obj_path = if defined?(rails_admin) && params[:model_name].present? && @object.respond_to?(:id)
+            rails_admin.show_path(model_name: params[:model_name], id: @object.id)
+          else
+            request.path
+          end
+        rescue StandardError
+          admin_obj_path = request.path
+        end
+
+        crumbs << { label: model_label, path: admin_obj_path }
       end
     elsif params[:controller] == "admin/homepage"
       crumbs << { label: "Homepage", path: admin_homepage_sections_edit_path }

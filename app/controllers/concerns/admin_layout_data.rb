@@ -15,6 +15,13 @@ module AdminLayoutData
 
   def set_admin_layout_data
     @admin_pending_requests = MentorshipRequest.where(status: "pending").count
+    # Pending startup profile approvals: prefer counting startup records that are inactive (awaiting admin activation).
+    # Fall back to counting founder UserProfile approvals if `active` isn't used.
+    if StartupProfile.column_names.include?("active")
+      @admin_pending_startup_approvals = StartupProfile.where(active: false).count
+    else
+      @admin_pending_startup_approvals = UserProfile.where(role: "founder", profile_approval_status: "pending").count
+    end
     @admin_kpi_counts = {
       users: User.count,
       requests: MentorshipRequest.count,

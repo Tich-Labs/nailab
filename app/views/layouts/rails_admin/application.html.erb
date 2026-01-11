@@ -46,12 +46,13 @@
             </button>
             %>
             <div class="relative flex items-center justify-center h-10 w-10">
-              <span class="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-semibold text-white"><%= @admin_pending_requests %></span>
-              <button class="flex items-center justify-center h-10 w-10 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 transition-all" aria-label="Notifications">
+              <% notif_count = (@admin_pending_startup_approvals || 0) + (@admin_pending_requests || 0) %>
+              <span class="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-semibold text-white"><%= notif_count %></span>
+              <%= link_to '/admin/startup_profile', class: 'flex items-center justify-center h-10 w-10 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 transition-all', aria: { label: 'Notifications' } do %>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 7.165 6 9.388 6 12v2.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-              </button>
+              <% end %>
             </div>
             <div class="flex items-center gap-2">
               <span class="hidden sm:inline text-sm text-slate-500 dark:text-slate-400"><%= current_user&.email %></span>

@@ -1,0 +1,30 @@
+<h1 class="text-2xl font-semibold mb-4">Profile Review</h1>
+<div class="bg-white p-6 rounded-lg shadow">
+  <h2 class="text-xl font-bold"><%= @profile.full_name %> — <%= @profile.user&.email %></h2>
+  <p class="text-sm text-gray-600 mb-4">Updated: <%= @profile.updated_at %></p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h3 class="font-semibold">Bio</h3>
+      <p class="mt-2"><%= @profile.bio.presence || '—' %></p>
+    </div>
+    <div>
+      <h3 class="font-semibold">Photo</h3>
+      <% if @profile.photo.attached? %>
+        <%= image_tag url_for(@profile.photo.variant(resize_to_limit: [300, 300])) rescue '' , class: 'mt-2 rounded' %>
+      <% else %>
+        <p class="mt-2 text-sm text-gray-500">No photo uploaded</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex gap-3">
+    <%= button_to 'Approve', approve_admin_user_profile_path(@profile), method: :post, data: { confirm: 'Approve this profile?' }, class: 'px-4 py-2 bg-green-600 text-white rounded' %>
+    <%= form_with url: reject_admin_user_profile_path(@profile), method: :post, local: true do |f| %>
+      <div>
+        <%= f.text_area :reason, placeholder: 'Reason for rejection (optional)', class: 'w-full p-2 border rounded mb-2' %>
+        <%= f.submit 'Reject', data: { confirm: 'Reject this profile?' }, class: 'px-4 py-2 bg-red-600 text-white rounded' %>
+      </div>
+    <% end %>
+  </div>
+</div>

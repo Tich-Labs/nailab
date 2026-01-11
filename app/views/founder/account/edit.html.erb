@@ -2,7 +2,7 @@
 <div class="max-w-4xl mx-auto py-8 px-4">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Account</h1>
   <div class="bg-white shadow rounded-lg p-6">
-    <%= form_with url: founder_account_path, method: :patch, local: false, html: { class: 'space-y-6', id: 'founder-account-form' } do %>
+    <%= form_with url: founder_account_path, method: :patch, local: true, html: { class: 'space-y-6', id: 'founder-account-form', multipart: true } do %>
       <div>
         <label for="user_full_name" class="block text-sm font-medium text-gray-700">Name</label>
         <input type="text" name="user[user_profile][full_name]" id="user_full_name" value="<%= current_user.user_profile&.full_name %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
@@ -26,6 +26,17 @@
       <div>
         <label for="user_bio" class="block text-sm font-medium text-gray-700">Bio</label>
         <textarea name="user[user_profile][bio]" id="user_bio" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"><%= current_user.user_profile&.bio %></textarea>
+        <p id="bio-error" class="text-sm text-red-600 mt-1 hidden">Bio must be at least 30 characters.</p>
+      </div>
+
+      <div>
+        <label for="user_photo" class="block text-sm font-medium text-gray-700">Photo</label>
+        <input type="file" name="user[user_profile][photo]" id="user_photo" accept="image/*" class="mt-1 block w-full" />
+        <% if current_user.user_profile&.photo&.attached? %>
+          <div class="mt-2">
+            <img src="<%= url_for(current_user.user_profile.photo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Profile photo" class="h-16 w-16 rounded-full object-cover" />
+          </div>
+        <% end %>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
@@ -54,3 +65,39 @@
   <div id="ajax-flash" class="fixed top-6 right-6 z-50"></div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.getElementById('founder-account-form');
+  if(!form) return;
+  const bio = document.getElementById('user_bio');
+  const photo = document.getElementById('user_photo');
+  const bioError = document.getElementById('bio-error');
+
+  form.addEventListener('submit', function(e){
+    let ok = true;
+    if(bio){
+      if(bio.value.trim().length < 30){
+        bioError.classList.remove('hidden');
+        ok = false;
+      } else {
+        bioError.classList.add('hidden');
+      }
+    }
+    if(photo && photo.files && photo.files[0]){
+      const f = photo.files[0];
+      const maxBytes = 5 * 1024 * 1024; // 5MB
+      if(f.size > maxBytes){
+        alert('Photo must be under 5MB');
+        ok = false;
+      }
+      const allowed = ['image/jpeg','image/png','image/webp'];
+      if(!allowed.includes(f.type)){
+        alert('Photo must be JPEG, PNG, or WEBP');
+        ok = false;
+      }
+    }
+    if(!ok) e.preventDefault();
+  });
+});
+</script>

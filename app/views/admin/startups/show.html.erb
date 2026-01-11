@@ -1,0 +1,16 @@
+<%# app/views/admin/startups/show.html.erb - Split review page for a startup profile %>
+<a href="#admin-main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:dark:bg-gray-900 focus:text-nailab-teal focus:ring-2 focus:ring-nailab-teal/50 rounded px-3 py-2">Skip to main content</a>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Left: Preview (70%) -->
+    <div id="admin-main-content" role="main" aria-labelledby="startup-title" class="w-full md:w-[70%]">
+      <%= render 'admin/startups/preview', startup: @startup %>
+    </div>
+
+    <!-- Right: Moderation sidebar (30%) -->
+    <aside role="complementary" aria-labelledby="moderation-heading" class="w-full md:w-[30%]">
+      <%= render 'admin/startups/sidebar', startup: @startup %>
+    </aside>
+  </div>
+</div>

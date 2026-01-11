@@ -1,0 +1,149 @@
+<%# app/views/admin/startups/_preview.html.erb - read-only public-style preview %>
+<section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-6">
+  <!-- Hero -->
+  <header class="flex items-center gap-6 mb-6">
+    <div class="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden flex items-center justify-center flex-shrink-0">
+      <% logo_src = startup.logo_url.presence || "https://picsum.photos/seed/startup-#{startup.id}/200/200" %>
+      <%= image_tag logo_src, alt: "#{startup.startup_name} logo", class: "w-full h-full object-contain" %>
+    </div>
+
+    <div>
+      <h1 id="startup-title" class="text-2xl font-bold text-gray-900 dark:text-white"><%= startup.startup_name %></h1>
+      <% if startup.try(:tagline).present? %>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= startup.tagline %></p>
+      <% elsif startup.try(:value_proposition).present? %>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= startup.value_proposition %></p>
+      <% end %>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Main content -->
+    <div class="lg:col-span-2">
+      <section aria-labelledby="about-heading" class="mb-6">
+        <h2 id="about-heading" class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">About</h2>
+        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed"><%= startup.description.presence || "No description provided." %></p>
+      </section>
+
+      <!-- Detailed startup info (reordered to match onboarding wording) -->
+      <section aria-labelledby="details-heading" class="mb-6">
+        <h3 id="details-heading" class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Details</h3>
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+          <div>
+            <dt class="font-bold text-black">Stage</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:stage).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Target market</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:target_market).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div class="md:col-span-2">
+            <dt class="font-bold text-black">Value prop</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:value_proposition).presence || startup.try(:tagline).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Industry</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:sector).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Funding</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:funding_stage).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Funding raised (USD)</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:funding_raised).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div class="md:col-span-2">
+            <dt class="font-bold text-black">Top mentorship areas</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= Array(startup.try(:mentorship_areas)).join(', ').presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div class="md:col-span-2">
+            <dt class="font-bold text-black">Challenges</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:challenge_details).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Mentorship mode</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:preferred_mentorship_mode).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Website</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:website_url).present? ? link_to(startup.website_url, startup.website_url, target: '_blank', rel: 'noopener') : '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Founded</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:founded_year).presence || '—' %></div>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-bold text-black">Team size</dt>
+            <dd>
+              <div class="bg-gray-50 dark:bg-gray-800 p-2 rounded w-full text-sm text-gray-700 dark:text-gray-300"><%= startup.try(:team_size).presence || '—' %></div>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="founder-heading" class="mb-6">
+        <h3 id="founder-heading" class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Founder</h3>
+        <div class="flex items-start gap-4">
+          <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center flex-shrink-0">
+            <% avatar_src = startup.user&.user_profile&.photo_url.presence || "https://i.pravatar.cc/128?u=#{startup.user&.id || 'anon'}" %>
+            <%= image_tag avatar_src, alt: startup.user&.user_profile&.full_name || 'Founder', class: "w-full h-full object-cover" %>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <p class="font-medium text-gray-900 dark:text-white"><%= startup.user&.user_profile&.full_name || "—" %></p>
+            <% profile = startup.user&.user_profile %>
+            <p class="text-sm text-gray-600 dark:text-gray-400"><%= profile&.title.presence || profile&.organization.presence || profile&.bio&.truncate(120) || "Founder" %></p>
+            <div class="mt-2">
+              <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded w-full text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                <div><strong>Email:</strong> <%= startup.user&.email || '—' %></div>
+                <div><strong>Phone:</strong> <%= profile&.phone.presence || '—' %></div>
+                <div><strong>Location:</strong> <%= profile&.country.presence || profile&.city.presence || '—' %></div>
+                <% if profile&.linkedin_url.present? %>
+                  <div><%= link_to 'LinkedIn', profile.linkedin_url, target: '_blank', rel: 'noopener', class: 'text-nailab-teal hover:underline' %></div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Additional sections could go here (products, traction, etc.) -->
+    </div>
+
+    <!-- Quick facts removed per admin request -->
+  </div>
+</section>

@@ -1,3 +1,74 @@
+module RailsAdmin
+  module Config
+    module Actions
+      class ApproveStartup < RailsAdmin::Config::Actions::Base
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :member do
+          true
+        end
+
+        register_instance_option :http_methods do
+          [ :post ]
+        end
+
+        register_instance_option :link_icon do
+          "fa fa-check"
+        end
+
+        register_instance_option :controller do
+          proc do
+            admin = controller.try(:current_user)
+            if @object.respond_to?(:user) && @object.user&.user_profile
+              if @object.respond_to?(:active)
+                @object.update!(active: true)
+              end
+              @object.user.user_profile.approve!(actor: admin)
+              flash[:success] = "Startup profile approved"
+            else
+              flash[:error] = "Could not locate associated user profile to approve"
+            end
+            redirect_to rails_admin.index_path(model_name: "startup_profile")
+          end
+        end
+      end
+
+      class RejectStartup < RailsAdmin::Config::Actions::Base
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :member do
+          true
+        end
+
+        register_instance_option :http_methods do
+          [ :post ]
+        end
+
+        register_instance_option :link_icon do
+          "fa fa-times"
+        end
+
+        register_instance_option :controller do
+          proc do
+            admin = controller.try(:current_user)
+            reason = params[:reason].presence || "Rejected by admin"
+            if @object.respond_to?(:user) && @object.user&.user_profile
+              if @object.respond_to?(:active)
+                @object.update!(active: false)
+              end
+              @object.user.user_profile.reject!(reason: reason, actor: admin)
+              flash[:success] = "Startup profile rejected"
+            else
+              flash[:error] = "Could not locate associated user profile to reject"
+            end
+            redirect_to rails_admin.index_path(model_name: "startup_profile")
+          end
+        end
+      end
+    end
+  end
+end
+
 RailsAdmin.config do |config|
     config.model "Mentor" do
       navigation_label "Mentorship"
@@ -26,6 +97,9 @@ RailsAdmin.config do |config|
     rescue NameError
       # Broadcast action not registered yet; skipping
     end
+    # Admin actions to approve/reject startup profiles
+    approve_startup
+    reject_startup
     show
     edit
     delete
@@ -345,7 +419,6 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
 end
-
 RailsAdmin::Config::Actions::ShowInApp.class_eval do
   register_instance_option :link_url do
     target = bindings[:object].try(:rails_admin_preview_path)

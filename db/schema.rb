@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_11_000500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -359,6 +359,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "profile_audits", force: :cascade do |t|
+    t.string "action", null: false
+    t.bigint "admin_id", null: false
+    t.datetime "created_at", null: false
+    t.text "reason"
+    t.datetime "updated_at", null: false
+    t.bigint "user_profile_id", null: false
+    t.index ["admin_id"], name: "index_profile_audits_on_admin_id"
+    t.index ["user_profile_id"], name: "index_profile_audits_on_user_profile_id"
+  end
+
   create_table "programs", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.text "content"
@@ -580,6 +591,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
     t.string "preferred_mentorship_mode"
     t.boolean "pro_bono", default: false, null: false
     t.string "professional_website"
+    t.string "profile_approval_status", default: "pending", null: false
+    t.text "profile_rejection_reason"
     t.boolean "profile_visibility", default: true, null: false
     t.jsonb "program_tiers", default: [], null: false
     t.decimal "rate_per_hour", precision: 10, scale: 2
@@ -592,11 +605,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "years_experience"
+    t.index ["profile_approval_status"], name: "index_user_profiles_on_profile_approval_status"
     t.index ["slug"], name: "index_user_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_user_profiles_on_user_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
+    t.boolean "admin", default: false, null: false
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
@@ -609,6 +624,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_030000) do
     t.string "slug"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
+    t.index ["admin"], name: "index_users_on_admin"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
