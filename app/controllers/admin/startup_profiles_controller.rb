@@ -94,7 +94,7 @@ module Admin
         redirect_back fallback_location: admin_startup_profile_path, alert: "Update failed: #{e.message}"
       end
     def approve
-      startup = StartupProfile.find(params[:id])
+      startup = StartupProfile.find_by(slug: params[:id]) || StartupProfile.find(params[:id])
       startup.update(active: true) if startup.respond_to?(:active)
 
       if startup.user&.user_profile
@@ -111,7 +111,7 @@ module Admin
     end
 
     def reject
-      startup = StartupProfile.find(params[:id])
+      startup = StartupProfile.find_by(slug: params[:id]) || StartupProfile.find(params[:id])
       startup.update(active: false) if startup.respond_to?(:active)
       reason = params[:reason].presence || "Rejected by admin"
 
@@ -129,7 +129,7 @@ module Admin
     end
 
     def archive
-      startup = StartupProfile.find(params[:id])
+      startup = StartupProfile.find_by(slug: params[:id]) || StartupProfile.find(params[:id])
       if startup.respond_to?(:archived=)
         startup.update(archived: true)
       else
