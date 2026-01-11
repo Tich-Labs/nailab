@@ -1,10 +1,10 @@
 <%# app/views/admin/startups/_sidebar.html.erb - Moderation controls and quick edits %>
 <div class="sticky top-6">
   <section aria-labelledby="moderation-heading" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 shadow-sm">
-    <h2 id="moderation-heading" class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Moderation</h2>
+    <h2 id="moderation-heading" class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Moderation (Coming Soon)</h2>
 
     <%= form_with url: (startup.present? ? "/admin/startup_profile/#{startup.to_param}" : '#'), method: :patch, local: true do |f| %>
-      <div class="space-y-4">
+      <!-- <div class="space-y-4">
         <div>
           <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
           <%= f.select :status, options_for_select([['Pending','pending'], ['Approved','approved'], ['Rejected','rejected'], ['Archived','archived']], (startup.user&.user_profile&.profile_approval_status || 'pending')), {}, class: "w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-nailab-teal/30 focus:border-nailab-teal" %>
@@ -39,7 +39,7 @@
             <a href="#" class="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:underline focus-visible:ring-2 focus-visible:ring-gray-500 rounded">View metrics</a>
           </div>
         </div>
-      </div>
+      </div> -->
     <% end %>
   </section>
 

@@ -64,8 +64,16 @@
       <div class="flex flex-1 pt-16">
         <aside class="w-72 shrink-0 border-r border-slate-200 bg-white p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto dark:border-slate-800 dark:bg-slate-950">
           <div class="space-y-6">
-            <% admin_sidebar_groups.each do |group| %>
-              <div>
+            <%# Reorder sidebar so current group appears first, and dim non-current groups %>
+            <% groups = admin_sidebar_groups %>
+            <% current_group = groups.find { |g|
+                 (g[:path].present? && request.path.start_with?(g[:path].to_s)) ||
+                 g[:sections].any? { |s| s[:path].present? && request.path.start_with?(s[:path].to_s) }
+               } %>
+            <% ordered_groups = current_group ? ([current_group] + groups.reject { |g| g == current_group }) : groups %>
+            <% ordered_groups.each do |group| %>
+              <% grey_class = current_group ? (group == current_group ? '' : 'opacity-60') : '' %>
+              <div class="<%= grey_class %>">
                 <%# highlight the group title when current_page? matches the group's path %>
                 <% active_group = group[:path].present? && current_page?(group[:path]) rescue false %>
                 <div class="px-3 py-2 text-sm font-extrabold uppercase tracking-wide border-b border-slate-200 dark:border-slate-800 mb-2 <%= active_group ? 'rounded-md ring-1 ring-black/10 text-black dark:text-white bg-transparent' : 'text-nailab-purple dark:text-nailab-purple/70' %>">
