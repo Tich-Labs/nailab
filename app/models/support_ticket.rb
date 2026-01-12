@@ -10,7 +10,21 @@ class SupportTicket < ApplicationRecord
   after_create :create_initial_reply
 
   def add_admin_reply(message, admin_user)
-    replies.create!(user: admin_user, body: message)
+    reply = replies.create!(user: admin_user, body: message)
+
+    # Notify the ticket owner that an admin replied
+    begin
+      Notification.create!(
+        user: user,
+        title: "Support response",
+        message: message.to_s.truncate(200),
+        link: "/founder/support_tickets/#{id}"
+      )
+    rescue => _e
+      # don't let notification failures break the reply creation
+    end
+
+    reply
   end
 
   private

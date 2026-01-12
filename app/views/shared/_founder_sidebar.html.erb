@@ -79,10 +79,7 @@
             <%= link_to 'Account Settings', founder_account_path,
                 class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_account_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
-          <li>
-            <%= link_to 'Subscription & Billing', current_user.subscription.present? ? founder_subscription_path : new_founder_subscription_path,
-                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_subscription_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
-          </li>
+          <%# Subscription & Billing link intentionally hidden for now %>
           <li>
             <%= link_to 'Support', founder_support_path,
                 class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_support_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>

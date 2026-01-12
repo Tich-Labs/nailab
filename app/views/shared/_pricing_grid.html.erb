@@ -2,6 +2,8 @@
 <% stacked = local_assigns[:stacked] %>
 <% grid_classes = stacked ? 'space-y-4' : 'grid md:grid-cols-3 gap-10' %>
 <div class="<%= grid_classes %>">
+  <% current_tier = (defined?(current_user) && current_user&.subscription&.tier)&.to_s&.strip&.downcase %>
+  <% logged_in = defined?(current_user) && current_user.present? %>
   <% pricing_tiers.each_with_index do |tier, idx| %>
     <% highlight = tier.fetch(:highlight, false) %>
     <% card_pad = stacked ? 'p-4' : 'p-8' %>
@@ -15,6 +17,11 @@
       <% if highlight %>
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-nailab-purple text-white text-xs font-bold px-3 py-0.5 rounded-full shadow">Most Popular</span>
         <% end %>
+      <% tier_name_norm = tier[:name].to_s.strip.downcase %>
+      <% is_current = current_tier.present? && tier_name_norm == current_tier %>
+      <% if is_current %>
+        <span class="absolute top-3 right-3 bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded">Your plan</span>
+      <% end %>
       <h2 class="<%= title_cls %> font-bold text-gray-900 mb-2 text-center tier-name"><%= tier[:name] %></h2>
       <div class="<%= price_cls %> font-extrabold text-nailab-purple mb-2 text-center tier-price"><%= tier[:price] %></div>
       <p class="text-gray-700 <%= desc_mb %> text-center tier-desc"><%= tier[:description] %></p>
@@ -33,9 +40,21 @@
       else
         'bg-nailab-teal text-white hover:bg-nailab-teal'
       end %>
-      <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= cta_color %> tier-cta">
-        <%= tier[:cta] || 'Choose Plan' %>
-      </a>
+      <% if is_current %>
+        <a href="<%= defined?(founder_subscription_path) ? founder_subscription_path : (tier[:cta_link] || '/users/sign_up') %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> bg-gray-300 text-gray-700 tier-cta">
+          Manage Plan
+        </a>
+      <% else %>
+        <% if logged_in %>
+          <a href="<%= new_founder_subscription_path(plan: tier[:name]) %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= cta_color %> tier-cta">
+            <%= tier[:cta] || 'Choose Plan' %>
+          </a>
+        <% else %>
+          <a href="<%= tier[:cta_link] || '/users/sign_up' %>" class="mt-auto block w-full text-center rounded-lg font-semibold transition-colors <%= cta_padding %> <%= stacked ? 'shadow-sm' : 'shadow-lg hover:shadow-xl' %> <%= cta_color %> tier-cta">
+            <%= tier[:cta] || 'Choose Plan' %>
+          </a>
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 </div>

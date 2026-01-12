@@ -28,6 +28,8 @@
                 <div class="flex space-x-3">
                   <% if peer.mentor.present? %>
                     <%= link_to 'View Profile', founder_mentor_path(peer.mentor), class: "inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
+                  <% elsif peer.startup_profile.present? %>
+                    <%= link_to 'View Profile', public_startup_profile_path(peer.startup_profile), class: "inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
                   <% else %>
                     <%= link_to 'View Profile', '#', class: "inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg" %>
                   <% end %>
@@ -111,7 +113,8 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <%= pm.label :recipient_id, 'Select Peer', class: 'block text-sm font-semibold text-gray-900 mb-2' %>
-              <%= pm.select :recipient_id, options_for_select(@recommended_peers.map { |p| [p.name, p.id] }), { prompt: 'Choose a peer...' }, class: 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent' %>
+              <% selected_recipient = params[:recipient_id].presence || nil %>
+              <%= pm.select :recipient_id, options_for_select(@recommended_peers.map { |p| [p.name, p.id] }, selected_recipient), { prompt: 'Choose a peer...' }, class: 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent' %>
             </div>
             <div class="md:col-span-2">
               <%= pm.label :content, 'Message', class: 'block text-sm font-semibold text-gray-900 mb-2' %>
@@ -120,6 +123,13 @@
           </div>
           <div class="flex justify-end">
             <%= pm.submit 'Send Message', class: 'inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-teal transition-all' %>
+          </div>
+        <% end %>
+        <% if current_user.admin? %>
+          <div class="mt-6 text-right">
+            <%= form_with url: cleanup_empty_startup_profiles_path, method: :post, local: true do |f| %>
+              <%= f.submit 'Delete Empty Startup Profiles', data: { confirm: 'Delete all startup profiles with no description or value proposition? This cannot be undone.' }, class: 'inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-all' %>
+            <% end %>
           </div>
         <% end %>
       </div>

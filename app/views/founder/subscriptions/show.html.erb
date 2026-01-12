@@ -78,6 +78,11 @@
         </div>
       </div>
     </div>
+    <%# Also show pricing grid so the user can change plans %>
+    <div class="mt-8">
+      <h3 class="text-xl font-semibold mb-4">Available Plans</h3>
+      <%= render 'shared/pricing_grid', pricing_tiers: (@pricing_tiers || []) %>
+    </div>
   <% else %>
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
       <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">

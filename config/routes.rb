@@ -161,6 +161,12 @@ Rails.application.routes.draw do
   # Redirect the plural admin path to RailsAdmin's singular model path
   get "/admin/startup_profiles", to: redirect("/admin/startup_profile")
 
+  # Backwards-compatible redirect: singular support_ticket -> support_tickets
+  get "/admin/support_ticket", to: redirect("/admin/support_tickets")
+
+  # Backwards-compatible redirect: singular mentorship_request -> mentorship_requests
+  get "/admin/mentorship_request", to: redirect("/admin/mentorship_requests")
+
   # Serve a custom admin grid for StartupProfile at the RailsAdmin model path
   # This route must come before mounting the RailsAdmin engine so it takes precedence.
   get "/admin/startup_profile", to: "admin/startup_profiles#index"
@@ -241,8 +247,9 @@ Rails.application.routes.draw do
     end
 
     get "community", to: "community#index"
+    post "community/cleanup_empty_profiles", to: "community#cleanup_empty_profiles", as: :cleanup_empty_startup_profiles
     resources(:connections, only: %i[create])
-    resources(:peer_messages, only: %i[create])
+    resources(:peer_messages, only: %i[index create])
 
     resource(:account, controller: "account", only: %i[show edit update])
     resource(:subscription, only: %i[show new create])

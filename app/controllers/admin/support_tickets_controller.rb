@@ -9,7 +9,7 @@ module Admin
         if params[:message].present?
           @ticket.add_admin_reply(params[:message], nil)
           @ticket.update(status: params[:status]) if params[:status].present?
-          redirect_to "/admin/support_ticket/#{@ticket.id}", notice: "Reply sent successfully"
+          redirect_to "/admin/support_tickets/#{@ticket.id}", notice: "Reply sent successfully"
         else
           flash[:error] = "Message cannot be blank"
           redirect_to "/admin/support_tickets/#{@ticket.id}/full_reply"
@@ -17,7 +17,7 @@ module Admin
       else
         # Quick reply with default message
         @ticket.add_admin_reply("Thank you for your inquiry. We'll get back to you soon.", nil)
-        redirect_to "/admin/support_ticket/#{@ticket.id}", notice: "Quick reply sent successfully"
+        redirect_to "/admin/support_tickets/#{@ticket.id}", notice: "Quick reply sent successfully"
       end
     end
   end

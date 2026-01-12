@@ -1,6 +1,6 @@
 class Founder::SubscriptionsController < Founder::BaseController
   include PricingPageConcern
-  before_action :load_pricing_content, only: %i[show]
+  before_action :load_pricing_content, only: %i[show new]
 
   def show
     @subscription = current_user.subscription
@@ -8,6 +8,10 @@ class Founder::SubscriptionsController < Founder::BaseController
 
   def new
     @subscription = Subscription.new
+    @selected_plan = params[:plan]&.to_s
+    if @selected_plan.present? && @pricing_tiers.present?
+      @selected_tier = @pricing_tiers.find { |t| t[:name].to_s.strip.downcase == @selected_plan.to_s.strip.downcase }
+    end
   end
 
   def create

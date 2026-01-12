@@ -66,7 +66,7 @@ module AdminDashboardHelper
         path: safe_path { "/admin/mentor" },
         sections: [
           { label: "Mentors", path: "/admin/mentor" },
-          { label: "Requests", path: "/admin/mentorship_request", badge: @admin_pending_requests }
+          { label: "Requests", path: "/admin/mentorship_requests", badge: @admin_pending_requests }
         ]
       },
       {
@@ -78,9 +78,9 @@ module AdminDashboardHelper
       },
       {
         title: "💬 Messaging & Comms",
-        path: safe_path { "/admin/support_ticket" },
+        path: safe_path { "/admin/support_tickets" },
         sections: [
-          { label: "Support Tickets", path: "/admin/support_ticket" }
+          { label: "Support Tickets", path: "/admin/support_tickets" }
         ]
       }
     ]
