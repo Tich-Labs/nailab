@@ -24,10 +24,10 @@ Devise.setup do |config|
   # config.parent_controller = 'DeviseController'
 
   # ==> Mailer Configuration
-  # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class
-  # with default "from" parameter.
-  config.mailer_sender = "noreply@nailab.app"
+  # Configure the e-mail address which will be shown in Devise::Mailer.
+  # Read from ENV so the sender can be changed per-environment without code edits.
+  # Falls back to the previous default if the env var is not set.
+  config.mailer_sender = ENV.fetch("DEVISE_MAILER_SENDER", "noreply@nailab.app")
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
