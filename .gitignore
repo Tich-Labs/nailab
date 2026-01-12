@@ -47,4 +47,8 @@ docs/
 # Do not track the gh-pages site folder in `main` (served from `gh-pages` branch)
 gh-pages/
 
+# Local nginx TLS helper (generated self-signed cert/key)
+/deploy/nginx/ssl/*.crt
+/deploy/nginx/ssl/*.key
+
 

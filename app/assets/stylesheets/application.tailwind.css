@@ -68,4 +68,11 @@
 	.alert-warning {
 		@apply bg-yellow-50 text-yellow-800 border-yellow-200;
 	}
+
+	/* Devise pages: ensure any purple utilities use the Nailab brand purple (#913F98) */
+	.nailab-devise .text-purple-600 { @apply text-nailab-purple; }
+	.nailab-devise .bg-purple-600 { @apply bg-nailab-purple; }
+	.nailab-devise .border-purple-600 { @apply border-nailab-purple; }
+	.nailab-devise .hover\:bg-purple-700:hover { @apply bg-nailab-purple/90; }
+	.nailab-devise .ring-purple-600 { @apply ring-nailab-purple; }
 }

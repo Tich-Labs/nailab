@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # Local-only email inbox for ActionMailer (Devise confirmations, resets, etc.)
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   # (Removed legacy admin/pricing_page/sections routes — pricing editor consolidated)
   namespace :admin do
     resources :about_sections

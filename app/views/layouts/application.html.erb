@@ -14,7 +14,7 @@
     <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="bg-white text-gray-900">
+  <body class="<%= ['bg-white text-gray-900', (devise_controller? ? 'nailab-devise' : nil)].compact.join(' ') %>">
     <%= render 'shared/public_header' %>
     <div class="page-content">
       <%= yield %>

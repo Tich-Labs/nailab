@@ -61,6 +61,11 @@ group :development, :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+group :development do
+  # Opens emails in-browser at /letter_opener (great for Devise confirmations)
+  gem "letter_opener_web"
+end
 gem "sassc-rails"
 
 gem "tailwindcss-rails", "~> 4.4"
