@@ -8,6 +8,8 @@ services:
       bundle install --jobs 4 --retry 3
       npm install
       bundle exec rails tailwindcss:build
+      # Ensure importmap pins and mappings are generated so controllers are available to the asset pipeline
+      bin/importmap
       bundle exec rails assets:precompile
     preDeployCommand: |
       bundle exec rails db:migrate
