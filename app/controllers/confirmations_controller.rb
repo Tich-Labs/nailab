@@ -11,9 +11,12 @@ class ConfirmationsController < Devise::ConfirmationsController
     end
 
     if successfully_sent?(resource)
-      set_flash_message!(:notice, :send_instructions) if is_navigational_format?
+      # Devise will set a notice, but ensure it's always present
+      set_flash_message!(:notice, :send_instructions) if is_navigational_format? && flash[:notice].blank?
       redirect_to new_user_session_path
     else
+      # If Devise didn't set a message, show a generic error
+      flash.now[:alert] ||= "We couldn't send confirmation instructions. Please check your email address and try again."
       respond_with(resource)
     end
   end

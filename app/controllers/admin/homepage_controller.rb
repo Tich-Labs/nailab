@@ -7,6 +7,7 @@ module Admin
   # Use `Admin::HomepagesController` for the central homepage sections dashboard.
   class HomepageController < RailsAdmin::MainController
     include AdminLayoutData
+    include AdminAuthorization
       before_action :set_logos, only: %i[impact_network reorder toggle]
       before_action :prepare_home_content, only: %i[hero update_hero how_we_support update_how_we_support cta update_cta who_we_are update_who_we_are connect_grow_impact update_connect_grow_impact our_impact update_our_impact]
       HERO_DEFAULT = {
