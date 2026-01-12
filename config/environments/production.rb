@@ -77,7 +77,7 @@ Rails.application.configure do
   # Render: set SMTP_* env vars in the dashboard.
   # If SMTP isn't configured, do NOT crash requests that attempt to send mail
   # (sign-up, confirmation, password reset, etc.).
-  if ENV["SMTP_ADDRESS"].present?
+  if ENV["SMTP_ADDRESS"].present? && ENV["SMTP_USERNAME"].present? && ENV["SMTP_PASSWORD"].present?
     config.action_mailer.perform_deliveries = true
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.raise_delivery_errors = true
@@ -94,7 +94,7 @@ Rails.application.configure do
   else
     config.action_mailer.perform_deliveries = false
     config.action_mailer.raise_delivery_errors = false
-    Rails.logger.warn("ActionMailer SMTP not configured (SMTP_ADDRESS missing); email delivery disabled.")
+    Rails.logger.warn("ActionMailer SMTP not configured (missing SMTP_ADDRESS/SMTP_USERNAME/SMTP_PASSWORD); email delivery disabled.")
   end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
