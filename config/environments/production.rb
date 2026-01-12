@@ -73,22 +73,29 @@ Rails.application.configure do
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
-  # Email delivery (required for Devise :confirmable in production)
+  # Email delivery
   # Render: set SMTP_* env vars in the dashboard.
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.raise_delivery_errors = true
+  # If SMTP isn't configured, do NOT crash requests that attempt to send mail
+  # (sign-up, confirmation, password reset, etc.).
+  if ENV["SMTP_ADDRESS"].present?
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.raise_delivery_errors = true
 
-  # Specify outgoing SMTP server.
-  config.action_mailer.smtp_settings = {
-    address: ENV.fetch("SMTP_ADDRESS", ""),
-    port: Integer(ENV.fetch("SMTP_PORT", "587")),
-    domain: ENV["SMTP_DOMAIN"],
-    user_name: ENV["SMTP_USERNAME"],
-    password: ENV["SMTP_PASSWORD"],
-    authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
-    enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true"
-  }
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch("SMTP_ADDRESS"),
+      port: Integer(ENV.fetch("SMTP_PORT", "587")),
+      domain: ENV["SMTP_DOMAIN"],
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
+      authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
+      enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true"
+    }
+  else
+    config.action_mailer.perform_deliveries = false
+    config.action_mailer.raise_delivery_errors = false
+    Rails.logger.warn("ActionMailer SMTP not configured (SMTP_ADDRESS missing); email delivery disabled.")
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

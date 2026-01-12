@@ -34,6 +34,32 @@ services:
           name: nailab-db
           property: connectionString
 
+      # App URL used for links in emails (Devise confirmations/resets)
+      - key: APP_HOST
+        sync: false
+      - key: APP_PROTOCOL
+        value: https
+
+      # Devise mail sender
+      - key: DEVISE_MAILER_SENDER
+        sync: false
+
+      # SMTP (set these in Render dashboard)
+      - key: SMTP_ADDRESS
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_DOMAIN
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_AUTHENTICATION
+        value: plain
+      - key: SMTP_ENABLE_STARTTLS_AUTO
+        value: "true"
+
 databases:
   - name: nailab-db
     plan: starter
