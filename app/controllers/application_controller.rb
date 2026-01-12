@@ -69,4 +69,15 @@
     def after_sign_out_path_for(resource_or_scope)
       root_path
     end
+
+    # Devise: ensure password reset redirects to a valid path (avoid polymorphic_url nil error)
+    def after_sending_reset_password_instructions_path_for(resource_name)
+      # Always redirect to the canonical sign-in page to avoid polymorphic URL build errors
+      # (some callers may pass nil resource_name)
+      if respond_to?(:new_user_session_path)
+        new_user_session_path
+      else
+        root_path
+      end
+    end
   end

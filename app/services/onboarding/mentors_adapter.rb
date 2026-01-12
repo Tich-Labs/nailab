@@ -19,7 +19,7 @@ module Onboarding
         if success
           next_step = next_step(step)
           completed = next_step.nil?
-          profile.update(onboarding_step: step)
+          profile.update(onboarding_step: step) if profile.respond_to?(:onboarding_step)
           if completed
             profile.update(onboarding_completed: true, profile_visibility: true)
           end

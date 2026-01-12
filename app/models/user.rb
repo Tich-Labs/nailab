@@ -49,11 +49,22 @@ class User < ApplicationRecord
   has_many :support_tickets, dependent: :destroy
   has_many :support_ticket_replies, as: :user, dependent: :destroy
 
+  public
+
   delegate :full_name, to: :user_profile, prefix: false, allow_nil: true
 
   def name
     full_name || email
   end
+
+  # Delegate common profile attributes so views can call `user.expertise`,
+  # `user.bio`, etc., directly. Allow nil to avoid NoMethodError when the
+  # profile is not present.
+  delegate :organization, :bio, :title, :years_experience, :expertise, :sectors,
+           :availability_hours_month, :preferred_mentorship_mode, :rate_per_hour,
+           :pro_bono, :mentorship_approach, :motivation, :stage_preference,
+           :linkedin_url, :professional_website, :photo,
+           to: :user_profile, allow_nil: true
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|

@@ -92,7 +92,10 @@ module Onboarding
 
     def build_result(success, model, step, completed: nil)
       if success
-        model.update(onboarding_step: step) unless model.respond_to?(:onboarding_step) && model.onboarding_step == step
+          # Only set `onboarding_step` on models that actually support it.
+          if model.respond_to?(:onboarding_step) && model.onboarding_step != step
+            model.update(onboarding_step: step)
+          end
         next_s = next_step(step)
         completed_flag = completed.nil? ? next_s.nil? : completed
         # if finishing, ensure user_profile is marked completed

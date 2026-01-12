@@ -23,13 +23,17 @@ class Founder::ResourcesController < Founder::BaseController
     file_path = @resource.file_path
     return redirect_back(alert: "Invalid file") unless file_path&.start_with?(Rails.root.join("storage").to_s)
     return redirect_back(alert: "File not found") unless File.exist?(file_path)
-    
+
     send_file file_path, type: "application/pdf", disposition: "attachment"
   end
 
   private
 
   def set_resource
-    @resource = Resource.find(params[:id])
+    # Allow lookup by slug (friendly url) or numeric id.
+    @resource = Resource.find_by(slug: params[:id]) || Resource.find_by(id: params[:id])
+    unless @resource
+      redirect_to founder_resources_path, alert: "Resource not found"
+    end
   end
 end

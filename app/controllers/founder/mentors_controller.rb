@@ -4,6 +4,7 @@ class Founder::MentorsController < Founder::BaseController
   end
 
   def show
-    @mentor = Mentor.find(params[:id])
+    # Support friendly slugs as well as numeric IDs
+    @mentor = Mentor.find_by(slug: params[:id]) || Mentor.find(params[:id])
   end
 end

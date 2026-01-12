@@ -21,11 +21,11 @@
       </div>
       <div>
         <h3 class="font-medium text-gray-700">Preferred Time</h3>
-        <p class="text-gray-600 mt-1"><%= @mentorship_request.preferred_time %></p>
+        <p class="text-gray-600 mt-1"><%= @mentorship_request.proposed_time ? @mentorship_request.proposed_time.strftime('%B %d, %Y %I:%M %p') : 'Not specified' %></p>
       </div>
       <div>
         <h3 class="font-medium text-gray-700">Duration</h3>
-        <p class="text-gray-600 mt-1"><%= @mentorship_request.duration %> minutes</p>
+        <p class="text-gray-600 mt-1"><%= @mentorship_request.respond_to?(:duration) && @mentorship_request.duration.present? ? "#{@mentorship_request.duration} minutes" : 'Not specified' %></p>
       </div>
     </div>
     <div class="mb-6">
