@@ -94,7 +94,10 @@ Rails.application.configure do
   else
     config.action_mailer.perform_deliveries = false
     config.action_mailer.raise_delivery_errors = false
-    Rails.logger.warn("ActionMailer SMTP not configured (missing SMTP_ADDRESS/SMTP_USERNAME/SMTP_PASSWORD); email delivery disabled.")
+
+    # NOTE: Rails.logger may not be initialized yet during certain boot phases
+    # (e.g., assets:precompile), so write directly to STDERR.
+    $stderr.puts("[nailab] ActionMailer SMTP not configured (missing SMTP_ADDRESS/SMTP_USERNAME/SMTP_PASSWORD); email delivery disabled.")
   end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
