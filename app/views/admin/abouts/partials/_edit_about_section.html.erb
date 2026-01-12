@@ -1,4 +1,7 @@
 <%# Shared partial for About section edit forms - following Homepage patterns %>
+<div class="mb-4">
+  <%= link_to 'Preview live section', local_assigns[:preview_url], class: 'btn btn-secondary', target: '_blank', rel: 'noopener' %>
+</div>
 <div class="bg-white p-4 rounded shadow">
   <%= form_with url: local_assigns[:form_url], method: :patch, local: true do |form| %>
     <p class="text-sm text-slate-600 mb-4">Update content for Our Impact section.</p>
@@ -33,9 +36,43 @@
         </div>
       </div>
     <% end %>
-    <div class="flex gap-3">
-      <%= form.submit 'Save section', class: 'btn btn-success text-white font-bold' %>
+    <div class="flex gap-3 actions form-actions">
+      <%= form.submit 'Save section', class: 'btn btn-success text-black font-bold' %>
+      <!-- Fallback explicit button in case form builder output is hidden by CSS/JS -->
+      <button type="submit" class="btn btn-success text-black font-bold" style="display:inline-block !important; visibility:visible !important; opacity:1 !important;">Save section</button>
     </div>
   <% end %>
+
+  <script>
+    // Ensure submit controls in this admin partial are visible even if CSS/JS hides them
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        var containers = document.querySelectorAll('.bg-white.p-4.rounded.shadow');
+        containers.forEach(function(container) {
+          var form = container.querySelector('form');
+          if (!form) return;
+          // Unhide any action containers
+          form.querySelectorAll('.actions, .form-actions').forEach(function(a){
+            a.style.display = 'block';
+            a.style.visibility = 'visible';
+            a.style.opacity = '1';
+          });
+          // Unhide submit inputs/buttons
+          form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function(btn){
+            btn.style.display = 'inline-block';
+            btn.style.visibility = 'visible';
+            btn.style.opacity = '1';
+            btn.classList.remove('hidden');
+            btn.removeAttribute('aria-hidden');
+            btn.disabled = false;
+          });
+        });
+      } catch (e) {
+        // fail silently
+        console && console.error && console.error('unhide admin submit error', e);
+      }
+    });
+  </script>
+
 </div>
 

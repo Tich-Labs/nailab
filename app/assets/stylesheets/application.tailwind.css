@@ -3,3 +3,69 @@
 @tailwind utilities;
 
 /* Put any custom CSS below this line */
+
+@layer components {
+	/* Admin forms: ensure action rows and submit buttons are visible/clickable */
+	.active_admin .actions,
+	.active_admin form .actions,
+	.rails_admin .form-actions,
+	.admin form .actions,
+	form.admin-form .actions,
+	.actions,
+	.form-actions {
+		display: block !important;
+		margin-top: 1rem !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+	}
+
+	.btn,
+	.btn-success,
+	input[type="submit"].btn,
+	button[type="submit"].btn,
+	input[type="submit"].btn-success,
+	button[type="submit"].btn-success,
+	.actions input[type="submit"],
+	.actions button[type="submit"],
+	.form-actions input[type="submit"],
+	.form-actions button[type="submit"] {
+		@apply inline-flex items-center justify-center rounded-md px-3 py-2 font-semibold;
+		@apply bg-emerald-600 text-white hover:bg-emerald-700;
+		display: inline-flex !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		pointer-events: auto !important;
+		cursor: pointer !important;
+	}
+
+	/* Container used by our custom admin partials */
+	.flex.gap-3.actions.form-actions {
+		display: flex !important;
+		gap: 0.75rem !important;
+		align-items: center !important;
+		pointer-events: auto !important;
+		position: relative !important;
+		z-index: 50 !important;
+	}
+
+	/* RailsAdmin flash alert styling */
+	.alert {
+		@apply rounded-2xl px-4 py-3 text-sm shadow-sm border;
+	}
+
+	.alert-success {
+		@apply bg-green-50 text-green-800 border-green-200;
+	}
+
+	.alert-danger {
+		@apply bg-red-50 text-red-800 border-red-200;
+	}
+
+	.alert-info {
+		@apply bg-blue-50 text-blue-800 border-blue-200;
+	}
+
+	.alert-warning {
+		@apply bg-yellow-50 text-yellow-800 border-yellow-200;
+	}
+}

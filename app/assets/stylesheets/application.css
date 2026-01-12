@@ -2,6 +2,10 @@
   min-height: 100vh;
 }
 
+/*
+ *= require active_admin/overrides
+ */
+
 .hero-slide {
   transition: opacity 1s ease;
 }
