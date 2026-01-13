@@ -1,3 +1,12 @@
+  private
+
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :role)
+  end
+
+  def account_update_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :role)
+  end
 class RegistrationsController < Devise::RegistrationsController
   def create
     super do |user|
@@ -93,10 +102,24 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    if resource.user_profile&.role == "mentor"
+    case resource.role
+    when "mentor"
       mentor_root_path
+    when "founder"
+      founder_onboarding_path
     else
-      founder_root_path
+      root_path
+    end
+  end
+
+  def after_sign_in_path_for(resource)
+    case resource.role
+    when "mentor"
+      mentor_root_path
+    when "founder"
+      founder_onboarding_path
+    else
+      root_path
     end
   end
 end
