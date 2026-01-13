@@ -1,5 +1,6 @@
 module Admin
   class SupportTicketsController < ApplicationController
+    include AdminAuthorization
     skip_before_action :verify_authenticity_token, only: [ :reply ]
 
     def reply
