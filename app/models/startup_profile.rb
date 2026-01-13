@@ -1,5 +1,6 @@
 
 class StartupProfile < ApplicationRecord
+  has_one_attached :logo
   attr_accessor :onboarding_step
 
   before_validation :set_slug

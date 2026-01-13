@@ -81,20 +81,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Block redundant RailsAdmin endpoints (these models are intentionally excluded from admin).
-  match "/admin/user(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/user_profile(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/identity(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/notification(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/jwt_denylist(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/conversation(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/message(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/peer_message(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/opportunity(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/milestone(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/opportunity_submission(/*path)", to: redirect("/admin"), via: :all
-  match "/admin/hero_slide(/*path)", to: redirect("/admin"), via: :all
-
   # Custom admin homepage editors and logo management — define before mounting RailsAdmin
   namespace :admin do
     # Friendly slug routes for pricing editor (allows /admin/pricing/pricing/edit)

@@ -1,7 +1,6 @@
 module Admin
   class PricingPageController < RailsAdmin::MainController
     include PricingPageConcern
-    include AdminAuthorization
 
     # GET /admin/pricing_page/:id/edit
     def edit

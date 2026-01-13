@@ -4,7 +4,6 @@ module Admin
   # editor which links to per-section editors (managed by Admin::HomepageController
   # and the resource controllers such as Admin::FocusAreasController).
   class HomepagesController < RailsAdmin::MainController
-    include AdminAuthorization
     def edit
       # id param accepted for URL compatibility (singleton homepage)
       @sections = [

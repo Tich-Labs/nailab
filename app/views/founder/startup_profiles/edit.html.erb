@@ -46,11 +46,20 @@
                 <option value="Bootstrapped" <%= @startup_profile.funding_stage == 'Bootstrapped' ? 'selected' : '' %>>Bootstrapped</option>
               </select>
             </div>
-                  <div>
+            <div>
               <label for="startup_profile_funding_raised" class="block text-sm font-medium text-gray-700 mb-2">Funding raised</label>
               <input type="number" name="startup_profile[funding_raised]" id="startup_profile_funding_raised" value="<%= @startup_profile.funding_raised %>" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" />
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div>
+            <label for="startup_profile_logo" class="block text-sm font-medium text-gray-700 mb-2">Startup Logo</label>
+            <input type="file" name="startup_profile[logo]" id="startup_profile_logo" accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" />
+            <% if @startup_profile.logo.attached? %>
+              <div class="mt-2">
+                <img src="<%= url_for(@startup_profile.logo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Startup logo" class="h-16 w-16 rounded object-cover" />
+              </div>
+            <% end %>
+          </div>
                 <div>
             <label for="startup_profile_target_market" class="block text-lg font-semibold text-gray-900 mb-2">Target market</label>
             <input type="text" name="startup_profile[target_market]" id="startup_profile_target_market" value="<%= @startup_profile.target_market %>" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" />

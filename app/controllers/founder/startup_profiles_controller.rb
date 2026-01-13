@@ -26,6 +26,7 @@ class Founder::StartupProfilesController < Founder::BaseController
       params.require(:startup_profile).permit(
         :startup_name,
         :logo_url,
+        :logo,
         :description,
         :stage,
         :target_market,

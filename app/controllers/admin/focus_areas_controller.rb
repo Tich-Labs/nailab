@@ -1,6 +1,5 @@
 module Admin
   class FocusAreasController < RailsAdmin::MainController
-    include AdminAuthorization
     before_action :set_focus_area, only: %i[edit update destroy reorder toggle]
 
     def index

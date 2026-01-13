@@ -1,7 +1,7 @@
 <%# app/views/founder/progresses/show.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Progress Tracker</h1>
+    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Progress Tracker <span class="text-base font-semibold text-purple-500">(coming soon)</span></h1>
     <p class="text-xl text-gray-600">Monitor your startup's milestones and key metrics</p>
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -10,7 +10,7 @@
       <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-bold text-white">Milestones</h2>
-          <%= link_to 'Add Milestone', new_founder_milestone_path, class: "inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all" %>
+          <button class="inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg opacity-50 cursor-not-allowed" disabled>Add Milestone</button>
         </div>
       </div>
       <div class="p-8">
@@ -45,7 +45,7 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No milestones yet</h3>
             <p class="text-gray-600 mb-6">Start tracking your progress by adding your first milestone.</p>
-            <%= link_to 'Create your first milestone', new_founder_milestone_path, class: "inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-teal transition-all" %>
+            <button class="inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg opacity-50 cursor-not-allowed" disabled>Create your first milestone</button>
           </div>
         <% end %>
       </div>
@@ -55,7 +55,7 @@
       <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-bold text-white">Monthly Metrics</h2>
-          <%= link_to 'Add Metrics', new_founder_monthly_metric_path, class: "inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all" %>
+          <button class="inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-lg opacity-50 cursor-not-allowed" disabled>Add Metrics</button>
         </div>
       </div>
       <div class="p-8">
@@ -88,7 +88,7 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No metrics recorded</h3>
             <p class="text-gray-600 mb-6">Start tracking your key performance indicators.</p>
-            <%= link_to 'Add your first metrics', new_founder_monthly_metric_path, class: "inline-flex items-center px-6 py-3 bg-purple-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-purple-700 transition-all" %>
+            <button class="inline-flex items-center px-6 py-3 bg-purple-600 text-white text-lg font-semibold rounded-xl shadow-lg opacity-50 cursor-not-allowed" disabled>Add your first metrics</button>
           </div>
         <% end %>
       </div>
