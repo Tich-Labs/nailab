@@ -1,6 +1,6 @@
 class Founder::CommunityController < Founder::BaseController
   def index
-    @recommended_peers = User.where.not(id: current_user.id).limit(10) # stub
+    @recommended_peers = User.where.not(id: current_user.id).where(role: "founder", admin: false).limit(10)
   end
 
   # Admin action: remove startup profiles that appear empty.
