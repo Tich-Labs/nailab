@@ -65,7 +65,7 @@
             </button>
             <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
               <%= link_to 'Account Settings', founder_account_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg" %>
-              <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg" %>
+              <%= button_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg" %>
             </div>
           </div>
         <% elsif !on_onboarding %>
@@ -95,7 +95,7 @@
             <% if user_signed_in? && !on_onboarding %>
               <%= link_to 'Dashboard', (current_user.user_profile&.role == 'mentor' ? mentor_root_path : founder_root_path), class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
               <%= link_to 'Account Settings', founder_account_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
-              <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+              <%= button_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <% else %>
               <%= link_to 'Log in', new_user_session_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <% end %>

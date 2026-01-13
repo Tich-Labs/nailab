@@ -1,6 +1,13 @@
 module Admin
   class SupportTicketsController < ApplicationController
+    include AdminLayoutData
+    layout "rails_admin/application"
+    before_action :set_admin_layout_data, only: [ :index ]
+    before_action :set_page_name, only: [ :index ]
     skip_before_action :verify_authenticity_token, only: [ :reply ]
+
+    def index
+    end
 
     def reply
       @ticket = SupportTicket.find(params[:id])
@@ -20,5 +27,11 @@ module Admin
         redirect_to "/admin/support_tickets/#{@ticket.id}", notice: "Quick reply sent successfully"
       end
     end
+
+      private
+
+      def set_page_name
+        @page_name = "Support Tickets"
+      end
   end
 end

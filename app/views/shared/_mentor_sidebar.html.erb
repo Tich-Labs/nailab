@@ -62,7 +62,7 @@
             <%= link_to 'Support', mentor_support_path, class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(mentor_support_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
           <li>
-            <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: "w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" %>
+            <%= button_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" %>
           </li>
         </ul>
       </div>

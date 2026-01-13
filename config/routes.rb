@@ -149,6 +149,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resources :mentorship_requests, only: %i[index]
+    resources :support_tickets, only: %i[index] do
+      member do
+        post :reply
+      end
+    end
+  end
+
   # Redirect the plural admin path to RailsAdmin's singular model path
   get "/admin/startup_profiles", to: redirect("/admin/startup_profile")
 
@@ -168,15 +177,6 @@ Rails.application.routes.draw do
   patch "/admin/startup_profile/:id", to: "admin/startup_profiles#update", as: :admin_startup_profile_update
 
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
-
-  # Admin support ticket replies
-  namespace :admin do
-    resources :support_tickets do
-      member do
-        post :reply
-      end
-    end
-  end
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
