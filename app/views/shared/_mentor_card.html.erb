@@ -1,0 +1,98 @@
+<article class="bg-white rounded-2xl shadow-lg p-6 flex flex-col h-full hover:shadow-2xl transition-shadow">
+  <% admin_mode = local_assigns.fetch(:admin_mode, false) %>
+  <div class="flex items-start gap-4 mb-4">
+    <div class="w-16 h-16 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+      <%= image_tag(mentor.photo_url.presence || 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=200&q=80', alt: mentor.full_name, class: 'w-full h-full object-cover') %>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-lg font-bold text-gray-900"><%= mentor.full_name %></h3>
+      <% if mentor.title.present? %>
+        <p class="text-sm text-gray-600"><%= mentor.title %></p>
+      <% end %>
+      <% if mentor.organization.present? %>
+        <p class="text-xs text-gray-500"><%= mentor.organization %></p>
+      <% end %>
+      <% if admin_mode %>
+        <% approval_status = mentor.profile_approval_status.presence || 'unknown' %>
+        <% status_classes = case approval_status.downcase
+        when 'pending'
+          'border-amber-200 bg-amber-50 text-amber-700'
+        when 'approved'
+          'border-emerald-200 bg-emerald-50 text-emerald-700'
+        else
+          'border-slate-200 bg-slate-100 text-slate-500'
+        end %>
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+          <%# Only show the approval status badge when the profile is approved; hide 'Pending' labels %>
+          <% if approval_status.downcase == 'approved' %>
+            <span class="px-2 py-1 rounded-full border font-semibold <%= status_classes %>"><%= approval_status.titleize %></span>
+          <% end %>
+          <span class="px-2 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-500 font-semibold"><%= mentor.profile_visibility ? 'Public' : 'Private' %></span>
+        </div>
+      <% end %>
+    </div>
+    <% if mentor.pro_bono %>
+      <span class="inline-flex items-center px-2 py-1 rounded-full bg-teal-100 text-nailab-teal text-xs font-semibold">Pro bono</span>
+    <% end %>
+  </div>
+  <p class="text-gray-700 text-sm mb-4 line-clamp-3"><%= mentor.bio %></p>
+  <div class="space-y-2 text-sm text-gray-600 mb-4">
+    <% if mentor.location.present? %>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-nailab-purple"></span>
+        <span><%= mentor.location %></span>
+      </div>
+    <% end %>
+    <% if mentor.years_experience.present? %>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        <span><%= mentor.years_experience %> years experience</span>
+      </div>
+    <% end %>
+    <% if mentor.rate_per_hour.present? && mentor.pro_bono == false %>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+        <span>$<%= number_with_precision(mentor.rate_per_hour, precision: 0) %>/hr</span>
+      </div>
+    <% end %>
+  </div>
+  <% if mentor.sectors.present? %>
+    <div class="flex flex-wrap gap-2 mb-4">
+      <% mentor.sectors.each do |sector| %>
+        <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"><%= sector %></span>
+      <% end %>
+    </div>
+  <% end %>
+  <% if mentor.expertise.present? %>
+    <div class="text-sm font-semibold text-gray-900 mb-2">Expertise</div>
+    <ul class="space-y-1 text-sm text-gray-600 mb-4">
+      <% mentor.expertise.first(4).each do |area| %>
+        <li class="flex items-center gap-2">
+          <span class="block w-1 h-1 rounded-full bg-nailab-teal"></span>
+          <span><%= area %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% override_path = local_assigns.fetch(:cta_path, nil) %>
+  <% override_label = local_assigns.fetch(:cta_label, nil) %>
+  <% override_hide = local_assigns.fetch(:hide_cta, false) %>
+  <% destination = if override_path.present?
+      override_path.respond_to?(:call) ? override_path.call(mentor) : override_path
+    end %>
+  <% if destination.present? %>
+    <div class="mt-auto">
+      <%= link_to (override_label.presence || "View profile"), destination, class: "inline-flex items-center justify-center w-full px-4 py-3 bg-nailab-purple text-white font-semibold rounded-xl hover:opacity-90 transition-colors" %>
+    </div>
+  <% elsif override_hide %>
+    <%# intentionally blank to let callers suppress the button %>
+  <% else %>
+    <div class="mt-auto">
+      <% if current_user %>
+        <%= link_to 'Request mentorship', founder_mentorship_path(request_mentor: mentor.user_id), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-nailab-purple text-white font-semibold rounded-xl hover:opacity-90 transition-colors' %>
+      <% else %>
+        <%= link_to 'Request mentorship', new_user_session_path, data: { return_to: founder_mentorship_path(request_mentor: mentor.user_id) }, class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-nailab-purple text-white font-semibold rounded-xl hover:bg-nailab-purple transition-colors' %>
+      <% end %>
+    </div>
+  <% end %>
+</article>

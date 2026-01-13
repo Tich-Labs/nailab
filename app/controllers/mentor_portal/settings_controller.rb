@@ -1,12 +1,11 @@
 module MentorPortal
   class SettingsController < MentorPortal::BaseController
     def show
-      # Placeholder for mentor settings
+      # Placeholder
     end
 
     def update
-      # Placeholder for updating mentor settings
-      redirect_to mentor_settings_path, notice: "Settings updated successfully."
+      # Placeholder
     end
   end
 end

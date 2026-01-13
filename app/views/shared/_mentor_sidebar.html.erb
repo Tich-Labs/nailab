@@ -31,6 +31,9 @@
           <li>
             <%= link_to 'Requests', mentor_mentorship_requests_path, class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?('/mentor/mentorship_requests') ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
+          <li>
+            <%= link_to 'Feedback', mentor_feedback_path, class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?('/mentor/feedback') ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
+          </li>
         </ul>
       </div>
       <!-- STARTUPS -->

@@ -1,0 +1,27 @@
+<% mentor_active_filters = [@filters[:sector], @filters[:location], @filters[:pro_bono]].compact.reject(&:blank?).size %>
+<div class="bg-slate-50 min-h-screen pb-10">
+  <%= render 'shared/mentor_search_filters', filters: @filters, sector_options: @sector_options, form_url: admin_mentors_path, hero_title: 'Manage Mentors', hero_subtitle: "Review approvals, mentor availability, and onboarding notes in one place.", filter_button_label: 'Filter mentors', mentor_active_filters: mentor_active_filters %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 mt-8">
+    <section class="space-y-6">
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Roster</p>
+          <h2 class="text-xl font-semibold text-slate-900"><%= @filtered_mentors.count %> mentor<%= 's' unless @filtered_mentors.count == 1 %> available</h2>
+        </div>
+        <% if mentor_active_filters.positive? || @filters[:search].present? %>
+          <%= link_to 'Remove filters', admin_mentors_path, class: 'text-sm text-nailab-teal font-semibold' %>
+        <% end %>
+      </div>
+      <% if @filtered_mentors.any? %>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <%= render partial: 'shared/mentor_card', collection: @filtered_mentors, as: :mentor, locals: { admin_mode: true, cta_path: ->(mentor) { '#' }, cta_label: 'View profile' } %>
+        </div>
+      <% else %>
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 text-center">
+          <p class="text-lg text-slate-600">No mentors match the current filters.</p>
+          <%= link_to 'Reset filters', admin_mentors_path, class: 'mt-4 inline-flex text-nailab-teal font-semibold hover:text-teal-700' %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+</div>

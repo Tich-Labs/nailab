@@ -15,8 +15,14 @@ class RegistrationsController < Devise::RegistrationsController
       ms = Onboarding::SessionStore.new(session, namespace: :mentors)
       ps = Onboarding::SessionStore.new(session, namespace: :partners)
 
-      # Attach founder data if present
-      if fs.to_h.present?
+      # Attach mentor data if present (prefer mentors when both namespaces exist)
+      if ms.to_h.present?
+        user_profile = user.build_user_profile(ms.to_h.merge(role: "mentor"))
+        user_profile.save
+      end
+
+      # Attach founder data if present (only when mentor data is not present)
+      if fs.to_h.present? && !ms.to_h.present?
         # Ensure the user record is persisted so associations get a user_id
         unless user.persisted?
           saved = user.save
@@ -45,12 +51,6 @@ class RegistrationsController < Devise::RegistrationsController
         rescue => e
           Rails.logger.error("Registrations#create: failed to notify admin of submission: #{e.message}")
         end
-      end
-
-      # Attach mentor data if present
-      if ms.to_h.present?
-        user_profile = user.build_user_profile(ms.to_h.merge(role: "mentor"))
-        user_profile.save
       end
 
       # Attach partner interest (store as Partner if model exists)

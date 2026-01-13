@@ -1,7 +1,5 @@
-module MentorPortal
-  class DashboardController < MentorPortal::BaseController
-    def show
-      # Placeholder for mentor overview
-    end
+class Mentor::DashboardController < Mentor::BaseController
+  def show
+    render template: "mentor/dashboard/show"
   end
 end

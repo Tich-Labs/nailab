@@ -17,7 +17,7 @@ programs_data = [
         <li>$210,000 invested in seed funding</li>
       </ul>
     HTML
-    program_type: :social_impact,
+    program_type: "Social Impact Programs",
     hero_image_url: "https://africasolutionsmediahub.org/wp-content/uploads/2025/02/women_s_health_in_Africa-2-1-scaled.jpg"
   },
   {
@@ -33,7 +33,7 @@ programs_data = [
         <li>$20,000 seed funding invested</li>
       </ul>
     HTML
-    program_type: :masterclasses_mentorship,
+    program_type: "Masterclasses & Mentorship",
     hero_image_url: "https://jacobsladder.africa/wp-content/uploads/2023/06/Technology-for-Climate-Action-Hackathon.jpg"
   },
   {
@@ -43,7 +43,7 @@ programs_data = [
       <p><strong>Partners: DHL Foundation and SOS Children's Network</strong></p>
       <p>Nailab trained 40 young SMEs on financial management, marketing, business planning, and leadership, while managing grant distribution for transparent scaling.</p>
     HTML
-    program_type: :masterclasses_mentorship,
+    program_type: "Masterclasses & Mentorship",
     hero_image_url: "https://fosda.org/wp-content/uploads/2022/11/YES-PRJ-147-scaled.jpg"
   },
   {
@@ -53,7 +53,7 @@ programs_data = [
       <p><strong>Partner: KCB Bank Group</strong></p>
       <p>Provided incubation, mentorship, and pitch training to 100 finalists under the #2jiajiri movement.</p>
     HTML
-    program_type: :masterclasses_mentorship,
+    program_type: "Masterclasses & Mentorship",
     hero_image_url: "https://africasustainabilitymatters.com/wp-content/uploads/2019/10/YOUNG-AFRICAN-LEADERS-87.jpg"
   },
   {
@@ -69,7 +69,7 @@ programs_data = [
         <li>$660,000 invested</li>
       </ul>
     HTML
-    program_type: :incubation_acceleration,
+    program_type: "Startup Incubation & Acceleration",
     hero_image_url: "https://cchub.africa/wp-content/uploads/2017/11/make-it-600.jpg"
   },
   {
@@ -85,7 +85,7 @@ programs_data = [
         <li>$1,435,680 invested</li>
       </ul>
     HTML
-    program_type: :incubation_acceleration,
+    program_type: "Startup Incubation & Acceleration",
     hero_image_url: "https://media.licdn.com/dms/image/v2/D4D12AQFamOVsZd7ymQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1709543877568?e=2147483647&v=beta&t=FznYfv9C8FM5HDgM9-cJbIcuvZedJ9LRnporx8lLJWI"
   },
   {
@@ -100,7 +100,7 @@ programs_data = [
         <li>$804,000 invested</li>
       </ul>
     HTML
-    program_type: :incubation_acceleration,
+    program_type: "Startup Incubation & Acceleration",
     hero_image_url: "https://miro.medium.com/v2/resize:fit:1400/1*XGDN42Mcin1E_X3-DEMbeQ.jpeg"
   },
   {
@@ -115,7 +115,7 @@ programs_data = [
         <li>20 businesses accelerated (€200,000 each)</li>
       </ul>
     HTML
-    program_type: :funding_access,
+    program_type: "Funding Access",
     hero_image_url: "https://www.techloy.com/content/images/2025/04/INFOGRAPHIC-Startup-Funding-in-Africa-and-the-Middle-East---Week-15--2025.png"
   },
   {
@@ -130,7 +130,7 @@ programs_data = [
         <li>10 finalists ($65K–$250K prizes)</li>
       </ul>
     HTML
-    program_type: :funding_access,
+    program_type: "Funding Access",
     hero_image_url: "https://media.licdn.com/dms/image/v2/D4D12AQGGj99FQ0RuQA/article-cover_image-shrink_720_1280/B4DZU8YCnsHkAU-/0/1740474696208?e=2147483647&v=beta&t=Wf8xqmUhBWMnEHi8YvN8VS9tkpOmIf6vSoe1edecbCQ"
   },
   {
@@ -140,7 +140,7 @@ programs_data = [
       <p><strong>Partners: Close the Gap, GoodUp</strong></p>
       <p>Three programs (2018-2019) with €100,000 total matching funds for 22 entrepreneurs.</p>
     HTML
-    program_type: :funding_access,
+    program_type: "Funding Access",
     hero_image_url: "https://www.techinafrica.com/wp-content/uploads/2025/04/84ff12b9-5382-4086-8205-708a1114f611_3500x1969.webp"
   },
   {
@@ -150,7 +150,7 @@ programs_data = [
       <p><strong>Partners: African Union Development Agency, SIFA-GIZ</strong></p>
       <p>2020 desk study providing a blueprint for inclusive workforce development through RPL platforms.</p>
     HTML
-    program_type: :research_development,
+    program_type: "Research & Development",
     hero_image_url: "https://aaeafrica.org/wp-content/uploads/2020/10/ecosystem.png"
   },
   {
@@ -165,7 +165,7 @@ programs_data = [
         <li>40 innovators incubated</li>
       </ul>
     HTML
-    program_type: :social_impact,
+    program_type: "Social Impact Programs",
     hero_image_url: "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3682232877071840990"
   },
   {
@@ -175,7 +175,7 @@ programs_data = [
       <p><strong>Partners: Women Empowerment Link, National Police Service, UNFPA</strong></p>
       <p>Developed interactive e-learning content aligned with national protocols to improve law enforcement response to gender-based violence.</p>
     HTML
-    program_type: :social_impact,
+    program_type: "Social Impact Programs",
     hero_image_url: "https://www.worldbank.org/content/dam/photos/780x439/2023/nov/GBV-event-2023.png"
   }
 ]

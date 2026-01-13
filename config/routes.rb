@@ -132,6 +132,8 @@ Rails.application.routes.draw do
     patch "homepage/cta", to: "homepage#update_cta", as: :homepage_cta_update
     # Friendly URL for editing homepage sections
     get "homepage/sections/edit", to: "homepages#edit", as: :homepage_sections_edit
+    # Backwards-compatible redirect: singular admin/mentor -> plural admin/mentors
+    # (Handled at top-level before mounting RailsAdmin so it takes precedence.)
     get "about/sections/edit", to: "abouts#edit", as: :about_sections_edit
     get "about/sections/:section/edit", to: "abouts#edit_section", as: :about_section_edit
     patch "about/sections/:section", to: "abouts#update_section", as: :about_section_update
@@ -156,6 +158,7 @@ Rails.application.routes.draw do
         post :reply
       end
     end
+    resources :mentors, only: %i[index]
   end
 
   # Redirect the plural admin path to RailsAdmin's singular model path
@@ -175,6 +178,10 @@ Rails.application.routes.draw do
   post "/admin/startup_profile/:id/archive", to: "admin/startup_profiles#archive", as: :archive_admin_startup_profile
   get "/admin/startup_profile/:id", to: "admin/startup_profiles#show", as: :admin_startup_profile_show
   patch "/admin/startup_profile/:id", to: "admin/startup_profiles#update", as: :admin_startup_profile_update
+
+  # Backwards-compatible top-level redirect: singular /admin/mentor -> plural /admin/mentors
+  # (Placed at top-level so it takes precedence over the RailsAdmin engine routes.)
+  get "/admin/mentor", to: redirect("/admin/mentors")
 
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
 
@@ -280,6 +287,9 @@ Rails.application.routes.draw do
     resources(:startups, only: %i[index show]) do
       get :progress, to: "startup_progress#show"
     end
+
+    # Feedback page for mentors
+    get "feedback", to: "feedback#index"
 
     resource(:profile, controller: "profiles", only: %i[show edit update])
     resource(:settings, only: %i[show update])
