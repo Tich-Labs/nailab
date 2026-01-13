@@ -11,12 +11,12 @@
       <!-- Main Navigation -->
       <nav class="hidden md:flex space-x-8">
         <% network_active = request.path.start_with?(startups_path) || request.path.start_with?(mentors_path) %>
-        <div class="relative" data-controller="dropdown">
-          <button type="button" data-action="click->dropdown#toggle" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium w-full #{network_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
+        <div class="relative">
+          <button type="button" onclick="toggleDropdown(this)" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium w-full #{network_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
             Our Network
             <span class="text-xs">▼</span>
           </button>
-          <div data-dropdown-target="menu" class="hidden absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]">
+          <div class="menu hidden absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]">
             <%= link_to 'Startups', startups_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors #{'bg-teal-50 text-nailab-teal font-semibold' if request.path == startups_path}" %>
             <%= link_to 'Mentors', mentors_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors #{'bg-teal-50 text-nailab-teal font-semibold' if request.path == mentors_path}" %>
           </div>
@@ -24,12 +24,12 @@
         <%= link_to 'Programs', programs_path, class: "text-gray-700 hover:text-nailab-teal px-3 py-2 text-base font-medium transition-colors #{request.path.start_with?(programs_path) ? 'text-nailab-teal' : ''}" %>
         <% current_resource_slug = params[:category].presence || @selected_category.presence || @resource_category_slug.presence || 'all' %>
         <% resources_active = request.path.start_with?(resources_path) %>
-        <div class="relative" data-controller="dropdown">
-          <button type="button" data-action="click->dropdown#toggle" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium w-full #{resources_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
+        <div class="relative">
+          <button type="button" onclick="toggleDropdown(this)" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium w-full #{resources_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
             Resources
             <span class="text-xs">▼</span>
           </button>
-          <div data-dropdown-target="menu" class="hidden absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]">
+          <div class="menu hidden absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]">
             <%= link_to 'Blogs', resources_category_path(category: 'blogs'), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors #{'bg-teal-50 text-nailab-teal font-semibold' if current_resource_slug == 'blogs'}" %>
             <%= link_to 'Knowledge Hub', resources_category_path(category: 'knowledge-hub'), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors #{'bg-teal-50 text-nailab-teal font-semibold' if current_resource_slug == 'knowledge-hub'}" %>
             <%= link_to 'Opportunities', resources_category_path(category: 'opportunities'), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors #{'bg-teal-50 text-nailab-teal font-semibold' if current_resource_slug == 'opportunities'}" %>
@@ -105,3 +105,10 @@
     </div>
   </div>
 </header>
+
+<script>
+function toggleDropdown(button) {
+  const menu = button.parentElement.querySelector('.menu');
+  menu.classList.toggle('hidden');
+}
+</script>
