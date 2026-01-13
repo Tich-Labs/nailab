@@ -4,14 +4,48 @@
       <h1 class="text-3xl lg:text-4xl font-bold mb-2">
         Welcome back, <%= (defined?(current_user) && current_user) ? (current_user.user_profile&.full_name || current_user.email) : (@user&.user_profile&.full_name || @user&.email) %> 👋
       </h1>
-      <p class="text-sm lg:text-base text-white/90 leading-relaxed">
-        Profile <strong><%= profile_completion_percent(current_user || @user) %>%</strong> complete — <%= profile_steps_left(current_user || @user) %> steps left
-      </p>
-    </div>
-
-    <div class="flex items-center gap-3">
-      <%= link_to 'Complete profile', next_onboarding_path_for(current_user || @user), class: 'inline-flex items-center px-4 py-2 bg-white text-nailab-teal rounded-lg font-semibold hover:bg-gray-100 transition-colors' %>
-      <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-3 py-2 border border-white/30 rounded-lg text-white/95 hover:bg-white/10 transition-colors' %>
+      <% user = current_user || @user %>
+      <% user_profile = user&.user_profile %>
+      <% startup_profile = user&.startup_profile %>
+      <% missing_bio = user_profile&.bio.blank? || user_profile&.bio.to_s.length < 30 %>
+      <% missing_photo = !(user_profile&.photo&.attached?) %>
+      <% missing_logo = startup_profile&.logo_url.blank? %>
+      <% if missing_bio || missing_photo || missing_logo %>
+        <p class="text-sm lg:text-base text-white/90 leading-relaxed mb-2">
+          <strong>Profile incomplete:</strong>
+          <% if missing_bio && missing_photo && missing_logo %>
+            Please add your bio, profile photo, and startup logo to complete your profile.
+          <% elsif missing_bio && missing_photo %>
+            Please add your bio and profile photo to complete your profile.
+          <% elsif missing_bio && missing_logo %>
+            Please add your bio and startup logo to complete your profile.
+          <% elsif missing_photo && missing_logo %>
+            Please add your profile photo and startup logo to complete your profile.
+          <% elsif missing_bio %>
+            Please add your bio to complete your profile.
+          <% elsif missing_photo %>
+            Please add your profile photo to complete your profile.
+          <% elsif missing_logo %>
+            Please add your startup logo to complete your profile.
+          <% end %>
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+          <% if missing_bio || missing_photo %>
+            <%= link_to 'Add bio & photo', founder_account_path, class: 'inline-flex items-center px-4 py-2 bg-white text-nailab-teal rounded-lg font-semibold hover:bg-gray-100 transition-colors' %>
+          <% end %>
+          <% if missing_logo %>
+            <%= link_to 'Add startup logo', edit_founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 bg-white text-nailab-teal rounded-lg font-semibold hover:bg-gray-100 transition-colors' %>
+          <% end %>
+          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-3 py-2 border border-white/30 rounded-lg text-white/95 hover:bg-white/10 transition-colors' %>
+        </div>
+      <% else %>
+        <p class="text-sm lg:text-base text-white/90 leading-relaxed">
+          Profile <strong>100%</strong> complete
+        </p>
+        <div class="flex items-center gap-3">
+          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-3 py-2 border border-white/30 rounded-lg text-white/95 hover:bg-white/10 transition-colors' %>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
