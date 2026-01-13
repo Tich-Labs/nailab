@@ -48,14 +48,14 @@ module AdminDashboardHelper
         ]
       },
       {
-        title: "Programs (Coming soon)",
+        title: "Programs",
         path: safe_path { "#" },
         sections: [
           { label: "Coming soon", path: "#" }
         ]
       },
       {
-        title: "Resources (Coming soon)",
+        title: "Resources",
         path: safe_path { "#" },
         sections: [
           { label: "Coming soon", path: "#" }
@@ -66,7 +66,7 @@ module AdminDashboardHelper
         path: safe_path { "/admin/mentor" },
         sections: [
           { label: "Mentors", path: "/admin/mentor" },
-          { label: "Requests", path: "/admin/mentorship_requests", badge: @admin_pending_requests }
+          { label: "Requests (Coming soon)", path: "/admin/mentorship_requests", badge: @admin_pending_requests }
         ]
       },
       {
@@ -80,7 +80,7 @@ module AdminDashboardHelper
         title: "💬 Messaging & Comms",
         path: safe_path { "/admin/support_tickets" },
         sections: [
-          { label: "Support Tickets", path: "/admin/support_tickets" }
+          { label: "Support Tickets(Coming soon)", path: "/admin/support_tickets" }
         ]
       }
     ]
