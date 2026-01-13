@@ -65,6 +65,8 @@ end
 group :development do
   # Opens emails in-browser at /letter_opener (great for Devise confirmations)
   gem "letter_opener_web"
+
+  gem "rspec-rails"
 end
 gem "sassc-rails"
 

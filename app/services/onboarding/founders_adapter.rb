@@ -23,13 +23,31 @@ module Onboarding
           build_result(success, profile, step)
         when "startup", "professional", "mentorship"
           startup = actor.startup_profile || actor.build_startup_profile
+          # Set onboarding_step so only current step's validations run
+          startup.onboarding_step = step if startup.respond_to?(:onboarding_step=)
           success = startup.update(params)
           build_result(success, startup, step)
         when "confirm"
-          # finalize onboarding: mark user profile completed
+          # Validate all fields before marking onboarding as complete
           profile = actor.user_profile || actor.build_user_profile
-          success = profile.update(onboarding_completed: true)
-          build_result(success, profile, step, completed: true)
+          startup = actor.startup_profile || actor.build_startup_profile
+
+          # Remove onboarding_step so all validations run
+          profile.onboarding_step = nil if profile.respond_to?(:onboarding_step=)
+          startup.onboarding_step = nil if startup.respond_to?(:onboarding_step=)
+
+          valid_profile = profile.valid?
+          valid_startup = startup.valid?
+
+          if valid_profile && valid_startup
+            success = profile.update(onboarding_completed: true)
+            build_result(success, profile, step, completed: true)
+          else
+            errors = []
+            errors += profile.errors.full_messages unless valid_profile
+            errors += startup.errors.full_messages unless valid_startup
+            OpenStruct.new(success?: false, errors: errors, next_step: step, completed?: false)
+          end
         end
       else
         # Guest flow: merge into session store
