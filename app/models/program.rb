@@ -13,6 +13,14 @@ class Program < ApplicationRecord
 
     validates :category, inclusion: { in: CATEGORIES }, allow_blank: true
 
+    def category
+      program_type.presence
+    end
+
+    def category=(_value)
+      # intentionally ignore leftover category assignments; program_type is the canonical field
+    end
+
     # Associations for multi-category support (optional)
     has_and_belongs_to_many :categories, join_table: :categories_programs, optional: true
 
