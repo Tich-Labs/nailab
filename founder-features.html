@@ -56,6 +56,23 @@
             margin: 0 0.35rem;
             color: rgb(156 163 175); /* gray-400 */
         }
+        .card-details-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgb(55 65 81); /* gray-700 */
+            margin-top: 0.5rem;
+        }
+        .card-details {
+            margin-top: 0.25rem;
+            padding-left: 1.1rem;
+            list-style: disc;
+            color: rgb(75 85 99); /* gray-600 */
+            font-size: 0.875rem;
+        }
+        .card-details li:empty::before {
+            content: 'Add detail…';
+            color: rgb(156 163 175); /* gray-400 */
+        }
         .status-badge {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -436,6 +453,52 @@
                 return meta;
             }
 
+            function ensureDetailsSection(card) {
+                let title = card.querySelector('.card-details-title');
+                let list = card.querySelector('.card-details');
+                if (title && list) return { title, list };
+
+                title = document.createElement('div');
+                title.className = 'card-details-title';
+                title.textContent = 'Additional details';
+
+                list = document.createElement('ul');
+                list.className = 'card-details';
+                for (let i = 0; i < 5; i += 1) {
+                    const li = document.createElement('li');
+                    li.className = 'detail-item editable';
+                    li.contentEditable = 'false';
+                    list.appendChild(li);
+                }
+
+                // Insert details before meta row if meta exists; otherwise append.
+                const meta = card.querySelector('.card-meta');
+                if (meta) {
+                    card.insertBefore(list, meta);
+                    card.insertBefore(title, list);
+                } else {
+                    card.appendChild(title);
+                    card.appendChild(list);
+                }
+
+                return { title, list };
+            }
+
+            function getDetails(card) {
+                const list = card.querySelector('.card-details');
+                if (!list) return [];
+                return Array.from(list.querySelectorAll('li')).slice(0, 5).map(li => (li.textContent || '').trim());
+            }
+
+            function setDetails(card, details) {
+                const { list } = ensureDetailsSection(card);
+                const items = Array.from(list.querySelectorAll('li')).slice(0, 5);
+                const values = Array.isArray(details) ? details.slice(0, 5) : [];
+                for (let i = 0; i < items.length; i += 1) {
+                    items[i].textContent = values[i] || '';
+                }
+            }
+
             function renderCardTimestamps(card) {
                 const meta = ensureMetaRow(card);
                 const createdEl = meta.querySelector('.created');
@@ -519,10 +582,12 @@
                     Array.from(col.querySelectorAll('.feature-card')).forEach(card => {
                         const title = card.querySelector('h4')?.textContent?.trim() || '';
                         const desc = card.querySelector('p')?.textContent?.trim() || '';
+                        const details = getDetails(card);
                         state[card.dataset.featureId] = {
                             column: colKey,
                             title,
                             desc,
+                            details,
                             createdAt: card.dataset.createdAt || null,
                             movedAt: card.dataset.movedAt || null
                         };
@@ -565,6 +630,8 @@
                         if (titleEl && typeof value.title === 'string') titleEl.textContent = value.title;
                         if (descEl && typeof value.desc === 'string') descEl.textContent = value.desc;
 
+                        if (Array.isArray(value.details)) setDetails(card, value.details);
+
                         if (typeof value.createdAt === 'string' && value.createdAt) card.dataset.createdAt = value.createdAt;
                         if (typeof value.movedAt === 'string' && value.movedAt) card.dataset.movedAt = value.movedAt;
                     }
@@ -585,6 +652,7 @@
                 let changed = false;
                 cards.forEach(card => {
                     ensureMetaRow(card);
+                    ensureDetailsSection(card);
                     if (!card.dataset.createdAt) {
                         // Prefer stored value if present; otherwise initialize.
                         const stored = state?.[card.dataset.featureId];
@@ -618,6 +686,8 @@
                 const descEl = card.querySelector('p');
                 if (titleEl) titleEl.classList.add('editable');
                 if (descEl) descEl.classList.add('editable');
+                const detailsList = ensureDetailsSection(card).list;
+                const detailItems = Array.from(detailsList.querySelectorAll('li')).slice(0, 5);
 
                 function enableEditing() {
                     card.classList.add('editing');
@@ -630,6 +700,10 @@
                         descEl.contentEditable = 'true';
                         descEl.setAttribute('role', 'textbox');
                     }
+                    detailItems.forEach(li => {
+                        li.contentEditable = 'true';
+                        li.setAttribute('role', 'textbox');
+                    });
                     // focus title first
                     if (titleEl) {
                         const range = document.createRange();
@@ -645,6 +719,7 @@
                     card.classList.remove('editing');
                     if (titleEl) titleEl.contentEditable = 'false';
                     if (descEl) descEl.contentEditable = 'false';
+                    detailItems.forEach(li => (li.contentEditable = 'false'));
                     card.draggable = true;
                     if (save) {
                         saveBoardState();
