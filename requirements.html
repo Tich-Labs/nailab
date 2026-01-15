@@ -210,7 +210,7 @@
       </section>
 
       <section class="mt-8">
-        <h2 class="text-lg font-semibold text-slate-900">6. Content Requirements</h2>
+        <h2 class="text-lg font-semibold text-slate-900">4. Content Requirements</h2>
         <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
           <li>Content provided by Nailab’s Communications Team.</li>
           <li>Consultant to integrate text, images, videos, and infographics as supplied.</li>
@@ -220,7 +220,7 @@
       </section>
 
       <section class="mt-8">
-        <h2 class="text-lg font-semibold text-slate-900">7. Testing and Quality Assurance</h2>
+        <h2 class="text-lg font-semibold text-slate-900">5. Testing and Quality Assurance</h2>
         <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
           <li>Conduct functional and usability testing across major browsers (Chrome, Safari, Edge, Firefox).</li>
           <li>Ensure compatibility with desktop, tablet, and mobile.</li>
@@ -231,7 +231,7 @@
       </section>
 
       <section class="mt-8">
-        <h2 class="text-lg font-semibold text-slate-900">8. Documentation and Knowledge Transfer</h2>
+        <h2 class="text-lg font-semibold text-slate-900">6. Documentation and Knowledge Transfer</h2>
         <p class="mt-2 text-sm text-slate-700">Deliver a handover package including:</p>
         <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
           <li>Website architecture and code documentation.</li>
@@ -242,6 +242,23 @@
       </section>
     </article>
   </main>
+    <script>
+      (function indentH3Sections() {
+        const article = document.querySelector('article');
+        if (!article) return;
+
+        const h3s = Array.from(article.querySelectorAll('h3'));
+        h3s.forEach((h3) => {
+          h3.classList.add('ml-6');
+
+          let el = h3.nextElementSibling;
+          while (el && el.tagName !== 'H2' && el.tagName !== 'H3') {
+            el.classList.add('ml-6');
+            el = el.nextElementSibling;
+          }
+        });
+      })();
+    </script>
 
   <script>
     (function init() {
