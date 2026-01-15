@@ -46,3 +46,39 @@ body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Rob
 .caption{padding:8px 12px;color:var(--muted);font-size:13px}
 .footer{max-width:980px;margin:28px auto;padding:0 20px;color:var(--muted);font-size:13px}
 .error{color:#b91c1c}
+
+/* ------------------------------------------------------------
+	 Founder features page CSS (moved from inline <style>)
+------------------------------------------------------------ */
+.kanban-column{min-height:400px}
+.feature-card{transition:all 0.3s ease}
+.feature-card[draggable="true"]{cursor:grab;user-select:none}
+.feature-card.dragging{opacity:0.5;cursor:grabbing}
+.feature-card.editing{outline:2px solid rgba(59,130,246,0.35);outline-offset:2px}
+.feature-card [contenteditable="true"]{outline:none}
+.feature-card .editable:focus{box-shadow:0 0 0 3px rgba(59,130,246,0.25);border-radius:6px}
+.kanban-column.drop-target{outline:2px dashed rgba(0,0,0,0.25);outline-offset:6px}
+.feature-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+@keyframes dropPulse{0%{transform:scale(1)}50%{transform:scale(1.015)}100%{transform:scale(1)}}
+.feature-card.just-dropped{animation:dropPulse 180ms ease-out}
+.card-meta{font-size:0.75rem;color:rgb(107 114 128);margin-top:0.5rem}
+.card-meta .sep{margin:0 0.35rem;color:rgb(156 163 175)}
+.card-details-title{font-size:0.75rem;font-weight:600;color:rgb(55 65 81);margin-top:0.5rem}
+.card-details{margin-top:0.25rem;padding-left:1.1rem;list-style:disc;color:rgb(75 85 99);font-size:0.875rem}
+.card-details li:empty::before{content:'Add detail…';color:rgb(156 163 175)}
+.details-toggle{margin-top:0.5rem;font-size:0.75rem;font-weight:600;color:rgb(55 65 81);text-decoration:underline;background:transparent;border:0;padding:0;cursor:pointer}
+.details-toggle:hover{color:rgb(17 24 39)}
+
+.card-screenshot{margin-top:0.5rem}
+.card-screenshot .label{font-size:0.75rem;font-weight:600;color:rgb(55 65 81)}
+.card-screenshot .link{font-size:0.875rem;color:rgb(37 99 235);text-decoration:underline;word-break:break-word}
+.card-screenshot .thumb{margin-top:0.4rem;width:100%;max-height:160px;object-fit:cover;border-radius:0.5rem;border:1px solid rgb(229 231 235);cursor:pointer}
+.card-screenshot .picker{margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center}
+.card-screenshot input{flex:1;border:1px solid rgb(209 213 219);border-radius:0.5rem;padding:0.35rem 0.5rem;font-size:0.875rem;background:#fff}
+.card-screenshot button{border:1px solid rgb(209 213 219);border-radius:0.5rem;padding:0.35rem 0.6rem;font-size:0.875rem;background:#fff}
+.card-screenshot button:hover{background:rgb(249 250 251)}
+
+.status-badge{font-size:0.75rem;padding:0.25rem 0.5rem;border-radius:9999px;font-weight:600}
+.progress-ring{transform:rotate(-90deg)}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-slide-in{animation:slideIn 0.5s ease-out}
