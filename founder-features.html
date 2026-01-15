@@ -20,6 +20,17 @@
             opacity: 0.5;
             cursor: grabbing;
         }
+        .feature-card.editing {
+            outline: 2px solid rgba(59, 130, 246, 0.35);
+            outline-offset: 2px;
+        }
+        .feature-card [contenteditable="true"] {
+            outline: none;
+        }
+        .feature-card .editable:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+            border-radius: 6px;
+        }
         .kanban-column.drop-target {
             outline: 2px dashed rgba(0, 0, 0, 0.25);
             outline-offset: 6px;
@@ -351,6 +362,7 @@
             <!-- Legend -->
             <div class="mt-8 bg-white rounded-lg shadow-sm p-6">
                 <h3 class="text-lg font-semibold mb-4">Status Legend</h3>
+                <p class="text-sm text-gray-600 mb-4">Tip: drag cards between columns (including back). Double-click a card to edit its title/description.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="flex items-center space-x-3">
                         <div class="w-4 h-4 bg-green-500 rounded-full"></div>
@@ -465,7 +477,9 @@
                 columns.forEach(col => {
                     const colKey = col.dataset.column;
                     Array.from(col.querySelectorAll('.feature-card')).forEach(card => {
-                        state[card.dataset.featureId] = colKey;
+                        const title = card.querySelector('h4')?.textContent?.trim() || '';
+                        const desc = card.querySelector('p')?.textContent?.trim() || '';
+                        state[card.dataset.featureId] = { column: colKey, title, desc };
                     });
                 });
                 try {
@@ -487,12 +501,24 @@
                 const cardById = new Map(cards.map(c => [c.dataset.featureId, c]));
                 const columnByKey = new Map(columns.map(c => [c.dataset.column, c]));
 
-                Object.entries(state).forEach(([id, colKey]) => {
+                Object.entries(state).forEach(([id, value]) => {
                     const card = cardById.get(id);
+                    if (!card) return;
+
+                    // Backward compatibility: older format stored {id: "column"}
+                    const colKey = typeof value === 'string' ? value : value?.column;
                     const col = columnByKey.get(colKey);
-                    if (!card || !col) return;
-                    col.appendChild(card);
-                    setBadgeForColumn(card, colKey);
+                    if (col) {
+                        col.appendChild(card);
+                        setBadgeForColumn(card, colKey);
+                    }
+
+                    if (value && typeof value === 'object') {
+                        const titleEl = card.querySelector('h4');
+                        const descEl = card.querySelector('p');
+                        if (titleEl && typeof value.title === 'string') titleEl.textContent = value.title;
+                        if (descEl && typeof value.desc === 'string') descEl.textContent = value.desc;
+                    }
                 });
             }
 
@@ -502,7 +528,85 @@
             cards.forEach(card => {
                 card.draggable = true;
 
+                // Make title/desc editable on demand
+                const titleEl = card.querySelector('h4');
+                const descEl = card.querySelector('p');
+                if (titleEl) titleEl.classList.add('editable');
+                if (descEl) descEl.classList.add('editable');
+
+                function enableEditing() {
+                    card.classList.add('editing');
+                    card.draggable = false;
+                    if (titleEl) {
+                        titleEl.contentEditable = 'true';
+                        titleEl.setAttribute('role', 'textbox');
+                    }
+                    if (descEl) {
+                        descEl.contentEditable = 'true';
+                        descEl.setAttribute('role', 'textbox');
+                    }
+                    // focus title first
+                    if (titleEl) {
+                        const range = document.createRange();
+                        range.selectNodeContents(titleEl);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                        titleEl.focus();
+                    }
+                }
+
+                function disableEditing(save) {
+                    card.classList.remove('editing');
+                    if (titleEl) titleEl.contentEditable = 'false';
+                    if (descEl) descEl.contentEditable = 'false';
+                    card.draggable = true;
+                    if (save) {
+                        saveBoardState();
+                    }
+                }
+
+                // Double-click anywhere on the card to edit
+                card.addEventListener('dblclick', (e) => {
+                    // Avoid triggering edit while dragging
+                    if (card.classList.contains('dragging')) return;
+                    enableEditing();
+                    e.preventDefault();
+                });
+
+                // Save on blur (when leaving the card)
+                card.addEventListener('focusout', () => {
+                    if (!card.classList.contains('editing')) return;
+                    // give focus a tick to move between title/desc without exiting edit mode
+                    window.setTimeout(() => {
+                        const active = document.activeElement;
+                        if (card.contains(active)) return;
+                        disableEditing(true);
+                    }, 0);
+                });
+
+                // ESC cancels editing (reverts by reloading from storage snapshot)
+                card.addEventListener('keydown', (e) => {
+                    if (!card.classList.contains('editing')) return;
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        // restore from saved state
+                        restoreBoardState();
+                        updateCounts();
+                        disableEditing(false);
+                    }
+                    // prevent Enter from creating new lines in the title
+                    if (e.key === 'Enter' && document.activeElement === titleEl) {
+                        e.preventDefault();
+                        if (descEl) descEl.focus();
+                    }
+                });
+
                 card.addEventListener('dragstart', (e) => {
+                    if (card.classList.contains('editing')) {
+                        e.preventDefault();
+                        return;
+                    }
                     card.classList.add('dragging');
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('text/plain', card.dataset.featureId);
