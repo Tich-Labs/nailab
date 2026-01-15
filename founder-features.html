@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nailab - Founder Features Status</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen">
@@ -16,7 +15,7 @@
                     <div class="flex items-center space-x-4">
                         <h1 class="text-2xl font-bold text-gray-900">Nailab</h1>
                         <span class="text-gray-400">|</span>
-                        <h2 class="text-xl text-gray-600">Founder Features Status</h2>
+                        <h2 class="text-xl text-gray-600">Founder Features</h2>
                     </div>
                     <div class="flex items-center space-x-2">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +30,7 @@
         <!-- Main Content -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Overview Stats -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-8 animate-slide-in">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="text-center">
                         <div class="flex justify-center mb-2">
@@ -440,37 +439,39 @@
             }
 
             function ensureMetaRow(card) {
-                let meta = card.querySelector('.card-meta');
+                let meta = card.querySelector('[data-meta-row]');
                 if (meta) return meta;
                 meta = document.createElement('div');
-                meta.className = 'card-meta';
-                meta.innerHTML = '<span class="created">Created: —</span><span class="sep">•</span><span class="moved">Moved: —</span>';
+                meta.dataset.metaRow = '1';
+                meta.className = 'mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500';
+                meta.innerHTML = '<span data-created>Created: —</span><span class="text-slate-300">•</span><span data-moved>Moved: —</span>';
                 card.appendChild(meta);
                 return meta;
             }
 
-            function ensureScreenshotSection(card) {
-                let section = card.querySelector('.card-screenshot');
-                if (section) return section;
+                        function ensureScreenshotSection(card) {
+                                let section = card.querySelector('[data-screenshot-section]');
+                                if (section) return section;
 
-                section = document.createElement('div');
-                section.className = 'card-screenshot';
-                section.innerHTML = `
-                    <div class="label">Screenshot</div>
-                    <a class="link" target="_blank" rel="noopener noreferrer" href="#">Not linked</a>
-                    <img class="thumb" alt="Screenshot preview" hidden />
-                    <div class="picker" hidden>
-                      <input class="shot-input" list="screenshotOptions" placeholder="Choose screenshot path (e.g. screenshots/site/auth/auth_password_new.png)" />
-                      <button type="button" class="shot-set">Set</button>
-                    </div>
-                `;
+                                section = document.createElement('div');
+                                section.dataset.screenshotSection = '1';
+                                section.className = 'mt-2';
+                                section.innerHTML = `
+                                        <div class="text-xs font-semibold text-slate-700">Screenshot</div>
+                                        <a data-ss-link class="text-sm text-blue-600 underline" target="_blank" rel="noopener noreferrer" href="#">Not linked</a>
+                                        <img data-ss-img class="mt-2 w-full max-h-40 object-cover rounded-lg border border-slate-200 cursor-pointer" alt="Screenshot preview" hidden />
+                                        <div data-ss-picker class="mt-2 flex gap-2 items-center" hidden>
+                                            <input data-ss-input class="flex-1 rounded-lg border border-slate-300 bg-white px-2 py-1 text-sm" list="screenshotOptions" placeholder="Choose screenshot path (e.g. screenshots/site/auth/auth_password_new.png)" />
+                                            <button type="button" data-ss-set class="rounded-lg border border-slate-300 bg-white px-3 py-1 text-sm hover:bg-slate-50">Set</button>
+                                        </div>
+                                `;
 
                 // Place it before details toggle if present (keeps it near status)
-                const toggle = card.querySelector('.details-toggle');
+                const toggle = card.querySelector('[data-details-toggle]');
                 if (toggle) {
                     card.insertBefore(section, toggle);
                 } else {
-                    const meta = card.querySelector('.card-meta');
+                    const meta = card.querySelector('[data-meta-row]');
                     if (meta) card.insertBefore(section, meta);
                     else card.appendChild(section);
                 }
@@ -480,10 +481,10 @@
 
             function renderCardScreenshot(card) {
                 const section = ensureScreenshotSection(card);
-                const link = section.querySelector('.link');
-                const img = section.querySelector('.thumb');
-                const picker = section.querySelector('.picker');
-                const input = section.querySelector('.shot-input');
+                const link = section.querySelector('[data-ss-link]');
+                const img = section.querySelector('[data-ss-img]');
+                const picker = section.querySelector('[data-ss-picker]');
+                const input = section.querySelector('[data-ss-input]');
 
                 const path = card.dataset.screenshotPath || '';
                 if (input) input.value = path;
@@ -505,33 +506,60 @@
                 if (picker) picker.hidden = !card.classList.contains('editing');
             }
 
+            function syncDetailPlaceholder(li) {
+                const text = (li.textContent || '').trim();
+                if (!text) {
+                    li.dataset.placeholder = 'true';
+                    li.textContent = 'Add detail…';
+                    li.classList.add('text-slate-400', 'italic');
+                } else {
+                    li.dataset.placeholder = 'false';
+                    li.classList.remove('text-slate-400', 'italic');
+                }
+            }
+
             function ensureDetailsSection(card) {
-                let title = card.querySelector('.card-details-title');
-                let list = card.querySelector('.card-details');
-                let wrap = card.querySelector('.card-details-wrap');
-                let toggle = card.querySelector('.details-toggle');
+                let title = card.querySelector('[data-details-title]');
+                let list = card.querySelector('[data-details-list]');
+                let wrap = card.querySelector('[data-details-wrap]');
+                let toggle = card.querySelector('[data-details-toggle]');
                 if (title && list && wrap && toggle) return { title, list, wrap, toggle };
 
                 // Wrap holds title + list so we can hide/show together
                 wrap = document.createElement('div');
-                wrap.className = 'card-details-wrap';
+                wrap.dataset.detailsWrap = '1';
+                wrap.className = 'mt-1';
 
                 title = document.createElement('div');
-                title.className = 'card-details-title';
+                title.dataset.detailsTitle = '1';
+                title.className = 'mt-2 text-xs font-semibold text-slate-700';
                 title.textContent = 'Additional details';
 
                 list = document.createElement('ul');
-                list.className = 'card-details';
+                list.dataset.detailsList = '1';
+                list.className = 'mt-1 list-disc pl-5 text-sm text-slate-600 space-y-1';
                 for (let i = 0; i < 5; i += 1) {
                     const li = document.createElement('li');
-                    li.className = 'detail-item editable';
+                    li.className = 'editable rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-200';
                     li.contentEditable = 'false';
+                    syncDetailPlaceholder(li);
+                    li.addEventListener('focusin', () => {
+                        if (li.dataset.placeholder === 'true') {
+                            li.textContent = '';
+                            li.dataset.placeholder = 'false';
+                            li.classList.remove('text-slate-400', 'italic');
+                        }
+                    });
+                    li.addEventListener('focusout', () => {
+                        syncDetailPlaceholder(li);
+                    });
                     list.appendChild(li);
                 }
 
                 toggle = document.createElement('button');
                 toggle.type = 'button';
-                toggle.className = 'details-toggle';
+                toggle.dataset.detailsToggle = '1';
+                toggle.className = 'mt-2 text-xs font-semibold text-slate-700 underline hover:text-slate-900';
                 toggle.textContent = 'Hide details';
 
                 // Create a stable id for aria-controls
@@ -544,7 +572,7 @@
                 wrap.appendChild(list);
 
                 // Insert details before meta row if meta exists; otherwise append.
-                const meta = card.querySelector('.card-meta');
+                const meta = card.querySelector('[data-meta-row]');
                 if (meta) {
                     card.insertBefore(wrap, meta);
                     card.insertBefore(toggle, wrap);
@@ -557,9 +585,12 @@
             }
 
             function getDetails(card) {
-                const list = card.querySelector('.card-details');
+                const list = card.querySelector('[data-details-list]');
                 if (!list) return [];
-                return Array.from(list.querySelectorAll('li')).slice(0, 5).map(li => (li.textContent || '').trim());
+                return Array.from(list.querySelectorAll('li')).slice(0, 5).map(li => {
+                    if (li.dataset.placeholder === 'true') return '';
+                    return (li.textContent || '').trim();
+                });
             }
 
             function setDetails(card, details) {
@@ -568,6 +599,7 @@
                 const values = Array.isArray(details) ? details.slice(0, 5) : [];
                 for (let i = 0; i < items.length; i += 1) {
                     items[i].textContent = values[i] || '';
+                    syncDetailPlaceholder(items[i]);
                 }
             }
 
@@ -582,8 +614,8 @@
 
             function renderCardTimestamps(card) {
                 const meta = ensureMetaRow(card);
-                const createdEl = meta.querySelector('.created');
-                const movedEl = meta.querySelector('.moved');
+                const createdEl = meta.querySelector('[data-created]');
+                const movedEl = meta.querySelector('[data-moved]');
                 if (createdEl) createdEl.textContent = `Created: ${formatDateTime(card.dataset.createdAt)}`;
                 if (movedEl) movedEl.textContent = `Moved: ${formatDateTime(card.dataset.movedAt)}`;
             }
@@ -778,6 +810,9 @@
             cards.forEach(card => {
                 card.draggable = true;
 
+                // Tailwind-only interactivity (no external CSS)
+                card.classList.add('transition', 'duration-200', 'transform', 'hover:-translate-y-0.5', 'hover:shadow-xl', 'cursor-grab', 'select-none');
+
                 // Make title/desc editable on demand
                 const titleEl = card.querySelector('h4');
                 const descEl = card.querySelector('p');
@@ -788,8 +823,8 @@
                 const detailItems = Array.from(detailsList.querySelectorAll('li')).slice(0, 5);
 
                 const screenshotSection = ensureScreenshotSection(card);
-                const shotInput = screenshotSection.querySelector('.shot-input');
-                const shotSet = screenshotSection.querySelector('.shot-set');
+                const shotInput = screenshotSection.querySelector('[data-ss-input]');
+                const shotSet = screenshotSection.querySelector('[data-ss-set]');
 
                 if (shotSet && shotInput) {
                     shotSet.addEventListener('click', () => {
@@ -809,6 +844,8 @@
 
                 function enableEditing() {
                     card.classList.add('editing');
+                    card.classList.add('ring-2', 'ring-blue-300', 'ring-offset-2');
+                    card.classList.remove('cursor-grab');
                     card.draggable = false;
                     // Always expand while editing so bullets are accessible
                     applyDetailsVisibility(card, true);
@@ -840,6 +877,8 @@
 
                 function disableEditing(save) {
                     card.classList.remove('editing');
+                    card.classList.remove('ring-2', 'ring-blue-300', 'ring-offset-2');
+                    card.classList.add('cursor-grab');
                     if (titleEl) titleEl.contentEditable = 'false';
                     if (descEl) descEl.contentEditable = 'false';
                     detailItems.forEach(li => (li.contentEditable = 'false'));
@@ -895,13 +934,17 @@
                         return;
                     }
                     card.classList.add('dragging');
+                    card.classList.add('opacity-50', 'cursor-grabbing');
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('text/plain', card.dataset.featureId);
                 });
 
                 card.addEventListener('dragend', () => {
                     card.classList.remove('dragging');
-                    columns.forEach(c => c.classList.remove('drop-target'));
+                    card.classList.remove('opacity-50', 'cursor-grabbing');
+                    columns.forEach(c => {
+                        c.classList.remove('drop-target', 'outline', 'outline-2', 'outline-dashed', 'outline-slate-400', 'outline-offset-4');
+                    });
                 });
             });
 
@@ -910,15 +953,18 @@
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'move';
                     col.classList.add('drop-target');
+                    col.classList.add('outline', 'outline-2', 'outline-dashed', 'outline-slate-400', 'outline-offset-4');
                 });
 
                 col.addEventListener('dragleave', () => {
                     col.classList.remove('drop-target');
+                    col.classList.remove('outline', 'outline-2', 'outline-dashed', 'outline-slate-400', 'outline-offset-4');
                 });
 
                 col.addEventListener('drop', (e) => {
                     e.preventDefault();
                     col.classList.remove('drop-target');
+                    col.classList.remove('outline', 'outline-2', 'outline-dashed', 'outline-slate-400', 'outline-offset-4');
                     const id = e.dataTransfer.getData('text/plain');
                     const dragged = document.querySelector(`.feature-card[data-feature-id="${CSS.escape(id)}"]`);
                     if (!dragged) return;
@@ -927,8 +973,6 @@
                     setBadgeForColumn(dragged, col.dataset.column);
                     dragged.dataset.movedAt = new Date().toISOString();
                     renderCardTimestamps(dragged);
-                    dragged.classList.add('just-dropped');
-                    window.setTimeout(() => dragged.classList.remove('just-dropped'), 250);
                     updateCounts();
                     saveBoardState();
                 });
@@ -960,23 +1004,6 @@
                     // ignore; screenshot linking still works if manually typed
                 });
 
-            // Add animation on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-slide-in');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.feature-card').forEach(card => {
-                observer.observe(card);
-            });
         });
     </script>
 </body>
