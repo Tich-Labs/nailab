@@ -7,10 +7,27 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <h1>Nailab — Application Documentation</h1>
-    <p class="lead">Browse screenshots and feature documentation below.</p>
+  <header class="gh-header">
+    <div class="gh-header__container">
+      <div class="gh-header__row">
+        <div class="gh-header__left">
+          <h1 class="gh-header__brand">Nailab</h1>
+          <span class="gh-header__sep">|</span>
+          <h2 class="gh-header__title">Application Documentation</h2>
+        </div>
+        <div class="gh-header__right">
+          <svg class="gh-header__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="gh-header__updated">Last Updated: <span id="lastUpdated"></span></span>
+        </div>
+      </div>
+    </div>
   </header>
+
+  <div class="site-header">
+    <p class="lead">Browse screenshots and feature documentation below.</p>
+  </div>
 
   <nav class="sections">
     <button data-filter="all">All</button>
@@ -182,6 +199,16 @@
     }
 
     async function init() {
+      // header: last updated date
+      const last = document.getElementById('lastUpdated');
+      if (last) {
+        last.textContent = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
       const items = await loadIndex();
       render(items);
       const initial = initialFilterFromUrl() || 'all';
