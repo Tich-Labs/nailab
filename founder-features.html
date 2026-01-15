@@ -73,6 +73,20 @@
             content: 'Add detail…';
             color: rgb(156 163 175); /* gray-400 */
         }
+        .details-toggle {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgb(55 65 81); /* gray-700 */
+            text-decoration: underline;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+        .details-toggle:hover {
+            color: rgb(17 24 39); /* gray-900 */
+        }
         .status-badge {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -456,7 +470,13 @@
             function ensureDetailsSection(card) {
                 let title = card.querySelector('.card-details-title');
                 let list = card.querySelector('.card-details');
-                if (title && list) return { title, list };
+                let wrap = card.querySelector('.card-details-wrap');
+                let toggle = card.querySelector('.details-toggle');
+                if (title && list && wrap && toggle) return { title, list, wrap, toggle };
+
+                // Wrap holds title + list so we can hide/show together
+                wrap = document.createElement('div');
+                wrap.className = 'card-details-wrap';
 
                 title = document.createElement('div');
                 title.className = 'card-details-title';
@@ -471,17 +491,31 @@
                     list.appendChild(li);
                 }
 
+                toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'details-toggle';
+                toggle.textContent = 'Hide details';
+
+                // Create a stable id for aria-controls
+                const controlsId = `details-${card.dataset.featureId || Math.random().toString(36).slice(2)}`;
+                wrap.id = controlsId;
+                toggle.setAttribute('aria-controls', controlsId);
+                toggle.setAttribute('aria-expanded', 'true');
+
+                wrap.appendChild(title);
+                wrap.appendChild(list);
+
                 // Insert details before meta row if meta exists; otherwise append.
                 const meta = card.querySelector('.card-meta');
                 if (meta) {
-                    card.insertBefore(list, meta);
-                    card.insertBefore(title, list);
+                    card.insertBefore(wrap, meta);
+                    card.insertBefore(toggle, wrap);
                 } else {
-                    card.appendChild(title);
-                    card.appendChild(list);
+                    card.appendChild(toggle);
+                    card.appendChild(wrap);
                 }
 
-                return { title, list };
+                return { title, list, wrap, toggle };
             }
 
             function getDetails(card) {
@@ -497,6 +531,15 @@
                 for (let i = 0; i < items.length; i += 1) {
                     items[i].textContent = values[i] || '';
                 }
+            }
+
+            function applyDetailsVisibility(card, open) {
+                const { wrap, toggle } = ensureDetailsSection(card);
+                const isOpen = open !== false;
+                card.dataset.detailsOpen = isOpen ? 'true' : 'false';
+                wrap.hidden = !isOpen;
+                toggle.textContent = isOpen ? 'Hide details' : 'Show details';
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             }
 
             function renderCardTimestamps(card) {
@@ -588,6 +631,7 @@
                             title,
                             desc,
                             details,
+                            detailsOpen: card.dataset.detailsOpen === 'false' ? false : true,
                             createdAt: card.dataset.createdAt || null,
                             movedAt: card.dataset.movedAt || null
                         };
@@ -631,6 +675,7 @@
                         if (descEl && typeof value.desc === 'string') descEl.textContent = value.desc;
 
                         if (Array.isArray(value.details)) setDetails(card, value.details);
+                        if (typeof value.detailsOpen === 'boolean') applyDetailsVisibility(card, value.detailsOpen);
 
                         if (typeof value.createdAt === 'string' && value.createdAt) card.dataset.createdAt = value.createdAt;
                         if (typeof value.movedAt === 'string' && value.movedAt) card.dataset.movedAt = value.movedAt;
@@ -652,10 +697,10 @@
                 let changed = false;
                 cards.forEach(card => {
                     ensureMetaRow(card);
+                    const stored = state?.[card.dataset.featureId];
                     ensureDetailsSection(card);
                     if (!card.dataset.createdAt) {
                         // Prefer stored value if present; otherwise initialize.
-                        const stored = state?.[card.dataset.featureId];
                         if (stored && typeof stored === 'object' && typeof stored.createdAt === 'string' && stored.createdAt) {
                             card.dataset.createdAt = stored.createdAt;
                         } else {
@@ -664,11 +709,18 @@
                         }
                     }
                     if (!card.dataset.movedAt) {
-                        const stored = state?.[card.dataset.featureId];
                         if (stored && typeof stored === 'object' && typeof stored.movedAt === 'string' && stored.movedAt) {
                             card.dataset.movedAt = stored.movedAt;
                         }
                     }
+
+                    // Default details visibility: open unless stored otherwise
+                    if (stored && typeof stored === 'object' && typeof stored.detailsOpen === 'boolean') {
+                        applyDetailsVisibility(card, stored.detailsOpen);
+                    } else {
+                        applyDetailsVisibility(card, true);
+                    }
+
                     renderCardTimestamps(card);
                 });
 
@@ -686,12 +738,22 @@
                 const descEl = card.querySelector('p');
                 if (titleEl) titleEl.classList.add('editable');
                 if (descEl) descEl.classList.add('editable');
-                const detailsList = ensureDetailsSection(card).list;
+                const detailsSection = ensureDetailsSection(card);
+                const detailsList = detailsSection.list;
                 const detailItems = Array.from(detailsList.querySelectorAll('li')).slice(0, 5);
+
+                // Toggle details
+                detailsSection.toggle.addEventListener('click', () => {
+                    const open = card.dataset.detailsOpen === 'false';
+                    applyDetailsVisibility(card, open);
+                    saveBoardState();
+                });
 
                 function enableEditing() {
                     card.classList.add('editing');
                     card.draggable = false;
+                    // Always expand while editing so bullets are accessible
+                    applyDetailsVisibility(card, true);
                     if (titleEl) {
                         titleEl.contentEditable = 'true';
                         titleEl.setAttribute('role', 'textbox');
