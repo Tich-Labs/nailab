@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nailab Requirements</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <div class="flex items-center space-x-4">
+          <a href="./?section=all" class="text-2xl font-bold text-gray-900 hover:underline">Nailab</a>
+          <span class="text-gray-400">|</span>
+          <a href="documentation.html" class="text-xl text-gray-600 hover:underline">Documentation</a>
+          <span class="text-gray-400">/</span>
+          <h1 class="text-xl text-gray-600">Requirements</h1>
+        </div>
+        <div class="flex items-center space-x-2">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="text-sm text-gray-600">Last Updated: <span id="lastUpdated"></span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <article class="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+      <header>
+        <h1 class="text-2xl font-bold text-slate-900">Nailab Website and Mentorship Platform — Requirements Document</h1>
+        <p class="mt-2 text-sm text-slate-600">Phase 1 (MVP) focus: Startups and Mentors.</p>
+      </header>
+
+      <hr class="my-6 border-slate-200" />
+
+      <section>
+        <h2 class="text-lg font-semibold text-slate-900">1. Project Overview</h2>
+        <p class="mt-2 text-sm text-slate-700">Nailab is rebuilding its website into a dynamic digital platform that empowers African startups by providing them with access to mentorship, expert guidance, and curated opportunities for growth and funding.</p>
+        <p class="mt-2 text-sm text-slate-700">The platform will combine a public-facing website with a membership-driven mentorship portal, creating an interactive ecosystem for founders, mentors, and investors.</p>
+        <p class="mt-2 text-sm text-slate-700">We have four key priority audiences at Nailab: Startups, Mentors, Partners, and Investors. For phase one (MVP), our focus will be on Startups and Mentors.</p>
+
+        <h3 class="mt-4 text-base font-semibold text-slate-900">Core goals</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Offer a peer-to-peer mentorship platform connecting founders and seasoned business leaders.</li>
+          <li>Provide curated resources and growth opportunities through an integrated resource library — templates and guides, events and workshops, and opportunities pages.</li>
+          <li>Showcase Nailab’s programs, impact, and community success stories.</li>
+          <li>Enable subscription-based access to mentorship and premium content.</li>
+          <li>Deliver a seamless, mobile-responsive experience across devices.</li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold text-slate-900">2. Project Scope</h2>
+        <p class="mt-2 text-sm text-slate-700">The Nailab Website and Mentorship Platform will serve as a centralized digital hub connecting African startups, mentors, and investors. The platform will facilitate mentorship matching, provide access to curated resources and opportunities, showcase startups, and enable progress tracking through a startup dashboard and community engagement through in platform messaging.</p>
+
+        <h3 class="mt-4 text-base font-semibold text-slate-900">2.1 Objectives</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>To create a secure and user-friendly online platform that digitizes Nailab’s mentorship, learning, and resource-sharing processes.</li>
+          <li>To provide a personalized experience for founders, mentors, and investors based on their profiles, sectors, and interests.</li>
+          <li>To enable data-driven mentorship matching and progress tracking for startups.</li>
+          <li>To enhance visibility of startups within Nailab’s network.</li>
+          <li>To support sustainable platform operations through integrated subscription management.</li>
+          <li>To provide centralized communication, knowledge-sharing, and support tools for the Nailab community.</li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold text-slate-900">3. Functional Requirements</h2>
+
+        <h3 class="mt-4 text-base font-semibold text-slate-900">3.1 User Registration and Profile Management</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Secure user registration and login system.</li>
+          <li>Profiles for founders and mentors, including:
+            <ul class="mt-2 list-disc pl-5">
+              <li>Personal information, photo, and bio.</li>
+              <li>Professional background (sector, expertise, location).</li>
+              <li>Visibility settings and edit controls.</li>
+            </ul>
+          </li>
+          <li>Privacy and visibility controls allowing users to manage what information is displayed publicly.</li>
+          <li>Account management features, including password reset and profile editing.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.2 Mentorship Matching System</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Algorithmic matching of mentors and mentees based on sector, startup stage, location, or thematic area.</li>
+          <li>Profile visibility and management for both mentors and mentees.</li>
+          <li>Functionality for mentors to review, accept, or decline mentorship requests.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.3 Resource Library and Opportunities Hub</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Upload, categorize, and display: articles, videos, toolkits, events, and funding opportunities.</li>
+          <li>Search and filter capabilities by topic, type, or date.</li>
+          <li>Functionality for users to bookmark or download materials.</li>
+          <li>Opportunity section with sign-up or application forms.</li>
+          <li>Some resources are free; others should be available to startups with a premium profile.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.4 Startup Directory</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Public-facing directory showcasing all startup profiles.</li>
+          <li>The data on the platform should be live.</li>
+          <li>Searchable and filterable by sector, stage, or location.</li>
+          <li>Live data integration: as startups create and update their profiles, the information should automatically appear and refresh on the directory page in real time.</li>
+          <li>Each profile includes: name, logo, location, focus area, description, and website/social links.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.5 Startup/founder dashboards &amp; Progress Tracking Tools</h3>
+        <p class="mt-2 text-sm text-slate-700">Founders will have personalized dashboards where they can set milestones and track business performance over time. Key metrics may include (but are not limited to):</p>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Monthly revenue growth (e.g., revenue change over time).</li>
+          <li>Customer or user growth (number of active clients, sign-ups, or sales).</li>
+          <li>Jobs created or sustained.</li>
+          <li>Funding raised or investment secured.</li>
+        </ul>
+        <ul class="mt-4 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Edit and update functionality: founders can add, edit, and update their performance data through an “Edit Progress” or “Update Metrics” button on their dashboard.</li>
+          <li>Mentor access and feedback: mentors can view mentees’ progress dashboards and provide guidance/feedback through in-platform comments or messages linked to each milestone.</li>
+          <li>Data visualization tools: simple charts, progress bars, or graphs to display trends and achievements over time.</li>
+          <li>Reminders and notifications: founders receive automated prompts to update data monthly or at customizable intervals.</li>
+          <li>Recommended mentors: a list of potential mentors tailored to the founder’s industry, mentorship needs, and startup stage.</li>
+          <li>Connection requests: startups can send requests to mentors they’re interested in, with updates on request status.</li>
+          <li>Booked sessions are visible: confirmed mentorship sessions displayed on the dashboard including date, time, and session details.</li>
+          <li>Messaging center: founders can communicate directly with mentors via in-platform chat or email integration, with notifications for timely responses.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6 Mentor Dashboard</h3>
+        <p class="mt-2 text-sm text-slate-700">The Mentor Dashboard will provide mentors with a personalized environment for onboarding, managing their profiles, engaging with mentees, and tracking their mentorship activities.</p>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6.a Onboarding and Account Setup</h3>
+        <h3 class="mt-4 text-base font-semibold text-slate-900">User Registration and Authentication</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Social sign-up/sign-in (LinkedIn): auto pre-fill of profile data (name, bio, title, organization) where available, and other data (e.g., work experience, bio, profile picture) pulled directly from LinkedIn. Mentors manually fill fields like availability, mentoring areas, startup sector, and pricing (or any information that cannot be imported).</li>
+          <li>Traditional signup (alternative option):
+            <ul class="mt-2 list-disc pl-5">
+              <li>Secure registration form with required fields (name, email, password, etc.).</li>
+              <li>Email format validation to prevent incorrect input.</li>
+              <li>Password mismatch detection with clear error messages.</li>
+              <li>Password strength validation to enforce secure credentials.</li>
+            </ul>
+          </li>
+          <li>“Forgot Password” and “Reset Password” links:
+            <ul class="mt-2 list-disc pl-5">
+              <li>Accessible from login and password recovery screens.</li>
+              <li>Automatic password reset email delivery with expiration control.</li>
+            </ul>
+          </li>
+          <li>Required fields validation: all mandatory fields must be completed before submission.</li>
+          <li>Email confirmation:
+            <ul class="mt-2 list-disc pl-5">
+              <li>Verification email with activation link.</li>
+              <li>Handling of expired or invalid verification links with clear user guidance.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6.b Ethical Onboarding Process</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Ethical guidelines page accessible from the sign-up flow and mentor dashboard, clearly displaying mentorship ethics, conduct policy, and data privacy terms.</li>
+          <li>Guidelines acceptance: mentor must acknowledge and accept ethical guidelines before profile activation.</li>
+          <li>System confirmation upon successful acceptance (e.g., “You’ve successfully completed your mentor onboarding.”).</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6.c Profile Completion Wizard</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Step-by-step setup with progress indicator, including “Back,” “Save and Exit,” and “Preview Profile” buttons.</li>
+          <li>Profile details to capture:
+            <ul class="mt-2 list-disc pl-5">
+              <li>Profile picture upload (with crop and re-upload options).</li>
+              <li>Professional expertise (sector, focus area, years of experience).</li>
+              <li>Mentorship preferences (startup fundraising stage, business area, region).</li>
+              <li>Monthly availability hours.</li>
+              <li>Hourly session rate and pro bono availability commitment.</li>
+              <li>Startup challenge expertise areas (e.g., fundraising, marketing, team building, operations).</li>
+            </ul>
+          </li>
+          <li>Input validation: mandatory fields must be filled; errors shown clearly with guidance.</li>
+          <li>Preview and submission:
+            <ul class="mt-2 list-disc pl-5">
+              <li>Preview full mentor profile before submission.</li>
+              <li>Edit functionality available post-submission.</li>
+              <li>System saves progress automatically or via “Save and Exit”.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6.d Dashboard Access and Functionality</h3>
+        <p class="mt-2 text-sm text-slate-700">Once onboarding is complete, mentors gain access to their dashboard with:</p>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Welcome message on first login post-activation.</li>
+          <li>Left navigation panel: quick links to mentees, messages, upcoming sessions, profile settings, and resource library.</li>
+          <li>Dashboard overview widgets: upcoming sessions/invitations, mentee progress summaries, and notifications.</li>
+          <li>Account controls: edit profile, manage availability, and view engagement statistics.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.6.e Validation and User Flow Controls</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Navigation controls: functional “Back,” “Next,” and “Save and Exit” across onboarding steps.</li>
+          <li>Input validation for all text, number, and selection fields.</li>
+          <li>Session continuity: data auto-saves between steps to prevent loss of progress.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.7 Subscription Payments</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Integration with secure payment gateways supporting cards and M-Pesa.</li>
+          <li>Different subscription tiers granting various platform access levels.</li>
+          <li>Automatic confirmation emails and receipt generation.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.8 Communication Tools</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>In-platform messaging system between mentors, mentees, and administrators.</li>
+          <li>Notifications for new messages, mentorship requests, platform updates, or events.</li>
+        </ul>
+
+        <h3 class="mt-6 text-base font-semibold text-slate-900">3.9 Contact and Inquiry System</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>“Contact Us” page with form submission linked to Nailab’s CRM/email system.</li>
+          <li>Embedded social media links and business contact details.</li>
+          <li>Confirmation message upon submission.</li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold text-slate-900">6. Content Requirements</h2>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Content provided by Nailab’s Communications Team.</li>
+          <li>Consultant to integrate text, images, videos, and infographics as supplied.</li>
+          <li>Copy tone: inspirational, professional, and impact-driven.</li>
+          <li>Ensure all pages are optimized with metadata and SEO keywords.</li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold text-slate-900">7. Testing and Quality Assurance</h2>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Conduct functional and usability testing across major browsers (Chrome, Safari, Edge, Firefox).</li>
+          <li>Ensure compatibility with desktop, tablet, and mobile.</li>
+          <li>Test all forms, links, payment gateways, and user flows.</li>
+          <li>Fix all identified bugs before final submission.</li>
+          <li>Provide Nailab with access to a staging environment for review.</li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold text-slate-900">8. Documentation and Knowledge Transfer</h2>
+        <p class="mt-2 text-sm text-slate-700">Deliver a handover package including:</p>
+        <ul class="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+          <li>Website architecture and code documentation.</li>
+          <li>Admin and user management guides.</li>
+          <li>Instructions for content updates.</li>
+          <li>Walkthrough session with Nailab’s communications and operations team.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <script>
+    (function init() {
+      const last = document.getElementById('lastUpdated');
+      if (last) {
+        last.textContent = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
