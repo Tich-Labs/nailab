@@ -87,6 +87,54 @@
         .details-toggle:hover {
             color: rgb(17 24 39); /* gray-900 */
         }
+
+        .card-screenshot {
+            margin-top: 0.5rem;
+        }
+        .card-screenshot .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgb(55 65 81); /* gray-700 */
+        }
+        .card-screenshot .link {
+            font-size: 0.875rem;
+            color: rgb(37 99 235); /* blue-600 */
+            text-decoration: underline;
+            word-break: break-word;
+        }
+        .card-screenshot .thumb {
+            margin-top: 0.4rem;
+            width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 1px solid rgb(229 231 235); /* gray-200 */
+            cursor: pointer;
+        }
+        .card-screenshot .picker {
+            margin-top: 0.4rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .card-screenshot input {
+            flex: 1;
+            border: 1px solid rgb(209 213 219); /* gray-300 */
+            border-radius: 0.5rem;
+            padding: 0.35rem 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+        }
+        .card-screenshot button {
+            border: 1px solid rgb(209 213 219); /* gray-300 */
+            border-radius: 0.5rem;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.875rem;
+            background: white;
+        }
+        .card-screenshot button:hover {
+            background: rgb(249 250 251); /* gray-50 */
+        }
         .status-badge {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -443,6 +491,92 @@
             const STORAGE_KEY = 'nailab_founder_features_board_v1';
             const columns = Array.from(document.querySelectorAll('.kanban-column[data-column]'));
             const cards = Array.from(document.querySelectorAll('.feature-card'));
+            let screenshotPaths = [];
+
+            function ensureScreenshotDatalist() {
+                let list = document.getElementById('screenshotOptions');
+                if (list) return list;
+                list = document.createElement('datalist');
+                list.id = 'screenshotOptions';
+                document.body.appendChild(list);
+                return list;
+            }
+
+            function updateScreenshotDatalist() {
+                const list = ensureScreenshotDatalist();
+                list.innerHTML = '';
+                screenshotPaths.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    list.appendChild(opt);
+                });
+            }
+
+            function normalize(str) {
+                return (str || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, ' ').trim();
+            }
+
+            function chooseFirstExisting(candidates) {
+                for (const p of candidates) {
+                    if (screenshotPaths.includes(p)) return p;
+                }
+                return null;
+            }
+
+            function suggestScreenshotForTitle(title) {
+                const t = normalize(title);
+                if (!t) return null;
+
+                // Specific, high-confidence mappings
+                if (t.includes('password reset') || t.includes('forgot password')) {
+                    return chooseFirstExisting(['screenshots/site/auth/auth_password_new.png']);
+                }
+                if (t.includes('email confirmation') || t.includes('account activation') || t.includes('confirmation')) {
+                    return chooseFirstExisting(['screenshots/site/auth/auth_confirmation_new.png']);
+                }
+                if (t.includes('sign in') || t.includes('login')) {
+                    return chooseFirstExisting(['screenshots/site/auth/auth_sign_in.png']);
+                }
+                if (t.includes('registration') || t.includes('sign up') || t.includes('signup')) {
+                    return chooseFirstExisting(['screenshots/site/auth/auth_sign_up.png']);
+                }
+                if (t.includes('account settings')) {
+                    return chooseFirstExisting(['screenshots/founder/account_settings.png']);
+                }
+                if (t.includes('progress') && (t.includes('tracking') || t.includes('tracker'))) {
+                    return chooseFirstExisting(['screenshots/founder/progress_tracker.png']);
+                }
+                if (t.includes('support')) {
+                    return chooseFirstExisting(['screenshots/founder/support_center.png']);
+                }
+                if (t.includes('messaging') || t.includes('messages')) {
+                    return chooseFirstExisting(['screenshots/founder/messages.png']);
+                }
+                if (t.includes('dashboard')) {
+                    return chooseFirstExisting(['screenshots/founder/dashboard.png']);
+                }
+                if (t.includes('startup profile') || t.includes('startup details') || t.includes('profile wizard')) {
+                    return chooseFirstExisting(['screenshots/founder/Startup_profile.png']);
+                }
+
+                // Fallback: best-effort filename match
+                const tokens = t.split(' ').filter(Boolean);
+                let best = null;
+                let bestScore = 0;
+                for (const p of screenshotPaths) {
+                    const n = normalize(p);
+                    let score = 0;
+                    for (const tok of tokens) {
+                        if (tok.length < 4) continue;
+                        if (n.includes(tok)) score += 1;
+                    }
+                    if (score > bestScore) {
+                        bestScore = score;
+                        best = p;
+                    }
+                }
+                return bestScore >= 2 ? best : null;
+            }
 
             function formatDateTime(iso) {
                 if (!iso) return '—';
@@ -465,6 +599,62 @@
                 meta.innerHTML = '<span class="created">Created: —</span><span class="sep">•</span><span class="moved">Moved: —</span>';
                 card.appendChild(meta);
                 return meta;
+            }
+
+            function ensureScreenshotSection(card) {
+                let section = card.querySelector('.card-screenshot');
+                if (section) return section;
+
+                section = document.createElement('div');
+                section.className = 'card-screenshot';
+                section.innerHTML = `
+                    <div class="label">Screenshot</div>
+                    <a class="link" target="_blank" rel="noopener noreferrer" href="#">Not linked</a>
+                    <img class="thumb" alt="Screenshot preview" hidden />
+                    <div class="picker" hidden>
+                      <input class="shot-input" list="screenshotOptions" placeholder="Choose screenshot path (e.g. screenshots/site/auth/auth_password_new.png)" />
+                      <button type="button" class="shot-set">Set</button>
+                    </div>
+                `;
+
+                // Place it before details toggle if present (keeps it near status)
+                const toggle = card.querySelector('.details-toggle');
+                if (toggle) {
+                    card.insertBefore(section, toggle);
+                } else {
+                    const meta = card.querySelector('.card-meta');
+                    if (meta) card.insertBefore(section, meta);
+                    else card.appendChild(section);
+                }
+
+                return section;
+            }
+
+            function renderCardScreenshot(card) {
+                const section = ensureScreenshotSection(card);
+                const link = section.querySelector('.link');
+                const img = section.querySelector('.thumb');
+                const picker = section.querySelector('.picker');
+                const input = section.querySelector('.shot-input');
+
+                const path = card.dataset.screenshotPath || '';
+                if (input) input.value = path;
+
+                if (path) {
+                    link.textContent = 'Open screenshot';
+                    link.href = path;
+                    img.src = path;
+                    img.hidden = false;
+                    img.onclick = () => window.open(path, '_blank', 'noopener');
+                } else {
+                    link.textContent = 'Not linked';
+                    link.href = '#';
+                    img.hidden = true;
+                    img.src = '';
+                }
+
+                // picker visible only while editing
+                if (picker) picker.hidden = !card.classList.contains('editing');
             }
 
             function ensureDetailsSection(card) {
@@ -631,6 +821,7 @@
                             title,
                             desc,
                             details,
+                            screenshotPath: card.dataset.screenshotPath || null,
                             detailsOpen: card.dataset.detailsOpen === 'false' ? false : true,
                             createdAt: card.dataset.createdAt || null,
                             movedAt: card.dataset.movedAt || null
@@ -677,6 +868,10 @@
                         if (Array.isArray(value.details)) setDetails(card, value.details);
                         if (typeof value.detailsOpen === 'boolean') applyDetailsVisibility(card, value.detailsOpen);
 
+                        if (typeof value.screenshotPath === 'string' && value.screenshotPath) {
+                            card.dataset.screenshotPath = value.screenshotPath;
+                        }
+
                         if (typeof value.createdAt === 'string' && value.createdAt) card.dataset.createdAt = value.createdAt;
                         if (typeof value.movedAt === 'string' && value.movedAt) card.dataset.movedAt = value.movedAt;
                     }
@@ -699,6 +894,7 @@
                     ensureMetaRow(card);
                     const stored = state?.[card.dataset.featureId];
                     ensureDetailsSection(card);
+                    ensureScreenshotSection(card);
                     if (!card.dataset.createdAt) {
                         // Prefer stored value if present; otherwise initialize.
                         if (stored && typeof stored === 'object' && typeof stored.createdAt === 'string' && stored.createdAt) {
@@ -722,6 +918,7 @@
                     }
 
                     renderCardTimestamps(card);
+                    renderCardScreenshot(card);
                 });
 
                 if (changed) saveBoardState();
@@ -741,6 +938,19 @@
                 const detailsSection = ensureDetailsSection(card);
                 const detailsList = detailsSection.list;
                 const detailItems = Array.from(detailsList.querySelectorAll('li')).slice(0, 5);
+
+                const screenshotSection = ensureScreenshotSection(card);
+                const shotInput = screenshotSection.querySelector('.shot-input');
+                const shotSet = screenshotSection.querySelector('.shot-set');
+
+                if (shotSet && shotInput) {
+                    shotSet.addEventListener('click', () => {
+                        const val = (shotInput.value || '').trim();
+                        card.dataset.screenshotPath = val;
+                        renderCardScreenshot(card);
+                        saveBoardState();
+                    });
+                }
 
                 // Toggle details
                 detailsSection.toggle.addEventListener('click', () => {
@@ -766,6 +976,9 @@
                         li.contentEditable = 'true';
                         li.setAttribute('role', 'textbox');
                     });
+
+                    // Show screenshot picker while editing
+                    renderCardScreenshot(card);
                     // focus title first
                     if (titleEl) {
                         const range = document.createRange();
@@ -786,6 +999,9 @@
                     if (save) {
                         saveBoardState();
                     }
+
+                    // Hide screenshot picker
+                    renderCardScreenshot(card);
                 }
 
                 // Double-click anywhere on the card to edit
@@ -873,6 +1089,28 @@
             restoreBoardState();
             bootstrapMissingState();
             updateCounts();
+
+            // Load screenshot options (used for linking cards to screenshots)
+            fetch('screenshots_index.json')
+                .then(r => r.json())
+                .then(list => {
+                    if (Array.isArray(list)) screenshotPaths = list;
+                    updateScreenshotDatalist();
+
+                    // Auto-suggest screenshot for cards that aren't linked yet
+                    cards.forEach(card => {
+                        if (card.dataset.screenshotPath) return;
+                        const title = card.querySelector('h4')?.textContent || '';
+                        const suggestion = suggestScreenshotForTitle(title);
+                        if (!suggestion) return;
+                        card.dataset.screenshotPath = suggestion;
+                        renderCardScreenshot(card);
+                    });
+                    saveBoardState();
+                })
+                .catch(() => {
+                    // ignore; screenshot linking still works if manually typed
+                });
 
             // Add animation on scroll
             const observerOptions = {
