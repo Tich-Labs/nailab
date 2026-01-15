@@ -47,6 +47,15 @@
         .feature-card.just-dropped {
             animation: dropPulse 180ms ease-out;
         }
+        .card-meta {
+            font-size: 0.75rem;
+            color: rgb(107 114 128); /* gray-500 */
+            margin-top: 0.5rem;
+        }
+        .card-meta .sep {
+            margin: 0 0.35rem;
+            color: rgb(156 163 175); /* gray-400 */
+        }
         .status-badge {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -404,6 +413,37 @@
             const columns = Array.from(document.querySelectorAll('.kanban-column[data-column]'));
             const cards = Array.from(document.querySelectorAll('.feature-card'));
 
+            function formatDateTime(iso) {
+                if (!iso) return '—';
+                const d = new Date(iso);
+                if (Number.isNaN(d.getTime())) return '—';
+                return d.toLocaleString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            function ensureMetaRow(card) {
+                let meta = card.querySelector('.card-meta');
+                if (meta) return meta;
+                meta = document.createElement('div');
+                meta.className = 'card-meta';
+                meta.innerHTML = '<span class="created">Created: —</span><span class="sep">•</span><span class="moved">Moved: —</span>';
+                card.appendChild(meta);
+                return meta;
+            }
+
+            function renderCardTimestamps(card) {
+                const meta = ensureMetaRow(card);
+                const createdEl = meta.querySelector('.created');
+                const movedEl = meta.querySelector('.moved');
+                if (createdEl) createdEl.textContent = `Created: ${formatDateTime(card.dataset.createdAt)}`;
+                if (movedEl) movedEl.textContent = `Moved: ${formatDateTime(card.dataset.movedAt)}`;
+            }
+
             function safeText(str) {
                 return (str || '').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
             }
@@ -479,7 +519,13 @@
                     Array.from(col.querySelectorAll('.feature-card')).forEach(card => {
                         const title = card.querySelector('h4')?.textContent?.trim() || '';
                         const desc = card.querySelector('p')?.textContent?.trim() || '';
-                        state[card.dataset.featureId] = { column: colKey, title, desc };
+                        state[card.dataset.featureId] = {
+                            column: colKey,
+                            title,
+                            desc,
+                            createdAt: card.dataset.createdAt || null,
+                            movedAt: card.dataset.movedAt || null
+                        };
                     });
                 });
                 try {
@@ -518,8 +564,47 @@
                         const descEl = card.querySelector('p');
                         if (titleEl && typeof value.title === 'string') titleEl.textContent = value.title;
                         if (descEl && typeof value.desc === 'string') descEl.textContent = value.desc;
+
+                        if (typeof value.createdAt === 'string' && value.createdAt) card.dataset.createdAt = value.createdAt;
+                        if (typeof value.movedAt === 'string' && value.movedAt) card.dataset.movedAt = value.movedAt;
                     }
                 });
+            }
+
+            function bootstrapMissingState() {
+                // Ensure every card has a createdAt and meta row even before any drag/edit.
+                const nowIso = new Date().toISOString();
+                let state = null;
+                try {
+                    state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+                } catch (_) {
+                    state = null;
+                }
+                if (!state || typeof state !== 'object') state = {};
+
+                let changed = false;
+                cards.forEach(card => {
+                    ensureMetaRow(card);
+                    if (!card.dataset.createdAt) {
+                        // Prefer stored value if present; otherwise initialize.
+                        const stored = state?.[card.dataset.featureId];
+                        if (stored && typeof stored === 'object' && typeof stored.createdAt === 'string' && stored.createdAt) {
+                            card.dataset.createdAt = stored.createdAt;
+                        } else {
+                            card.dataset.createdAt = nowIso;
+                            changed = true;
+                        }
+                    }
+                    if (!card.dataset.movedAt) {
+                        const stored = state?.[card.dataset.featureId];
+                        if (stored && typeof stored === 'object' && typeof stored.movedAt === 'string' && stored.movedAt) {
+                            card.dataset.movedAt = stored.movedAt;
+                        }
+                    }
+                    renderCardTimestamps(card);
+                });
+
+                if (changed) saveBoardState();
             }
 
             ensureCardIds();
@@ -582,6 +667,7 @@
                         const active = document.activeElement;
                         if (card.contains(active)) return;
                         disableEditing(true);
+                        renderCardTimestamps(card);
                     }, 0);
                 });
 
@@ -638,6 +724,8 @@
 
                     col.appendChild(dragged);
                     setBadgeForColumn(dragged, col.dataset.column);
+                    dragged.dataset.movedAt = new Date().toISOString();
+                    renderCardTimestamps(dragged);
                     dragged.classList.add('just-dropped');
                     window.setTimeout(() => dragged.classList.remove('just-dropped'), 250);
                     updateCounts();
@@ -646,6 +734,7 @@
             });
 
             restoreBoardState();
+            bootstrapMissingState();
             updateCounts();
 
             // Add animation on scroll
