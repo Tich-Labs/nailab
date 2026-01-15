@@ -12,9 +12,29 @@
         .feature-card {
             transition: all 0.3s ease;
         }
+        .feature-card[draggable="true"] {
+            cursor: grab;
+            user-select: none;
+        }
+        .feature-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        .kanban-column.drop-target {
+            outline: 2px dashed rgba(0, 0, 0, 0.25);
+            outline-offset: 6px;
+        }
         .feature-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        @keyframes dropPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.015); }
+            100% { transform: scale(1); }
+        }
+        .feature-card.just-dropped {
+            animation: dropPulse 180ms ease-out;
         }
         .status-badge {
             font-size: 0.75rem;
@@ -72,7 +92,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-green-600">95%</h3>
+                        <h3 id="statCompletePercent" class="text-2xl font-bold text-green-600">95%</h3>
                         <p class="text-sm text-gray-600">Complete</p>
                     </div>
                     <div class="text-center">
@@ -81,7 +101,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-yellow-600">10</h3>
+                        <h3 id="statInProgress" class="text-2xl font-bold text-yellow-600">10</h3>
                         <p class="text-sm text-gray-600">In Progress</p>
                     </div>
                     <div class="text-center">
@@ -90,7 +110,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-red-600">4</h3>
+                        <h3 id="statMissing" class="text-2xl font-bold text-red-600">4</h3>
                         <p class="text-sm text-gray-600">Missing</p>
                     </div>
                     <div class="text-center">
@@ -99,7 +119,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-blue-600">42</h3>
+                        <h3 id="statTotal" class="text-2xl font-bold text-blue-600">42</h3>
                         <p class="text-sm text-gray-600">Total Features</p>
                     </div>
                 </div>
@@ -114,10 +134,10 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Completed (28)
+                            Completed (<span id="countComplete">28</span>)
                         </h3>
                     </div>
-                    <div class="p-4 space-y-3 kanban-column">
+                    <div class="p-4 space-y-3 kanban-column" data-column="complete">
                         <!-- Authentication & Registration -->
                         <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200">
                             <h4 class="font-medium text-gray-900 mb-1">Founder Registration & Authentication</h4>
@@ -221,10 +241,10 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            In Progress (10)
+                            In Progress (<span id="countInProgress">10</span>)
                         </h3>
                     </div>
-                    <div class="p-4 space-y-3 kanban-column">
+                    <div class="p-4 space-y-3 kanban-column" data-column="in_progress">
                         <!-- Dashboard Overview -->
                         <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200">
                             <h4 class="font-medium text-gray-900 mb-1">Profile Summary</h4>
@@ -297,10 +317,10 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                             </svg>
-                            Missing (4)
+                            Missing (<span id="countMissing">4</span>)
                         </h3>
                     </div>
-                    <div class="p-4 space-y-3 kanban-column">
+                    <div class="p-4 space-y-3 kanban-column" data-column="missing">
                         <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200">
                             <h4 class="font-medium text-gray-900 mb-1">Account Deletion</h4>
                             <p class="text-sm text-gray-600 mb-2">Deactivate or delete account functionality</p>
@@ -366,23 +386,163 @@
             day: 'numeric'
         });
 
-        // Add drag and drop functionality for kanban cards
+        // Kanban drag/drop + persistence
         document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.feature-card');
-            
+            const STORAGE_KEY = 'nailab_founder_features_board_v1';
+            const columns = Array.from(document.querySelectorAll('.kanban-column[data-column]'));
+            const cards = Array.from(document.querySelectorAll('.feature-card'));
+
+            function safeText(str) {
+                return (str || '').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+            }
+
+            function ensureCardIds() {
+                const seen = new Set();
+                cards.forEach((card, idx) => {
+                    if (card.dataset.featureId) return;
+                    const title = card.querySelector('h4')?.textContent || `feature-${idx}`;
+                    let base = safeText(title) || `feature-${idx}`;
+                    let candidate = base;
+                    let n = 2;
+                    while (seen.has(candidate)) {
+                        candidate = `${base}-${n}`;
+                        n += 1;
+                    }
+                    seen.add(candidate);
+                    card.dataset.featureId = candidate;
+                });
+            }
+
+            function setBadgeForColumn(card, columnKey) {
+                const badge = card.querySelector('.status-badge');
+                if (!badge) return;
+                badge.classList.remove(
+                    'bg-green-100', 'text-green-800',
+                    'bg-yellow-100', 'text-yellow-800',
+                    'bg-red-100', 'text-red-800'
+                );
+
+                if (columnKey === 'complete') {
+                    badge.textContent = '✅ Complete';
+                    badge.classList.add('bg-green-100', 'text-green-800');
+                } else if (columnKey === 'in_progress') {
+                    badge.textContent = '🟡 Partial';
+                    badge.classList.add('bg-yellow-100', 'text-yellow-800');
+                } else {
+                    badge.textContent = '❌ Missing';
+                    badge.classList.add('bg-red-100', 'text-red-800');
+                }
+            }
+
+            function updateCounts() {
+                const completeCount = document.querySelectorAll('.kanban-column[data-column="complete"] .feature-card').length;
+                const inProgressCount = document.querySelectorAll('.kanban-column[data-column="in_progress"] .feature-card').length;
+                const missingCount = document.querySelectorAll('.kanban-column[data-column="missing"] .feature-card').length;
+                const total = completeCount + inProgressCount + missingCount;
+
+                const pct = total === 0 ? 0 : Math.round((completeCount / total) * 100);
+
+                const elCountComplete = document.getElementById('countComplete');
+                const elCountInProgress = document.getElementById('countInProgress');
+                const elCountMissing = document.getElementById('countMissing');
+                const elStatCompletePercent = document.getElementById('statCompletePercent');
+                const elStatInProgress = document.getElementById('statInProgress');
+                const elStatMissing = document.getElementById('statMissing');
+                const elStatTotal = document.getElementById('statTotal');
+
+                if (elCountComplete) elCountComplete.textContent = String(completeCount);
+                if (elCountInProgress) elCountInProgress.textContent = String(inProgressCount);
+                if (elCountMissing) elCountMissing.textContent = String(missingCount);
+
+                if (elStatCompletePercent) elStatCompletePercent.textContent = `${pct}%`;
+                if (elStatInProgress) elStatInProgress.textContent = String(inProgressCount);
+                if (elStatMissing) elStatMissing.textContent = String(missingCount);
+                if (elStatTotal) elStatTotal.textContent = String(total);
+            }
+
+            function saveBoardState() {
+                const state = {};
+                columns.forEach(col => {
+                    const colKey = col.dataset.column;
+                    Array.from(col.querySelectorAll('.feature-card')).forEach(card => {
+                        state[card.dataset.featureId] = colKey;
+                    });
+                });
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                } catch (_) {
+                    // ignore storage errors (private mode, quota, etc.)
+                }
+            }
+
+            function restoreBoardState() {
+                let state = null;
+                try {
+                    state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+                } catch (_) {
+                    state = null;
+                }
+                if (!state || typeof state !== 'object') return;
+
+                const cardById = new Map(cards.map(c => [c.dataset.featureId, c]));
+                const columnByKey = new Map(columns.map(c => [c.dataset.column, c]));
+
+                Object.entries(state).forEach(([id, colKey]) => {
+                    const card = cardById.get(id);
+                    const col = columnByKey.get(colKey);
+                    if (!card || !col) return;
+                    col.appendChild(card);
+                    setBadgeForColumn(card, colKey);
+                });
+            }
+
+            ensureCardIds();
+
+            // Drag + drop
             cards.forEach(card => {
                 card.draggable = true;
-                
-                card.addEventListener('dragstart', function(e) {
+
+                card.addEventListener('dragstart', (e) => {
+                    card.classList.add('dragging');
                     e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/html', this.innerHTML);
-                    this.classList.add('opacity-50');
+                    e.dataTransfer.setData('text/plain', card.dataset.featureId);
                 });
-                
-                card.addEventListener('dragend', function(e) {
-                    this.classList.remove('opacity-50');
+
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('dragging');
+                    columns.forEach(c => c.classList.remove('drop-target'));
                 });
             });
+
+            columns.forEach(col => {
+                col.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    col.classList.add('drop-target');
+                });
+
+                col.addEventListener('dragleave', () => {
+                    col.classList.remove('drop-target');
+                });
+
+                col.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    col.classList.remove('drop-target');
+                    const id = e.dataTransfer.getData('text/plain');
+                    const dragged = document.querySelector(`.feature-card[data-feature-id="${CSS.escape(id)}"]`);
+                    if (!dragged) return;
+
+                    col.appendChild(dragged);
+                    setBadgeForColumn(dragged, col.dataset.column);
+                    dragged.classList.add('just-dropped');
+                    window.setTimeout(() => dragged.classList.remove('just-dropped'), 250);
+                    updateCounts();
+                    saveBoardState();
+                });
+            });
+
+            restoreBoardState();
+            updateCounts();
 
             // Add animation on scroll
             const observerOptions = {
