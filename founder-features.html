@@ -6,52 +6,16 @@
     <title>Nailab - Founder Features Status</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50" data-page-title="Founder Features">
     <div class="min-h-screen">
-        <!-- Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-4">
-                    <div class="flex items-center space-x-4">
-                        <a href="./?section=all" class="text-2xl font-bold text-gray-900 hover:underline">Nailab</a>
-                        <span class="text-gray-400">|</span>
-                        <h2 class="text-xl text-gray-600">Founder Features</h2>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-sm text-gray-600">Last Updated: <span id="lastUpdated"></span></span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <nav class="mt-4" aria-label="Documentation pages">
-                <a href="founder-features.html" aria-current="page" class="inline-flex items-center gap-2 rounded-md border border-emerald-200 bg-emerald-200 px-3 py-2 text-sm font-semibold text-emerald-950 shadow-sm">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 11l3 3L22 4"></path>
-                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
-                    </svg>
-                    Founder Features Status
-                </a>
-
-                <a href="documentation.html" class="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm hover:bg-slate-50">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
-                    </svg>
-                    Documentation
-                </a>
-            </nav>
-            <hr class="my-6 border-slate-200" />
-        </div>
+        <div id="nailabHeader"></div>
+        <script src="shared.js"></script>
+        <script>window.NailabShared.renderHeader();</script>
 
         <!-- Main Content -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Overview Stats -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8 animate-slide-in">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="text-center">
                         <div class="flex justify-center mb-2">
@@ -88,6 +52,35 @@
                         </div>
                         <h3 id="statTotal" class="text-2xl font-bold text-blue-600">42</h3>
                         <p class="text-sm text-gray-600">Total Features</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-semibold mb-4">Status Legend</h3>
+                <p class="text-sm text-gray-600 mb-4">Tip: drag cards between columns (including back). Double-click a card to edit its title/description.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                        <div>
+                            <p class="font-medium">Complete ✅</p>
+                            <p class="text-sm text-gray-600">Feature is fully implemented and functional</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                        <div>
+                            <p class="font-medium">Partial 🟡</p>
+                            <p class="text-sm text-gray-600">Feature exists but needs enhancements</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                        <div>
+                            <p class="font-medium">Missing ❌</p>
+                            <p class="text-sm text-gray-600">Feature is not implemented</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -315,34 +308,6 @@
                 </div>
             </div>
 
-            <!-- Legend -->
-            <div class="mt-8 bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold mb-4">Status Legend</h3>
-                <p class="text-sm text-gray-600 mb-4">Tip: drag cards between columns (including back). Double-click a card to edit its title/description.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 bg-green-500 rounded-full"></div>
-                        <div>
-                            <p class="font-medium">Complete ✅</p>
-                            <p class="text-sm text-gray-600">Feature is fully implemented and functional</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                        <div>
-                            <p class="font-medium">Partial 🟡</p>
-                            <p class="text-sm text-gray-600">Feature exists but needs enhancements</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 bg-red-500 rounded-full"></div>
-                        <div>
-                            <p class="font-medium">Missing ❌</p>
-                            <p class="text-sm text-gray-600">Feature is not implemented</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 
