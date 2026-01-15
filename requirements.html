@@ -242,23 +242,9 @@
       </section>
     </article>
   </main>
-    <script>
-      (function indentH3Sections() {
-        const article = document.querySelector('article');
-        if (!article) return;
-
-        const h3s = Array.from(article.querySelectorAll('h3'));
-        h3s.forEach((h3) => {
-          h3.classList.add('ml-6');
-
-          let el = h3.nextElementSibling;
-          while (el && el.tagName !== 'H2' && el.tagName !== 'H3') {
-            el.classList.add('ml-6');
-            el = el.nextElementSibling;
-          }
-        });
-      })();
-    </script>
+  <script>
+    window.NailabShared.indentH3Sections({ rootSelector: 'article' });
+  </script>
 
   <script>
     (function init() {

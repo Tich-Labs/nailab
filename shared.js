@@ -83,6 +83,35 @@
     }
   }
 
+  function indentH3Sections(options) {
+    const opts = options || {};
+    const rootSelector = opts.rootSelector || 'article';
+    const indentClass = opts.indentClass || 'ml-6';
+
+    const run = function () {
+      const root = document.querySelector(rootSelector);
+      if (!root) return;
+
+      const h3s = Array.from(root.querySelectorAll('h3'));
+      h3s.forEach((h3) => {
+        h3.classList.add(indentClass);
+
+        let el = h3.nextElementSibling;
+        while (el && el.tagName !== 'H2' && el.tagName !== 'H3') {
+          el.classList.add(indentClass);
+          el = el.nextElementSibling;
+        }
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run, { once: true });
+    } else {
+      run();
+    }
+  }
+
   window.NailabShared = window.NailabShared || {};
   window.NailabShared.renderHeader = renderHeader;
+  window.NailabShared.indentH3Sections = indentH3Sections;
 })();
