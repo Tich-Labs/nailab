@@ -18,6 +18,35 @@
     return pageFile === 'documentation.html' || pageFile === 'requirements.html';
   }
 
+  function navItems() {
+    return [
+      { href: 'founder-features.html', label: 'Founder Features' },
+      { href: 'mentors-features.html', label: 'Mentors Features' },
+      { href: 'matchmaking-features.html', label: 'Matchmaking Features' },
+      { href: 'content-features.html', label: 'Content Features' },
+      { href: 'subscription-features.html', label: 'Subscription Features' },
+      { href: 'admin-features.html', label: 'Admin Features' },
+      { href: 'documentation.html', label: 'Documentation', isDocs: true }
+    ];
+  }
+
+  function linkIconSvg(href) {
+    if (href && href.endsWith('-features.html')) {
+      return (
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '  <path d="M9 11l3 3L22 4"></path>' +
+        '  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>' +
+        '</svg>'
+      );
+    }
+    return (
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+      '  <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>' +
+      '  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>' +
+      '</svg>'
+    );
+  }
+
   function renderHeader(options) {
     const containerId = (options && options.containerId) || 'nailabHeader';
     const container = document.getElementById(containerId);
@@ -27,11 +56,25 @@
     const pageTitle = (options && options.pageTitle) || bodyTitle || document.title || 'Nailab';
 
     const pageFile = currentPageFile();
-    const founderActive = pageFile === 'founder-features.html';
-    const docsActive = isDocsActive(pageFile);
+    const items = navItems();
 
     const inactive = 'inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm hover:bg-slate-50';
     const active = 'inline-flex items-center gap-2 rounded-md border border-emerald-200 bg-emerald-200 px-3 py-2 text-sm font-semibold text-emerald-950 shadow-sm';
+
+    const navHtml =
+      items
+        .map((it) => {
+          const activeNow = it.isDocs ? isDocsActive(pageFile) : pageFile === it.href;
+          const a11y = activeNow ? 'aria-current="page" ' : '';
+          const cls = activeNow ? active : inactive;
+          return (
+            '    <a href="' + it.href + '" ' + a11y + 'class="' + cls + '">' +
+            linkIconSvg(it.href) +
+            '      ' + escapeHtml(it.label) +
+            '    </a>'
+          );
+        })
+        .join('');
 
     container.innerHTML =
       '<header class="bg-white shadow-sm border-b border-gray-200">' +
@@ -53,22 +96,8 @@
       '</header>' +
       '' +
       '<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">' +
-      '  <nav class="mt-4" aria-label="Documentation pages">' +
-      '    <a href="founder-features.html" ' + (founderActive ? 'aria-current="page" ' : '') + 'class="' + (founderActive ? active : inactive) + '">' +
-      '      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-      '        <path d="M9 11l3 3L22 4"></path>' +
-      '        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>' +
-      '      </svg>' +
-      '      Founder Features Status' +
-      '    </a>' +
-      '' +
-      '    <a href="documentation.html" ' + (docsActive ? 'aria-current="page" ' : '') + 'class="' + (docsActive ? active : inactive) + '">' +
-      '      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-      '        <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>' +
-      '        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>' +
-      '      </svg>' +
-      '      Documentation' +
-      '    </a>' +
+      '  <nav class="mt-4 flex flex-wrap gap-2" aria-label="Pages">' +
+      navHtml +
       '  </nav>' +
       '  <hr class="my-6 border-slate-200" />' +
       '</div>';
