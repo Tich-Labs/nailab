@@ -312,16 +312,19 @@
     </div>
 
     <script>
-        // Set last updated date
-        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
+        // Set last updated date (guard in case element is not present)
+        const _lastUpdatedEl = document.getElementById('lastUpdated');
+        if (_lastUpdatedEl) {
+            _lastUpdatedEl.textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
 
         // Kanban drag/drop + persistence
         document.addEventListener('DOMContentLoaded', function() {
-            const STORAGE_KEY = 'nailab_founder_features_board_v1';
+            const STORAGE_KEY = 'nailab_founder_features_board_v2';
             const columns = Array.from(document.querySelectorAll('.kanban-column[data-column]'));
             const cards = Array.from(document.querySelectorAll('.feature-card'));
             let screenshotPaths = [];
@@ -492,15 +495,16 @@
                 if (picker) picker.hidden = !card.classList.contains('editing');
             }
 
-            function syncDetailPlaceholder(li) {
-                const text = (li.textContent || '').trim();
-                if (!text) {
-                    li.dataset.placeholder = 'true';
-                    li.textContent = 'Add detail…';
-                    li.classList.add('text-slate-400', 'italic');
+            function applyChecklistItem(li, item) {
+                // item: { text, done }
+                const checkbox = li.querySelector('input[type="checkbox"]');
+                const label = li.querySelector('span[data-check-text]');
+                if (checkbox) checkbox.checked = !!item.done;
+                if (label) label.textContent = item.text || '';
+                if (item.done) {
+                    label.classList.add('line-through', 'text-slate-400');
                 } else {
-                    li.dataset.placeholder = 'false';
-                    li.classList.remove('text-slate-400', 'italic');
+                    label.classList.remove('line-through', 'text-slate-400');
                 }
             }
 
@@ -511,7 +515,6 @@
                 let toggle = card.querySelector('[data-details-toggle]');
                 if (title && list && wrap && toggle) return { title, list, wrap, toggle };
 
-                // Wrap holds title + list so we can hide/show together
                 wrap = document.createElement('div');
                 wrap.dataset.detailsWrap = '1';
                 wrap.className = 'mt-1';
@@ -519,26 +522,44 @@
                 title = document.createElement('div');
                 title.dataset.detailsTitle = '1';
                 title.className = 'mt-2 text-xs font-semibold text-slate-700';
-                title.textContent = 'Additional details';
+                title.textContent = 'Sub-tasks';
 
                 list = document.createElement('ul');
                 list.dataset.detailsList = '1';
-                list.className = 'mt-1 list-disc pl-5 text-sm text-slate-600 space-y-1';
-                for (let i = 0; i < 5; i += 1) {
+                list.className = 'mt-1 space-y-1 text-sm text-slate-600';
+
+                for (let i = 0; i < 8; i += 1) {
                     const li = document.createElement('li');
-                    li.className = 'editable rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-200';
-                    li.contentEditable = 'false';
-                    syncDetailPlaceholder(li);
-                    li.addEventListener('focusin', () => {
-                        if (li.dataset.placeholder === 'true') {
-                            li.textContent = '';
-                            li.dataset.placeholder = 'false';
-                            li.classList.remove('text-slate-400', 'italic');
-                        }
+                    li.className = 'flex items-start gap-2';
+
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.className = 'mt-1';
+
+                    const span = document.createElement('span');
+                    span.dataset.checkText = '1';
+                    span.className = 'flex-1';
+                    span.textContent = '';
+
+                    // Make label editable when card is in editing state
+                    span.contentEditable = 'false';
+                    span.classList.add('editable');
+
+                    cb.addEventListener('change', () => {
+                        applyChecklistItem(li, { text: span.textContent.trim(), done: cb.checked });
+                        saveBoardState();
                     });
-                    li.addEventListener('focusout', () => {
-                        syncDetailPlaceholder(li);
+
+                    span.addEventListener('focusin', () => {
+                        if (!card.classList.contains('editing')) return;
                     });
+
+                    span.addEventListener('focusout', () => {
+                        saveBoardState();
+                    });
+
+                    li.appendChild(cb);
+                    li.appendChild(span);
                     list.appendChild(li);
                 }
 
@@ -548,7 +569,6 @@
                 toggle.className = 'mt-2 text-xs font-semibold text-slate-700 underline hover:text-slate-900';
                 toggle.textContent = 'Hide details';
 
-                // Create a stable id for aria-controls
                 const controlsId = `details-${card.dataset.featureId || Math.random().toString(36).slice(2)}`;
                 wrap.id = controlsId;
                 toggle.setAttribute('aria-controls', controlsId);
@@ -557,7 +577,6 @@
                 wrap.appendChild(title);
                 wrap.appendChild(list);
 
-                // Insert details before meta row if meta exists; otherwise append.
                 const meta = card.querySelector('[data-meta-row]');
                 if (meta) {
                     card.insertBefore(wrap, meta);
@@ -573,20 +592,48 @@
             function getDetails(card) {
                 const list = card.querySelector('[data-details-list]');
                 if (!list) return [];
-                return Array.from(list.querySelectorAll('li')).slice(0, 5).map(li => {
-                    if (li.dataset.placeholder === 'true') return '';
-                    return (li.textContent || '').trim();
-                });
+                return Array.from(list.querySelectorAll('li')).slice(0, 8).map(li => {
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const txt = li.querySelector('span[data-check-text]')?.textContent?.trim() || '';
+                    return { text: txt, done: !!(cb && cb.checked) };
+                }).filter(item => item.text || item.done);
             }
 
             function setDetails(card, details) {
                 const { list } = ensureDetailsSection(card);
-                const items = Array.from(list.querySelectorAll('li')).slice(0, 5);
-                const values = Array.isArray(details) ? details.slice(0, 5) : [];
+                const items = Array.from(list.querySelectorAll('li')).slice(0, 8);
+                // Accept array of strings or array of {text,done}
+                const vals = Array.isArray(details) ? details.slice(0, 8) : [];
                 for (let i = 0; i < items.length; i += 1) {
-                    items[i].textContent = values[i] || '';
-                    syncDetailPlaceholder(items[i]);
+                    const li = items[i];
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const span = li.querySelector('span[data-check-text]');
+                    const v = vals[i] || '';
+                    if (typeof v === 'string') {
+                        span.textContent = v || '';
+                        if (cb) cb.checked = false;
+                    } else if (v && typeof v === 'object') {
+                        span.textContent = v.text || '';
+                        if (cb) cb.checked = !!v.done;
+                    } else {
+                        span.textContent = '';
+                        if (cb) cb.checked = false;
+                    }
+                    applyChecklistItem(li, { text: span.textContent.trim(), done: !!(cb && cb.checked) });
                 }
+            }
+
+            function cleanupEmptyChecklistItems(card) {
+                const list = card.querySelector('[data-details-list]');
+                if (!list) return;
+                const items = Array.from(list.querySelectorAll('li'));
+                items.forEach(li => {
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const txt = li.querySelector('span[data-check-text]')?.textContent?.trim() || '';
+                    if (!txt && (!cb || !cb.checked)) {
+                        li.remove();
+                    }
+                });
             }
 
             function applyDetailsVisibility(card, open) {
@@ -966,6 +1013,206 @@
 
             restoreBoardState();
             bootstrapMissingState();
+            // Seed checklist subtasks when missing using provided founder backlog
+            (function seedFoundersChecklistIfMissing() {
+                const seeds = new Map();
+                // Map keys are normalized (safeText) titles
+                seeds.set(safeText('Founder Email + Password Registration & Authentication'), [
+                    { text: 'Create registration form (email, password, confirm password, first/last name)', done: false },
+                    { text: 'Enforce strong password rules', done: false },
+                    { text: 'Hash passwords securely', done: false },
+                    { text: 'Check email uniqueness', done: false },
+                    { text: 'Rate limiting & security headers', done: false },
+                    { text: 'Unit tests for auth flow', done: false }
+                ]);
+                seeds.set(safeText('Founder Forgot/Reset Password Flow'), [
+                    { text: '"Forgot password" link on login', done: false },
+                    { text: 'Send time-limited reset token via email', done: false },
+                    { text: 'Reset password form with confirmation', done: false },
+                    { text: 'Update password & invalidate old sessions', done: false },
+                    { text: 'Email templates & success/error handling', done: false }
+                ]);
+                seeds.set(safeText('Email Confirmation / Account Activation'), [
+                    { text: 'Generate & send verification token on sign-up', done: false },
+                    { text: 'Verification endpoint (click link)', done: false },
+                    { text: 'Block access until verified', done: false },
+                    { text: 'Resend verification option', done: false },
+                    { text: 'Handle expired/invalid tokens', done: false }
+                ]);
+                seeds.set(safeText('Founder Onboarding Wizard – Multi-step Profile Setup'), [
+                    { text: 'Wizard layout with step sidebar & progress bar', done: false },
+                    { text: 'Steps: Personal Info, Startup Details, Professional Background, Privacy, Review', done: false },
+                    { text: 'Save draft on each step', done: false },
+                    { text: '"Save & Exit" functionality', done: false }
+                ]);
+                seeds.set(safeText('Founder Profile Fields in Onboarding'), [
+                    { text: 'Personal: photo upload, bio, location', done: false },
+                    { text: 'Startup: name, logo, focus area, description, website/social links', done: false },
+                    { text: 'Professional: sector, stage, funding round', done: false },
+                    { text: 'Privacy toggles (public/private per field)', done: false },
+                    { text: 'Real-time validation & error messages', done: false }
+                ]);
+                seeds.set(safeText('Founder Dashboard – Layout & Navigation'), [
+                    { text: 'Dashboard layout (top bar + left sidebar + main area)', done: false },
+                    { text: 'Left nav: Home, Startup Profile, Progress Tracker, Mentorship, Resources, Messages, Opportunities, Community, Account Settings, Support, Log Out', done: false },
+                    { text: 'Responsive mobile menu', done: false },
+                    { text: 'Personalized welcome banner', done: false }
+                ]);
+                seeds.set(safeText('Dashboard – Top Navigation Bar'), [
+                    { text: 'Profile picture avatar dropdown', done: false },
+                    { text: 'Notification bell icon with badge counter', done: false },
+                    { text: 'Responsive placement', done: false }
+                ]);
+                seeds.set(safeText('Startup Profile Summary & Edit View'), [
+                    { text: 'Profile page showing all fields', done: false },
+                    { text: 'Edit mode with forms mirroring onboarding', done: false },
+                    { text: 'Team member add/remove (optional)', done: false },
+                    { text: 'Save & preview changes', done: false }
+                ]);
+                seeds.set(safeText('Progress Tracking – Milestones View'), [
+                    { text: 'Milestones list/timeline view', done: false },
+                    { text: 'Add new milestone form', done: false },
+                    { text: 'Edit/delete existing milestones', done: false },
+                    { text: 'Status tags (planned, in-progress, achieved)', done: false }
+                ]);
+                seeds.set(safeText('Progress Tracking – Monthly Tracker Form'), [
+                    { text: 'Form for Revenue, Customers, Runway, Burn Rate', done: false },
+                    { text: 'Historical data storage', done: false },
+                    { text: 'Validation & auto-calculation', done: false },
+                    { text: 'Save & confirmation', done: false }
+                ]);
+                seeds.set(safeText('Dashboard – Monthly Progress Charts'), [
+                    { text: 'Line/area charts for key metrics', done: false },
+                    { text: 'Pull data from monthly tracker', done: false },
+                    { text: 'Responsive & interactive', done: false },
+                    { text: 'Empty state handling & loading indicators', done: false }
+                ]);
+                seeds.set(safeText('Mentorship – Recommended Mentors Display'), [
+                    { text: '"Recommended Mentors" section', done: false },
+                    { text: 'Query matching mentors', done: false },
+                    { text: 'Cards with name, photo, expertise, match score', done: false }
+                ]);
+                seeds.set(safeText('Mentorship – View Mentor Profile & Request'), [
+                    { text: 'Mentor profile modal/page', done: false },
+                    { text: '"Request Mentorship" button', done: false },
+                    { text: 'Request form (message, preferred topics)', done: false }
+                ]);
+                seeds.set(safeText('Mentorship – Session Booking Flow'), [
+                    { text: 'Notification on mentor acceptance', done: false },
+                    { text: 'Calendar view of mentor availability', done: false },
+                    { text: 'Time slot picker', done: false },
+                    { text: 'Confirmation + calendar sync', done: false }
+                ]);
+                seeds.set(safeText('Mentorship – Upcoming/Booked Sessions Display'), [
+                    { text: 'Sessions list/card view', done: false },
+                    { text: 'Status indicators (upcoming, past)', done: false },
+                    { text: 'Cancel/reschedule options', done: false }
+                ]);
+                seeds.set(safeText('Notification System – Bell Icon Functionality'), [
+                    { text: 'Notification dropdown/list', done: false },
+                    { text: 'Types: request updates, new messages, opportunities', done: false },
+                    { text: 'Mark as read & badge counter', done: false },
+                    { text: 'Preference to turn off specific notification types', done: false }
+                ]);
+                seeds.set(safeText('Community – Recommended Peers Display'), [
+                    { text: '"Recommended Founders" section', done: false },
+                    { text: 'Match by stage, industry, location', done: false },
+                    { text: 'Peer cards with startup/logo', done: false }
+                ]);
+                seeds.set(safeText('Community – Peer Messaging / Connect'), [
+                    { text: '"Connect" or "Message" button on peer card', done: false },
+                    { text: 'Open chat window', done: false },
+                    { text: 'Send/receive messages', done: false }
+                ]);
+                seeds.set(safeText('In-Platform Messaging Center (Founder View)'), [
+                    { text: 'Inbox with conversation threads', done: false },
+                    { text: 'Real-time send/receive', done: false },
+                    { text: 'Notification badges', done: false }
+                ]);
+                seeds.set(safeText('Resources – Library View & Search/Filter'), [
+                    { text: 'Resource grid/list', done: false },
+                    { text: 'Keyword search bar', done: false },
+                    { text: 'Category filters', done: false },
+                    { text: 'Pagination / infinite scroll support', done: false },
+                    { text: 'Recently viewed or favorites section', done: false }
+                ]);
+                seeds.set(safeText('Resources – Rating & Interaction'), [
+                    { text: 'Star rating system per resource', done: false },
+                    { text: 'View average rating', done: false },
+                    { text: 'Download/preview buttons', done: false }
+                ]);
+                seeds.set(safeText('Opportunities – Curated List & Search'), [
+                    { text: 'Opportunities grid', done: false },
+                    { text: 'Type filter (grants, competitions, events)', done: false },
+                    { text: 'Cards with title, organizer, desc, deadline', done: false },
+                    { text: 'Deadline countdown badge', done: false },
+                    { text: '"Save for later" functionality', done: false }
+                ]);
+                seeds.set(safeText('Account Settings – Profile Updates & Password Change'), [
+                    { text: 'Edit founder/startup info', done: false },
+                    { text: 'Change password form', done: false },
+                    { text: 'Privacy/visibility controls', done: false }
+                ]);
+                seeds.set(safeText('Account Settings – Deactivate/Delete Account'), [
+                    { text: 'Deactivation option (hide profile)', done: false },
+                    { text: 'Offer data export before deactivation', done: false },
+                    { text: 'Send confirmation email before final deletion', done: false },
+                    { text: 'Final deletion endpoint with secure confirmation', done: false }
+                ]);
+                seeds.set(safeText('Support – Help & Contact Section'), [
+                    { text: 'FAQs accordion/list', done: false },
+                    { text: 'Contact form or email link', done: false },
+                    { text: 'Live chat integration (if available)', done: false }
+                ]);
+                seeds.set(safeText('Secure Logout Functionality'), [
+                    { text: 'Logout endpoint (clear session/token)', done: false },
+                    { text: 'Redirect to landing page', done: false },
+                    { text: 'Confirmation toast', done: false }
+                ]);
+
+
+                // helper: produce token set for fuzzy matching
+                function tokenSet(s) {
+                    return new Set((s || '').toLowerCase().split(/[^a-z0-9]+/).filter(t => t.length > 2));
+                }
+
+                let changed = false;
+                cards.forEach(card => {
+                    const details = getDetails(card);
+                    if (details && details.length > 0) return; // already has subtasks
+                    const title = card.querySelector('h4')?.textContent || '';
+                    const key = safeText(title);
+
+                    if (seeds.has(key)) {
+                        setDetails(card, seeds.get(key));
+                        changed = true;
+                        return;
+                    }
+
+                    // Fuzzy fallback: pick seed with highest token overlap
+                    const cardTokens = tokenSet(title);
+                    let best = null;
+                    let bestScore = 0;
+                    for (const [seedKey, arr] of seeds.entries()) {
+                        const seedTokens = tokenSet(seedKey.replace(/-/g,' '));
+                        let score = 0;
+                        seedTokens.forEach(t => { if (cardTokens.has(t)) score += 1; });
+                        if (score > bestScore) {
+                            bestScore = score;
+                            best = arr;
+                        }
+                    }
+                    if (best && bestScore >= 2) {
+                        setDetails(card, best);
+                        changed = true;
+                    }
+                });
+
+                // Remove empty checkbox lines left over after seeding
+                cards.forEach(card => cleanupEmptyChecklistItems(card));
+
+                if (changed) saveBoardState();
+            })();
             updateCounts();
 
             // Load screenshot options (used for linking cards to screenshots)
