@@ -1,38 +1,26 @@
 
 # Nailab - Startup Mentorship Platform
 
+Documentation: [Documentation](https://tich-labs.github.io/nailab/)
+
 A comprehensive Rails application connecting startups with experienced mentors through structured mentorship programs, resources, and support systems.
 
 ## Features
 
-## 🚦 Implementation Status
-
-See [docs/FEATURE_IMPLEMENTATION_AUDIT.md](docs/FEATURE_IMPLEMENTATION_AUDIT.md) for a detailed, up-to-date audit of all features, their status (implemented, partial, missing), and evidence. This file is updated regularly as new features are completed.
-
-**Summary (as of Jan 2026):**
-- ✅ Implemented: 49
-- 🟡 Partial: 12
-- ❌ Missing: 8
-
-For missing or incomplete features, see [docs/MISSING_COMPONENTS_LIST.md](docs/MISSING_COMPONENTS_LIST.md).
-
-For planned improvements and admin UI work, see [docs/ADMIN_IMPROVEMENTS_BACKLOG.md](docs/ADMIN_IMPROVEMENTS_BACKLOG.md) and [docs/ADMIN_VIEWS_REFACTOR_PLAN.md](docs/ADMIN_VIEWS_REFACTOR_PLAN.md).
-
-For mentorship matching logic and roadmap, see [docs/MENTORSHIP_MATCHING_PLAN.md](docs/MENTORSHIP_MATCHING_PLAN.md).
-
-### 🎯 Core Functionality
-
-### 💬 Support System
-- **Support Ticketing**: Full conversation system between users and admins
-- **Admin Dashboard**: RailsAdmin interface for ticket management
-- **User Portals**: Separate interfaces for founders and mentors
-- **Conversation Threading**: Complete message history and status tracking
-
-### 🔐 Authentication & Authorization
-- **Devise Integration**: Complete user authentication system
-- **Role-Based Access**: Founder and mentor user types
-- **Social Sign-in**: LinkedIn OAuth integration
-- **Email Confirmation**: Account verification system
+- **Authentication**: Devise-based sign up, sign in, and password management. **Users**: Founders, Mentors, Admins. **Journey**: register → confirm email → complete profile.
+- **Onboarding**: Multi-step onboarding for founders, mentors, and partners. **Users**: Founders, Mentors, Partners. **Journey**: complete personal → startup → professional steps → set preferences.
+- **Founder Portal**: Dashboard, opportunities, progress tracker, startup profile, account & subscription management. **Users**: Founders. **Journey**: log in → view dashboard → apply for opportunities → track progress.
+- **Mentor Portal**: Mentor dashboard, availability, mentorship requests, sessions, conversations. **Users**: Mentors. **Journey**: set availability → receive requests → accept/decline → host sessions.
+- **Mentorship Requests & Matching**: Create/respond/accept/decline/reschedule requests and match mentors to founders. **Users**: Founders, Mentors, Admins. **Journey**: request mentorship → mentor responds → schedule session.
+- **Sessions & Scheduling**: Session join links, calendar integration, session management. **Users**: Founders, Mentors. **Journey**: schedule session → join session → follow-up notes.
+- **Support Ticketing System**: `SupportTicket` and `SupportTicketReply` models with RailsAdmin integration and threaded conversations. **Users**: Founders, Mentors, Admins. **Journey**: submit ticket → admin replies → resolve ticket.
+- **Admin Dashboard**: RailsAdmin for managing users, content, programs, and support tickets. **Users**: Admins. **Journey**: review content → moderate users → respond to tickets.
+- **Programs & Resources**: Program listings and resource library (guides, templates, event resources). **Users**: Public, Founders, Mentors. **Journey**: browse programs → view details → access resources.
+- **Startup Profiles & Directory**: Create and manage startup profiles, searchable directory. **Users**: Founders, Mentors, Public. **Journey**: create profile → update details → get discovered.
+- **Payments & Subscriptions**: Pricing pages and subscription management for paid plans. **Users**: Founders (customers). **Journey**: choose plan → subscribe → manage billing.
+- **API Endpoints**: Versioned `api/v1` endpoints supporting frontend and mobile clients. **Users**: Frontend/mobile developers. **Journey**: authenticate → fetch program/resource data → perform actions.
+- **Security & Access Control**: CSRF protection, role-based access limits, and user-scoped data. **Users**: All. **Journey**: access resources according to role and permissions.
+- **Frontend & UX**: Tailwind CSS, Hotwire, and importmap-driven assets for a responsive, performant UI. **Users**: Developers and end users. **Journey**: responsive UI, fast interactions.
 
 ## Site Map (Visual Tree)
 
@@ -111,70 +99,54 @@ For mentorship matching logic and roadmap, see [docs/MENTORSHIP_MATCHING_PLAN.md
 └── up           # Health check endpoint
 ```
 
-## Support Ticketing System
-
-The application includes a comprehensive support ticketing system that enables full conversations between users and administrators:
-
-### For Users (Founders & Mentors)
-- **Create Support Tickets**: Submit issues with subject and detailed description
-- **View Ticket History**: See all their support tickets with status indicators
-- **Conversation Threading**: View complete conversation history with admin replies
-- **Reply to Tickets**: Continue conversations with support staff
-- **Status Tracking**: Monitor ticket progress (Open, In Progress, Resolved, Closed)
-
-### For Administrators
-- **RailsAdmin Integration**: Manage tickets through the admin dashboard
-- **Conversation View**: See full ticket conversations with user/admin distinction
-- **Inline Replies**: Reply directly from the admin interface
-- **Status Management**: Update ticket status and track resolution
-- **User Context**: View user information and ticket history
-
-### Technical Implementation
-- **Models**: `SupportTicket` and `SupportTicketReply` with polymorphic associations
-- **Admin Interface**: Custom RailsAdmin configuration with conversation display
-- **User Interfaces**: Separate controllers and views for founder and mentor portals
-- **Security**: CSRF protection and user-specific access control
-- **Styling**: Tailwind CSS with consistent design across admin and user interfaces
 
 ## Getting Started
 
 ### Prerequisites
-- Ruby 3.2.3
+- Ruby 3.2.3 (use `rbenv` / `rvm` to manage versions)
 - Rails 8.1.1
-- PostgreSQL
-- Node.js & Yarn (for asset compilation)
+- PostgreSQL (12+ recommended)
+- Node.js 18+ and Yarn (or `npm`) for asset compilation
 
 ### Installation
 
 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone git@github.com:Tich-Labs/nailab.git
 cd nailab-rails
 ```
 
-2. Install dependencies
+2. Install Ruby gems and JS packages
 ```bash
+rbenv install 3.2.3    # optional: only if Ruby not installed
+rbenv local 3.2.3
 bundle install
-yarn install
+yarn install --check-files
 ```
 
-3. Set up the database
+3. Configure credentials and environment variables
+
+- If the project uses an `.env` helper file:
+```bash
+cp .env.example .env
+# Edit .env to set any secrets and service credentials
+```
+- Ensure `RAILS_MASTER_KEY` (or `config/credentials.yml.enc`) is available in your environment for encrypted credentials.
+
+4. Set up the database
 ```bash
 rails db:create
 rails db:migrate
 rails db:seed
 ```
 
-4. Configure environment variables
-```bash
-# Copy and configure .env file
-cp .env.example .env
-```
-
 5. Start the development server
 ```bash
 bundle exec rails server
 ```
+
+Notes
+- The repo includes `Procfile`/`Procfile.dev` and `render.yaml` for local multi-process workflows and Render deployment respectively. Use `bin/dev` or a Procfile runner if you prefer to run web and background processes together.
 
 ### Key Dependencies
 
@@ -197,6 +169,7 @@ rails test
 ```bash
 rubocop
 brakeman
+bundler-audit
 ```
 
 ### Deployment
