@@ -411,4 +411,54 @@
   window.NailabShared = window.NailabShared || {};
   window.NailabShared.renderHeader = renderHeader;
   window.NailabShared.indentH3Sections = indentH3Sections;
+  
+  // Admin subtasks helper: populate the existing `data-details-list` items with checkbox subtasks
+  function initAdminSubtasks() {
+    const cards = Array.from(document.querySelectorAll('.feature-card'));
+    cards.forEach(card => {
+      try {
+        const fid = card.dataset.featureId || '';
+        const key = 'admin_subtasks_' + fid;
+        const stored = JSON.parse(localStorage.getItem(key) || 'null') || { items: [], checked: [] };
+
+        // find details list created by per-page script
+        const list = card.querySelector('[data-details-list]');
+        if (!list) return;
+        const items = Array.from(list.querySelectorAll('li')).slice(0, 4);
+        items.forEach((li, idx) => {
+          // replace li contents with checkbox + editable span
+          const text = stored.items && stored.items[idx] ? stored.items[idx] : '';
+          li.innerHTML = '';
+          const label = document.createElement('label');
+          label.className = 'inline-flex items-start gap-2';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'subtask-checkbox mt-1';
+          cb.checked = !!(stored.checked && stored.checked[idx]);
+          const span = document.createElement('span');
+          span.className = 'subtask-text editable';
+          span.contentEditable = 'false';
+          span.textContent = text || '';
+          label.appendChild(cb);
+          label.appendChild(span);
+          li.appendChild(label);
+
+          // interactions
+          cb.addEventListener('change', persist);
+          span.addEventListener('dblclick', () => { span.contentEditable = 'true'; span.focus(); });
+          span.addEventListener('focusout', () => { span.contentEditable = 'false'; persist(); });
+        });
+
+        function persist() {
+          const texts = items.map(li => li.querySelector('.subtask-text')?.textContent || '');
+          const checks = items.map(li => !!li.querySelector('.subtask-checkbox')?.checked);
+          try { localStorage.setItem(key, JSON.stringify({ items: texts, checked: checks })); } catch (e) {}
+        }
+      } catch (e) {
+        // ignore per-card errors
+      }
+    });
+  }
+
+  window.NailabShared.initAdminSubtasks = initAdminSubtasks;
 })();

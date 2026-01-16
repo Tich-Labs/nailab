@@ -85,6 +85,8 @@
                 </div>
             </div>
 
+            
+
             <!-- Kanban Board -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Completed Column -->
@@ -98,7 +100,17 @@
                         </h3>
                     </div>
                     <div class="p-4 space-y-3 kanban-column" data-column="complete">
-                        <div class="text-sm text-slate-500">No tasks (duplicates removed).</div>
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="admin-auth-role-management">
+                            <h4 class="font-medium text-gray-900 mb-1">Admin Authentication &amp; Role Management</h4>
+                            <p class="text-sm text-gray-600 mb-2">Verify admin flag migration; add multi-role support; protect admin-only routes; optional 2FA toggle.</p>
+                            <span class="status-badge bg-green-100 text-green-800">✅ Complete</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="admin-ui-railsadmin-navigation">
+                            <h4 class="font-medium text-gray-900 mb-1">Admin UI (RailsAdmin mounted + navigation)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Dashboard tiles (users, resources, opportunities); custom menu groups; activity feed helper integration.</p>
+                            <span class="status-badge bg-green-100 text-green-800">✅ Complete</span>
+                        </div>
                     </div>
                 </div>
 
@@ -113,7 +125,77 @@
                         </h3>
                     </div>
                     <div class="p-4 space-y-3 kanban-column" data-column="in_progress">
-                        <div class="text-sm text-slate-500">No tasks (duplicates removed).</div>
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="homepage-hero-stats-announcement-editor">
+                            <h4 class="font-medium text-gray-900 mb-1">Homepage Hero Stats &amp; Announcement Editor</h4>
+                            <p class="text-sm text-gray-600 mb-2">Admin settings for hero KPIs and announcement bar; preview mode and cache invalidation on save.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Pending</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="resources-knowledge-hub-crud">
+                            <h4 class="font-medium text-gray-900 mb-1">Resources / Knowledge Hub Full CRUD + Publish Workflow</h4>
+                            <p class="text-sm text-gray-600 mb-2">Resource model with Active Storage, categories, tags, publish toggle and preview/search support.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="opportunities-management-crud">
+                            <h4 class="font-medium text-gray-900 mb-1">Opportunities Management CRUD</h4>
+                            <p class="text-sm text-gray-600 mb-2">Opportunity model with deadline & apply link, bulk CSV import and deadline countdown support.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Pending</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="events-webinars-crud">
+                            <h4 class="font-medium text-gray-900 mb-1">Events &amp; Webinars CRUD</h4>
+                            <p class="text-sm text-gray-600 mb-2">Event model with date/location/RSVP, recording uploads and past/upcoming views; optional calendar integration.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Pending</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="programs-dynamic-content-management">
+                            <h4 class="font-medium text-gray-900 mb-1">Programs Page Dynamic Content Management</h4>
+                            <p class="text-sm text-gray-600 mb-2">Program CRUD with 5-pillars categories, nested impact stats, ordering and scheduled publishing.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="testimonials-management-moderation">
+                            <h4 class="font-medium text-gray-900 mb-1">Testimonials Management &amp; Moderation</h4>
+                            <p class="text-sm text-gray-600 mb-2">Testimonial CRUD with approval workflow, drag-and-drop ordering and publish controls.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="partner-logos-impact-network-manager">
+                            <h4 class="font-medium text-gray-900 mb-1">Partner Logos &amp; Impact Network Manager</h4>
+                            <p class="text-sm text-gray-600 mb-2">Nested homepage logos, drag-reorder UI, active flag and replacement/upload support with preview grid.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="central-feedback-inbox-triage">
+                            <h4 class="font-medium text-gray-900 mb-1">Central Feedback Inbox &amp; Triage</h4>
+                            <p class="text-sm text-gray-600 mb-2">Server-side Feedback model, admin inbox with filters, status workflow and CSV export.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Pending</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="support-ticket-admin-enhancements">
+                            <h4 class="font-medium text-gray-900 mb-1">Support Ticket Admin Enhancements</h4>
+                            <p class="text-sm text-gray-600 mb-2">Inline reply UI in RailsAdmin with email notifications, status enum and agent assignment.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="moderation-queue-flagged-content">
+                            <h4 class="font-medium text-gray-900 mb-1">Moderation Queue &amp; Flagged Content</h4>
+                            <p class="text-sm text-gray-600 mb-2">Flagging system and admin queue for reported items with remove/suspend/warn/dismiss actions and audit logs.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="analytics-dashboard-lightweight">
+                            <h4 class="font-medium text-gray-900 mb-1">Lightweight Business Analytics Dashboard</h4>
+                            <p class="text-sm text-gray-600 mb-2">Basic KPI tiles and charts drawn from existing models with selectable time ranges.</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Partial</span>
+                        </div>
+
+                        <div class="feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200" data-feature-id="blog-news-management">
+                            <h4 class="font-medium text-gray-900 mb-1">Blog/News Management</h4>
+                            <p class="text-sm text-gray-600 mb-2">Blog CRUD with scheduling, drafts and featured toggles for Home/Resources (enable if blogs active).</p>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">🟡 Pending</span>
+                        </div>
                     </div>
                 </div>
 
@@ -394,6 +476,8 @@
 
                 return { title, list, wrap, toggle };
             }
+
+            // Subtasks are initialized via shared.js (window.NailabShared.initAdminSubtasks)
 
             function getDetails(card) {
                 const list = card.querySelector('[data-details-list]');
@@ -792,6 +876,147 @@
             restoreBoardState();
             bootstrapMissingState();
             updateCounts();
+
+            // Prefill per-card subtasks (store defaults if not present) and initialize subtasks UI
+            (function prefillAdminSubtasksDefaults() {
+                const defaults = {
+                    'admin-auth-role-management': {
+                        items: [
+                            'Verify admin flag migration & bootstrap script',
+                            'Add multi-role support (RailsAdmin custom scopes)',
+                            'Admin-only routes & layout',
+                            '2FA optional toggle'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'admin-ui-railsadmin-navigation': {
+                        items: [
+                            'Update dashboard.html.erb with tiles (users count, resources uploaded, opportunities active)',
+                            'Custom RailsAdmin menu groups (Content, Users, Moderation)',
+                            'Activity feed helper integration',
+                            ''
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'homepage-hero-stats-announcement-editor': {
+                        items: [
+                            'Create Admin::Settings model/controller for hero stats (founders/mentors/valuation)',
+                            'Editable announcement bar field',
+                            'Preview mode before publish',
+                            'Cache invalidation on save'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'resources-knowledge-hub-crud': {
+                        items: [
+                            'Admin::Resource model with Active Storage attachments',
+                            'Categories from RESOURCE_CATEGORY_OPTIONS',
+                            'Tags & publish/unpublish toggle',
+                            'Preview page + search/filter support'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'opportunities-management-crud': {
+                        items: [
+                            'Admin::Opportunity model (title, organizer, description, deadline, apply link, category)',
+                            'Bulk import from CSV option',
+                            'Deadline countdown display support',
+                            'Publish/unpublish'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'events-webinars-crud': {
+                        items: [
+                            'Admin::Event model (date, title, location/virtual, description, recording URL/file, RSVP link)',
+                            'Past/upcoming toggle/filter',
+                            'Calendar view integration (optional)',
+                            ''
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'programs-dynamic-content-management': {
+                        items: [
+                            'Admin::Program model with category (5 pillars) enum',
+                            'Nested impact stats fields',
+                            'Ordering & publish scheduling',
+                            'Filterable frontend sync'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'testimonials-management-moderation': {
+                        items: [
+                            'Admin::Testimonial model (quote, founder name, company, link, photo)',
+                            'Approval status (pending/approved/rejected)',
+                            'Drag-and-drop ordering',
+                            'Publish/unpublish'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'partner-logos-impact-network-manager': {
+                        items: [
+                            'Nested attributes in HomePage model',
+                            'Drag-and-drop reorder UI',
+                            'Active flag + logo replacement',
+                            'Preview grid'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'central-feedback-inbox-triage': {
+                        items: [
+                            'Admin::Feedback model (type, category, description, screenshot, status)',
+                            'Inbox list with filters & search',
+                            'Status workflow (open → in-progress → resolved)',
+                            'Export CSV'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'support-ticket-admin-enhancements': {
+                        items: [
+                            'RailsAdmin custom reply UI + email notification on reply',
+                            'Status enum (open, in-progress, resolved)',
+                            'Agent assignment dropdown',
+                            'SLA reminder job (optional)'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'moderation-queue-flagged-content': {
+                        items: [
+                            'Flagging system (report endpoints)',
+                            'Admin queue with reported items',
+                            'Actions: remove content, suspend user, warn, dismiss',
+                            'Audit log for moderation actions'
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'analytics-dashboard-lightweight': {
+                        items: [
+                            'Pull from existing models (User, MentorshipSession, Resource, Feedback)',
+                            'Time-range filters (7d/30d/all)',
+                            'Basic charts (Chartkick or Highcharts)',
+                            ''
+                        ],
+                        checked: [false, false, false, false]
+                    },
+                    'blog-news-management': {
+                        items: [
+                            'Admin::Blog model (title, content, author, publish date, category)',
+                            'Scheduling & draft status',
+                            'Featured toggle for Home/Resources',
+                            ''
+                        ],
+                        checked: [false, false, false, false]
+                    }
+                };
+
+                try {
+                    Object.entries(defaults).forEach(([fid, payload]) => {
+                        const key = 'admin_subtasks_' + fid;
+                        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(payload));
+                    });
+                } catch (e) { /* ignore */ }
+            })();
+
+            try { if (window.NailabShared && typeof window.NailabShared.initAdminSubtasks === 'function') window.NailabShared.initAdminSubtasks(); } catch (e) { /* ignore */ }
 
             // Load screenshot options (used for linking cards to screenshots)
             fetch('screenshots_index.json')
