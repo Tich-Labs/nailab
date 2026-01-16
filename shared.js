@@ -26,6 +26,7 @@
       { href: 'content-features.html', label: 'Content Features' },
       { href: 'subscription-features.html', label: 'Subscription Features' },
       { href: 'admin-features.html', label: 'Admin Features' },
+      { href: 'technical-features.html', label: 'Technical Features' },
       { href: 'documentation.html', label: 'Documentation', isDocs: true }
     ];
   }

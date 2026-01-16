@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nailab - Technical Features & Implementation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50" data-page-title="Technical Features">
+    <div class="min-h-screen">
+        <div id="nailabHeader"></div>
+        <script src="shared.js"></script>
+        <script>window.NailabShared.renderHeader();</script>
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-12">
+                    <div class="flex items-center space-x-4">
+                        <a href="index.html" class="text-sm text-slate-600 hover:text-slate-900">Home</a>
+                        <a href="founder-features.html" class="text-sm text-slate-600 hover:text-slate-900">Founders</a>
+                        <a href="content-features.html" class="text-sm text-slate-600 hover:text-slate-900">Content</a>
+                        <a href="mentors-features.html" class="text-sm text-slate-600 hover:text-slate-900">Mentors</a>
+                        <a href="technical-features.html" class="text-sm font-semibold text-blue-600">Technical</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Overview Stats (kept same layout) -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8 animate-slide-in">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 id="statCompletePercent" class="text-2xl font-bold text-green-600">0%</h3>
+                        <p class="text-sm text-gray-600">Complete</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 id="statInProgress" class="text-2xl font-bold text-yellow-600">0</h3>
+                        <p class="text-sm text-gray-600">In Progress</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 id="statMissing" class="text-2xl font-bold text-red-600">0</h3>
+                        <p class="text-sm text-gray-600">Missing</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        <h3 id="statTotal" class="text-2xl font-bold text-blue-600">0</h3>
+                        <p class="text-sm text-gray-600">Total Features</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-semibold mb-4">Status Legend</h3>
+                <p class="text-sm text-gray-600 mb-4">Tip: drag cards between columns (including back). Double-click a card to edit its title/description.</p>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Completed Column -->
+                <div class="bg-green-50 rounded-lg border border-green-200">
+                    <div class="p-4 border-b border-green-200">
+                        <h3 class="font-semibold text-green-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Completed (<span id="countComplete">0</span>)
+                        </h3>
+                    </div>
+                    <div class="p-4 space-y-3 kanban-column" data-column="complete">
+                        <!-- Completed cards will be appended here -->
+                    </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div class="p-4 border-b border-yellow-200">
+                        <h3 class="font-semibold text-yellow-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            In Progress (<span id="countInProgress">0</span>)
+                        </h3>
+                    </div>
+                    <div class="p-4 space-y-3 kanban-column" data-column="in_progress">
+                        <!-- In-progress cards will be appended here -->
+                    </div>
+                </div>
+
+                <!-- Missing Column -->
+                <div class="bg-red-50 rounded-lg border border-red-200">
+                    <div class="p-4 border-b border-red-200">
+                        <h3 class="font-semibold text-red-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                            Missing (<span id="countMissing">0</span>)
+                        </h3>
+                    </div>
+                    <div class="p-4 space-y-3 kanban-column" data-column="missing">
+                        <!-- Missing cards will be seeded here -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Set last updated date (guard in case element is not present)
+        const _lastUpdatedEl = document.getElementById('lastUpdated');
+        if (_lastUpdatedEl) {
+            _lastUpdatedEl.textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Kanban drag/drop + persistence
+        document.addEventListener('DOMContentLoaded', function() {
+            const STORAGE_KEY = 'nailab_technical_features_board_v2';
+            const columns = Array.from(document.querySelectorAll('.kanban-column[data-column]'));
+            const cards = Array.from(document.querySelectorAll('.feature-card'));
+            let screenshotPaths = [];
+
+            function normalize(str) {
+                return (str || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, ' ').trim();
+            }
+
+            function safeText(str) {
+                return (str || '').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+            }
+
+            function ensureDetailsSection(card) {
+                let title = card.querySelector('[data-details-title]');
+                let list = card.querySelector('[data-details-list]');
+                let wrap = card.querySelector('[data-details-wrap]');
+                let toggle = card.querySelector('[data-details-toggle]');
+                if (title && list && wrap && toggle) return { title, list, wrap, toggle };
+
+                wrap = document.createElement('div');
+                wrap.dataset.detailsWrap = '1';
+                wrap.className = 'mt-1';
+
+                title = document.createElement('div');
+                title.dataset.detailsTitle = '1';
+                title.className = 'mt-2 text-xs font-semibold text-slate-700';
+                title.textContent = 'Sub-tasks';
+
+                list = document.createElement('ul');
+                list.dataset.detailsList = '1';
+                list.className = 'mt-1 space-y-1 text-sm text-slate-600';
+
+                for (let i = 0; i < 8; i += 1) {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start gap-2';
+
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.className = 'mt-1';
+
+                    const span = document.createElement('span');
+                    span.dataset.checkText = '1';
+                    span.className = 'flex-1';
+                    span.textContent = '';
+
+                    span.contentEditable = 'false';
+                    span.classList.add('editable');
+
+                    cb.addEventListener('change', () => {
+                        saveBoardState();
+                    });
+
+                    span.addEventListener('focusout', () => {
+                        saveBoardState();
+                    });
+
+                    li.appendChild(cb);
+                    li.appendChild(span);
+                    list.appendChild(li);
+                }
+
+                toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.dataset.detailsToggle = '1';
+                toggle.className = 'mt-2 block w-full text-left text-xs font-semibold text-slate-700 underline hover:text-slate-900';
+                toggle.textContent = 'Hide details';
+
+                const controlsId = `details-${Math.random().toString(36).slice(2)}`;
+                wrap.id = controlsId;
+                toggle.setAttribute('aria-controls', controlsId);
+                toggle.setAttribute('aria-expanded', 'true');
+
+                wrap.appendChild(title);
+                wrap.appendChild(list);
+                cardAppendDefaults(card, wrap, toggle);
+                return { title, list, wrap, toggle };
+            }
+
+            function cardAppendDefaults(card, wrap, toggle) {
+                const meta = card.querySelector('[data-meta-row]');
+                if (meta) {
+                    card.insertBefore(wrap, meta);
+                    card.insertBefore(toggle, wrap);
+                } else {
+                    card.appendChild(toggle);
+                    card.appendChild(wrap);
+                }
+            }
+
+            function getDetails(card) {
+                const list = card.querySelector('[data-details-list]');
+                if (!list) return [];
+                return Array.from(list.querySelectorAll('li')).slice(0, 8).map(li => {
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const txt = li.querySelector('span[data-check-text]')?.textContent?.trim() || '';
+                    return { text: txt, done: !!(cb && cb.checked) };
+                }).filter(item => item.text || item.done);
+            }
+
+            function setDetails(card, details) {
+                const { list } = ensureDetailsSection(card);
+                const items = Array.from(list.querySelectorAll('li')).slice(0, 8);
+                const vals = Array.isArray(details) ? details.slice(0, 8) : [];
+                for (let i = 0; i < items.length; i += 1) {
+                    const li = items[i];
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const span = li.querySelector('span[data-check-text]');
+                    const v = vals[i] || '';
+                    if (typeof v === 'string') {
+                        span.textContent = v || '';
+                        if (cb) cb.checked = false;
+                    } else if (v && typeof v === 'object') {
+                        span.textContent = v.text || '';
+                        if (cb) cb.checked = !!v.done;
+                    } else {
+                        span.textContent = '';
+                        if (cb) cb.checked = false;
+                    }
+                }
+            }
+
+            function cleanupEmptyChecklistItems(card) {
+                const list = card.querySelector('[data-details-list]');
+                if (!list) return;
+                const items = Array.from(list.querySelectorAll('li'));
+                items.forEach(li => {
+                    const cb = li.querySelector('input[type="checkbox"]');
+                    const txt = li.querySelector('span[data-check-text]')?.textContent?.trim() || '';
+                    if (!txt && (!cb || !cb.checked)) li.remove();
+                });
+            }
+
+            function ensureCardIds() {
+                const seen = new Set();
+                const all = document.querySelectorAll('.feature-card');
+                Array.from(all).forEach((card, idx) => {
+                    if (card.dataset.featureId) return;
+                    const title = card.querySelector('h4')?.textContent || `feature-${idx}`;
+                    let base = safeText(title) || `feature-${idx}`;
+                    let candidate = base;
+                    let n = 2;
+                    while (seen.has(candidate)) {
+                        candidate = `${base}-${n}`;
+                        n += 1;
+                    }
+                    seen.add(candidate);
+                    card.dataset.featureId = candidate;
+                });
+            }
+
+            function saveBoardState() {
+                const state = {};
+                columns.forEach(col => {
+                    const colKey = col.dataset.column;
+                    Array.from(col.querySelectorAll('.feature-card')).forEach(card => {
+                        const title = card.querySelector('h4')?.textContent?.trim() || '';
+                        const desc = card.querySelector('p')?.textContent?.trim() || '';
+                        const details = getDetails(card);
+                        state[card.dataset.featureId] = {
+                            column: colKey,
+                            title,
+                            desc,
+                            details,
+                            screenshotPath: card.dataset.screenshotPath || null,
+                            detailsOpen: card.dataset.detailsOpen === 'false' ? false : true,
+                            createdAt: card.dataset.createdAt || null,
+                            movedAt: card.dataset.movedAt || null
+                        };
+                    });
+                });
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+            }
+
+            function restoreBoardState() {
+                let state = null;
+                try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (_) { state = null; }
+                if (!state || typeof state !== 'object') return;
+                const cardById = new Map(Array.from(document.querySelectorAll('.feature-card')).map(c => [c.dataset.featureId, c]));
+                const columnByKey = new Map(columns.map(c => [c.dataset.column, c]));
+                Object.entries(state).forEach(([id, value]) => {
+                    const card = cardById.get(id);
+                    if (!card) return;
+                    const colKey = typeof value === 'string' ? value : value?.column;
+                    const col = columnByKey.get(colKey);
+                    if (col) { col.appendChild(card); }
+                    if (value && typeof value === 'object') {
+                        if (Array.isArray(value.details)) setDetails(card, value.details);
+                    }
+                });
+            }
+
+            ensureCardIds();
+
+            // Seed technical features checklist when missing using provided backlog
+            (function seedTechnicalChecklistIfMissing() {
+                const seeds = new Map();
+
+                // MVP
+                seeds.set(safeText('T1 Secure Authentication & Authorization Infrastructure'), [
+                    { text: 'Add Devise + omniauth-linkedin setup', done: false },
+                    { text: 'Implement Pundit/ActionPolicy role policies', done: false },
+                    { text: 'Configure Rack::Attack rate limiting', done: false },
+                    { text: 'Secure headers, CSRF hardening, session timeout', done: false },
+                    { text: 'Auth unit & integration tests', done: false }
+                ]);
+
+                seeds.set(safeText('T2 Reliable Transactional Email & Notification Delivery'), [
+                    { text: 'Configure Action Mailer + Resend/Postmark', done: false },
+                    { text: 'Background jobs (GoodJob/Sidekiq) for delivery', done: false },
+                    { text: 'Template system (MJML/Liquid) + previews', done: false },
+                    { text: 'Bounce & delivery tracking instrumentation', done: false }
+                ]);
+
+                seeds.set(safeText('T3 Calendar & Availability Data Model & Conflict Detection'), [
+                    { text: 'Design JSONB availability model with recurrences', done: false },
+                    { text: 'Implement conflict detection service', done: false },
+                    { text: 'Timezone support & conversions', done: false },
+                    { text: 'Validation tests for overlapping slots', done: false }
+                ]);
+
+                seeds.set(safeText('T4 Comprehensive Feature Gating & Subscription Enforcement'), [
+                    { text: 'Centralize Pundit policies for premium features', done: false },
+                    { text: 'Implement subscription status caching', done: false },
+                    { text: 'Grace period & downgrade handling', done: false },
+                    { text: 'Policy & integration tests', done: false }
+                ]);
+
+                seeds.set(safeText('T5 Security Baseline & Application Monitoring'), [
+                    { text: 'Add Brakeman & bundler-audit to CI', done: false },
+                    { text: 'Integrate Sentry for error tracking', done: false },
+                    { text: 'Use Lograge for structured logs', done: false },
+                    { text: 'Enforce HTTPS & HSTS on hosting', done: false }
+                ]);
+
+                seeds.set(safeText('T6 Automated Testing Foundation (Unit + Integration)'), [
+                    { text: 'Set up RSpec + FactoryBot + Shoulda Matchers', done: false },
+                    { text: 'Write model, policy, mailer specs', done: false },
+                    { text: 'Enable SimpleCov and target > 80%', done: false },
+                    { text: 'CI pipeline test jobs', done: false }
+                ]);
+
+                // Alpha
+                seeds.set(safeText('A1 Real-time Notifications Infrastructure'), [
+                    { text: 'ActionCable + Redis setup', done: false },
+                    { text: 'Turbo Streams for live updates', done: false },
+                    { text: 'Notification preferences model & UI', done: false },
+                    { text: 'Email digest background job', done: false }
+                ]);
+
+                seeds.set(safeText('A2 Resources & Opportunities Admin CRUD + Search'), [
+                    { text: 'Admin CRUD (ActiveAdmin or custom)', done: false },
+                    { text: 'pg_search / full-text indexes', done: false },
+                    { text: 'Active Storage + Cloud upload (S3/Cloudinary)', done: false }
+                ]);
+
+                seeds.set(safeText('A3 Full Calendar Sync (Google / Outlook)'), [
+                    { text: 'Google Calendar API + OAuth setup', done: false },
+                    { text: 'iCalendar (.ics) generation', done: false },
+                    { text: 'Background sync & revocation handling', done: false }
+                ]);
+
+                seeds.set(safeText('A4 Performance Optimization & Caching Strategy'), [
+                    { text: 'Implement fragment & Russian Doll caching', done: false },
+                    { text: 'Add key DB indexes & query tuning', done: false },
+                    { text: 'Consider CDN for assets (Cloudflare)', done: false }
+                ]);
+
+                seeds.set(safeText('A5 Basic Admin Dashboard'), [
+                    { text: 'Admin namespace or ActiveAdmin setup', done: false },
+                    { text: 'Admin authorization & audit log', done: false }
+                ]);
+
+                seeds.set(safeText('A6 Background Job Reliability & Monitoring'), [
+                    { text: 'GoodJob dashboard + retry policies', done: false },
+                    { text: 'Dead job queue monitoring & alerts', done: false }
+                ]);
+
+                // Beta
+                seeds.set(safeText('B1 Account Deactivation & Data Deletion (GDPR-like)'), [
+                    { text: 'Soft-delete (paranoia/discard)', done: false },
+                    { text: 'Data export background job', done: false },
+                    { text: 'Anonymization + final purge flow', done: false }
+                ]);
+
+                seeds.set(safeText('B2 Public Profile SEO & Structured Data'), [
+                    { text: 'FriendlyId slugs for profiles', done: false },
+                    { text: 'Meta tags + OpenGraph/Twitter cards', done: false },
+                    { text: 'JSON-LD schema.org markup', done: false }
+                ]);
+
+                seeds.set(safeText('B3 Advanced Abuse Protection & Rate Limiting'), [
+                    { text: 'Advanced Rack::Attack rules', done: false },
+                    { text: 'Honeypot fields & optional reCAPTCHA', done: false }
+                ]);
+
+                seeds.set(safeText('B4 Platform Analytics & Usage Insights'), [
+                    { text: 'Ahoy / event tracking', done: false },
+                    { text: 'Plausible or Matomo setup', done: false },
+                    { text: 'Anonymized event storage', done: false }
+                ]);
+
+                seeds.set(safeText('B5 Advanced Security & Compliance Readiness'), [
+                    { text: 'OWASP ZAP baseline scans', done: false },
+                    { text: 'Optional 2FA for users', done: false },
+                    { text: 'Encrypted sensitive fields', done: false }
+                ]);
+
+                seeds.set(safeText('B6 End-to-End Testing & Uptime Monitoring'), [
+                    { text: 'Playwright / Cypress E2E suites', done: false },
+                    { text: 'Render uptime + external monitors', done: false }
+                ]);
+
+                seeds.set(safeText('B7 CI/CD & Deployment Pipeline Maturity'), [
+                    { text: 'Render auto-deploy + preview envs', done: false },
+                    { text: 'GitHub Actions for lint/test/security', done: false },
+                    { text: 'Semantic versioning tags', done: false }
+                ]);
+
+                seeds.set(safeText('B8 Multi-language & Internationalization Foundation'), [
+                    { text: 'rails-i18n setup & locale files', done: false },
+                    { text: 'Locale detection & fallback', done: false },
+                    { text: 'Translation management process', done: false }
+                ]);
+
+                // helper: token set for fuzzy matching
+                function tokenSet(s) { return new Set((s || '').toLowerCase().split(/[^a-z0-9]+/).filter(t => t.length > 2)); }
+
+                let changed = false;
+                // find or create minimal card placeholders in Missing column for seeding
+                const missingCol = document.querySelector('.kanban-column[data-column="missing"]');
+                if (missingCol) {
+                    // For each seed key, ensure there is a placeholder card (if not present) and then seed details
+                    for (const seedKey of seeds.keys()) {
+                        // normalize back to readable title for card header
+                        const titleText = seedKey.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        // try to find existing card matching tokens (compare using lowercased first token)
+                            let found = null;
+                            const titleFirst = titleText.toLowerCase().split(' ')[0];
+                            Array.from(document.querySelectorAll('.feature-card')).forEach(c => {
+                                const t = (c.querySelector('h4')?.textContent || '').toLowerCase();
+                                if (t.includes(titleFirst)) found = c;
+                            });
+                        if (!found) {
+                            const c = document.createElement('div');
+                            c.className = 'feature-card bg-white rounded-lg p-3 shadow-sm border border-gray-200';
+                            const h = document.createElement('h4');
+                            h.className = 'font-medium text-gray-900 mb-1';
+                            h.textContent = titleText;
+                            const p = document.createElement('p');
+                            p.className = 'text-sm text-gray-600 mb-2';
+                            p.textContent = 'Technical implementation backlog item';
+                            const span = document.createElement('span');
+                            span.className = 'status-badge bg-red-100 text-red-800';
+                            span.textContent = '❌ Missing';
+                            c.appendChild(h);
+                            c.appendChild(p);
+                            c.appendChild(span);
+                            missingCol.appendChild(c);
+                        }
+                    }
+                }
+
+                // Now perform seeding on cards that have no details
+                const allCards = Array.from(document.querySelectorAll('.feature-card'));
+                allCards.forEach(card => {
+                    const details = getDetails(card);
+                    if (details && details.length > 0) return;
+                    const title = card.querySelector('h4')?.textContent || '';
+                    const key = safeText(title);
+                    if (seeds.has(key)) {
+                        setDetails(card, seeds.get(key));
+                        changed = true;
+                    } else {
+                        // fuzzy match by token overlap
+                        const ct = tokenSet(title);
+                        let best = null; let bestScore = 0;
+                        for (const [sKey, arr] of seeds.entries()) {
+                            const sTokens = tokenSet(sKey.replace(/-/g,' '));
+                            let score = 0; sTokens.forEach(t => { if (ct.has(t)) score += 1; });
+                            if (score > bestScore) { bestScore = score; best = arr; }
+                        }
+                        if (best && bestScore >= 2) { setDetails(card, best); changed = true; }
+                    }
+                });
+
+                // cleanup empty rows
+                Array.from(document.querySelectorAll('.feature-card')).forEach(card => cleanupEmptyChecklistItems(card));
+                if (changed) saveBoardState();
+            })();
+
+            // expose a minimal updateCounts to update the top stats based on visible cards
+            function updateCounts() {
+                const completeCount = document.querySelectorAll('.kanban-column[data-column="complete"] .feature-card').length;
+                const inProgressCount = document.querySelectorAll('.kanban-column[data-column="in_progress"] .feature-card').length;
+                const missingCount = document.querySelectorAll('.kanban-column[data-column="missing"] .feature-card').length;
+                const total = completeCount + inProgressCount + missingCount;
+                const pct = total === 0 ? 0 : Math.round((completeCount / total) * 100);
+                document.getElementById('countComplete').textContent = String(completeCount);
+                document.getElementById('countInProgress').textContent = String(inProgressCount);
+                document.getElementById('countMissing').textContent = String(missingCount);
+                document.getElementById('statCompletePercent').textContent = `${pct}%`;
+                document.getElementById('statInProgress').textContent = String(inProgressCount);
+                document.getElementById('statMissing').textContent = String(missingCount);
+                document.getElementById('statTotal').textContent = String(total);
+            }
+
+            // restore and initialize minimal state
+            try { restoreBoardState(); } catch(_){}
+            try { updateCounts(); } catch(_){}
+
+        });
+    </script>
+</body>
+</html>
