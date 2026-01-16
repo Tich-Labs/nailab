@@ -835,13 +835,15 @@
                 });
             });
 
-            (function seedSubscriptionChecklistIfEmpty() {
+            (function seedSubscriptionChecklistIfMissing() {
+                let existingState = null;
                 try {
-                    const existing = localStorage.getItem(STORAGE_KEY);
-                    if (existing) return;
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) existingState = JSON.parse(raw);
                 } catch (_) {
-                    // ignore
+                    existingState = null;
                 }
+                if (!existingState || typeof existingState !== 'object') existingState = {};
 
                 const seed = {
                     'integrate-secure-payment-gateway': [
@@ -900,14 +902,21 @@
                     ]
                 };
 
+                let changed = false;
                 cards.forEach((card) => {
                     const id = card.dataset.featureId;
                     const details = seed[id];
                     if (!details) return;
+
+                    const stored = existingState?.[id];
+                    const hasDetails = stored && typeof stored === 'object' && Array.isArray(stored.details) && stored.details.length > 0;
+                    if (hasDetails) return;
+
                     setDetails(card, details);
+                    changed = true;
                 });
 
-                saveBoardState();
+                if (changed) saveBoardState();
             })();
 
             restoreBoardState();
