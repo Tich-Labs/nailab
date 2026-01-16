@@ -78,24 +78,89 @@
         .join('');
 
     container.innerHTML =
-      '<header class="bg-white shadow-sm border-b border-gray-200">' +
+      '<header class="bg-gray-50 shadow-sm border-b border-gray-200">' +
       '  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">' +
       '    <div class="flex justify-between items-center py-4">' +
       '      <div class="flex items-center space-x-4">' +
-      '        <a href="./?section=all" class="text-2xl font-bold text-gray-900 hover:underline">Nailab</a>' +
+      '        <a href="./?section=all" class="text-2xl font-bold text-black hover:underline">Nailab</a>' +
       '        <span class="text-gray-400">|</span>' +
-      '        <h2 class="text-xl text-gray-600">' + escapeHtml(pageTitle) + '</h2>' +
+      '        <h2 class="text-xl font-bold text-black">' + escapeHtml(pageTitle) + '</h2>' +
       '      </div>' +
       '      <div class="flex items-center space-x-2">' +
-      '        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
-      '          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' +
-      '        </svg>' +
-      '        <span class="text-sm text-gray-600">Last Updated: <span id="lastUpdated"></span></span>' +
-      '      </div>' +
+        // Feedback trigger (primary) - placed to the left of Info and Last Updated
+        '        <button id="openFeedbackBtn" class="mr-3 inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none">' +
+        '          <svg class="w-4 h-4 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' +
+        '            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H8l-6 4V5z" />' +
+        '          </svg>' +
+        '          Give Feedback' +
+        '        </button>' +
+        // Info button
+
+        '        <span class="text-sm text-gray-600">Last Updated: <span id="lastUpdated"></span></span>' +
+        '      </div>' +
       '    </div>' +
       '  </div>' +
       '</header>' +
-      '' +
+
+
+      // Feedback modal (hidden by default)
+      '<div id="feedbackModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/50 p-4">' +
+      '  <div role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" class="max-w-lg w-full bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 relative transform transition-opacity duration-200 ease-out opacity-0" data-open="false">' +
+      '    <button id="closeFeedbackModalBtn" class="absolute top-3 right-3 text-slate-500 hover:text-slate-700 dark:text-slate-300">' +
+      '      <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor">' +
+      '        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l8 8M6 14L14 6" />' +
+      '      </svg>' +
+      '    </button>' +
+      '    <h3 id="feedbackTitle" class="text-lg font-bold text-black dark:text-slate-100">Give Feedback</h3>' +
+      '    <form id="feedbackForm" class="mt-4 space-y-4" novalidate>' +
+      '      <fieldset class="space-y-2">' +
+      '        <legend class="text-sm font-bold text-black dark:text-slate-200">Type</legend>' +
+        '        <div class="flex flex-col sm:flex-row sm:space-x-3">' +
+      '          <label class="inline-flex items-center mt-2 sm:mt-0 px-2 py-1 rounded-md bg-red-50 text-red-800 border border-red-100 text-sm"><input type="radio" name="fbType" value="bug" class="mr-2" required><span>Report a bug/issue</span></label>' +
+          '          <label class="inline-flex items-center mt-2 sm:mt-0 px-2 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-100 text-sm"><input type="radio" name="fbType" value="feature" class="mr-2"><span>Request new feature</span></label>' +
+          '          <label class="inline-flex items-center mt-2 sm:mt-0 px-2 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-100 text-sm"><input type="radio" name="fbType" value="general" class="mr-2"><span>General suggestion</span></label>' +
+      '        </div>' +
+      '      </fieldset>' +
+
+      '      <div>' +
+      '        <label class="block text-sm font-bold text-black dark:text-slate-200">Category</label>' +
+        '        <select id="fbCategory" class="mt-1 block w-full rounded-md border-slate-200 bg-gray-50 dark:bg-slate-700 dark:border-slate-600 p-2">' +
+      '          <option value="">Select a category</option>' +
+      '          <option>Founder Features</option>' +
+      '          <option>Mentor Features</option>' +
+      '          <option>Matchmaking Features</option>' +
+      '          <option>Content & Resources</option>' +
+      '          <option>Subscription & Payments</option>' +
+      '          <option>Admin / Dashboard</option>' +
+      '          <option>Technical / Performance</option>' +
+      '          <option>Other</option>' +
+      '        </select>' +
+      '        <input id="fbCategoryOther" class="mt-2 hidden w-full rounded-md border-slate-200 bg-gray-50 p-2 dark:bg-slate-700" type="text" placeholder="Please specify...">' +
+      '      </div>' +
+
+      '      <div>' +
+      '        <label class="block text-sm font-bold text-black dark:text-slate-200">Details</label>' +
+      '        <textarea id="fbDetails" rows="4" class="mt-1 block w-full rounded-md border-slate-200 bg-gray-50 p-2 dark:bg-slate-700" placeholder="Share your thoughts with us..." required></textarea>' +
+      '      </div>' +
+
+      '      <div>' +
+      '        <label class="block text-sm font-bold text-black dark:text-slate-200">Screenshot (optional)</label>' +
+      '        <input id="fbScreenshot" type="file" accept="image/*" class="mt-1" />' +
+      '      </div>' +
+
+      '      <div>' +
+      '        <label class="block text-sm font-bold text-black dark:text-slate-200">Email (optional)</label>' +
+      '        <input id="fbEmail" type="email" class="mt-1 block w-full rounded-md border-slate-200 p-2 dark:bg-slate-700" placeholder="you@example.com">' +
+      '      </div>' +
+
+      '      <div class="flex items-center justify-end space-x-2 pt-2">' +
+      '        <button type="button" id="feedbackCancel" class="rounded-md px-3 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200">Cancel</button>' +
+      '        <button type="submit" id="feedbackSubmit" class="rounded-md px-4 py-2 bg-emerald-600 text-white disabled:opacity-40" disabled>Submit</button>' +
+      '      </div>' +
+      '    </form>' +
+      '  </div>' +
+      '</div>' +
+
       '<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">' +
       '  <nav class="mt-4 flex flex-wrap gap-2" aria-label="Pages">' +
       navHtml +
@@ -111,6 +176,124 @@
         day: 'numeric'
       });
     }
+
+    // wire up header modal and feedback modal handlers
+    (function () {
+      // Info modal
+      const openInfoBtn = document.getElementById('openHeaderModalBtn');
+      const infoModal = document.getElementById('headerModal');
+      const closeInfoBtn = document.getElementById('closeHeaderModalBtn');
+
+      function showInfoModal() {
+        if (!infoModal) return;
+        infoModal.classList.remove('hidden');
+        infoModal.classList.add('flex');
+        infoModal.setAttribute('aria-modal', 'true');
+      }
+
+      function hideInfoModal() {
+        if (!infoModal) return;
+        infoModal.classList.add('hidden');
+        infoModal.classList.remove('flex');
+        infoModal.removeAttribute('aria-modal');
+      }
+
+      if (openInfoBtn) openInfoBtn.addEventListener('click', showInfoModal);
+      if (closeInfoBtn) closeInfoBtn.addEventListener('click', hideInfoModal);
+      if (infoModal) infoModal.addEventListener('click', function (e) { if (e.target === infoModal) hideInfoModal(); });
+
+      // Feedback modal
+      const openFbBtn = document.getElementById('openFeedbackBtn');
+      const fbModal = document.getElementById('feedbackModal');
+      const fbPanel = fbModal && fbModal.querySelector('[role="dialog"]');
+      const closeFbBtn = document.getElementById('closeFeedbackModalBtn');
+      const fbForm = document.getElementById('feedbackForm');
+      const fbSubmit = document.getElementById('feedbackSubmit');
+      const fbCancel = document.getElementById('feedbackCancel');
+      const fbTypeInputs = fbForm ? Array.from(fbForm.elements['fbType'] || []) : [];
+      const fbCategory = document.getElementById('fbCategory');
+      const fbCategoryOther = document.getElementById('fbCategoryOther');
+      const fbDetails = document.getElementById('fbDetails');
+
+      function openFeedback() {
+        if (!fbModal) return;
+        fbModal.classList.remove('hidden');
+        // slight delay to allow transition classes if desired
+        setTimeout(function () {
+          if (fbPanel) {
+            fbPanel.style.opacity = '1';
+            fbPanel.setAttribute('data-open', 'true');
+          }
+        }, 10);
+        // focus first radio
+        if (fbTypeInputs && fbTypeInputs[0]) fbTypeInputs[0].focus();
+        document.addEventListener('keydown', escHandler);
+      }
+
+      function closeFeedback() {
+        if (!fbModal) return;
+        if (fbPanel) {
+          fbPanel.style.opacity = '0';
+          fbPanel.setAttribute('data-open', 'false');
+        }
+        setTimeout(function () { fbModal.classList.add('hidden'); }, 180);
+        document.removeEventListener('keydown', escHandler);
+      }
+
+      function escHandler(e) {
+        if (e.key === 'Escape') {
+          if (fbModal && !fbModal.classList.contains('hidden')) closeFeedback();
+          if (infoModal && !infoModal.classList.contains('hidden')) hideInfoModal();
+        }
+      }
+
+      if (openFbBtn) openFbBtn.addEventListener('click', openFeedback);
+      if (closeFbBtn) closeFbBtn.addEventListener('click', closeFeedback);
+      if (fbCancel) fbCancel.addEventListener('click', closeFeedback);
+      if (fbModal) fbModal.addEventListener('click', function (e) { if (e.target === fbModal) closeFeedback(); });
+
+      // dynamic form behavior
+      function updateDetailsPlaceholder() {
+        if (!fbDetails) return;
+        const selected = (fbForm && fbForm.elements['fbType'] && Array.from(fbForm.elements['fbType']).find(i => i.checked) || {}).value;
+        if (selected === 'bug') fbDetails.placeholder = 'Describe what went wrong and how to reproduce it...';
+        else if (selected === 'feature') fbDetails.placeholder = 'What feature do you want and why is it useful for you?';
+        else fbDetails.placeholder = 'Share your thoughts with us...';
+      }
+
+      if (fbTypeInputs.length) fbTypeInputs.forEach(i => i.addEventListener('change', function () { updateDetailsPlaceholder(); validateForm(); }));
+
+      if (fbCategory) fbCategory.addEventListener('change', function () {
+        if (fbCategory.value === 'Other') fbCategoryOther.classList.remove('hidden'); else fbCategoryOther.classList.add('hidden');
+        validateForm();
+      });
+
+      if (fbDetails) fbDetails.addEventListener('input', validateForm);
+      if (fbCategoryOther) fbCategoryOther.addEventListener('input', validateForm);
+      if (fbForm) fbForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        // simple submit handling: show success and close
+        fbSubmit.disabled = true;
+        fbSubmit.textContent = 'Sending...';
+        setTimeout(function () {
+          fbSubmit.textContent = 'Submitted';
+          // brief success then close
+          setTimeout(function () { fbSubmit.textContent = 'Submit'; fbSubmit.disabled = false; fbForm.reset(); closeFeedback(); }, 800);
+        }, 600);
+      });
+
+      function validateForm() {
+        if (!fbForm) return;
+        const typeSelected = !!(Array.from(fbForm.elements['fbType'] || []).find(i => i.checked));
+        const categoryFilled = fbCategory && fbCategory.value;
+        const detailsFilled = fbDetails && fbDetails.value.trim().length > 0;
+        const otherOk = !(fbCategory && fbCategory.value === 'Other') || (fbCategoryOther && fbCategoryOther.value.trim().length > 0);
+        fbSubmit.disabled = !(typeSelected && categoryFilled && detailsFilled && otherOk);
+      }
+
+      // initial validation state
+      validateForm();
+    })();
   }
 
   function indentH3Sections(options) {
