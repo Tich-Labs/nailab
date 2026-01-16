@@ -77,6 +77,9 @@
         })
         .join('');
 
+      // hide top-page nav when on the dedicated feedback page
+      const navSection = (pageFile === 'feedback.html') ? '' : ('  <nav class="mt-4 flex flex-wrap gap-2" aria-label="Pages">' + navHtml + '  </nav>');
+
     container.innerHTML =
       '<header class="bg-gray-50 shadow-sm border-b border-gray-200">' +
       '  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">' +
@@ -88,12 +91,12 @@
       '      </div>' +
       '      <div class="flex items-center space-x-2">' +
         // Feedback trigger (primary) - placed to the left of Info and Last Updated
-        '        <button id="openFeedbackBtn" class="mr-3 inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none">' +
+        '        <a href="feedback.html" class="mr-3 inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none">' +
         '          <svg class="w-4 h-4 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' +
         '            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H8l-6 4V5z" />' +
         '          </svg>' +
         '          Give Feedback' +
-        '        </button>' +
+        '        </a>' +
         // Info button
 
         '        <span class="text-sm text-gray-600">Last Updated: <span id="lastUpdated"></span></span>' +
@@ -162,9 +165,7 @@
       '</div>' +
 
       '<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">' +
-      '  <nav class="mt-4 flex flex-wrap gap-2" aria-label="Pages">' +
-      navHtml +
-      '  </nav>' +
+      navSection +
       '  <hr class="my-6 border-slate-200" />' +
       '</div>';
 
@@ -270,15 +271,95 @@
 
       if (fbDetails) fbDetails.addEventListener('input', validateForm);
       if (fbCategoryOther) fbCategoryOther.addEventListener('input', validateForm);
+      // triage and persist feedback locally (queue) on submit
+      function triageFeedback(data) {
+        const text = (data.details || '').toLowerCase();
+        const category = (data.category || '').toLowerCase();
+        const triage = { labels: [], board: null, priority: 'normal' };
+
+        // Bug priority and routing
+        if (data.type === 'bug') {
+          if ((text.includes('crash') || text.includes('error') || text.includes('exception') || text.includes("not working")) && (category.includes('founder') || text.includes('founder') || text.includes('dashboard'))) {
+            triage.board = 'founder-features';
+            triage.labels.push('bug', 'high-priority');
+            triage.priority = 'high';
+            return triage;
+          }
+          // generic bug mapping
+          triage.labels.push('bug');
+        }
+
+        // Feature request routing
+        if (data.type === 'feature') {
+          triage.labels.push('feature-request');
+        }
+
+        // Internationalization
+        if (text.includes('french') || text.includes('translation') || text.includes('translate')) {
+          triage.labels.push('feature-request', 'internationalization');
+          triage.board = 'technical-features';
+        }
+
+        // Positive feedback
+        if (data.type === 'general' && (/love|great|awesome|nice|thanks|excellent|well done/).test(text)) {
+          triage.labels.push('positive-feedback');
+          triage.board = 'content-features';
+          triage.archived = true;
+          return triage;
+        }
+
+        // category-based board mapping
+        if (!triage.board) {
+          if (category.includes('founder')) triage.board = 'founder-features';
+          else if (category.includes('mentor')) triage.board = 'mentors-features';
+          else if (category.includes('matchmaking')) triage.board = 'matchmaking-features';
+          else if (category.includes('content')) triage.board = 'content-features';
+          else if (category.includes('subscription')) triage.board = 'subscription-features';
+          else if (category.includes('admin')) triage.board = 'admin-features';
+          else if (category.includes('technical') || category.includes('performance')) triage.board = 'technical-features';
+        }
+
+        // fallback: technical board
+        if (!triage.board) triage.board = 'technical-features';
+
+        return triage;
+      }
+
       if (fbForm) fbForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        // simple submit handling: show success and close
         fbSubmit.disabled = true;
         fbSubmit.textContent = 'Sending...';
+
+        // collect form data
+        const formData = {
+          type: (fbForm.elements['fbType'] && Array.from(fbForm.elements['fbType']).find(i => i.checked) || {}).value || '',
+          category: fbCategory && fbCategory.value || '',
+          categoryOther: fbCategoryOther && fbCategoryOther.value || '',
+          details: fbDetails && fbDetails.value || '',
+          email: document.getElementById('fbEmail') && document.getElementById('fbEmail').value || ''
+        };
+
+        // perform triage
+        const triage = triageFeedback(formData);
+
+        // push to local storage queue
+        try {
+          const key = 'nailab_feedback_queue';
+          const existing = JSON.parse(localStorage.getItem(key) || '[]');
+          const entry = Object.assign({}, formData, { triage: triage, createdAt: new Date().toISOString() });
+          existing.push(entry);
+          localStorage.setItem(key, JSON.stringify(existing));
+        } catch (err) {
+          console.error('Failed to store feedback:', err);
+        }
+
+        // UX: show triage summary briefly before closing
         setTimeout(function () {
           fbSubmit.textContent = 'Submitted';
-          // brief success then close
-          setTimeout(function () { fbSubmit.textContent = 'Submit'; fbSubmit.disabled = false; fbForm.reset(); closeFeedback(); }, 800);
+          const summary = 'Triage: ' + (triage.board || 'technical-features') + ' — labels: ' + (triage.labels.join(', ') || 'none');
+          // temporarily show summary in the submit button
+          setTimeout(function () { fbSubmit.textContent = summary; }, 200);
+          setTimeout(function () { fbSubmit.textContent = 'Submit'; fbSubmit.disabled = false; fbForm.reset(); closeFeedback(); }, 1200);
         }, 600);
       });
 
@@ -294,6 +375,9 @@
       // initial validation state
       validateForm();
     })();
+
+    // NOTE: per-page feedback column injection removed — feedback remains
+    // available only on the dedicated feedback page (feedback.html).
   }
 
   function indentH3Sections(options) {

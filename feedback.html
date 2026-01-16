@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feedback Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="nailabHeader"></div>
+
+  <main class="max-w-4xl mx-auto p-6">
+    <section id="fbFormSection" class="bg-white rounded-lg shadow p-6 mb-6">
+      <h1 class="text-2xl font-bold mb-3">Give your Feedback</h1>
+      <form id="pageFeedbackForm" class="space-y-4" novalidate>
+        <div>
+          <label class="block text-sm font-semibold">Type</label>
+          <div class="mt-2 flex gap-2">
+            <label class="inline-flex items-center px-4 py-2 rounded bg-red-50 text-red-800"><input type="radio" name="fbType" value="bug" class="mr-2">Bug</label>
+            <label class="inline-flex items-center px-4 py-2 rounded bg-emerald-50 text-emerald-800"><input type="radio" name="fbType" value="feature" class="mr-2">Feature</label>
+            <label class="inline-flex items-center px-4 py-2 rounded bg-amber-50 text-amber-800"><input type="radio" name="fbType" value="general" class="mr-2">General</label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Category</label>
+          <select id="pageFbCategory" class="mt-1 w-full rounded border p-2 bg-gray-50">
+            <option value="">Select a category</option>
+            <option>Founder Features</option>
+            <option>Mentor Features</option>
+            <option>Matchmaking Features</option>
+            <option>Content & Resources</option>
+            <option>Subscription & Payments</option>
+            <option>Admin / Dashboard</option>
+            <option>Technical / Performance</option>
+            <option>Other</option>
+          </select>
+          <input id="pageFbCategoryOther" class="mt-2 hidden w-full rounded border p-2 bg-gray-50" type="text" placeholder="Please specify...">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Details</label>
+          <textarea id="pageFbDetails" rows="5" class="mt-1 w-full rounded border p-2 bg-gray-50" required placeholder="Describe the issue or request..."></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Email (optional)</label>
+          <input id="pageFbEmail" type="email" class="mt-1 w-full rounded border p-2 bg-gray-50" placeholder="you@example.com">
+        </div>
+
+        <div class="flex justify-end gap-2">
+          <button type="button" id="pageFbClear" class="px-3 py-2 rounded bg-slate-100">Clear queue</button>
+          <button type="submit" id="pageFbSubmit" class="px-4 py-2 rounded bg-emerald-600 text-white">Submit</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Entry detail modal -->
+    <div id="entryModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" aria-hidden="true">
+      <div role="dialog" aria-modal="true" aria-labelledby="entryModalTitle" aria-describedby="entryModalBody" tabindex="-1" class="max-w-2xl w-full bg-white rounded-xl shadow-2xl ring-1 ring-black/5 overflow-hidden">
+        <div class="flex items-start justify-between p-4 border-b border-slate-100">
+          <div class="flex items-center gap-3">
+            <span id="entryModalTypeBadge" class="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-800">Type</span>
+            <h3 id="entryModalTitle" class="text-lg font-semibold">Feedback detail</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <div id="entryModalTimestamp" class="text-xs text-slate-500"></div>
+            <button id="entryModalClose" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-600 hover:bg-slate-100" aria-label="Close feedback detail">
+              <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l8 8M6 14L14 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="entryModalBody" class="p-4 text-sm text-slate-700 max-h-[60vh] overflow-auto whitespace-pre-wrap"></div>
+        <div id="entryModalMeta" class="p-4 border-t border-slate-100 text-xs text-slate-500 flex flex-col sm:flex-row sm:justify-between gap-2"></div>
+      </div>
+    </div>
+
+    <section id="fbListSection" class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold mb-3">Submitted Feedback</h2>
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-4">
+        <div class="flex items-center gap-2">
+          <label class="text-sm">Type</label>
+          <select id="filterType" class="rounded border p-1 bg-white">
+            <option value="">All</option>
+            <option value="bug">Bug</option>
+            <option value="feature">Feature</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm">Category</label>
+          <select id="filterCategory" class="rounded border p-1 bg-white">
+            <option value="">All</option>
+            <option>Founder Features</option>
+            <option>Mentor Features</option>
+            <option>Matchmaking Features</option>
+            <option>Content & Resources</option>
+            <option>Subscription & Payments</option>
+            <option>Admin / Dashboard</option>
+            <option>Technical / Performance</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <input id="filterSearch" type="search" placeholder="Search details or email" class="rounded border p-1" />
+        </div>
+      </div>
+
+      <div id="fbListEmpty" class="text-sm text-slate-500">No feedback yet.</div>
+      <div class="overflow-x-auto mt-2">
+        <table id="fbTable" class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left text-xs text-slate-600">
+              <th class="p-2">Date</th>
+              <th class="p-2">Type</th>
+              <th class="p-2">Category</th>
+              <th class="p-2">Details</th>
+              <th class="p-2">Labels</th>
+              <th class="p-2">Email</th>
+            </tr>
+          </thead>
+          <tbody id="fbTableBody" class="divide-y"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/shared.js"></script>
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.NailabShared && typeof window.NailabShared.renderHeader === 'function') {
+          window.NailabShared.renderHeader();
+        }
+
+        const form = document.getElementById('pageFeedbackForm');
+        const submitBtn = document.getElementById('pageFbSubmit');
+        const clearBtn = document.getElementById('pageFbClear');
+        const category = document.getElementById('pageFbCategory');
+        const categoryOther = document.getElementById('pageFbCategoryOther');
+        const details = document.getElementById('pageFbDetails');
+        const email = document.getElementById('pageFbEmail');
+        const list = document.getElementById('fbList');
+        const empty = document.getElementById('fbListEmpty');
+        const filterType = document.getElementById('filterType');
+        const filterCategory = document.getElementById('filterCategory');
+        const filterSearch = document.getElementById('filterSearch');
+        const tableBody = document.getElementById('fbTableBody');
+
+        function triageFeedback(data) {
+          const text = (data.details || '').toLowerCase();
+          const cat = (data.category || '').toLowerCase();
+          const triage = { labels: [], board: null, priority: 'normal' };
+          if (data.type === 'bug') {
+            if ((text.includes('crash') || text.includes('error') || text.includes('exception') || text.includes('not working')) && (cat.includes('founder') || text.includes('founder') || text.includes('dashboard'))) {
+              triage.board = 'founder-features';
+              triage.labels.push('bug', 'high-priority');
+              triage.priority = 'high';
+              return triage;
+            }
+            triage.labels.push('bug');
+          }
+          if (data.type === 'feature') triage.labels.push('feature-request');
+          if (text.includes('french') || text.includes('translation') || text.includes('translate')) {
+            triage.labels.push('feature-request', 'internationalization');
+            triage.board = 'technical-features';
+          }
+          if (data.type === 'general' && (/love|great|awesome|nice|thanks|excellent|well done/).test(text)) {
+            triage.labels.push('positive-feedback');
+            triage.board = 'content-features';
+            triage.archived = true;
+            return triage;
+          }
+          if (!triage.board) {
+            if (cat.includes('founder')) triage.board = 'founder-features';
+            else if (cat.includes('mentor')) triage.board = 'mentors-features';
+            else if (cat.includes('matchmaking')) triage.board = 'matchmaking-features';
+            else if (cat.includes('content')) triage.board = 'content-features';
+            else if (cat.includes('subscription')) triage.board = 'subscription-features';
+            else if (cat.includes('admin')) triage.board = 'admin-features';
+            else if (cat.includes('technical') || cat.includes('performance')) triage.board = 'technical-features';
+          }
+          if (!triage.board) triage.board = 'technical-features';
+          return triage;
+        }
+
+        function renderList() {
+          tableBody.innerHTML = '';
+          const items = JSON.parse(localStorage.getItem('nailab_feedback_queue') || '[]');
+          if (!items.length) {
+            empty.style.display = '';
+            return;
+          }
+          empty.style.display = 'none';
+
+          // apply filters
+          const typeFilter = (filterType && filterType.value) || '';
+          const catFilter = (filterCategory && filterCategory.value) || '';
+          const search = (filterSearch && filterSearch.value || '').toLowerCase().trim();
+
+          const filtered = items
+            .slice()
+            .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .filter(it => {
+              if (typeFilter && it.type !== typeFilter) return false;
+              if (catFilter && (it.category || '') !== catFilter) return false;
+              if (search) {
+                const hay = ((it.details||'') + ' ' + (it.email||'') + ' ' + (it.category||'') + ' ' + (it.type||'')).toLowerCase();
+                if (!hay.includes(search)) return false;
+              }
+              return true;
+            });
+
+          if (!filtered.length) {
+            empty.style.display = '';
+            return;
+          }
+          empty.style.display = 'none';
+
+            filtered.forEach(it => {
+            const tr = document.createElement('tr');
+            // color-code row by type
+            let rowClass = 'bg-white';
+            if ((it.type || '').toLowerCase() === 'bug') rowClass = 'bg-red-50 border-l-4 border-red-300';
+            else if ((it.type || '').toLowerCase() === 'feature') rowClass = 'bg-emerald-50 border-l-4 border-emerald-300';
+            else if ((it.type || '').toLowerCase() === 'general') rowClass = 'bg-amber-50 border-l-4 border-amber-300';
+            tr.className = rowClass;
+            const date = new Date(it.createdAt).toLocaleString();
+            const labels = (it.triage && it.triage.labels && it.triage.labels.join(', ')) || 'none';
+            tr.innerHTML = '<td class="p-2 align-top text-xs text-slate-600">' + date + '</td>' +
+              '<td class="p-2 align-top"><span class="px-2 py-1 rounded text-xs bg-white/0">' + (it.type || '') + '</span></td>' +
+              '<td class="p-2 align-top text-sm">' + (it.category || '') + '</td>' +
+              '<td class="p-2 align-top whitespace-pre-wrap">' + (it.details || '') + '</td>' +
+              '<td class="p-2 align-top text-xs text-slate-600">' + labels + '</td>' +
+              '<td class="p-2 align-top text-xs">' + (it.email || '') + '</td>';
+            // make row clickable to open detail modal / link
+            tr.style.cursor = 'pointer';
+            tr.addEventListener('click', function () {
+              // set hash to allow deep-linking
+              location.hash = encodeURIComponent(it.createdAt);
+              openEntryModal(it);
+            });
+            tableBody.appendChild(tr);
+          });
+        }
+
+        category.addEventListener('change', function () {
+          if (category.value === 'Other') categoryOther.classList.remove('hidden'); else categoryOther.classList.add('hidden');
+        });
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const type = (Array.from(form.elements['fbType']).find(i => i.checked) || {}).value || '';
+          const cat = category.value || '';
+          const catOtherVal = categoryOther.value || '';
+          const payload = {
+            type: type,
+            category: cat === 'Other' ? catOtherVal || 'Other' : cat,
+            details: details.value || '',
+            email: email.value || ''
+          };
+          const triage = triageFeedback(payload);
+          try {
+            const key = 'nailab_feedback_queue';
+            const existing = JSON.parse(localStorage.getItem(key) || '[]');
+            existing.push(Object.assign({}, payload, { triage: triage, createdAt: new Date().toISOString() }));
+            localStorage.setItem(key, JSON.stringify(existing));
+          } catch (err) {
+            console.error('Failed to store feedback', err);
+            alert('Failed to save feedback locally');
+            return;
+          }
+          form.reset();
+          renderList();
+          // scroll to list
+          document.getElementById('fbListSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        clearBtn.addEventListener('click', function () {
+          if (!confirm('Clear all stored feedback?')) return;
+          localStorage.removeItem('nailab_feedback_queue');
+          renderList();
+        });
+
+        // filter listeners
+        if (filterType) filterType.addEventListener('change', renderList);
+        if (filterCategory) filterCategory.addEventListener('change', renderList);
+        if (filterSearch) filterSearch.addEventListener('input', renderList);
+
+        renderList();
+        // entry modal helpers
+        const entryModal = document.getElementById('entryModal');
+        const entryModalBody = document.getElementById('entryModalBody');
+        const entryModalMeta = document.getElementById('entryModalMeta');
+        const entryModalClose = document.getElementById('entryModalClose');
+
+        const entryModalTypeBadge = document.getElementById('entryModalTypeBadge');
+        const entryModalTimestamp = document.getElementById('entryModalTimestamp');
+
+        function openEntryModal(entry) {
+          if (!entry) return;
+          // populate body
+          entryModalBody.textContent = entry.details || '';
+
+          // set header/type badge and timestamp
+          if (entryModalTypeBadge) {
+            const t = (entry.type || '').toLowerCase();
+            entryModalTypeBadge.textContent = (entry.type || '').toUpperCase();
+            entryModalTypeBadge.className = 'inline-flex items-center px-2 py-1 rounded text-xs font-semibold';
+            if (t === 'bug') entryModalTypeBadge.classList.add('bg-red-100', 'text-red-800');
+            else if (t === 'feature') entryModalTypeBadge.classList.add('bg-emerald-100', 'text-emerald-800');
+            else entryModalTypeBadge.classList.add('bg-amber-100', 'text-amber-800');
+          }
+          if (entryModalTimestamp) entryModalTimestamp.textContent = new Date(entry.createdAt).toLocaleString();
+
+          // set dialog title: prefer explicit `title` if present, otherwise derive from details
+          try {
+            const titleEl = document.getElementById('entryModalTitle');
+            let titleText = '';
+            if (entry.title && String(entry.title).trim()) {
+              titleText = String(entry.title).trim();
+            } else if (entry.details && String(entry.details).trim()) {
+              // take the first non-empty line
+              const firstLine = String(entry.details).split(/\r?\n/).map(s => s.trim()).find(s => s.length > 0) || '';
+              titleText = firstLine || String(entry.details).trim();
+            }
+            if (titleText) {
+              // truncate to reasonable length
+              const max = 100;
+              if (titleText.length > max) titleText = titleText.slice(0, max).trim() + '…';
+              if (titleEl) titleEl.textContent = titleText;
+            } else {
+              if (titleEl) titleEl.textContent = 'Feedback detail';
+            }
+          } catch (e) {
+            /* ignore */
+          }
+
+          // details meta
+          entryModalMeta.innerHTML = '<div><strong>Category:</strong> ' + (entry.category || '') + '</div>' +
+            (entry.email ? '<div><strong>Email:</strong> ' + entry.email + '</div>' : '');
+
+          // show modal and focus
+          entryModal.classList.remove('hidden');
+          entryModal.setAttribute('aria-hidden', 'false');
+          const dialog = entryModal.querySelector('[role="dialog"]');
+          if (dialog) dialog.focus();
+        }
+
+        function closeEntryModal() {
+          if (!entryModal) return;
+          entryModal.classList.add('hidden');
+          entryModal.setAttribute('aria-hidden', 'true');
+          // clear hash so deep-link state is removed
+          try { history.replaceState(null, '', location.pathname + (location.search || '')); } catch (e) {}
+        }
+        if (entryModalClose) entryModalClose.addEventListener('click', closeEntryModal);
+        window.addEventListener('hashchange', function () {
+          const id = decodeURIComponent(location.hash.slice(1) || '');
+          if (!id) return;
+          const items = JSON.parse(localStorage.getItem('nailab_feedback_queue') || '[]');
+          const found = items.find(x => x.createdAt === id);
+          if (found) openEntryModal(found);
+        });
+        // open modal if page loaded with hash
+        (function openHashIfPresent() {
+          const id = decodeURIComponent(location.hash.slice(1) || '');
+          if (!id) return;
+          const items = JSON.parse(localStorage.getItem('nailab_feedback_queue') || '[]');
+          const found = items.find(x => x.createdAt === id);
+          if (found) openEntryModal(found);
+        })();
+      });
+    })();
+  </script>
+</body>
+</html>
