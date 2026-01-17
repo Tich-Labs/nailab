@@ -1,7 +1,8 @@
 
 class MentorOnboardingController < ApplicationController
-  before_action :ensure_mentor_role, if: :current_user
-  before_action :load_profile, if: :current_user
+  before_action :ensure_signed_in
+  before_action :ensure_mentor_role
+  before_action :load_profile
 
   STEPS = %w[basic_details work_experience mentorship_focus mentorship_style availability review]
 
@@ -19,26 +20,16 @@ class MentorOnboardingController < ApplicationController
 
     if service_result.success?
       if service_result.completed?
-        # Completed flow: enqueue side-effects (only when completed and actor exists)
-        if current_user
-          payload = service_result.respond_to?(:changed_models) ? service_result.changed_models : {}
-          Notifications::OnboardingNotifier.notify_user_on_completion(user: current_user, role: :mentors, payload: payload)
-          Notifications::OnboardingNotifier.notify_admin_of_submission(user: current_user, role: :mentors, payload: payload)
-          if defined?(Analytics::Tracker)
-            Analytics::Tracker.track(event: "onboarding_completed", user_id: current_user.id, role: "mentor", payload: payload)
-          else
-            Rails.logger.info("[MentorOnboarding] onboarding_completed user=#{current_user.id} role=mentor")
-          end
+        payload = service_result.respond_to?(:changed_models) ? service_result.changed_models : {}
+        Notifications::OnboardingNotifier.notify_user_on_completion(user: current_user, role: :mentors, payload: payload)
+        Notifications::OnboardingNotifier.notify_admin_of_submission(user: current_user, role: :mentors, payload: payload)
+        if defined?(Analytics::Tracker)
+          Analytics::Tracker.track(event: "onboarding_completed", user_id: current_user.id, role: "mentor", payload: payload)
+        else
+          Rails.logger.info("[MentorOnboarding] onboarding_completed user=#{current_user.id} role=mentor")
         end
 
-        if current_user
-          redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
-        else
-          # Guest completed onboarding: show a friendly completion page that prompts
-          # the user to create an account. This avoids redirecting guests to auth-protected
-          # mentor areas which render the generic Devise sign-in requirement.
-          redirect_to mentor_onboarding_completed_path
-        end
+        redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
       else
         redirect_to mentor_onboarding_path(step: service_result.next_step)
       end
@@ -87,25 +78,8 @@ class MentorOnboardingController < ApplicationController
       return
     end
 
-    if current_user
-      @profile = current_user.user_profile || current_user.build_user_profile
-      @profile.update(onboarding_step: @step) unless @profile.onboarding_step == @step
-    else
-      # Read guest data from the onboarding session namespace so adapter writes
-      # (which use Onboarding::SessionStore) are visible here.
-      session_store = Onboarding::SessionStore.new(session, namespace: :mentors)
-      profile_data = session_store.to_h || {}
-      @profile = OpenStruct.new(profile_data)
-      def @profile.model_name
-        ActiveModel::Name.new(OpenStruct, nil, "user_profile")
-      end
-      def @profile.to_key; nil; end
-      def @profile.persisted?; false; end
-      def @profile.errors
-        @_errors ||= Hash.new { |h, k| [] }
-      end
-      session[:mentor_onboarding_step] = @step
-    end
+    @profile = current_user.user_profile || current_user.build_user_profile
+    @profile.update(onboarding_step: @step) unless @profile.onboarding_step == @step
 
     @progress = (STEPS.index(@step) + 1).to_f / STEPS.length * 100
   end
@@ -113,7 +87,7 @@ class MentorOnboardingController < ApplicationController
   private
 
   def ensure_mentor_role
-    unless current_user.user_profile&.role == "mentor"
+    unless current_user.mentor?
       redirect_to root_path, alert: "Access denied"
     end
   end
@@ -147,5 +121,11 @@ class MentorOnboardingController < ApplicationController
   def complete_onboarding
     @profile.update(onboarding_completed: true, profile_visibility: true)
     redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
+  end
+
+  def ensure_signed_in
+    return if current_user
+    flash[:alert] = "Please sign in or create an account to continue onboarding."
+    redirect_to new_user_session_path
   end
 end

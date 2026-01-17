@@ -1,5 +1,6 @@
 module Admin
   class SupportTicketsController < ApplicationController
+    include AdminAuthorization
     include AdminLayoutData
     layout "rails_admin/application"
     before_action :set_admin_layout_data, only: [ :index ]
@@ -7,6 +8,7 @@ module Admin
     skip_before_action :verify_authenticity_token, only: [ :reply ]
 
     def index
+      authorize :admin, :manage_support_tickets?
     end
 
     def reply

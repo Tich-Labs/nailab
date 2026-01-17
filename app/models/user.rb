@@ -1,4 +1,12 @@
 class User < ApplicationRecord
+    # Role enumeration for better security and maintainability
+    enum :role, {
+      founder: 0,
+      mentor: 1,
+      partner: 2,
+      admin: 3
+    }, default: :founder
+
     before_validation :set_slug
     validates :slug, presence: true, uniqueness: true
 
@@ -55,6 +63,28 @@ class User < ApplicationRecord
 
   def name
     full_name || email
+  end
+
+  # Role helper methods for better readability
+  def founder?
+    role == "founder"
+  end
+
+  def mentor?
+    role == "mentor"
+  end
+
+  def partner?
+    role == "partner"
+  end
+
+  def admin?
+    role == "admin" || admin == true
+  end
+
+  # Check if user has any elevated privileges
+  def privileged?
+    admin? || mentor?
   end
 
   # Delegate common profile attributes so views can call `user.expertise`,

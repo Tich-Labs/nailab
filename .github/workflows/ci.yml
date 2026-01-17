@@ -1,6 +1,45 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Set up Node (optional for JS tools)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Install Ruby gems
+        run: bundle install --jobs=4 --retry=3
+
+      - name: Build Tailwind CSS (Ruby wrapper)
+        run: bin/rails tailwindcss:build --minify
+
+      - name: Precompile Rails assets
+        run: bin/rails assets:precompile
+
+      - name: Run tests
+        run: bundle exec rails test
+name: CI
+
+on:
   pull_request:
   push:
     branches: [ main ]

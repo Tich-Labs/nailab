@@ -1,16 +1,19 @@
 module Admin
   class UserProfilesController < ApplicationController
-    # Authentication temporarily disabled for admin pages (development)
+    include AdminAuthorization
     before_action :set_profile, only: %i[show approve reject]
 
     def index
-      @profiles = UserProfile.where(profile_approval_status: "pending").order(created_at: :asc)
+      authorize :admin, :manage_user_profiles?
+      @profiles = policy_scope(UserProfile).where(profile_approval_status: "pending").order(created_at: :asc)
     end
 
     def show
+      authorize @profile
     end
 
     def approve
+      authorize @profile, :approve?
       @profile.approve!(actor: current_user)
       redirect_to admin_user_profiles_path, notice: "Profile approved."
     rescue => e
@@ -18,6 +21,7 @@ module Admin
     end
 
     def reject
+      authorize @profile, :reject?
       reason = params[:reason].presence || "No reason provided"
       @profile.reject!(reason: reason, actor: current_user)
       redirect_to admin_user_profiles_path, notice: "Profile rejected."
@@ -30,6 +34,5 @@ module Admin
     def set_profile
       @profile = UserProfile.find(params[:id])
     end
-
   end
 end

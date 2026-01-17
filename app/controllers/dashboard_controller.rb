@@ -3,10 +3,10 @@ class DashboardController < ApplicationController
 
   def show
     @user_profile = current_user.user_profile
-    @startup_profile = current_user.startup_profile if @user_profile&.role == "founder"
-    @mentorship_requests = if @user_profile&.role == "mentor"
+    @startup_profile = current_user.startup_profile if current_user.founder?
+    @mentorship_requests = if current_user.mentor?
       MentorshipRequest.where(mentor_id: current_user.id).order(created_at: :desc)
-    elsif @user_profile&.role == "founder"
+    elsif current_user.founder?
       MentorshipRequest.where(founder_id: current_user.id).order(created_at: :desc)
     else
       []

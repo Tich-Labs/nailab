@@ -127,13 +127,16 @@ class PagesController < ApplicationController
        )
       # Map 'Social Impact Programs' to 'Social Impact' for filtering
       mapped_category = selected_category == "Social Impact Programs" ? "Social Impact" : selected_category
+      # Query by program_type (canonical) or by categories association where present.
       if mapped_category == "Startup Incubation & Acceleration"
         @programs = Program.where(active: true)
-          .where("category ILIKE ? OR category ILIKE ? OR program_type = ?",
-            "%Startup Incubation%", "%Startup Acceleration%", "incubation_acceleration")
+          .where("programs.program_type = ? OR programs.program_type ILIKE ? OR programs.program_type ILIKE ?",
+            "incubation_acceleration", "%incubation%", "%acceleration%")
       else
-        @programs = Program.where(active: true)
-          .where("category = ? OR program_type = ?", mapped_category, mapped_category.parameterize.underscore)
+        slug = mapped_category.parameterize.underscore
+        @programs = Program.left_joins(:categories).where(active: true)
+          .where("programs.program_type = ? OR categories.slug = ? OR categories.name ILIKE ?", slug, slug, "%#{mapped_category}%")
+          .distinct
       end
     else
       @programs = Program.where(active: true)

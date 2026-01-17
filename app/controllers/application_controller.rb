@@ -5,6 +5,7 @@
     rescue NameError
       # AdminDashboardHelper not yet loaded during initialization; helper will be autoloaded when needed
     end
+    include Pundit::Authorization
     before_action :redirect_to_onboarding_if_needed, unless: :devise_controller?
     before_action :store_return_to, if: :devise_controller?
     protect_from_forgery with: :exception
@@ -24,10 +25,10 @@
     end
 
     def onboarding_path_for(user_profile)
-      case user_profile&.role.to_s
-      when "mentor"
+      case user_profile&.role&.to_sym
+      when :mentor
         mentor_onboarding_path
-      when "partner"
+      when :partner
         partner_onboarding_path
       else
         founder_onboarding_path
@@ -55,10 +56,10 @@
       end
 
       session.delete(:user_return_to) || stored_location_for(resource) || begin
-        case resource.user_profile&.role.to_s
-        when "mentor"
+        case resource.user_profile&.role&.to_sym
+        when :mentor
           mentor_root_path
-        when "partner"
+        when :partner
           (defined?(partner_root_path) ? partner_root_path : founder_root_path)
         else
           founder_root_path

@@ -165,6 +165,55 @@ Notes
 rails test
 ```
 
+### Tailwind CSS — chosen approach (Ruby wrapper)
+
+Decision: this project uses the Ruby wrapper `tailwindcss-rails` as the primary Tailwind build tool. This keeps Tailwind integrated with Rails tooling and simplifies local and production builds for Rails-centric deployments. Do not run both the Ruby wrapper and the Node `tailwindcss` CLI to build the same output — pick one to avoid inconsistent generated CSS.
+
+Why this choice:
+- Ease: `bin/rails tailwindcss:build` / `bin/rails tailwindcss:watch` integrate with Rails and are simple to run.
+- Predictability: Rails tasks keep asset builds colocated with `bin/rails assets:precompile`.
+- Simplicity for Rails-only deploys: avoids depending on Node just for Tailwind when you don't need Node plugins.
+
+When to consider switching to Node instead:
+- You depend on Node-only PostCSS/Tailwind plugins or advanced JS toolchain features.
+- You want exact parity with a frontend JS ecosystem build pipeline (e.g. Webpack/Vite).
+
+Local developer workflow (Ruby wrapper):
+```bash
+# install gems
+bundle install
+
+# watch (dev):
+bin/rails tailwindcss:watch
+
+# one-off build (production-mode CSS):
+RAILS_ENV=production bin/rails tailwindcss:build --minify
+
+# then precompile Rails assets
+bin/rails assets:precompile
+```
+
+CI / Production build process (recommended):
+1. `bundle install --without development test` (or your CI bundle command)
+2. Run `bin/rails tailwindcss:build` to generate the CSS into `app/assets/builds/`.
+3. Run `bin/rails assets:precompile` so Rails fingerprints and packages assets for the webserver.
+
+Example CI snippet:
+```bash
+bundle config set --local deployment 'true'
+bundle install --jobs=4 --retry=3
+# Build Tailwind via the Ruby wrapper
+bin/rails tailwindcss:build --minify
+# Precompile Rails assets
+bin/rails assets:precompile
+```
+
+Notes and best practices:
+- Keep `app/assets/builds/application.css` out of source control — generate it in CI or during image build.
+- If you also use Node for JS tools (Cypress, Playwright, bundlers), keep Node deps for those, but do not use the Node Tailwind CLI concurrently to build `application.css`.
+- If you later need Node-only plugins, migrate Tailwind to the Node toolchain and update CI to run `npm ci && npm run build:css`.
+- Troubleshooting: if you see `@apply` or utility errors from the Ruby wrapper, ensure your `tailwind.config.js` and plugin versions are compatible with the wrapper's Tailwind version.
+
 ### Code Quality
 ```bash
 rubocop

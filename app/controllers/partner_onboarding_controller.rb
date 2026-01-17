@@ -1,12 +1,17 @@
 class PartnerOnboardingController < ApplicationController
+  before_action :ensure_signed_in
   STEPS = %w[organization type_and_contact focus_and_collab confirm].freeze
 
   def show
     @step = params[:step] || STEPS.first
     @step_index = STEPS.index(@step) || 0
     @percent_complete = ((@step_index + 1).to_f / STEPS.size * 100).round
-    session_store = Onboarding::SessionStore.new(session, namespace: :partners)
-    @partner_onboarding = OpenStruct.new(session_store.to_h || {})
+    # Signed-in users only: show any persisted partner data if available.
+    @partner_onboarding = if current_user.respond_to?(:partner_profile) && current_user.partner_profile
+      OpenStruct.new(current_user.partner_profile.attributes)
+    else
+      OpenStruct.new({})
+    end
   end
 
   def create
@@ -19,7 +24,7 @@ class PartnerOnboardingController < ApplicationController
     @step = params[:step] || STEPS.first
     step_params = partner_onboarding_params
 
-    service_result = Onboarding::Core.call(actor: nil, role: :partners, step: @step, params: step_params, session: session)
+    service_result = Onboarding::Core.call(actor: current_user, role: :partners, step: @step, params: step_params, session: session)
 
     if service_result.success?
       if service_result.completed?
@@ -39,5 +44,11 @@ class PartnerOnboardingController < ApplicationController
 
   def partner_onboarding_params
     params.fetch(:partner_onboarding, {}).permit(:organization_name, :organization_website, :organization_country, :organization_description, :organization_type, :contact_person, focus_sectors: [], collaboration_areas: [])
+  end
+  
+  def ensure_signed_in
+    return if current_user
+    flash[:alert] = "Please sign in or create an account to continue onboarding."
+    redirect_to new_user_session_path
   end
 end

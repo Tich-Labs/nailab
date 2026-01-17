@@ -2,7 +2,7 @@ require 'rails_helper'
 
 
 RSpec.describe StartupProfile, type: :model do
-  let(:user) { User.create!(email: "test@example.com", password: "password") }
+  let(:user) { User.create!(email: "test@example.com", password: "Password1!") }
   let(:valid_attributes) do
     {
       startup_name: "Test Startup",

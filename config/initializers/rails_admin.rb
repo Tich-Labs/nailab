@@ -19,6 +19,10 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
             admin = controller.try(:current_user)
+            # Authorize admin action
+            policy = Pundit.policy!(admin, @object.class)
+            raise Pundit::NotAuthorizedError unless policy.update?
+
             if @object.respond_to?(:user) && @object.user&.user_profile
               if @object.respond_to?(:active)
                 @object.update!(active: true)
@@ -51,6 +55,10 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
             admin = controller.try(:current_user)
+            # Authorize admin action
+            policy = Pundit.policy!(admin, @object.class)
+            raise Pundit::NotAuthorizedError unless policy.update?
+
             reason = params[:reason].presence || "Rejected by admin"
             if @object.respond_to?(:user) && @object.user&.user_profile
               if @object.respond_to?(:active)
@@ -399,16 +407,16 @@ RailsAdmin.config do |config|
   ### Popular gems integration
 
   ## == Devise ==
-  # config.authenticate_with do
-  #   warden.authenticate! scope: :user
-  # end
-  # config.current_user_method(&:current_user)
+  config.authenticate_with do
+    warden.authenticate! scope: :user
+  end
+  config.current_user_method(&:current_user)
 
   ## == CancanCan ==
   # config.authorize_with :cancancan
 
   ## == Pundit ==
-  # config.authorize_with :pundit
+  config.authorize_with :pundit
 
   # == PaperTrail ==
   # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0

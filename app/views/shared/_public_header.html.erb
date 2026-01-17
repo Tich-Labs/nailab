@@ -41,12 +41,10 @@
       </nav>
       <!-- Right Side Actions -->
       <div class="flex items-center space-x-4">
-        <%# Hide logged-in UI when showing onboarding flows to guests */ %>
-        <% onboarding_paths = ['/founder_onboarding','/mentor_onboarding','/partner_onboarding'] %>
-        <% on_onboarding = onboarding_paths.any? { |p| request.path.start_with?(p) } %>
+        <%# Public header — show signed-in UI when available, otherwise log in link %>
         <% if user_signed_in? %>
           <!-- Logged In State -->
-          <% if current_user.user_profile&.role == 'mentor' %>
+          <% if current_user.mentor? %>
             <%= link_to 'Go to Dashboard', mentor_root_path, class: "bg-nailab-teal text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-nailab-teal transition-colors" %>
           <% else %>
             <%= link_to 'Go to Dashboard', founder_root_path, class: "bg-nailab-teal text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-nailab-teal transition-colors" %>
@@ -68,11 +66,7 @@
               <%= button_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg" %>
             </div>
           </div>
-        <% elsif !on_onboarding %>
-          <!-- Logged Out State -->
-              <%= link_to 'Log in', new_user_session_path, class: "font-semibold text-white px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 bg-nailab-purple" %>
         <% else %>
-          <!-- During onboarding (guest) always show Log in -->
           <%= link_to 'Log in', new_user_session_path, class: "font-semibold text-white px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 bg-nailab-purple" %>
         <% end %>
         <!-- Mobile menu button -->
@@ -92,8 +86,8 @@
             <%= link_to 'Resources', resources_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <%= link_to 'Pricing', pricing_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <%= link_to 'Contact', contact_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
-            <% if user_signed_in? && !on_onboarding %>
-              <%= link_to 'Dashboard', (current_user.user_profile&.role == 'mentor' ? mentor_root_path : founder_root_path), class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
+            <% if user_signed_in? %>
+              <%= link_to 'Dashboard', (current_user.mentor? ? mentor_root_path : founder_root_path), class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
               <%= link_to 'Account Settings', founder_account_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-50" %>
               <%= button_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50" %>
             <% else %>
@@ -105,10 +99,9 @@
     </div>
   </div>
 </header>
-
 <script>
-function toggleDropdown(button) {
-  const menu = button.parentElement.querySelector('.menu');
-  menu.classList.toggle('hidden');
-}
+  function toggleDropdown(button) {
+    const menu = button.parentElement.querySelector('.menu');
+    menu.classList.toggle('hidden');
+  }
 </script>

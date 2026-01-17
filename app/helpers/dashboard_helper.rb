@@ -33,11 +33,11 @@ module DashboardHelper
   # Determine the onboarding path for a user by role
   def next_onboarding_path_for(user)
     profile = user.respond_to?(:user_profile) ? user.user_profile : nil
-    role = profile&.role.to_s
+    role = profile&.role&.to_sym
     case role
-    when "mentor"
+    when :mentor
       respond_to?(:mentor_onboarding_path) ? mentor_onboarding_path : founder_onboarding_path
-    when "partner"
+    when :partner
       respond_to?(:partner_onboarding_path) ? partner_onboarding_path : founder_onboarding_path
     else
       founder_onboarding_path
