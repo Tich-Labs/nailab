@@ -22,23 +22,21 @@ Rails.application.configure do
     # Basic CSP to prevent XSS and code injection. The header value must be
     # a string; returning a Hash (or leaving a Proc object in the header)
     # caused the Proc inspection string to show up as a directive name.
-    "Content-Security-Policy" => lambda {
-      base_csp = [
-        "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
-        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
-        "img-src 'self' data: https:",
-        "font-src 'self'",
-        "connect-src 'self' https://cdn.jsdelivr.net",
-        "frame-ancestors 'none'",
-        "base-uri 'self'",
-        "form-action 'self'",
-        "worker-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
-        "manifest-src 'self'"
-      ].join("; ")
-
-      base_csp
-    }
+    # Evaluate CSP at boot and store as a string to avoid embedding Proc objects
+    # in header values which can appear as "#<Proc:0x...>" in the header.
+    "Content-Security-Policy" => [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
+      "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
+      "img-src 'self' data: https:",
+      "font-src 'self'",
+      "connect-src 'self' https://cdn.jsdelivr.net",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "worker-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
+      "manifest-src 'self'"
+    ].join("; ")
   }
 end
 
