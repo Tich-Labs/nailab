@@ -129,6 +129,13 @@ class Rack::Attack
 end
 
 # Cache mechanism for Rack::Attack (important for performance)
+# Use Redis in production when available (supports `increment`),
+# otherwise fall back to an in-memory store which also supports `increment`.
 unless Rails.env.test?
-  Rack::Attack.cache.store = ActiveSupport::Cache::Store.new
+  if ENV['REDIS_URL'].present?
+    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: ENV['REDIS_URL'])
+  else
+    Rails.logger.warn "Rack::Attack: REDIS_URL not set; using MemoryStore for rate limiting"
+    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+  end
 end
