@@ -18,12 +18,11 @@ Rails.application.configure do
     "X-XSS-Protection" => "1; mode=block",
     # Enables XSS filtering in older browsers (modern browsers rely on CSP)
 
-    # === CONTENT SECURITY POLICY WITH NONCE ===
-    # Basic CSP to prevent XSS and code injection with nonce support
+    # === CONTENT SECURITY POLICY ===
+    # Basic CSP to prevent XSS and code injection. The header value must be
+    # a string; returning a Hash (or leaving a Proc object in the header)
+    # caused the Proc inspection string to show up as a directive name.
     "Content-Security-Policy" => lambda {
-      # Generate a new nonce for each request
-      nonce = SecureRandom.hex(16)
-
       base_csp = [
         "default-src 'self'",
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
@@ -38,14 +37,7 @@ Rails.application.configure do
         "manifest-src 'self'"
       ].join("; ")
 
-      # Set nonce in response header for views to use
-      csp_with_nonce = base_csp.gsub("script-src 'self'", "script-src 'self' 'unsafe-inline' #{nonce}")
-                         .gsub("style-src 'self'", "style-src 'self' 'unsafe-inline' #{nonce}")
-
-      {
-        "Content-Security-Policy" => csp_with_nonce,
-        "X-Content-Security-Policy-Nonce" => nonce
-      }
+      base_csp
     }
   }
 end
