@@ -35,13 +35,7 @@ Rails.application.configure do
         "base-uri 'self'",
         "form-action 'self'",
         "worker-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
-        "manifest-src 'self'",
-        # Add nonce to inline script and style sources
-        "script-src 'self' 'unsafe-inline' #{nonce}",
-        "style-src 'self' 'unsafe-inline' #{nonce}",
-        # Allow specific external domains for assets
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
-        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com"
+        "manifest-src 'self'"
       ].join("; ")
 
       # Set nonce in response header for views to use
