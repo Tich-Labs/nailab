@@ -132,8 +132,8 @@ end
 # Use Redis in production when available (supports `increment`),
 # otherwise fall back to an in-memory store which also supports `increment`.
 unless Rails.env.test?
-  if ENV['REDIS_URL'].present?
-    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: ENV['REDIS_URL'])
+  if ENV["REDIS_URL"].present?
+    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: ENV["REDIS_URL"])
   else
     Rails.logger.warn "Rack::Attack: REDIS_URL not set; using MemoryStore for rate limiting"
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
