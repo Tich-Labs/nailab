@@ -3,21 +3,24 @@
   <div class="max-w-4xl mx-auto px-4 text-center">
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        if (document.querySelector('.swiper')) {
-          new Swiper('.swiper', {
-            loop: true,
-            navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-              el: '.swiper-pagination',
-              clickable: true,
-            },
-            slidesPerView: 1,
-            autoHeight: true,
-          });
-        }
+        var el = document.querySelector('.swiper');
+        if (!el) return;
+        // Avoid double-initialization when other scripts/controllers also initialize Swiper
+        if (el.dataset.swiperInitialized) return;
+        new Swiper(el, {
+          loop: true,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          slidesPerView: 1,
+          autoHeight: true,
+        });
+        el.dataset.swiperInitialized = 'true';
       });
     </script>
     <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-10">Testimonials</h2>
@@ -62,4 +65,3 @@
       </div>
   </div>
 </section>
-s

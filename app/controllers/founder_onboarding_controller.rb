@@ -50,9 +50,6 @@ class FounderOnboardingController < ApplicationController
       else
         redirect_to founder_onboarding_path(step: service_result.next_step)
       end
-      else
-        redirect_to founder_onboarding_path(step: service_result.next_step)
-      end
     else
       # render with errors
       @errors = service_result.errors

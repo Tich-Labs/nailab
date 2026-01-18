@@ -5,7 +5,11 @@ import 'swiper/css';
 export default class extends window.Stimulus.Controller {
   connect() {
     console.log('TestimonialSliderController connected: initializing Swiper');
-    this.swiper = new Swiper(this.element.querySelector('.swiper'), {
+    const el = this.element.querySelector('.swiper');
+    if (!el) return;
+    // If another initializer already set up Swiper, skip to avoid double-init
+    if (el.dataset.swiperInitialized) { console.log('Swiper already initialized, skipping'); return; }
+    this.swiper = new Swiper(el, {
       loop: true,
       navigation: {
         nextEl: this.element.querySelector('.swiper-button-next'),
@@ -24,6 +28,10 @@ export default class extends window.Stimulus.Controller {
     });
   }
   disconnect() {
-    if (this.swiper) this.swiper.destroy();
+    if (this.swiper) {
+      const el = this.element.querySelector('.swiper');
+      this.swiper.destroy();
+      if (el && el.dataset.swiperInitialized) delete el.dataset.swiperInitialized;
+    }
   }
 }

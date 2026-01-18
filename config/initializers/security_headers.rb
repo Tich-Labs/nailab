@@ -18,19 +18,41 @@ Rails.application.configure do
     "X-XSS-Protection" => "1; mode=block",
     # Enables XSS filtering in older browsers (modern browsers rely on CSP)
 
-    # === CONTENT SECURITY POLICY ===
-    # Basic CSP to prevent XSS and code injection
-    "Content-Security-Policy" => [
-      "default-src 'self'",              # Only allow resources from same origin
-      "script-src 'self' 'unsafe-inline'", # Allow inline scripts for Hotwire/Turbo
-      "style-src 'self' 'unsafe-inline'", # Allow inline styles for Tailwind
-      "img-src 'self' data: https:",     # Allow images from same origin and https
-      "font-src 'self'",                # Allow fonts from same origin
-      "connect-src 'self'",              # Only connect to same origin
-      "frame-ancestors 'none'",         # Prevent clickjacking (modern alternative to X-Frame-Options)
-      "base-uri 'self'",                 # Restrict base URI
-      "form-action 'self'"               # Restrict form submissions
-    ].join("; ")
+    # === CONTENT SECURITY POLICY WITH NONCE ===
+    # Basic CSP to prevent XSS and code injection with nonce support
+    "Content-Security-Policy" => lambda {
+      # Generate a new nonce for each request
+      nonce = SecureRandom.hex(16)
+
+      base_csp = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
+        "img-src 'self' data: https:",
+        "font-src 'self'",
+        "connect-src 'self' https://cdn.jsdelivr.net",
+        "frame-ancestors 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "worker-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
+        "manifest-src 'self'",
+        # Add nonce to inline script and style sources
+        "script-src 'self' 'unsafe-inline' #{nonce}",
+        "style-src 'self' 'unsafe-inline' #{nonce}",
+        # Allow specific external domains for assets
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com"
+      ].join("; ")
+
+      # Set nonce in response header for views to use
+      csp_with_nonce = base_csp.gsub("script-src 'self'", "script-src 'self' 'unsafe-inline' #{nonce}")
+                         .gsub("style-src 'self'", "style-src 'self' 'unsafe-inline' #{nonce}")
+
+      {
+        "Content-Security-Policy" => csp_with_nonce,
+        "X-Content-Security-Policy-Nonce" => nonce
+      }
+    }
   }
 end
 
@@ -56,11 +78,11 @@ if Rails.env.development?
     # Relax CSP in development for debugging
     config.action_dispatch.default_headers["Content-Security-Policy"] = [
       "default-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+      "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
       "img-src 'self' data: http: https:",
       "font-src 'self'",
-      "connect-src 'self' ws: wss:",
+      "connect-src 'self' https://cdn.jsdelivr.net ws: wss:",
       "frame-ancestors 'none'"
     ].join("; ")
   end

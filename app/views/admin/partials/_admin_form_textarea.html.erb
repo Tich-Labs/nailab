@@ -1,5 +1,0 @@
-<div class="mb-3">
-  <%# locals: name, value, label_text, placeholder, rows %>
-  <%= label_tag local_assigns[:name], (local_assigns[:label_text] || ''), class: 'block font-medium text-black' %>
-  <%= text_area_tag local_assigns[:name], (local_assigns[:value] || ''), rows: (local_assigns[:rows] || 4), placeholder: (local_assigns[:placeholder] || ''), class: 'w-full form-input admin-form-input bg-white border border-gray-200 shadow-sm rounded-md px-3 py-2' %>
-</div>

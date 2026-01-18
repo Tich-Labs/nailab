@@ -64,10 +64,10 @@ group :development, :test do
   gem "selenium-webdriver"
 end
 
-group :development do
+group :development, :test do
   # Opens emails in-browser at /letter_opener (great for Devise confirmations)
   gem "letter_opener_web"
-
+  gem "factory_bot_rails"
   gem "rspec-rails"
 end
 gem "sassc-rails"
