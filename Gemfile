@@ -17,6 +17,7 @@ gem "omniauth" # OAuth authentication framework
 gem "omniauth-linkedin-oauth2" # LinkedIn OAuth2 provider
 gem "omniauth-google-oauth2" # Google OAuth2 provider
 gem "omniauth-rails_csrf_protection" # CSRF protection for OmniAuth
+gem "sendgrid-ruby" # SendGrid email delivery service
 gem "pundit" # Authorization policies
 gem "active_storage_validations" # Validations for ActiveStorage uploads
 gem "rails_admin" # CMS/Admin interface

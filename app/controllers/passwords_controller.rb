@@ -11,4 +11,17 @@ class PasswordsController < Devise::PasswordsController
       respond_with(resource)
     end
   end
+
+  # Enhanced password reset with SendGrid integration
+  def send_reset_instructions_with_sendgrid
+    token, encoded = Devise.token_generator.generate(resource, :reset_password_token)
+
+    # Send password reset email using SendGrid integration
+    resource.send_password_reset_instructions_with_sendgrid(token, encoded)
+
+    Rails.logger.info "Password reset sent via SendGrid to #{resource.email}"
+  rescue => e
+    Rails.logger.error "SendGrid password reset failed: #{e.message}"
+    flash.now[:error] = "Failed to send password reset email. Please try again."
+  end
 end

@@ -88,13 +88,24 @@ class User < ApplicationRecord
   end
 
   # Delegate common profile attributes so views can call `user.expertise`,
-  # `user.bio`, etc., directly. Allow nil to avoid NoMethodError when the
+  # `user.bio`, etc., directly. Allow nil to avoid NoMethodError when
   # profile is not present.
   delegate :organization, :bio, :title, :years_experience, :expertise, :sectors,
            :availability_hours_month, :preferred_mentorship_mode, :rate_per_hour,
            :pro_bono, :mentorship_approach, :motivation, :stage_preference,
            :linkedin_url, :professional_website, :photo,
            to: :user_profile, allow_nil: true
+
+  # Enhanced password reset with SendGrid integration
+  def send_password_reset_instructions_with_sendgrid(token, options = {})
+    token, encoded = Devise.token_generator.generate(self, :reset_password_token)
+
+    Devise::Mailer.send_reset_password_instructions(self, token, encoded).deliver_now
+    Rails.logger.info "Password reset email sent via SendGrid to #{self.email}"
+  rescue => e
+    Rails.logger.error "SendGrid password reset failed: #{e.message}"
+    raise e
+  end
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
