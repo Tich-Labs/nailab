@@ -85,7 +85,16 @@
     # Override ensure_signed_in to prevent method name conflicts
     def ensure_signed_in
       return if user_signed_in?
-      flash[:alert] = "Please sign in or create an account to continue."
+
+      # Different messages based on the current path
+      if request.path.include?("/founder")
+        flash[:alert] = "Please sign in to access founder features."
+      elsif request.path.include?("/mentor")
+        flash[:alert] = "Please sign in to access mentor features."
+      else
+        flash[:alert] = "Please sign in or create an account to continue."
+      end
+
       redirect_to new_user_session_path
     end
   end
