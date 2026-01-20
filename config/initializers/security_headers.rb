@@ -7,21 +7,21 @@ Rails.application.configure do
   # Basic security headers that apply to all environments
   config.action_dispatch.default_headers = {
     # === CLICKJACKING PROTECTION ===
-    "X-Frame-Options" => "DENY",
     # Prevents your site from being embedded in iframes by malicious sites
+    "X-Frame-Options" => "DENY",
 
     # === MIME SNIFFING PROTECTION ===
-    "X-Content-Type-Options" => "nosniff",
     # Prevents browsers from trying to guess file types
+    "X-Content-Type-Options" => "nosniff",
 
     # === XSS PROTECTION ===
-    "X-XSS-Protection" => "1; mode=block",
     # Enables XSS filtering in older browsers (modern browsers rely on CSP)
+    "X-XSS-Protection" => "1; mode=block",
 
     # === CONTENT SECURITY POLICY ===
     # Basic CSP to prevent XSS and code injection. The header value must be
     # a string; returning a Hash (or leaving a Proc object in the header)
-    # caused the Proc inspection string to show up as a directive name.
+    # caused to Proc inspection string to show up as a directive name.
     # Evaluate CSP at boot and store as a string to avoid embedding Proc objects
     # in header values which can appear as "#<Proc:0x...>" in the header.
     "Content-Security-Policy" => [
@@ -59,15 +59,15 @@ end
 # Development-specific headers (more permissive for development)
 if Rails.env.development?
   Rails.application.configure do
-    # Relax CSP in development for debugging
+    # Relax CSP in development for debugging and letter_opener
     config.action_dispatch.default_headers["Content-Security-Policy"] = [
       "default-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
-      "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
+      "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
       "img-src 'self' data: http: https:",
       "font-src 'self'",
       "connect-src 'self' https://cdn.jsdelivr.net ws: wss:",
-      "frame-ancestors 'none'"
+      "frame-ancestors 'self'"  # Allow letter_opener iframe in development
     ].join("; ")
   end
 end

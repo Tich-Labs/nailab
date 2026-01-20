@@ -58,6 +58,11 @@ class UserProfile < ApplicationRecord
   validates :availability_hours_month, presence: true, if: -> { role == "mentor" }
   validates :professional_website, format: { with: URI::DEFAULT_PARSER.make_regexp }, allow_blank: true
 
+  # Social media URL validations
+  validates :twitter_url, format: { with: URI::DEFAULT_PARSER.make_regexp }, allow_blank: true
+  validates :other_social_url, format: { with: URI::DEFAULT_PARSER.make_regexp }, allow_blank: true
+  validates :other_social_platform, inclusion: { in: %w[facebook instagram youtube tiktok github website] }, allow_blank: true
+
   # Founder-specific bio requirement: shorter minimum than mentors but still
   # require founders to include a brief bio during onboarding.
   validates :bio, presence: true, length: { minimum: 30, maximum: 1000 }, unless: -> { role == "mentor" }

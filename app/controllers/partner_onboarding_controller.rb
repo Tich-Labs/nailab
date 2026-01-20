@@ -1,5 +1,5 @@
 class PartnerOnboardingController < ApplicationController
-  before_action :ensure_signed_in
+  before_action :authenticate_user!
   STEPS = %w[organization type_and_contact focus_and_collab confirm].freeze
 
   def show
@@ -45,7 +45,7 @@ class PartnerOnboardingController < ApplicationController
   def partner_onboarding_params
     params.fetch(:partner_onboarding, {}).permit(:organization_name, :organization_website, :organization_country, :organization_description, :organization_type, :contact_person, focus_sectors: [], collaboration_areas: [])
   end
-  
+
   def ensure_signed_in
     return if current_user
     flash[:alert] = "Please sign in or create an account to continue onboarding."

@@ -118,14 +118,8 @@ class MentorOnboardingController < ApplicationController
     STEPS[current_index + 1] if current_index && current_index < STEPS.length - 1
   end
 
-  def complete_onboarding
-    @profile.update(onboarding_completed: true, profile_visibility: true)
-    redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
-  end
-
-  def ensure_signed_in
-    return if current_user
-    flash[:alert] = "Please sign in or create an account to continue onboarding."
-    redirect_to new_user_session_path
-  end
+   def complete_onboarding
+     @profile.update(onboarding_completed: true, profile_visibility: true)
+     redirect_to mentor_root_path, notice: "Welcome to Nailab! Your mentor profile has been created successfully."
+   end
 end

@@ -50,9 +50,9 @@ module Onboarding
 
       if merged
         # auto-confirm the user so they can continue in-browser
-        if user.respond_to?(:confirm) && !user.respond_to?(:confirmed?)
+        if user.respond_to?(:confirm!) && !user.confirmed?
           begin
-            user.confirm
+            user.confirm!
           rescue
             # ignore confirm failures in merge
           end

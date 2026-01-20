@@ -17,7 +17,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '8e312fd18abda65d0b087b2b2b972ab2f6251cd66f47e88b50827787ec700d12bb609200a36bbdc1aa39f381b8c2b472504f3ada1de366b9d39080e22a80374f'
+  config.secret_key = ENV.fetch("DEVISE_SECRET_KEY", "b6db751ff08913e8e0f2cc0b659dd64660ca62edf60f8cbd9a295b451f4da1b0")
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -163,7 +163,7 @@ Devise.setup do |config|
   config.reconfirmable = true
 
   # Defines which key will be used when confirming an account
-  # config.confirmation_keys = [:email]
+  config.confirmation_keys = [ :email ]
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
@@ -324,8 +324,18 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  # LinkedIn OAuth is currently disabled.
-  # config.omniauth :linkedin, ENV["LINKEDIN_CLIENT_ID"], ENV["LINKEDIN_CLIENT_SECRET"]
+  # LinkedIn OAuth configuration
+  client_id = ENV["LINKEDIN_CLIENT_ID"] || "missing_client_id"
+  client_secret = ENV["LINKEDIN_CLIENT_SECRET"] || "missing_client_secret"
+
+  Rails.logger.info "LinkedIn OAuth Client ID: #{client_id}"
+  Rails.logger.info "LinkedIn OAuth Client Secret: #{client_secret[0..10]}..."
+
+  config.omniauth :linkedin, client_id, client_secret, {
+    scope: "r_emailaddress r_liteprofile",
+    callback_url: ENV.fetch("LINKEDIN_CALLBACK_URL", "http://localhost:3000/users/auth/linkedin/callback"),
+    secure_image_url: true
+  }
 
   # ==> Configuration for :registerable
 

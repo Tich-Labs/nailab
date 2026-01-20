@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_17_054058) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -585,9 +585,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_17_054058) do
     t.boolean "onboarding_completed", default: false, null: false
     t.string "onboarding_step"
     t.string "organization"
+    t.string "other_social_platform"
+    t.string "other_social_url"
     t.string "phone"
     t.string "photo"
     t.string "photo_url"
+    t.boolean "photo_visibility", default: true, null: false
     t.string "preferred_mentorship_mode"
     t.boolean "pro_bono", default: false, null: false
     t.string "professional_website"
@@ -602,9 +605,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_17_054058) do
     t.jsonb "stage_preference"
     t.string "time_zone"
     t.string "title"
+    t.string "twitter_url"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "years_experience"
+    t.index ["photo_visibility"], name: "index_user_profiles_on_photo_visibility"
     t.index ["profile_approval_status"], name: "index_user_profiles_on_profile_approval_status"
     t.index ["slug"], name: "index_user_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_user_profiles_on_user_id", unique: true

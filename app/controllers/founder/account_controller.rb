@@ -7,13 +7,19 @@ class Founder::AccountController < Founder::BaseController
 
   def update
     user_attrs = params.require(:user).permit(:email, :password, :password_confirmation)
-    profile_attrs = params.require(:user).fetch(:user_profile, {}).permit(:full_name, :bio, :city, :country, :professional_website, :photo)
+    profile_attrs = params.require(:user).fetch(:user_profile, {}).permit(
+      :full_name, :bio, :city, :country, :professional_website, :photo,
+      :photo_visibility, :linkedin_url, :twitter_url, :other_social_url, :other_social_platform
+    )
 
     success = true
     success &= current_user.update(user_attrs) if user_attrs.present?
 
     if profile_attrs.present?
       profile = current_user.user_profile || current_user.build_user_profile
+      # Handle boolean checkbox for photo visibility
+      profile_attrs[:photo_visibility] = true if profile_attrs[:photo_visibility] == "true"
+
       # Handle attached photo separately to ensure ActiveStorage attaches correctly
       photo = profile_attrs.delete(:photo)
       success &= profile.update(profile_attrs)

@@ -81,4 +81,11 @@
         root_path
       end
     end
+
+    # Override ensure_signed_in to prevent method name conflicts
+    def ensure_signed_in
+      return if user_signed_in?
+      flash[:alert] = "Please sign in or create an account to continue."
+      redirect_to new_user_session_path
+    end
   end

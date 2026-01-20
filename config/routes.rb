@@ -50,6 +50,10 @@ Rails.application.routes.draw do
     delete "sign_out", to: "sessions#destroy"
   end
 
+  # Founder onboarding routes
+  get "/founder_onboarding", to: "founder_onboarding#show"
+  patch "/founder_onboarding", to: "founder_onboarding#update"
+
   resources :notifications, only: [ :index ] do
     post :mark_all_read, on: :collection
      post :mark_read, on: :member
@@ -197,6 +201,8 @@ Rails.application.routes.draw do
   get "mentors", to: "pages#mentor_directory"
   get "pricing", to: "pages#pricing"
   get "contact", to: "pages#contact"
+  get "terms", to: "pages#terms"
+  get "privacy", to: "pages#privacy"
 
   get "dashboard", to: redirect("/founder"), constraints: lambda { |req| req.session[:user_id].present? }
   get "profile", to: redirect("/founder/account"), constraints: lambda { |req| req.session[:user_id].present? }
@@ -291,6 +297,9 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/failure", to: "sessions#failure"
 
   get "auth/google_oauth2/callback", to: "google_calendar#callback"
   get "auth/google_oauth2", as: "google_oauth2_auth", to: "google_calendar#connect"

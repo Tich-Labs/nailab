@@ -24,7 +24,7 @@ module Onboarding
         when "startup", "professional", "mentorship"
           startup = actor.startup_profile || actor.build_startup_profile
           # Set onboarding_step so only current step's validations run
-          startup.onboarding_step = step if startup.respond_to?(:onboarding_step=)
+          startup.onboarding_step = step if startup.respond_to?(:onboarding_step)
           success = startup.update(params)
           build_result(success, startup, step)
         when "confirm"
@@ -33,8 +33,8 @@ module Onboarding
           startup = actor.startup_profile || actor.build_startup_profile
 
           # Remove onboarding_step so all validations run
-          profile.onboarding_step = nil if profile.respond_to?(:onboarding_step=)
-          startup.onboarding_step = nil if startup.respond_to?(:onboarding_step=)
+          profile.onboarding_step = nil if profile.respond_to?(:onboarding_step)
+          startup.onboarding_step = nil if startup.respond_to?(:onboarding_step)
 
           valid_profile = profile.valid?
           valid_startup = startup.valid?

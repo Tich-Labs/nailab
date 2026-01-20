@@ -28,17 +28,23 @@
         <textarea name="user[user_profile][bio]" id="user_bio" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"><%= current_user.user_profile&.bio %></textarea>
         <p id="bio-error" class="text-sm text-red-600 mt-1 hidden">Bio must be at least 30 characters.</p>
       </div>
-
-      <div>
-        <label for="user_photo" class="block text-sm font-medium text-gray-700">Photo</label>
-        <input type="file" name="user[user_profile][photo]" id="user_photo" accept="image/*" class="mt-1 block w-full" />
-        <% if current_user.user_profile&.photo&.attached? %>
-          <div class="mt-2">
-            <img src="<%= url_for(current_user.user_profile.photo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Profile photo" class="h-16 w-16 rounded-full object-cover" />
-          </div>
-        <% end %>
+      <div class="space-y-4">
+        <div>
+          <label for="user_photo" class="block text-sm font-medium text-gray-700">Photo</label>
+          <input type="file" name="user[user_profile][photo]" id="user_photo" accept="image/*" class="mt-1 block w-full" />
+          <% if current_user.user_profile&.photo&.attached? %>
+            <div class="mt-2">
+              <img src="<%= url_for(current_user.user_profile.photo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Profile photo" class="h-16 w-16 rounded-full object-cover" />
+            </div>
+          <% end %>
+        </div>
+        <div class="flex items-center">
+          <input type="checkbox" name="user[user_profile][photo_visibility]" id="user_photo_visibility" value="true" <%= current_user.user_profile&.photo_visibility ? 'checked' : '' %> class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+          <label for="user_photo_visibility" class="ml-2 block text-sm text-gray-700">
+            Show photo on public profile
+          </label>
+        </div>
       </div>
-
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="user_city" class="block text-sm font-medium text-gray-700">City</label>
@@ -49,55 +55,115 @@
           <input type="text" name="user[user_profile][country]" id="user_country" value="<%= current_user.user_profile&.country %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
         </div>
       </div>
-
       <div>
         <label for="user_website" class="block text-sm font-medium text-gray-700">Website</label>
         <input type="url" name="user[user_profile][professional_website]" id="user_website" value="<%= current_user.user_profile&.professional_website %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
       </div>
-
-      <div class="flex justify-end space-x-4">
-        <a href="<%= founder_account_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
-        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Update Account</button>
+      <!-- Social Media Section -->
+      <div class="border-t pt-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Social Media Profiles</h3>
+        <div class="space-y-4">
+          <div>
+            <label for="user_linkedin_url" class="block text-sm font-medium text-gray-700">LinkedIn Profile URL</label>
+            <input type="url" name="user[user_profile][linkedin_url]" id="user_linkedin_url" value="<%= current_user.user_profile&.linkedin_url %>" placeholder="https://linkedin.com/in/yourprofile" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          </div>
+          <div>
+            <label for="user_twitter_url" class="block text-sm font-medium text-gray-700">X (Twitter) Profile URL</label>
+            <input type="url" name="user[user_profile][twitter_url]" id="user_twitter_url" value="<%= current_user.user_profile&.twitter_url %>" placeholder="https://x.com/yourhandle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="user_other_social_platform" class="block text-sm font-medium text-gray-700">Other Platform</label>
+              <select name="user[user_profile][other_social_platform]" id="user_other_social_platform" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                <option value="">Select platform (optional)</option>
+                <option value="facebook" <%= current_user.user_profile&.other_social_platform == 'facebook' ? 'selected' : '' %>>Facebook</option>
+                <option value="instagram" <%= current_user.user_profile&.other_social_platform == 'instagram' ? 'selected' : '' %>>Instagram</option>
+                <option value="youtube" <%= current_user.user_profile&.other_social_platform == 'youtube' ? 'selected' : '' %>>YouTube</option>
+                <option value="tiktok" <%= current_user.user_profile&.other_social_platform == 'tiktok' ? 'selected' : '' %>>TikTok</option>
+                <option value="github" <%= current_user.user_profile&.other_social_platform == 'github' ? 'selected' : '' %>>GitHub</option>
+              </select>
+            </div>
+            <div>
+              <label for="user_other_social_url" class="block text-sm font-medium text-gray-700">Other Social URL</label>
+              <input type="url" name="user[user_profile][other_social_url]" id="user_other_social_url" value="<%= current_user.user_profile&.other_social_url %>" placeholder="https://..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+            </div>
       </div>
-    <% end %>
-  </div>
+      
+      <!-- Social Media Section -->
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Social Media Profiles</h3>
+        <div class="space-y-4">
+          <div>
+            <label for="user_linkedin_url" class="block text-sm font-medium text-gray-700">LinkedIn Profile URL</label>
+            <input type="url" name="user[user_profile][linkedin_url]" id="user_linkedin_url" value="<%= current_user.user_profile&.linkedin_url %>" placeholder="https://linkedin.com/in/yourprofile" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          </div>
+          
+          <div>
+            <label for="user_twitter_url" class="block text-sm font-medium text-gray-700">X (Twitter) Profile URL</label>
+            <input type="url" name="user[user_profile][twitter_url]" id="user_twitter_url" value="<%= current_user.user_profile&.twitter_url %>" placeholder="https://x.com/yourhandle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="user_other_social_platform" class="block text-sm font-medium text-gray-700">Other Platform</label>
+              <select name="user[user_profile][other_social_platform]" id="user_other_social_platform" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                <option value="">Select platform (optional)</option>
+                <option value="facebook" <%= current_user.user_profile&.other_social_platform == 'facebook' ? 'selected' : '' %>>Facebook</option>
+                <option value="instagram" <%= current_user.user_profile&.other_social_platform == 'instagram' ? 'selected' : '' %>>Instagram</option>
+                <option value="youtube" <%= current_user.user_profile&.other_social_platform == 'youtube' ? 'selected' : '' %>>YouTube</option>
+                <option value="tiktok" <%= current_user.user_profile&.other_social_platform == 'tiktok' ? 'selected' : '' %>>TikTok</option>
+                <option value="github" <%= current_user.user_profile&.other_social_platform == 'github' ? 'selected' : '' %>>GitHub</option>
+              </select>
+            </div>
+            <div>
+              <label for="user_other_social_url" class="block text-sm font-medium text-gray-700">Other Social URL</label>
+              <input type="url" name="user[user_profile][other_social_url]" id="user_other_social_url" value="<%= current_user.user_profile&.other_social_url %>" placeholder="https://..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+       <div class="flex justify-end space-x-4">
+        <a href="<%= founder_account_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
+                <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Update Account</button>
+              </div>
+            <% end %>
+          </div>
+          <div id="ajax-flash" class="fixed top-6 right-6 z-50"></div>
+        </div>
+      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function(){
+          const form = document.getElementById('founder-account-form');
+          if(!form) return;
+          const bio = document.getElementById('user_bio');
+          const photo = document.getElementById('user_photo');
+          const bioError = document.getElementById('bio-error');
 
-  <div id="ajax-flash" class="fixed top-6 right-6 z-50"></div>
-  </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  const form = document.getElementById('founder-account-form');
-  if(!form) return;
-  const bio = document.getElementById('user_bio');
-  const photo = document.getElementById('user_photo');
-  const bioError = document.getElementById('bio-error');
-
-  form.addEventListener('submit', function(e){
-    let ok = true;
-    if(bio){
-      if(bio.value.trim().length < 30){
-        bioError.classList.remove('hidden');
-        ok = false;
-      } else {
-        bioError.classList.add('hidden');
-      }
-    }
-    if(photo && photo.files && photo.files[0]){
-      const f = photo.files[0];
-      const maxBytes = 5 * 1024 * 1024; // 5MB
-      if(f.size > maxBytes){
-        alert('Photo must be under 5MB');
-        ok = false;
-      }
-      const allowed = ['image/jpeg','image/png','image/webp'];
-      if(!allowed.includes(f.type)){
-        alert('Photo must be JPEG, PNG, or WEBP');
-        ok = false;
-      }
-    }
-    if(!ok) e.preventDefault();
-  });
-});
-</script>
+          form.addEventListener('submit', function(e){
+            let ok = true;
+            if(bio){
+              if(bio.value.trim().length < 30){
+                bioError.classList.remove('hidden');
+                ok = false;
+              } else {
+                bioError.classList.add('hidden');
+              }
+            }
+            if(photo && photo.files && photo.files[0]){
+              const f = photo.files[0];
+              const maxBytes = 5 * 1024 * 1024; // 5MB
+              if(f.size > maxBytes){
+                alert('Photo must be under 5MB');
+                ok = false;
+              }
+              const allowed = ['image/jpeg','image/png','image/webp'];
+              if(!allowed.includes(f.type)){
+                alert('Photo must be JPEG, PNG, or WEBP');
+                ok = false;
+              }
+            }
+            if(!ok) e.preventDefault();
+          });
+        });
+      </script>

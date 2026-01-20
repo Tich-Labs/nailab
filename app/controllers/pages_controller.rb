@@ -387,4 +387,12 @@ class PagesController < ApplicationController
   def default_hero_secondary_cta
     { "label" => "Find a mentor", "link" => "/mentors" }
   end
+
+  def terms
+  render layout: "application"
+  end
+
+  def privacy
+    render layout: "application"
+  end
 end

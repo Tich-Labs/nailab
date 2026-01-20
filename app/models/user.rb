@@ -111,12 +111,26 @@ class User < ApplicationRecord
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
+      user.role = auth.credentials.role if auth.credentials&.role
+
       # Create user profile with LinkedIn data
       user.build_user_profile(
-        full_name: auth.info.name,
+        full_name: auth.info.first_name && auth.info.last_name ? "#{auth.info.first_name} #{auth.info.last_name}" : auth.info.name,
         linkedin_url: auth.info.urls&.public_profile,
-        bio: auth.info.description
+        bio: auth.info.description&.truncate(500),
+        photo_url: auth.info.image
       )
+    end
+  end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.linkedin_data"]
+        user.email = data["info"]["email"] if user.email.blank?
+        user.build_user_profile if user.user_profile.blank?
+        user.user_profile.full_name = "#{data['info']['first_name']} #{data['info']['last_name']}" if user.user_profile.full_name.blank?
+        user.user_profile.linkedin_url = data["info"]["urls"]["public_profile"] if data["info"]["urls"]
+      end
     end
   end
 
