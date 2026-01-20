@@ -61,16 +61,13 @@ class RegistrationsController < Devise::RegistrationsController
       end
 
       # If onboarding data existed, auto-confirm mentors/partners and sign them in.
-      # Founders should NOT be auto-confirmed — they must wait for approval email.
-      if ms.to_h.present? || ps.to_h.present?
-        if user.respond_to?(:confirm)
-          user.confirm
-        elsif user.respond_to?(:confirmed_at)
-          user.update(confirmed_at: Time.current)
+        # Founders should NOT be auto-confirmed — they must wait for approval email.
+        if ms.to_h.present? || ps.to_h.present?
+          flash[:notice] = "Welcome to Nailab! 🎉 Your founder account has been created successfully. Please check your email for confirmation and next steps to complete your profile setup."
         end
         # Sign in the user (bypass Devise confirmable gate if we just confirmed)
         sign_in(resource_name, user) unless user_signed_in?
-      elsif fs.to_h.present?
+        elsif fs.to_h.present?
         # Founders: leave unconfirmed in production and show a pending notice
         flash[:notice] = "Thanks for signing up. We'll review your application and send an approval email shortly."
       end
@@ -91,8 +88,7 @@ class RegistrationsController < Devise::RegistrationsController
         link = Rails.application.routes.url_helpers.dev_confirm_email_path(raw)
         flash.now[:notice] = "Dev confirmation link: <a href='#{link}'>Confirm email</a>".html_safe
         Rails.logger.info("Dev confirmation link for user=#{user.email}: #{link}")
-      end
-    end
+       end
   end
 
   # Page shown to users whose sign up is pending manual approval/confirmation
@@ -119,7 +115,6 @@ class RegistrationsController < Devise::RegistrationsController
     when :founder
       founder_onboarding_path
     else
-      root_path
+       root_path
     end
-  end
 end
