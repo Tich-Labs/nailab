@@ -3,29 +3,27 @@
     <h2 class="text-2xl font-bold text-gray-900">Metrics Dashboard</h2>
     <%= link_to "Submit New Update", new_founder_monthly_metric_path, class: "bg-nailab-teal text-white font-bold py-2 px-4 rounded-lg" %>
   </div>
-
   <% if @latest_metric %>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl p-6">
+      <div class="bg-purple-100 rounded-xl p-6 shadow-lg">
         <h3 class="text-sm font-medium text-gray-600">MRR</h3>
         <p class="text-3xl font-bold text-gray-900 mt-1"><%= number_to_currency(@latest_metric.mrr) %></p>
       </div>
-      <div class="bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl p-6">
+      <div class="bg-purple-100 rounded-xl p-6 shadow-lg">
         <h3 class="text-sm font-medium text-gray-600">Runway</h3>
         <p class="text-3xl font-bold mt-1 <%= @latest_metric.runway_in_months < 3 ? 'text-red-600' : 'text-green-600' %>">
           <%= number_with_precision(@latest_metric.runway_in_months, precision: 1) %> months
         </p>
       </div>
-      <div class="bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl p-6">
+      <div class="bg-purple-100 rounded-xl p-6 shadow-lg">
         <h3 class="text-sm font-medium text-gray-600">New Customers</h3>
         <p class="text-3xl font-bold text-gray-900 mt-1"><%= @latest_metric.new_paying_customers %></p>
       </div>
-      <div class="bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl p-6">
+      <div class="bg-purple-100 rounded-xl p-6 shadow-lg">
         <h3 class="text-sm font-medium text-gray-600">Churn</h3>
         <p class="text-3xl font-bold text-gray-900 mt-1"><%= @latest_metric.churned_customers %></p>
       </div>
     </div>
-
     <div class="space-y-8">
       <div>
         <h3 class="text-lg font-semibold text-gray-900 mb-4">MRR Trend</h3>

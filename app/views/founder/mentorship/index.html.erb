@@ -17,9 +17,9 @@
               </svg>
             </button>
           </div>
-          <div class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg">
+          <div class="mb-4 p-4 bg-purple-100 rounded-lg">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-nailab-teal rounded-full flex items-center justify-center">
+              <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
                 <span class="text-white font-bold"><%= @selected_mentor.name.first %></span>
               </div>
               <div>
@@ -46,15 +46,15 @@
   <!-- Available Mentors -->
   <div class="lg:col-span-2">
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
+      <div class="bg-purple-600 px-8 py-6">
         <h2 class="text-2xl font-bold text-white">Available Mentors</h2>
       </div>
       <div class="p-8">
         <div class="space-y-6">
           <% @mentors.each do |mentor| %>
-            <div class="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl hover:from-purple-100 hover:to-teal-100 transition-all">
+            <div class="flex items-center justify-between p-6 bg-purple-100 rounded-xl hover:bg-purple-200 transition-all">
               <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-nailab-teal rounded-full flex items-center justify-center">
+                <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center">
                   <span class="text-white font-bold text-xl"><%= mentor.name.first %></span>
                 </div>
                 <div>
@@ -92,13 +92,13 @@
   <div class="space-y-8">
     <!-- My Requests -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-8 py-6">
+      <div class="bg-purple-600 px-8 py-6">
         <h3 class="text-2xl font-bold text-white">My Requests</h3>
       </div>
       <div class="p-8">
         <div class="space-y-4">
           <% @mentorship_requests.each do |request| %>
-            <div class="p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+            <div class="p-4 bg-purple-100 rounded-xl">
               <p class="font-semibold text-gray-900"><%= request.mentor&.name || 'Unknown Mentor' %></p>
               <p class="text-sm text-gray-600"><%= request.status.titleize %></p>
             </div>
@@ -118,13 +118,13 @@
     </div>
     <!-- Upcoming Sessions -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
+      <div class="bg-purple-600 px-8 py-6">
         <h3 class="text-2xl font-bold text-white">Upcoming Sessions</h3>
       </div>
       <div class="p-8">
         <div class="space-y-4">
           <% @sessions.each do |session| %>
-            <div class="p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+            <div class="p-4 bg-purple-100 rounded-xl">
               <p class="font-semibold text-gray-900"><%= session.mentor.name %></p>
               <p class="text-sm text-gray-600 mb-3"><%= session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %></p>
               <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal transition-all" %>

@@ -2,7 +2,6 @@
   <% if @monthly_metric.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-700 border border-red-200 rounded-lg p-4">
       <h2 class="text-lg font-bold mb-2"><%= pluralize(@monthly_metric.errors.count, "error") %> prohibited this monthly metric from being saved:</h2>
-
       <ul class="list-disc list-inside">
         <% @monthly_metric.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -10,14 +9,12 @@
       </ul>
     </div>
   <% end %>
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
       <%= form.label :period, class: "block text-sm font-medium text-gray-700" %>
       <%= form.date_select :period, { order: [:month, :year], start_year: Date.current.year - 5, end_year: Date.current.year }, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
     </div>
   </div>
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
       <%= form.label :mrr, 'Monthly Recurring Revenue (MRR)', class: "block text-sm font-medium text-gray-700" %>
@@ -28,7 +25,6 @@
       <%= form.number_field :cash_at_hand, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
     </div>
   </div>
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
       <%= form.label :new_paying_customers, class: "block text-sm font-medium text-gray-700" %>
@@ -39,17 +35,14 @@
       <%= form.number_field :churned_customers, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
     </div>
   </div>
-  
   <div class="space-y-2">
     <%= form.label :burn_rate, 'Monthly Burn Rate', class: "block text-sm font-medium text-gray-700" %>
     <%= form.number_field :burn_rate, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
   </div>
-
   <div class="space-y-2">
     <%= form.label :product_progress, class: "block text-sm font-medium text-gray-700" %>
     <%= form.text_area :product_progress, rows: 4, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
   </div>
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
       <%= form.label :funding_stage, class: "block text-sm font-medium text-gray-700" %>
@@ -60,13 +53,11 @@
       <%= form.number_field :funds_raised, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
     </div>
   </div>
-
   <div class="space-y-2">
     <%= form.label :investors_engaged, 'Investors Engaged (Names)', class: "block text-sm font-medium text-gray-700" %>
     <%= form.text_area :investors_engaged, rows: 2, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
   </div>
-
   <div class="flex justify-end">
-    <%= form.submit class: "bg-nailab-teal text-white font-bold py-2 px-6 rounded-lg cursor-pointer" %>
+    <%= form.submit class: "bg-purple-600 text-white font-bold py-2 px-6 rounded-lg cursor-pointer" %>
   </div>
 <% end %>

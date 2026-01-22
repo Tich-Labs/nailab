@@ -5,12 +5,12 @@
     <p class="text-xl text-gray-600">Manage your account information and preferences</p>
   </div>
   <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
+    <div class="bg-purple-600 px-8 py-6">
       <h2 class="text-2xl font-bold text-white">Profile Information</h2>
     </div>
     <div class="p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+        <div class="p-6 bg-purple-100 rounded-xl">
           <div class="flex items-center space-x-3 mb-3">
             <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
               <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -21,7 +21,7 @@
           </div>
           <p class="text-gray-700 text-lg"><%= current_user.user_profile&.full_name || current_user.email %></p>
         </div>
-        <div class="p-6 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+        <div class="p-6 bg-purple-100 rounded-xl">
           <div class="flex items-center space-x-3 mb-3">
             <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
               <svg class="w-5 h-5 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
           </div>
           <p class="text-gray-700 text-lg"><%= current_user.email %></p>
         </div>
-        <div class="p-6 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+        <div class="p-6 bg-purple-100 rounded-xl">
           <div class="flex items-center space-x-3 mb-3">
             <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
               <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
           </div>
           <p class="text-gray-700 text-lg"><%= current_user.user_profile&.role || 'Founder' %></p>
         </div>
-        <div class="p-6 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+        <div class="p-6 bg-purple-100 rounded-xl">
           <div class="flex items-center space-x-3 mb-3">
             <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
               <svg class="w-5 h-5 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

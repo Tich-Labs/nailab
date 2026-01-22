@@ -7,7 +7,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     <% @opportunities.each do |opportunity| %>
       <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
-        <div class="bg-gradient-to-r from-nailab-teal to-purple-600 px-6 py-4">
+        <div class="bg-purple-600 px-6 py-4">
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full"><%= opportunity.opportunity_type %></span>
             <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full <%= opportunity.active ? 'bg-green-500/20 text-green-100' : 'bg-red-500/20 text-red-100' %>">
@@ -18,7 +18,7 @@
         <div class="p-6">
           <h3 class="text-xl font-bold text-gray-900 mb-3"><%= opportunity.title %></h3>
           <p class="text-gray-600 mb-6"><%= opportunity.description %></p>
-          <div class="bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg p-4 mb-6">
+          <div class="bg-purple-100 rounded-lg p-4 mb-6">
             <div class="flex justify-between items-center text-sm mb-2">
               <span class="text-gray-600">Deadline:</span>
               <span class="font-semibold text-gray-900"><%= opportunity.deadline.strftime('%B %d, %Y') %></span>

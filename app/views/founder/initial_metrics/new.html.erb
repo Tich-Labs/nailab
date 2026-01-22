@@ -3,13 +3,11 @@
     <h1 class="text-3xl font-bold text-gray-900">Welcome to Your Dashboard!</h1>
     <p class="mt-2 text-lg text-gray-600">To get started, please provide your key metrics for the last three months.</p>
   </div>
-
   <%= form_with(url: founder_initial_metrics_path, method: :post, class: "mt-12 space-y-12") do |form| %>
     <% @monthly_metrics.each_with_index do |metric, index| %>
       <%= fields_for "monthly_metrics[]", metric do |ff| %>
         <div class="bg-white rounded-xl shadow-lg p-8">
           <h2 class="text-2xl font-bold text-gray-900 mb-6"><%= metric.period.strftime("%B %Y") %></h2>
-
           <% if metric.errors.any? %>
             <div id="error_explanation" class="bg-red-50 text-red-700 border border-red-200 rounded-lg p-4 mb-6">
               <h3 class="text-lg font-bold mb-2"><%= pluralize(metric.errors.count, "error") %> prohibited this entry from being saved:</h3>
@@ -20,9 +18,7 @@
               </ul>
             </div>
           <% end %>
-
           <%= ff.hidden_field :period %>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
               <%= ff.label :mrr, 'Monthly Recurring Revenue (MRR)', class: "block text-sm font-medium text-gray-700" %>
@@ -33,7 +29,6 @@
               <%= ff.number_field :cash_at_hand, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
             </div>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div class="space-y-2">
               <%= ff.label :new_paying_customers, class: "block text-sm font-medium text-gray-700" %>
@@ -44,7 +39,6 @@
               <%= ff.number_field :churned_customers, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
             </div>
           </div>
-
           <div class="mt-6">
             <%= ff.label :burn_rate, 'Monthly Burn Rate', class: "block text-sm font-medium text-gray-700" %>
             <%= ff.number_field :burn_rate, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-nailab-teal focus:ring-nailab-teal" %>
@@ -52,9 +46,8 @@
         </div>
       <% end %>
     <% end %>
-
     <div class="flex justify-center pt-8">
-      <%= form.submit "Submit All Metrics", class: "bg-nailab-teal text-white font-bold py-3 px-8 rounded-lg cursor-pointer text-lg" %>
+      <%= form.submit "Submit All Metrics", class: "bg-purple-600 text-white font-bold py-3 px-8 rounded-lg cursor-pointer text-lg" %>
     </div>
   <% end %>
 </div>
