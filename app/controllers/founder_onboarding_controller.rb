@@ -18,6 +18,7 @@ class FounderOnboardingController < ApplicationController
     when "startup" then startup_params
     when "professional" then professional_params
     when "mentorship" then mentorship_params
+    when "confirm" then {}
     else {}
     end
 
@@ -103,7 +104,7 @@ class FounderOnboardingController < ApplicationController
   end
 
   def mentorship_params
-    params.require(:founder_onboarding).require(:startup_profile).permit(:mentorship_areas, :challenge_details, :preferred_mentorship_mode)
+    params.require(:founder_onboarding).require(:startup_profile).permit(:challenge_details, :preferred_mentorship_mode, mentorship_areas: [])
   end
 
   def prepare_profiles

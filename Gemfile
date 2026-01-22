@@ -23,6 +23,8 @@ gem "active_storage_validations" # Validations for ActiveStorage uploads
 gem "rails_admin" # CMS/Admin interface
 gem "rack-attack" # Rate limiting and security
 gem "hotwire-rails" # Turbo/Stimulus for interactivity
+gem "chartkick"
+gem "groupdate"
 gem "cssbundling-rails" # TailwindCSS integration
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

@@ -218,6 +218,7 @@ Rails.application.routes.draw do
 
     resource(:startup_profile, only: %i[show edit update])
     resource(:progress, only: %i[show])
+    resource :initial_metrics, path: 'initial-metrics', only: [:new, :create], controller: 'initial_metrics', as: :initial_metrics
     resources(:milestones)
     resources(:monthly_metrics, only: %i[new create edit update index])
 
