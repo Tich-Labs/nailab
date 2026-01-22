@@ -11,8 +11,8 @@
     "tailwindcss": "^3.3.0"
   },
   "scripts": {
-    "build:css": "bin/rails tailwindcss:build",
-    "watch:css": "bin/rails tailwindcss:watch"
+    "build:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --config ./tailwind.config.js --minify",
+    "watch:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --config ./tailwind.config.js --watch"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",

@@ -3,12 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Nailab | Founder Dashboard</title>
+    <title><%= content_for?(:title) ? yield(:title) : 'Nailab | Founder Dashboard' %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      <%= File.read(Rails.root.join('app', 'assets', 'stylesheets', 'tailwind.css')).html_safe %>
+    </style>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-    <%= javascript_include_tag 'controllers', type: 'module', 'data-turbo-track': 'reload' %>
+    <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-50 text-gray-900">
     <div class="flex min-h-screen">
