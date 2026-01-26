@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="nailab_founder">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= content_for?(:title) ? yield(:title) : 'Nailab | Founder Dashboard' %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= tag.link rel: 'stylesheet', href: asset_path('tailwind.css'), media: 'all', data: { turbo_track: 'reload' } %>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <style nonce="<%= content_security_policy_nonce %>">
+      <%= File.read(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')).html_safe %>
+    </style>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-50 text-gray-900" data-theme="nailab_founder">

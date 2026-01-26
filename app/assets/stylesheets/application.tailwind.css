@@ -38,8 +38,8 @@
 		cursor: pointer !important;
 	}
 
-	body[data-theme="nailab_founder"] .btn,
-	body[data-theme="nailab_founder"] .btn-success {
+	[data-theme="nailab_founder"] .btn,
+	[data-theme="nailab_founder"] .btn-success {
 		@apply bg-nailab-purple text-white hover:bg-nailab-purple/90;
 	}
 
@@ -81,3 +81,48 @@
 	.nailab-devise .hover\:bg-purple-700:hover { @apply bg-nailab-purple/90; }
 	.nailab-devise .ring-purple-600 { @apply ring-nailab-purple; }
 }
+
+/* DaisyUI base token fallbacks for the Nailab founder theme
+	 These ensure classes like `bg-base-100` and `text-base-content`
+	 work even if DaisyUI's generated utilities are missing. */
+@layer components {
+	[data-theme="nailab_founder"] {
+		--base-100: #ffffff;
+		--base-200: #f3f4f6;
+		--base-300: #e5e7eb;
+		--base-content: #111827;
+		--primary: #913F98;
+		--secondary: #35C9C9;
+		--accent: #F472B6;
+		--neutral: #1F2937;
+		--info: #38BDF8;
+		--success: #22C55E;
+		--warning: #F59E0B;
+		--error: #EF4444;
+	}
+
+	.bg-base-100 { background-color: var(--base-100); }
+	.bg-base-200 { background-color: var(--base-200); }
+	.bg-base-300 { background-color: var(--base-300); }
+	.text-base-content { color: var(--base-content); }
+}
+
+/* Ensure Bootstrap/.card rules don't override Tailwind/DaisyUI utilities
+	 for the founder theme by scoping higher-specificity fallbacks. */
+@layer components {
+	[data-theme="nailab_founder"] {
+		/* Brand purple card override */
+		.card.bg-nailab-purple {
+			background-color: rgb(145 63 152) !important;
+			color: #ffffff !important;
+		}
+
+		/* Daisy base token cards */
+		.card.bg-base-100 { background-color: var(--base-100) !important; color: var(--base-content) !important; }
+		.card.bg-base-200 { background-color: var(--base-200) !important; color: var(--base-content) !important; }
+		.card.bg-base-300 { background-color: var(--base-300) !important; color: var(--base-content) !important; }
+	}
+	/* Test: Force all bg-nailab-purple to be visible */
+	.bg-nailab-purple {
+		background-color: #913f98 !important;
+	}}
