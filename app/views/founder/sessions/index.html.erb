@@ -1,6 +1,7 @@
 <%# app/views/founder/sessions/index.html.erb %>
-<div class="max-w-6xl mx-auto py-8 px-4">
-  <h1 class="text-3xl font-bold text-gray-900 mb-8">My Sessions</h1>
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-6xl mx-auto py-8 px-4">
+  <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">My Sessions</h1>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @sessions.each do |session| %>
       <div class="bg-white shadow rounded-lg p-6">
@@ -48,4 +49,5 @@
       <%= link_to 'Request a Session', founder_mentorship_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
     </div>
   <% end %>
+</div>
 </div>

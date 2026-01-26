@@ -51,9 +51,10 @@ class RegistrationsController < Devise::RegistrationsController
         Partner.create(ps.to_h) if defined?(Partner)
       end
 
-      # If onboarding data existed, set appropriate flash and sign-in behavior
+      # If onboarding data existed, handle flash and sign-in logic
       if ms.to_h.present? || ps.to_h.present?
-        flash[:notice] = "Welcome to Nailab! Your account has been created. Please check your email for confirmation and next steps."
+        flash[:notice] = "Welcome to Nailab! 🎉 Your founder account has been created successfully. Please check your email for confirmation and next steps to complete your profile setup."
+        # Sign in the user (bypass Devise confirmable gate if we just confirmed)
         sign_in(resource_name, user) unless user_signed_in?
       elsif fs.to_h.present?
         # Founders: leave unconfirmed in production and show a pending notice
@@ -61,6 +62,21 @@ class RegistrationsController < Devise::RegistrationsController
       end
 
       # Clear onboarding session namespaces
+      # If there was a pending invite token (from invite acceptance flow), process it now
+      if session[:pending_invite_token].present?
+        begin
+          invite = StartupInvite.find_by(token: session[:pending_invite_token])
+          if invite && invite.invitee_email.to_s.downcase == user.email.to_s.downcase
+            invite.mark_accepted!(user)
+            Rails.logger.info("Processed pending invite token for user=#{user.email}")
+          end
+        rescue => e
+          Rails.logger.error("Failed to process pending invite token: #{e.message}")
+        ensure
+          session.delete(:pending_invite_token)
+        end
+      end
+
       session.delete(:onboarding_founders)
       session.delete(:onboarding_mentors)
       session.delete(:onboarding_partners)

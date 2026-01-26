@@ -1,0 +1,16 @@
+<p>Hello <%= @invite.invitee_name || @invite.invitee_email %>,</p>
+
+<p><strong><%= @inviter.name %></strong> has invited you to join the startup <strong><%= @startup.name %></strong> on Nailab.</p>
+
+<p>Message from inviter:</p>
+<blockquote>
+  <%= @invite.role.presence || 'Co-founder / team member' %>
+</blockquote>
+
+<p>To accept the invite and join the team, click the link below:</p>
+
+<p><a href="<%= @accept_url %>">Accept Invite</a></p>
+
+<p>If you don't already have an account, you'll be asked to create one.</p>
+
+<p>Thanks,<br/>The Nailab Team</p>

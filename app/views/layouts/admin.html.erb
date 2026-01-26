@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nailab_admin">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= content_for?(:title) ? yield(:title) : 'Nailab' %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : 'Nailab — supporting founders with programs, mentorship, and funding across Africa.' %>" />
+    <%= yield :head %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <style>
+      <%= File.read(Rails.root.join('app', 'assets', 'stylesheets', 'tailwind.css')).html_safe %>
+    </style>
+    <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
+    <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+      <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col items-center justify-center">
+        <!-- Page content here -->
+        <%= render 'shared/dashboard_header' %>
+        <main class="w-full p-8">
+          <%= yield %>
+        </main>
+        <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+        <%= render 'shared/admin_sidebar' %>
+      </div>
+    </div>
+  </body>
+</html>

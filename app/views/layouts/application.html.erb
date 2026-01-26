@@ -26,12 +26,11 @@
   </head>
   <body class="<%= ['bg-white text-gray-900', (devise_controller? ? 'nailab-devise' : nil)].compact.join(' ') %>">
     <%= render 'shared/public_header' %>
-    <div class="page-content">
-      <%= yield %>
-    </div>
-    <% unless request.path == new_user_session_path || request.path == new_user_registration_path || request.path == founder_onboarding_path || request.path.start_with?('/founder') %>
-      <%= render 'shared/footer' %>
-    <% end %>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-  </body>
+    <%= yield %>
+  </div>
+  <% unless request.path == new_user_session_path || request.path == new_user_registration_path || request.path == founder_onboarding_path || request.path.start_with?('/founder') %>
+    <%= render 'shared/footer' %>
+  <% end %>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+</body>
 </html>

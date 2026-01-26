@@ -1,0 +1,30 @@
+<div data-controller="invite-modal" id="invite-modal-root">
+  <div class="modal" data-invite-modal-target="modal" style="display:none">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Invite a co-founder or team member</h3>
+      <div data-invite-modal-target="flash" class="my-2"></div>
+      <form data-invite-modal-target="form" action="<%= founder_startup_invites_path %>" method="post">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= hidden_field_tag :startup_id, (current_user&.startups&.first&.id) %>
+        <div class="grid grid-cols-1 gap-2 mt-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input name="startup_invite[invitee_name]" class="input input-bordered w-full" placeholder="Co-founder name">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input name="startup_invite[invitee_email]" type="email" required class="input input-bordered w-full" placeholder="email@example.com">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Role</label>
+            <input name="startup_invite[role]" class="input input-bordered w-full" placeholder="Co-founder, CTO, COO">
+          </div>
+        </div>
+        <div class="modal-action mt-4">
+          <button type="button" class="btn btn-ghost" data-action="click->invite-modal#close">Cancel</button>
+          <button type="submit" class="btn btn-primary" data-action="invite-modal#submit">Send Invite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

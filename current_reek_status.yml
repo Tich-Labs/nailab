@@ -1,0 +1,334 @@
+---
+- context: Admin::AboutsController#log_our_impact_stats
+  lines:
+  - 185
+  message: is controlled by argument 'section_key'
+  smell_type: ControlParameter
+  source: app/controllers/admin/abouts_controller.rb
+  argument: section_key
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Control-Parameter.md
+- context: Admin::AboutsController#setup_section_defaults
+  lines:
+  - 74
+  message: is controlled by argument 'section_key'
+  smell_type: ControlParameter
+  source: app/controllers/admin/abouts_controller.rb
+  argument: section_key
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Control-Parameter.md
+- context: Admin::AboutsController
+  lines:
+  - 95
+  - 151
+  - 173
+  message: takes parameters ['about', 'section_key', 'stored'] to 3 methods
+  smell_type: DataClump
+  source: app/controllers/admin/abouts_controller.rb
+  parameters:
+  - about
+  - section_key
+  - stored
+  count: 3
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Data-Clump.md
+- context: Admin::AboutsController
+  lines:
+  - 95
+  - 151
+  - 173
+  - 189
+  message: takes parameters ['about', 'stored'] to 4 methods
+  smell_type: DataClump
+  source: app/controllers/admin/abouts_controller.rb
+  parameters:
+  - about
+  - stored
+  count: 4
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Data-Clump.md
+- context: Admin::AboutsController
+  lines:
+  - 164
+  - 168
+  - 173
+  - 195
+  message: takes parameters ['section_key', 'section_params'] to 4 methods
+  smell_type: DataClump
+  source: app/controllers/admin/abouts_controller.rb
+  parameters:
+  - section_key
+  - section_params
+  count: 4
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Data-Clump.md
+- context: Admin::AboutsController
+  lines:
+  - 73
+  - 95
+  - 151
+  - 173
+  - 195
+  message: takes parameters ['section_key', 'stored'] to 5 methods
+  smell_type: DataClump
+  source: app/controllers/admin/abouts_controller.rb
+  parameters:
+  - section_key
+  - stored
+  count: 5
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Data-Clump.md
+- context: Admin::AboutsController
+  lines:
+  - 173
+  - 189
+  - 195
+  message: takes parameters ['section_params', 'stored'] to 3 methods
+  smell_type: DataClump
+  source: app/controllers/admin/abouts_controller.rb
+  parameters:
+  - section_params
+  - stored
+  count: 3
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Data-Clump.md
+- context: Admin::AboutsController#get_section_image_url
+  lines:
+  - 96
+  - 99
+  message: calls 'about.why_nailab_image' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: about.why_nailab_image
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#get_section_image_url
+  lines:
+  - 101
+  - 102
+  message: calls 'stored["#{section_key}_image_url"]' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: stored["#{section_key}_image_url"]
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#handle_image_attachment
+  lines:
+  - 190
+  - 191
+  message: calls 'section_params[:image]' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: section_params[:image]
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#handle_image_url
+  lines:
+  - 196
+  - 197
+  message: calls 'section_params[:image_url]' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: section_params[:image_url]
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#handle_vision_mission_update
+  lines:
+  - 158
+  - 161
+  message: calls 'admin_about_section_edit_path(section_key)' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: admin_about_section_edit_path(section_key)
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#handle_vision_mission_update
+  lines:
+  - 152
+  - 153
+  message: calls 'params.fetch(:section_payload)' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: params.fetch(:section_payload)
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#setup_section_defaults
+  lines:
+  - 81
+  - 85
+  - 88
+  message: calls 'section_content["description"]' 3 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: section_content["description"]
+  count: 3
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#setup_section_defaults
+  lines:
+  - 76
+  - 80
+  - 84
+  - 87
+  message: calls 'section_content["title"]' 4 times
+  smell_type: DuplicateMethodCall
+  source: app/controllers/admin/abouts_controller.rb
+  name: section_content["title"]
+  count: 4
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: Admin::AboutsController#get_section_image_url
+  lines:
+  - 96
+  - 96
+  - 99
+  message: refers to 'about' more than self (maybe move it to another class?)
+  smell_type: FeatureEnvy
+  source: app/controllers/admin/abouts_controller.rb
+  name: about
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Feature-Envy.md
+- context: Admin::AboutsController#handle_image_attachment
+  lines:
+  - 190
+  - 191
+  message: refers to 'about' more than self (maybe move it to another class?)
+  smell_type: FeatureEnvy
+  source: app/controllers/admin/abouts_controller.rb
+  name: about
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Feature-Envy.md
+- context: Admin::AboutsController#handle_image_attachment
+  lines:
+  - 190
+  - 191
+  message: refers to 'section_params' more than self (maybe move it to another class?)
+  smell_type: FeatureEnvy
+  source: app/controllers/admin/abouts_controller.rb
+  name: section_params
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Feature-Envy.md
+- context: Admin::AboutsController#handle_section_image_update
+  lines:
+  - 173
+  message: has 4 parameters
+  smell_type: LongParameterList
+  source: app/controllers/admin/abouts_controller.rb
+  count: 4
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Long-Parameter-List.md
+- context: Admin::AboutsController#handle_vision_mission_update
+  lines:
+  - 151
+  message: has 4 parameters
+  smell_type: LongParameterList
+  source: app/controllers/admin/abouts_controller.rb
+  count: 4
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Long-Parameter-List.md
+- context: Admin::AboutsController#get_section_image_url
+  lines:
+  - 96
+  message: manually dispatches method call
+  smell_type: ManualDispatch
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Manual-Dispatch.md
+- context: Admin::AboutsController#handle_image_attachment
+  lines:
+  - 190
+  message: manually dispatches method call
+  smell_type: ManualDispatch
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Manual-Dispatch.md
+- context: Admin::AboutsController#update_section
+  lines:
+  - 56
+  message: performs a nil-check
+  smell_type: NilCheck
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Nil-Check.md
+- context: Admin::AboutsController
+  lines:
+  - 5
+  message: has at least 19 methods
+  smell_type: TooManyMethods
+  source: app/controllers/admin/abouts_controller.rb
+  count: 19
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Too-Many-Methods.md
+- context: Admin::AboutsController#handle_vision_mission_update
+  lines:
+  - 151
+  message: has approx 9 statements
+  smell_type: TooManyStatements
+  source: app/controllers/admin/abouts_controller.rb
+  count: 9
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Too-Many-Statements.md
+- context: Admin::AboutsController#setup_section_defaults
+  lines:
+  - 73
+  message: has approx 12 statements
+  smell_type: TooManyStatements
+  source: app/controllers/admin/abouts_controller.rb
+  count: 12
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Too-Many-Statements.md
+- context: Admin::AboutsController#build_section_payload
+  lines:
+  - 164
+  message: doesn't depend on instance state (maybe move it to another class?)
+  smell_type: UtilityFunction
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Utility-Function.md
+- context: Admin::AboutsController#handle_image_url
+  lines:
+  - 195
+  message: doesn't depend on instance state (maybe move it to another class?)
+  smell_type: UtilityFunction
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Utility-Function.md
+- context: Admin::AboutsController#log_our_impact_stats
+  lines:
+  - 184
+  message: doesn't depend on instance state (maybe move it to another class?)
+  smell_type: UtilityFunction
+  source: app/controllers/admin/abouts_controller.rb
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Utility-Function.md
+- context: AboutPageService#build_section_payload
+  lines:
+  - 20
+  message: is controlled by argument 'section_key'
+  smell_type: ControlParameter
+  source: app/services/about_page_service.rb
+  argument: section_key
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Control-Parameter.md
+- context: AboutPageService#handle_special_section_updates
+  lines:
+  - 31
+  message: is controlled by argument 'section_key'
+  smell_type: ControlParameter
+  source: app/services/about_page_service.rb
+  argument: section_key
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Control-Parameter.md
+- context: AboutPageService#handle_our_impact_updates
+  lines:
+  - 67
+  - 68
+  message: calls 'stat["label"]' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/services/about_page_service.rb
+  name: stat["label"]
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: AboutPageService#handle_our_impact_updates
+  lines:
+  - 67
+  - 68
+  message: calls 'stat["value"]' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/services/about_page_service.rb
+  name: stat["value"]
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: AboutPageService#section_title_for
+  lines:
+  - 5
+  - 10
+  message: calls 'key.to_s' 2 times
+  smell_type: DuplicateMethodCall
+  source: app/services/about_page_service.rb
+  name: key.to_s
+  count: 2
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Duplicate-Method-Call.md
+- context: AboutPageService#handle_our_impact_updates
+  lines:
+  - 63
+  message: has approx 8 statements
+  smell_type: TooManyStatements
+  source: app/services/about_page_service.rb
+  count: 8
+  documentation_link: https://github.com/troessner/reek/blob/v6.5.0/docs/Too-Many-Statements.md

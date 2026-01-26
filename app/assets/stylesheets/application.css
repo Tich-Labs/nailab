@@ -4,6 +4,8 @@
 
 /*
  *= require active_admin/overrides
+ *= require application.tailwind
+ *= require tailwind
  */
 
 .hero-slide {

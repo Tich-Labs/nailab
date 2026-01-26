@@ -1,61 +1,61 @@
 <%# app/views/founder/startup_profiles/show.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Startup Profile</h1>
-    <p class="text-xl text-gray-600">Manage your startup's information and visibility</p>
+  <div class="mb-8 bg-nailab-purple text-white p-6 rounded-xl shadow-lg">
+    <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4">Startup Profile</h1>
+    <p class="text-xl text-white/70">Manage your startup's information and visibility</p>
   </div>
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-8 py-6">
+    <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-nailab-purple text-white px-8 py-6 rounded-t-xl">
       <h2 class="text-2xl font-bold text-white"><%= @startup_profile.startup_name %></h2>
-      <p class="text-purple-100 mt-1"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
+      <p class="text-white/70 mt-1"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
     </div>
-    <div class="p-8">
+    <div class="p-8 bg-base-100 rounded-b-xl">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="space-y-6">
           <div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Company Details</h3>
+            <h3 class="text-lg font-semibold text-nailab-purple mb-4">Company Details</h3>
             <div class="space-y-4">
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-gray-600 font-medium">Description</span>
-                <span class="text-gray-900 text-right ml-4"><%= @startup_profile.description %></span>
+                <span class="text-base-content/60 font-medium">Description</span>
+                <span class="text-base-content text-right ml-4"><%= @startup_profile.description %></span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-gray-600 font-medium">Stage</span>
-                <span class="text-gray-900 font-semibold"><%= @startup_profile.stage %></span>
+                <span class="text-base-content/60 font-medium">Stage</span>
+                <span class="text-base-content font-semibold"><%= @startup_profile.stage %></span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-gray-600 font-medium">Sector</span>
-                <span class="text-gray-900 font-semibold"><%= @startup_profile.sector %></span>
+                <span class="text-base-content/60 font-medium">Sector</span>
+                <span class="text-base-content font-semibold"><%= @startup_profile.sector %></span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-gray-600 font-medium">Funding Stage</span>
-                <span class="text-gray-900 font-semibold"><%= @startup_profile.funding_stage %></span>
+                <span class="text-base-content/60 font-medium">Funding Stage</span>
+                <span class="text-base-content font-semibold"><%= @startup_profile.funding_stage %></span>
               </div>
               <div class="flex justify-between items-center py-2">
-                <span class="text-gray-600 font-medium">Funding Raised</span>
-                <span class="text-gray-900 font-semibold">$<%= number_with_delimiter(@startup_profile.funding_raised) %></span>
+                <span class="text-base-content/60 font-medium">Funding Raised</span>
+                <span class="text-base-content font-semibold">$<%= number_with_delimiter(@startup_profile.funding_raised) %></span>
               </div>
             </div>
           </div>
         </div>
         <div class="space-y-6">
           <div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Market & Vision</h3>
+            <h3 class="text-lg font-semibold text-nailab-purple mb-4">Market & Vision</h3>
             <div class="space-y-4">
               <div>
-                <span class="text-gray-600 font-medium">Target Market</span>
-                <p class="text-gray-900 mt-1"><%= @startup_profile.target_market %></p>
+                <span class="text-base-content/60 font-medium">Target Market</span>
+                <p class="text-base-content mt-1"><%= @startup_profile.target_market %></p>
               </div>
               <div>
-                <span class="text-gray-600 font-medium">Value Proposition</span>
-                <p class="text-gray-900 mt-1"><%= @startup_profile.value_proposition %></p>
+                <span class="text-base-content/60 font-medium">Value Proposition</span>
+                <p class="text-base-content mt-1"><%= @startup_profile.value_proposition %></p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="mt-8 pt-8 border-t border-gray-200">
-        <%= link_to 'Edit Profile', edit_founder_startup_profile_path, class: 'inline-flex items-center px-6 py-3 bg-nailab-teal text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-teal transition-all' %>
+      <div class="mt-8 pt-8 border-t border-base-200">
+        <%= link_to 'Edit Profile', edit_founder_startup_profile_path, class: 'inline-flex items-center px-6 py-3 bg-nailab-purple text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-purple transition-all' %>
       </div>
     </div>
   </div>

@@ -1,8 +1,9 @@
 <%# app/views/founder/monthly_metrics/index.html.erb %>
-<div class="max-w-6xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-6xl mx-auto py-8 px-4">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold text-gray-900">Monthly Metrics</h1>
-    <%= link_to 'Add New Metrics', new_founder_monthly_metric_path, class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
+    <%= link_to 'Add New Metrics', new_founder_monthly_metric_path, class: "btn btn-primary" %>
   </div>
   <div class="bg-white shadow rounded-lg overflow-hidden">
     <div class="px-6 py-4 border-b">
@@ -35,7 +36,7 @@
                 <%= metric.growth_rate %>% MoM
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <%= link_to 'Edit', edit_founder_monthly_metric_path(metric), class: "text-purple-600 hover:text-purple-800" %>
+                <%= link_to 'Edit', edit_founder_monthly_metric_path(metric), class: "text-primary" %>
               </td>
             </tr>
           <% end %>
@@ -45,8 +46,9 @@
     <% if @monthly_metrics.empty? %>
       <div class="text-center py-12">
         <p class="text-gray-500 mb-4">No metrics recorded yet.</p>
-        <%= link_to 'Add your first metrics', new_founder_monthly_metric_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
+        <%= link_to 'Add your first metrics', new_founder_monthly_metric_path, class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
+</div>
 </div>

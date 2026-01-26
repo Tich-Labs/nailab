@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nailab_founder">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= content_for?(:title) ? yield(:title) : 'Nailab' %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : 'Nailab — supporting founders with programs, mentorship, and funding across Africa.' %>" />
+    <%= yield :head %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <style nonce="<%= content_security_policy_nonce %>">
+      <%= File.read(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')).html_safe %>
+    </style>
+    <style nonce="<%= content_security_policy_nonce %>">
+      /* Founder-scoped form control defaults: make inputs visible on all themes */
+      [data-theme="nailab_founder"] input[type="text"],
+      [data-theme="nailab_founder"] input[type="number"],
+      [data-theme="nailab_founder"] input[type="email"],
+      [data-theme="nailab_founder"] select,
+      [data-theme="nailab_founder"] textarea,
+      [data-theme="nailab_founder"] .select,
+      [data-theme="nailab_founder"] .input,
+      [data-theme="nailab_founder"] .textarea {
+        background-color: #ffffff;
+        border: 1px solid #D1D5DB; /* gray-300 */
+        border-radius: 0.375rem; /* rounded */
+        padding: 0.5rem; /* p-2 */
+        box-shadow: none;
+      }
+
+      [data-theme="nailab_founder"] input:focus,
+      [data-theme="nailab_founder"] select:focus,
+      [data-theme="nailab_founder"] textarea:focus {
+        outline: none;
+        border-color: #7C3AED; /* nailab purple-ish focus */
+        box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+      }
+    </style>
+    <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
+    <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+      <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col items-center justify-center">
+        <!-- Page content here -->
+        <%= render 'shared/dashboard_header' %>
+        <main class="w-full p-8">
+          <%= yield %>
+        </main>
+        <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+        <%= render 'shared/founder_sidebar' %>
+      </div>
+    </div>
+  </body>
+</html>

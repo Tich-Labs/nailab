@@ -1,20 +1,45 @@
 <%# Shared resource card partial - accepts `resource` and optional `variant` ('founder' or 'public') %>
 <% variant ||= 'public' %>
 
-<article class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition hover:border-slate-300">
+<article class="flex flex-col justify-between rounded-2xl border border-base-200 bg-base-100 p-6 shadow-lg transition hover:border-base-300">
+  <%# Compute action label and path based on resource_type so CTAs are consistent %>
+  <% rt = resource.resource_type.to_s.downcase %>
+  <% action_map = {
+    'blog' => { label: 'Read', path: ->(r) { resource_detail_path(r.slug) } },
+    'article' => { label: 'Read', path: ->(r) { resource_detail_path(r.slug) } },
+    'template' => { label: 'Download', path: ->(r) { r.url.presence || (variant == 'founder' ? download_founder_resource_path(r) : resource_detail_path(r.slug)) } },
+    'opportunity' => { label: 'Apply', path: ->(r) { r.url.presence || resource_detail_path(r.slug) } },
+    'event' => { label: 'Attend', path: ->(r) { r.url.presence || resource_detail_path(r.slug) } }
+  } %>
+  <% default_action = { label: 'View', path: ->(r) { resource_detail_path(r.slug) } } %>
+  <% action = action_map.fetch(rt, default_action) %>
+
   <% if variant == 'founder' %>
-    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-4 py-3 -mx-6 mt-0">
+    <div class="bg-nailab-purple text-white px-4 py-3 -mx-6 mt-0">
       <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
-        <span class="text-white text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
+        <span class="px-3 py-1 bg-white/10 text-white text-s font-semibold rounded"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
+        <%# Avoid showing the same label twice (category vs file_type). Prefer published date when available. %>
+        <% if resource.respond_to?(:published_at) && resource.published_at.present? %>
+          <span class="text-white text-sm font-medium"><%= resource.published_at.strftime('%b %d, %Y') %></span>
+        <% else %>
+          <span class="text-white text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
+        <% end %>
       </div>
     </div>
     <div class="p-6">
-      <h3 class="text-xl font-bold text-gray-900 mb-3"><%= resource.title %></h3>
-      <p class="text-gray-600 mb-6"><%= resource.description %></p>
+      <h3 class="text-xl font-bold text-nailab-purple mb-3"><%= resource.title %></h3>
+      <p class="text-base-content/70 mb-6"><%= resource.description %></p>
       <div class="flex space-x-3">
-        <%= link_to 'View Details', founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
-        <%= link_to 'Download', download_founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal transition-all" %>
+        <% primary_label = action[:label] %>
+        <% primary_path = action[:path].call(resource) rescue founder_resource_path(resource) %>
+        <% details_path = (begin; founder_resource_path(resource) rescue nil; end) %>
+        <%# If the primary path already points to the details page (or the public detail), only render a single primary CTA to avoid duplicates. %>
+        <% if primary_path.to_s == details_path.to_s || primary_path.to_s == resource_detail_path(resource.slug).to_s %>
+          <%= link_to primary_label, primary_path, class: "w-full inline-flex items-center justify-center px-4 py-3 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
+        <% else %>
+          <%= link_to primary_label, primary_path, class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
+          <%= link_to 'Details', details_path || founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-secondary text-secondary-content text-sm font-semibold rounded-lg hover:bg-secondary-focus transition-all" %>
+        <% end %>
       </div>
     </div>
   <% else %>
@@ -29,9 +54,15 @@
       <p class="text-sm text-slate-600"><%= truncate(resource.description, length: 180) %></p>
     </header>
     <div class="mt-6 flex items-center justify-between text-sm font-semibold text-slate-900">
-      <%= link_to 'View details', resource_detail_path(resource.slug), class: 'text-slate-900 underline-offset-2 transition hover:text-slate-700' %>
-      <% action_label = %w[blog template].include?(resource.resource_type) ? 'Read' : 'Attend' %>
-      <span class="text-xs uppercase tracking-[0.3em] text-slate-400"><%= action_label %></span>
+      <% public_label = action[:label] %>
+      <% public_path = action[:path].call(resource) rescue resource_detail_path(resource.slug) %>
+      <%# If the primary public path is the same as the resource detail, label the details link with the primary label and avoid a duplicate span. %>
+      <% if public_path.to_s == resource_detail_path(resource.slug).to_s %>
+        <%= link_to public_label, resource_detail_path(resource.slug), class: 'text-slate-900 underline-offset-2 transition hover:text-slate-700' %>
+      <% else %>
+        <%= link_to 'View details', resource_detail_path(resource.slug), class: 'text-slate-900 underline-offset-2 transition hover:text-slate-700' %>
+        <%= link_to public_label, public_path, class: 'text-xs uppercase tracking-[0.3em] text-slate-400 hover:underline' %>
+      <% end %>
     </div>
   <% end %>
 </article>

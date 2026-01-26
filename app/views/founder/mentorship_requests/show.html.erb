@@ -1,5 +1,6 @@
 <%# app/views/founder/mentorship_requests/show.html.erb %>
-<div class="max-w-4xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-4xl mx-auto py-8 px-4">
   <div class="bg-white shadow rounded-lg p-6">
     <div class="flex justify-between items-start mb-6">
       <div>
@@ -11,25 +12,25 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div>
-        <h3 class="font-medium text-gray-700">Mentor</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Mentor</h3>
         <p class="text-gray-600 mt-1"><%= @mentorship_request.mentor&.name || 'Unknown Mentor' %></p>
         <p class="text-sm text-gray-500"><%= @mentorship_request.mentor&.expertise || 'No expertise specified' %></p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Requested Date</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Requested Date</h3>
         <p class="text-gray-600 mt-1"><%= @mentorship_request.created_at.strftime('%B %d, %Y') %></p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Preferred Time</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Preferred Time</h3>
         <p class="text-gray-600 mt-1"><%= @mentorship_request.proposed_time ? @mentorship_request.proposed_time.strftime('%B %d, %Y %I:%M %p') : 'Not specified' %></p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Duration</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Duration</h3>
         <p class="text-gray-600 mt-1"><%= @mentorship_request.respond_to?(:duration) && @mentorship_request.duration.present? ? "#{@mentorship_request.duration} minutes" : 'Not specified' %></p>
       </div>
     </div>
     <div class="mb-6">
-      <h3 class="font-medium text-gray-700">Message</h3>
+      <h3 class="text-lg font-semibold text-gray-700">Message</h3>
       <p class="text-gray-600 mt-1"><%= @mentorship_request.message %></p>
     </div>
     <% if @mentorship_request.status == 'approved' %>
@@ -49,4 +50,5 @@
       </div>
     <% end %>
   </div>
+</div>
 </div>

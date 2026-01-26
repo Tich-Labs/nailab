@@ -77,21 +77,36 @@ def seed_monthly_metrics!(user:, startup_profile:, metrics:)
   metrics.each do |mm|
     metric = MonthlyMetric.new
     link_to_owner(metric, user: user, startup_profile: startup_profile)
+    # Ensure a Startup row exists for the founder (some seed data uses only startup_profile)
+    startup_row = Startup.find_or_create_by!(user_id: user.id) do |s|
+      s.name = (startup_profile && startup_profile.startup_name) || "#{user.email}-startup"
+      s.active = true if s.respond_to?(:active=)
+    end
+    metric.startup = startup_row
+    # Normalize legacy metric keys into canonical columns expected by the model
+    attrs = {}
+    attrs[:period] = mm[:month]
+    attrs[:mrr] = mm[:revenue] if mm.key?(:revenue)
+    attrs[:customers] = mm[:customers] if mm.key?(:customers)
+    # If new_paying_customers not provided, fall back to customers (best-effort)
+    attrs[:new_paying_customers] = mm[:new_paying_customers] || mm[:customers]
+    attrs[:churned_customers] = mm[:churned_customers] || 0
+    attrs[:burn_rate] = mm[:burn_rate] if mm.key?(:burn_rate)
+    # Compute cash_at_hand if runway_months + burn_rate provided and revenue/mrr present
+    if mm[:cash_at_hand]
+      attrs[:cash_at_hand] = mm[:cash_at_hand]
+    elsif mm[:runway_months] && mm[:burn_rate]
+      revenue_val = mm[:revenue].to_f
+      cash = mm[:runway_months].to_f * mm[:burn_rate].to_f - revenue_val
+      attrs[:cash_at_hand] = cash > 0 ? cash : 0
+    end
 
-    safe_assign(metric, {
-      month: mm[:month],
-      period: mm[:month],
-      recorded_on: mm[:month],
-      revenue: mm[:revenue],
-      total_revenue: mm[:revenue],
-      customers: mm[:customers],
-      customer_count: mm[:customers],
-      runway_months: mm[:runway_months],
-      runway: mm[:runway_months],
-      burn_rate: mm[:burn_rate],
-      monthly_burn: mm[:burn_rate],
-      notes: mm[:notes]
-    })
+    attrs[:funds_raised] = mm[:funds_raised] if mm.key?(:funds_raised)
+    attrs[:funding_stage] = mm[:funding_stage] if mm.key?(:funding_stage)
+    attrs[:investors_engaged] = mm[:investors_engaged] if mm.key?(:investors_engaged)
+    attrs[:product_progress] = mm[:product_progress] || mm[:notes]
+
+    safe_assign(metric, attrs)
 
     metric.save!
   end
@@ -350,6 +365,97 @@ partners_data.each do |data|
 end
 
 puts "✅ Seeded testimonials and partners."
+
+# ----------------------------
+# DEV: Seed one founder with 6 months of realistic monthly metrics
+# ----------------------------
+puts "🌱 Seeding developer metrics sample..."
+dev_email = ENV.fetch("DEV_METRICS_EMAIL", "seedmetrics@local.test")
+dev_user = seed_founder!(email: dev_email, full_name: "Metrics Founder")
+
+# Ensure a startup exists for the founder
+dev_startup = Startup.find_or_create_by!(user_id: dev_user.id) do |s|
+  s.name = "Sandbox Startup"
+  s.active = true
+end
+
+6.downto(1) do |i|
+  date = Date.today.prev_month(i - 1).beginning_of_month
+  # Simulate growth with a mid-way funding event at month 4
+  if i == 4
+    funds = 500_000.0
+    stage = "Pre-Seed"
+  elsif i < 4
+    funds = 0.0
+    stage = "Bootstrapped"
+  else
+    funds = 0.0
+    stage = "Pre-Seed"
+  end
+
+  mrr = (i * 5000).to_f + (i >= 4 ? 20000 : 0)
+  new_customers = 5 * i
+  churned = [ 0, (new_customers * 0.05).round ].max
+  cash = 50_000 + (i * 10_000) + (i == 4 ? funds : 0)
+  burn = 25_000 + (i * 2_000)
+
+  MonthlyMetric.create!(
+    startup: dev_startup,
+    user: dev_user,
+    period: date,
+    mrr: mrr,
+    new_paying_customers: new_customers,
+    churned_customers: churned,
+    cash_at_hand: cash,
+    burn_rate: burn,
+    funds_raised: funds,
+    funding_stage: stage,
+    product_progress: "Iterated on onboarding and payments.",
+    investors_engaged: (i == 4 ? "Local VC" : nil)
+  )
+end
+
+puts "✅ Seeded developer metrics sample for #{dev_email}"
+
+# ----------------------------
+# DEV: Add metrics for an existing founder user (founder4)
+# ----------------------------
+puts "🌱 Seeding metrics for founder4 if present..."
+founder4 = User.find_by(slug: 'founder4-test-nailab-app')
+if founder4
+  f4_startup = Startup.find_or_create_by!(user_id: founder4.id) do |s|
+    s.name = "Founder4 Startup"
+    s.active = true if s.respond_to?(:active=)
+  end
+
+  6.downto(1) do |i|
+    date = Date.today.prev_month(i - 1).beginning_of_month
+    mrr = (i * 1500).to_f
+    new_customers = [ 1, i * 2 ].max
+    churned = (new_customers * 0.08).round
+    cash = 20_000 + (i * 2_500)
+    burn = 6_000 + (i * 400)
+
+    # Create only if not already present for the period
+    next if MonthlyMetric.exists?(startup_id: f4_startup.id, period: date)
+
+    MonthlyMetric.create!(
+      startup: f4_startup,
+      user: founder4,
+      period: date,
+      mrr: mrr,
+      new_paying_customers: new_customers,
+      churned_customers: churned,
+      cash_at_hand: cash,
+      burn_rate: burn,
+      product_progress: "Metrics seeded for founder4",
+      funding_stage: "Bootstrapped"
+    )
+  end
+  puts "✅ Seeded monthly metrics for founder4 (#{founder4.email})"
+else
+  puts "⚠️ founder4 user not found (slug: founder4-test-nailab-app); skipping founder4 metrics seed"
+end
 
 # Seed mentors
 puts "🌱 Seeding mentors..."

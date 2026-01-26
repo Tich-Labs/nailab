@@ -1,0 +1,38 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Startup Monthly Updates</h2>
+    <%= link_to 'New Update', new_founder_startup_update_path, class: 'btn btn-primary' %>
+  </div>
+  <% if @updates.any? %>
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Year</th>
+          <th>MRR</th>
+          <th>New Customers</th>
+          <th>Churned</th>
+          <th>Cash</th>
+          <th>Burn Rate</th>
+          <th>Runway</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @updates.each do |update| %>
+          <tr>
+            <td><%= Date::MONTHNAMES[update.report_month] %></td>
+            <td><%= update.report_year %></td>
+            <td>$<%= number_with_delimiter(update.mrr) %></td>
+            <td><%= update.new_paying_customers %></td>
+            <td><%= update.churned_customers %></td>
+            <td>$<%= number_with_delimiter(update.cash_at_hand) %></td>
+            <td>$<%= number_with_delimiter(update.burn_rate) %></td>
+            <td><%= update.runway || '-' %> mo</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info mt-8">No updates yet. Submit your first update!</div>
+  <% end %>
+</div>

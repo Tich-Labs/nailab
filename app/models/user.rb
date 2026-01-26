@@ -38,7 +38,7 @@ class User < ApplicationRecord
   validate :password_complexity, if: -> { password.present? }
   has_one :user_profile, dependent: :destroy
   has_one :startup_profile, dependent: :destroy
-  has_one :startup, dependent: :destroy
+  has_many :startups, dependent: :destroy
   has_one :mentor, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
@@ -60,6 +60,12 @@ class User < ApplicationRecord
   public
 
   delegate :full_name, to: :user_profile, prefix: false, allow_nil: true
+
+  # Convenience accessor for a user's primary startup (first created)
+  # Many controllers expect `current_user.startup` to return a single startup.
+  def startup
+    startups.first
+  end
 
   def name
     full_name || email

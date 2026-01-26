@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_25_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -277,13 +277,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
 
   create_table "monthly_metrics", force: :cascade do |t|
     t.decimal "burn_rate"
+    t.decimal "cash_at_hand", precision: 10, scale: 2
+    t.integer "churned_customers"
     t.datetime "created_at", null: false
     t.integer "customers"
-    t.date "month"
-    t.decimal "revenue"
-    t.integer "runway"
+    t.string "funding_stage"
+    t.decimal "funds_raised", precision: 10, scale: 2
+    t.string "investors_engaged"
+    t.decimal "mrr"
+    t.integer "new_paying_customers"
+    t.date "period"
+    t.text "product_progress"
+    t.bigint "startup_id", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
+    t.index ["startup_id"], name: "index_monthly_metrics_on_startup_id"
     t.index ["user_id"], name: "index_monthly_metrics_on_user_id"
   end
 
@@ -438,6 +446,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "startup_invites", force: :cascade do |t|
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.string "invitee_email", null: false
+    t.string "invitee_name"
+    t.bigint "inviter_id", null: false
+    t.string "role"
+    t.datetime "sent_at"
+    t.bigint "startup_id", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invitee_email"], name: "index_startup_invites_on_invitee_email"
+    t.index ["inviter_id"], name: "index_startup_invites_on_inviter_id"
+    t.index ["startup_id"], name: "index_startup_invites_on_startup_id"
+    t.index ["token"], name: "index_startup_invites_on_token", unique: true
+  end
+
   create_table "startup_profiles", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.text "challenge_details"
@@ -465,6 +490,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
     t.index ["active"], name: "index_startup_profiles_on_active"
     t.index ["slug"], name: "index_startup_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_startup_profiles_on_user_id"
+  end
+
+  create_table "startup_updates", force: :cascade do |t|
+    t.decimal "burn_rate", precision: 12, scale: 2, null: false
+    t.decimal "cash_at_hand", precision: 15, scale: 2, null: false
+    t.integer "churned_customers", null: false
+    t.datetime "created_at", null: false
+    t.string "funding_stage"
+    t.decimal "funds_raised", precision: 15, scale: 2
+    t.string "investors_engaged"
+    t.decimal "mrr", precision: 12, scale: 2, null: false
+    t.integer "new_paying_customers", null: false
+    t.text "product_progress"
+    t.integer "report_month", null: false
+    t.integer "report_year", null: false
+    t.bigint "startup_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["startup_id", "report_month", "report_year"], name: "index_startup_updates_on_startup_and_month_year", unique: true
+    t.index ["startup_id"], name: "index_startup_updates_on_startup_id"
   end
 
   create_table "startups", force: :cascade do |t|
@@ -623,11 +667,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "provider"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.integer "role", default: 0, null: false
     t.string "slug"
+    t.string "uid"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
     t.index ["admin"], name: "index_users_on_admin"
@@ -655,7 +701,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "milestones", "users"
-  add_foreign_key "monthly_metrics", "users"
+  add_foreign_key "monthly_metrics", "startups"
   add_foreign_key "notifications", "users"
   add_foreign_key "opportunity_submissions", "opportunities"
   add_foreign_key "opportunity_submissions", "users"
@@ -665,7 +711,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_190338) do
   add_foreign_key "ratings", "users"
   add_foreign_key "sessions", "mentors"
   add_foreign_key "sessions", "users"
+  add_foreign_key "startup_invites", "startups"
+  add_foreign_key "startup_invites", "users", column: "inviter_id"
   add_foreign_key "startup_profiles", "users"
+  add_foreign_key "startup_updates", "startups"
   add_foreign_key "startups", "users"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "support_messages", "support_tickets"

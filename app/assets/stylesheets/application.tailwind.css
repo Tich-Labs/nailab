@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 /* Put any custom CSS below this line */
 
@@ -36,6 +36,11 @@
 		opacity: 1 !important;
 		pointer-events: auto !important;
 		cursor: pointer !important;
+	}
+
+	body[data-theme="nailab_founder"] .btn,
+	body[data-theme="nailab_founder"] .btn-success {
+		@apply bg-nailab-purple text-white hover:bg-nailab-purple/90;
 	}
 
 	/* Container used by our custom admin partials */

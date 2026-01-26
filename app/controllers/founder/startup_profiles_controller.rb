@@ -8,6 +8,9 @@ class Founder::StartupProfilesController < Founder::BaseController
   end
 
   def update
+    # Mark this update as a normal profile edit so onboarding-only validations don't fire
+    @startup_profile.onboarding_step = params[:onboarding_step].presence || "edit"
+
     if @startup_profile.update(startup_profile_params)
       redirect_to founder_startup_profile_path, notice: "Profile updated successfully."
     else
