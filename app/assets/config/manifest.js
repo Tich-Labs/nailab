@@ -1,8 +1,8 @@
 //= link_tree ../images
 //= link actiontext.css
 //= link_tree ../stylesheets/rails_admin .css
+// Make builds available to the asset pipeline
 //= link_tree ../builds
-//= link builds/tailwind.css
 // Make importmap-pinned Stimulus controllers available under /assets/controllers
 //= link_tree ../../javascript/controllers .js
 //= link_tree ../javascripts .js
