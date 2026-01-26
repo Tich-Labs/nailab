@@ -9,12 +9,19 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <style nonce="<%= content_security_policy_nonce %>">
-      <%= File.read(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')).html_safe %>
-    </style>
-    <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
-    <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
+    <%# Preload compiled Tailwind output when present (CI builds into app/assets/builds/). Fall back to application.css if available. %>
+    <% css_asset = begin
+      if Rails.application.assets && Rails.application.assets.find_asset('builds/tailwind.css')
+        'builds/tailwind.css'
+      else
+        'application.css'
+      end
+    rescue
+      # In production environment with Sprockets manifest, prefer builds/tailwind.css
+      'builds/tailwind.css'
+    end %>
+    <link rel="preload" href="<%= asset_path(css_asset) %>" as="style" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="<%= asset_path(css_asset) %>" /></noscript>
     <%= javascript_importmap_tags %>
   </head>
   <body class="<%= ['bg-white text-gray-900', (devise_controller? ? 'nailab-devise' : nil)].compact.join(' ') %>">

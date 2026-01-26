@@ -1,4 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
+  # POST /resource
   def create
     super do |user|
       # Use Onboarding::SessionStore namespaces where adapters write data
@@ -18,12 +19,13 @@ class RegistrationsController < Devise::RegistrationsController
           end
         end
 
-        up_attrs = fs.to_h.slice("full_name", "phone", "country", "city", "email") rescue fs.to_h
-        sp_attrs = fs.to_h.except(*up_attrs.keys) rescue fs.to_h
+        up_attrs = (fs.to_h.slice("full_name", "phone", "country", "city", "email") rescue fs.to_h)
+        sp_attrs = (fs.to_h.except(*up_attrs.keys) rescue fs.to_h)
         user_profile = user.create_user_profile(up_attrs.merge(role: "founder"))
         unless user_profile&.persisted?
           Rails.logger.error("Registrations#create: failed to create user_profile: #{user_profile&.errors&.full_messages}")
         end
+
         startup_profile = user.create_startup_profile(sp_attrs)
         unless startup_profile&.persisted?
           Rails.logger.error("Registrations#create: failed to create startup_profile: #{startup_profile&.errors&.full_messages}")
@@ -46,9 +48,7 @@ class RegistrationsController < Devise::RegistrationsController
 
       # Attach partner interest (store as Partner if model exists)
       if ps.to_h.present?
-        if defined?(Partner)
-          Partner.create(ps.to_h)
-        end
+        Partner.create(ps.to_h) if defined?(Partner)
       end
 
       # If onboarding data existed, handle flash and sign-in logic
@@ -104,10 +104,10 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    case resource.role
-    when :mentor
+    case resource.role.to_s
+    when "mentor"
       mentor_root_path
-    when :founder
+    when "founder"
       founder_onboarding_path
     else
       root_path
@@ -115,10 +115,10 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def after_sign_in_path_for(resource)
-    case resource.role
-    when :mentor
+    case resource.role.to_s
+    when "mentor"
       mentor_root_path
-    when :founder
+    when "founder"
       founder_onboarding_path
     else
       root_path
