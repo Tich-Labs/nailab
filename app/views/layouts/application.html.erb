@@ -9,13 +9,22 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <%# Prefer the locally-built Tailwind output at app/assets/builds/tailwind.css when present. Fall back to the asset pipeline. %>
-    <% if File.exist?(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')) %>
-      <link rel="stylesheet" href="/assets/builds/tailwind.css" />
-    <% else %>
-      <%# Use the asset pipeline lookup when build output isn't present on disk. This keeps compatibility with CI/prod where fingerprinting may be used. %>
-      <link rel="stylesheet" href="<%= asset_path('application.css') %>" />
-    <% end %>
+    <%# Prefer the compiled builds/tailwind.css in production (fingerprinted via manifest).
+        Fall back to the local builds file or to application.css if needed. %>
+    <% css_asset = begin
+      if Rails.env.production?
+        'builds/tailwind.css'
+      elsif File.exist?(Rails.root.join('app', 'assets', 'builds', 'tailwind.css'))
+        '/assets/builds/tailwind.css'
+      else
+        'application.css'
+      end
+    rescue
+      'application.css'
+    end %>
+
+    <link rel="preload" href="<%= (asset_path(css_asset) rescue '/assets/builds/tailwind.css') %>" as="style" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="<%= (asset_path(css_asset) rescue '/assets/builds/tailwind.css') %>" /></noscript>
     <%= javascript_importmap_tags %>
   </head>
   <body class="<%= ['bg-white text-gray-900', (devise_controller? ? 'nailab-devise' : nil)].compact.join(' ') %>">
