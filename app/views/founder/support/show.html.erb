@@ -57,10 +57,10 @@
     </div>
     <!-- FAQ -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-primary px-8 py-6">
+      <div class="bg-primary px-8 py-6 rounded-t-xl">
         <h2 class="text-2xl font-bold text-primary-content">Frequently Asked Questions</h2>
       </div>
-      <div class="p-8">
+      <div class="p-8 bg-base-100 rounded-b-xl">
         <div class="space-y-6">
           <div class="p-4 bg-base-200 rounded-xl">
             <h3 class="font-bold text-gray-900 mb-2">How do I update my startup profile?</h3>
@@ -85,10 +85,10 @@
   <!-- Existing Support Tickets -->
   <% if @support_tickets.any? %>
   <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
-    <div class="bg-primary px-8 py-6">
+    <div class="bg-primary px-8 py-6 rounded-t-xl">
       <h3 class="text-2xl font-bold text-primary-content">Your Support Tickets</h3>
     </div>
-    <div class="p-8">
+    <div class="p-8 bg-base-100 rounded-b-xl">
       <div class="space-y-4">
         <% @support_tickets.each do |ticket| %>
         <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -124,10 +124,10 @@
   <% end %>
   <!-- Submit a Ticket -->
   <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-primary px-8 py-6">
+    <div class="bg-primary px-8 py-6 rounded-t-xl">
       <h3 class="text-2xl font-bold text-primary-content">Submit a Support Ticket</h3>
     </div>
-    <div class="p-8">
+    <div class="p-8 bg-base-100 rounded-b-xl">
       <%= form_with url: founder_support_tickets_path, scope: :support_ticket, local: true, class: "space-y-6" do |f| %>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>

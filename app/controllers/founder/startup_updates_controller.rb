@@ -23,11 +23,10 @@ module Founder
 
     private
     def set_startup
-        @startup = current_user.startup
-        return if @startup.present?
+      @startup = current_user.startup
+      return if @startup.present?
 
-        redirect_to founder_startup_profile_path, alert: "Create your startup profile before submitting updates"
-      end
+      redirect_to founder_startup_profile_path, alert: "Create your startup profile before submitting updates"
     end
 
     def startup_update_params

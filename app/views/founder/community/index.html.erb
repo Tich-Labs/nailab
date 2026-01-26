@@ -62,10 +62,10 @@
     <!-- Community Activity -->
       <div class="space-y-8">
       <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="bg-primary px-8 py-6">
+        <div class="bg-primary px-8 py-6 rounded-t-xl">
           <h3 class="text-2xl font-bold text-primary-content">Community Activity</h3>
         </div>
-        <div class="p-8">
+        <div class="p-8 bg-base-100 rounded-b-xl">
           <div class="space-y-6">
             <div class="card bg-base-200 rounded-xl">
               <div class="card-body p-6">
@@ -113,10 +113,10 @@
   </div>
   <!-- Quick Message -->
     <div class="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-primary px-8 py-6">
+    <div class="bg-primary px-8 py-6 rounded-t-xl">
       <h3 class="text-2xl font-bold text-primary-content">Send a Quick Message</h3>
     </div>
-    <div class="p-8">
+    <div class="p-8 bg-base-100 rounded-b-xl">
       <div class="space-y-6">
         <%= form_with url: founder_peer_messages_path, scope: :peer_message, local: true do |pm| %>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
