@@ -123,6 +123,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_25_120000) do
     t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 
+  create_table "deleted_accounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_deleted_accounts_on_email", unique: true
+  end
+
   create_table "events_webinars_pages", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false

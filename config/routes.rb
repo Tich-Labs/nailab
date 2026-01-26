@@ -39,7 +39,13 @@ Rails.application.routes.draw do
   get "/favicon.ico", to: missing_favicon
   get "/assets/fonts/gotham/*font", to: missing_font
 
-  devise_for :users, controllers: { registrations: "registrations", omniauth_callbacks: "users/omniauth_callbacks", passwords: "passwords", confirmations: "confirmations" }
+  devise_for :users, controllers: {
+    registrations: "registrations",
+    omniauth_callbacks: "users/omniauth_callbacks",
+    passwords: "passwords",
+    confirmations: "confirmations",
+    sessions: "users/sessions"
+  }
   devise_scope :user do
     get "mentors/sign_up", to: "registrations#new", as: :new_mentor_registration, defaults: { role: "mentor" }
     post "mentors", to: "registrations#create", as: :mentor_registration, defaults: { role: "mentor" }
@@ -253,7 +259,7 @@ Rails.application.routes.draw do
     resources(:connections, only: %i[create])
     resources(:peer_messages, only: %i[index create])
 
-    resource(:account, controller: "account", only: %i[show edit update])
+    resource(:account, controller: "account", only: %i[show edit update destroy])
     resource(:subscription, only: %i[show new create])
 
     get "support", to: "support#show"

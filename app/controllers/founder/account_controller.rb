@@ -44,6 +44,20 @@ class Founder::AccountController < Founder::BaseController
     end
   end
 
+  def destroy
+    # Store user reference and record deleted email for informational login checks
+    user = current_user
+    DeletedAccount.create!(email: user.email) rescue nil
+
+    # Sign out the user first and then destroy the account
+    sign_out user
+    user.destroy
+
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: "Your account has been successfully deleted. We're sorry to see you go!" }
+    end
+  end
+
   private
 
   def user_params

@@ -42,4 +42,14 @@ module.exports = {
     ],
     logs: false,
   },
+  safelist: [
+    'bg-nailab-purple',
+    '!bg-nailab-purple',
+    'bg-nailab-purple/10',
+    'from-nailab-purple',
+    'text-nailab-purple',
+    'border-nailab-purple',
+    'focus:ring-nailab-purple',
+    'hover:!bg-nailab-purple'
+  ],
 }

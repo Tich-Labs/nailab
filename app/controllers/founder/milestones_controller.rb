@@ -2,18 +2,18 @@ class Founder::MilestonesController < Founder::BaseController
   before_action :set_milestone, only: %i[show edit update destroy]
 
   def index
-    @milestones = current_user.startup.milestones
+    @milestones = current_user.milestones
   end
 
   def show
   end
 
   def new
-    @milestone = current_user.startup.milestones.build
+    @milestone = current_user.milestones.build
   end
 
   def create
-    @milestone = current_user.startup.milestones.build(milestone_params)
+    @milestone = current_user.milestones.build(milestone_params)
     if @milestone.save
       redirect_to founder_milestones_path, notice: "Milestone created."
     else
@@ -40,7 +40,7 @@ class Founder::MilestonesController < Founder::BaseController
   private
 
   def set_milestone
-    @milestone = current_user.startup.milestones.find(params[:id])
+    @milestone = current_user.milestones.find(params[:id])
   end
 
   def milestone_params

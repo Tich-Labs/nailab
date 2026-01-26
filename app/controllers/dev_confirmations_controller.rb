@@ -13,9 +13,10 @@ class DevConfirmationsController < ApplicationController
     user = User.confirm_by_token(token)
 
     if user && user.errors.empty?
-      # sign in the user so they can continue in-browser
-      sign_in(user)
-      redirect_to root_path, notice: "Email confirmed (dev). You are signed in."
+      # In development, confirm the account but send tester to the login page
+      # so they can sign in normally (matches prod behavior where confirmation
+      # typically leads to sign-in). Do not auto-sign-in here.
+      redirect_to new_user_session_path, notice: "Email confirmed. Please log in."
     else
       msg = user&.errors&.full_messages&.join(", ") || "Invalid or expired token"
       redirect_to root_path, alert: "Confirmation failed: #{msg}"

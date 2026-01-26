@@ -5,27 +5,27 @@
     <%= form_with url: founder_account_path, method: :patch, local: true, html: { class: 'space-y-6', id: 'founder-account-form', multipart: true } do %>
       <div>
         <label for="user_full_name" class="block text-sm font-medium text-gray-700">Name</label>
-        <input type="text" name="user[user_profile][full_name]" id="user_full_name" value="<%= current_user.user_profile&.full_name %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="text" name="user[user_profile][full_name]" id="user_full_name" value="<%= current_user.user_profile&.full_name %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <div>
         <label for="user_email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" name="user[email]" id="user_email" value="<%= current_user.email %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="email" name="user[email]" id="user_email" value="<%= current_user.email %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <div>
         <label for="user_current_password" class="block text-sm font-medium text-gray-700">Current Password (required to confirm changes)</label>
-        <input type="password" name="user[current_password]" id="user_current_password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="password" name="user[current_password]" id="user_current_password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <div>
         <label for="user_password" class="block text-sm font-medium text-gray-700">New Password (leave blank if not changing)</label>
-        <input type="password" name="user[password]" id="user_password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="password" name="user[password]" id="user_password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <div>
         <label for="user_password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-        <input type="password" name="user[password_confirmation]" id="user_password_confirmation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="password" name="user[password_confirmation]" id="user_password_confirmation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <div>
         <label for="user_bio" class="block text-sm font-medium text-gray-700">Bio</label>
-        <textarea name="user[user_profile][bio]" id="user_bio" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"><%= current_user.user_profile&.bio %></textarea>
+        <textarea name="user[user_profile][bio]" id="user_bio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"><%= current_user.user_profile&.bio %></textarea>
         <p id="bio-error" class="text-sm text-red-600 mt-1 hidden">Bio must be at least 30 characters.</p>
       </div>
       <div class="space-y-4">
@@ -48,16 +48,16 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="user_city" class="block text-sm font-medium text-gray-700">City</label>
-          <input type="text" name="user[user_profile][city]" id="user_city" value="<%= current_user.user_profile&.city %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          <input type="text" name="user[user_profile][city]" id="user_city" value="<%= current_user.user_profile&.city %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
         </div>
         <div>
           <label for="user_country" class="block text-sm font-medium text-gray-700">Country</label>
-          <input type="text" name="user[user_profile][country]" id="user_country" value="<%= current_user.user_profile&.country %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+          <input type="text" name="user[user_profile][country]" id="user_country" value="<%= current_user.user_profile&.country %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
         </div>
       </div>
       <div>
         <label for="user_website" class="block text-sm font-medium text-gray-700">Website</label>
-        <input type="url" name="user[user_profile][professional_website]" id="user_website" value="<%= current_user.user_profile&.professional_website %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+        <input type="url" name="user[user_profile][professional_website]" id="user_website" value="<%= current_user.user_profile&.professional_website %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
       </div>
       <!-- Social Media Section -->
       <div class="border-t pt-6">
@@ -65,16 +65,16 @@
         <div class="space-y-4">
           <div>
             <label for="user_linkedin_url" class="block text-sm font-medium text-gray-700">LinkedIn Profile URL</label>
-            <input type="url" name="user[user_profile][linkedin_url]" id="user_linkedin_url" value="<%= current_user.user_profile&.linkedin_url %>" placeholder="https://linkedin.com/in/yourprofile" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+            <input type="url" name="user[user_profile][linkedin_url]" id="user_linkedin_url" value="<%= current_user.user_profile&.linkedin_url %>" placeholder="https://linkedin.com/in/yourprofile" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
           </div>
           <div>
             <label for="user_twitter_url" class="block text-sm font-medium text-gray-700">X (Twitter) Profile URL</label>
-            <input type="url" name="user[user_profile][twitter_url]" id="user_twitter_url" value="<%= current_user.user_profile&.twitter_url %>" placeholder="https://x.com/yourhandle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+            <input type="url" name="user[user_profile][twitter_url]" id="user_twitter_url" value="<%= current_user.user_profile&.twitter_url %>" placeholder="https://x.com/yourhandle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label for="user_other_social_platform" class="block text-sm font-medium text-gray-700">Other Platform</label>
-              <select name="user[user_profile][other_social_platform]" id="user_other_social_platform" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
+              <select name="user[user_profile][other_social_platform]" id="user_other_social_platform" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                 <option value="">Select platform (optional)</option>
                 <option value="facebook" <%= current_user.user_profile&.other_social_platform == 'facebook' ? 'selected' : '' %>>Facebook</option>
                 <option value="instagram" <%= current_user.user_profile&.other_social_platform == 'instagram' ? 'selected' : '' %>>Instagram</option>
@@ -85,42 +85,8 @@
             </div>
             <div>
               <label for="user_other_social_url" class="block text-sm font-medium text-gray-700">Other Social URL</label>
-              <input type="url" name="user[user_profile][other_social_url]" id="user_other_social_url" value="<%= current_user.user_profile&.other_social_url %>" placeholder="https://..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+              <input type="url" name="user[user_profile][other_social_url]" id="user_other_social_url" value="<%= current_user.user_profile&.other_social_url %>" placeholder="https://..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
             </div>
-      </div>
-      
-      <!-- Social Media Section -->
-      <div class="mt-6 pt-6 border-t border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Social Media Profiles</h3>
-        <div class="space-y-4">
-          <div>
-            <label for="user_linkedin_url" class="block text-sm font-medium text-gray-700">LinkedIn Profile URL</label>
-            <input type="url" name="user[user_profile][linkedin_url]" id="user_linkedin_url" value="<%= current_user.user_profile&.linkedin_url %>" placeholder="https://linkedin.com/in/yourprofile" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
-          </div>
-          
-          <div>
-            <label for="user_twitter_url" class="block text-sm font-medium text-gray-700">X (Twitter) Profile URL</label>
-            <input type="url" name="user[user_profile][twitter_url]" id="user_twitter_url" value="<%= current_user.user_profile&.twitter_url %>" placeholder="https://x.com/yourhandle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
-          </div>
-          
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="user_other_social_platform" class="block text-sm font-medium text-gray-700">Other Platform</label>
-              <select name="user[user_profile][other_social_platform]" id="user_other_social_platform" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500">
-                <option value="">Select platform (optional)</option>
-                <option value="facebook" <%= current_user.user_profile&.other_social_platform == 'facebook' ? 'selected' : '' %>>Facebook</option>
-                <option value="instagram" <%= current_user.user_profile&.other_social_platform == 'instagram' ? 'selected' : '' %>>Instagram</option>
-                <option value="youtube" <%= current_user.user_profile&.other_social_platform == 'youtube' ? 'selected' : '' %>>YouTube</option>
-                <option value="tiktok" <%= current_user.user_profile&.other_social_platform == 'tiktok' ? 'selected' : '' %>>TikTok</option>
-                <option value="github" <%= current_user.user_profile&.other_social_platform == 'github' ? 'selected' : '' %>>GitHub</option>
-              </select>
-            </div>
-            <div>
-              <label for="user_other_social_url" class="block text-sm font-medium text-gray-700">Other Social URL</label>
-              <input type="url" name="user[user_profile][other_social_url]" id="user_other_social_url" value="<%= current_user.user_profile&.other_social_url %>" placeholder="https://..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
-            </div>
-          </div>
-        </div>
       </div>
       
        <div class="flex justify-end space-x-4">
@@ -129,6 +95,24 @@
               </div>
             <% end %>
           </div>
+          
+          <!-- Danger Zone -->
+          <div class="mt-8 border-t border-red-200 pt-8">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-red-900 mb-4">Danger Zone</h3>
+              <p class="text-sm text-red-700 mb-4">
+                Once you delete your account, there is no going back. This will permanently delete your account and remove your data from our servers.
+              </p>
+              <%= form_with url: founder_account_path, method: :delete, local: true, html: { class: 'inline-block' } do %>
+                <button type="submit" 
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">
+                  Delete Account
+                </button>
+              <% end %>
+            </div>
+          </div>
+          
           <div id="ajax-flash" class="fixed top-6 right-6 z-50"></div>
       </div>
       </div>
