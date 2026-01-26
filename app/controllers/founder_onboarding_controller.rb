@@ -4,7 +4,7 @@ class FounderOnboardingController < ApplicationController
   include CountryHelper
   before_action :ensure_signed_in
 
-  STEPS = %w[personal startup professional mentorship confirm]
+  STEPS = %w[personal startup additional invite_cofounders invite_team professional mentorship confirm]
 
   def show
     prepare_profiles
@@ -16,6 +16,8 @@ class FounderOnboardingController < ApplicationController
     step_params = case @step
     when "personal" then personal_params
     when "startup" then startup_params
+    when "additional" then additional_startup_params
+    when "invite_cofounders", "invite_team" then invite_params
     when "professional" then professional_params
     when "mentorship" then mentorship_params
     else {}
@@ -88,14 +90,22 @@ class FounderOnboardingController < ApplicationController
   private
 
   def personal_params
-    params.require(:founder_onboarding).require(:user_profile).permit(:full_name, :phone, :country, :city, :bio)
+    params.require(:founder_onboarding).require(:user_profile).permit(:full_name, :phone, :country, :city, :bio, :linkedin_url, :photo)
   end
 
   def startup_params
     cast_boolean_param(
-      params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo_url, :description, :stage, :target_market, :value_proposition, :profile_visibility),
+      params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo, :logo_url, :website_url, :year_founded, :country_of_operation, :description, :stage, :target_market, :value_proposition, :team_size, :profile_visibility),
       :profile_visibility
     )
+  end
+
+  def additional_startup_params
+    params.require(:founder_onboarding).require(:additional_startup).permit(:startup_name, :logo, :website_url, :year_founded, :country_of_operation, :description, :team_size, :value_proposition)
+  end
+
+  def invite_params
+    params.fetch(:founder_onboarding, {}).permit(invites: [ :invitee_name, :invitee_email, :role, :startup_id ])
   end
 
   def professional_params
