@@ -67,7 +67,7 @@
             </div>
           </div>
         <% else %>
-          <%= link_to 'Log in', new_user_session_path, class: "font-semibold text-white px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 bg-nailab-purple" %>
+          <%= link_to 'Log in', new_user_session_path, class: "inline-flex items-center justify-center font-semibold text-white px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 bg-nailab-purple", style: "background-color:#913f98;color:#ffffff;" , aria: { label: 'Log in' } %>
         <% end %>
         <!-- Mobile menu button -->
         <div data-controller="mobile-menu" class="md:hidden relative">
