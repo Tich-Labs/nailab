@@ -31,6 +31,9 @@ module NailabBackend
 
     # Add vendor JavaScript to asset paths for importmap
     config.assets.paths << Rails.root.join("vendor", "javascript")
+    # Include the tailwind build output so Sprockets can resolve it
+    config.assets.paths << Rails.root.join("app", "assets", "builds")
+    config.assets.precompile += %w[ builds/tailwind.css tailwind.css ]
 
     initializer "nailab_backend.ignore_app_admin" do
       Rails.autoloaders.main.ignore(Rails.root.join("app/admin"))

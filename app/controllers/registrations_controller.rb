@@ -1,12 +1,3 @@
-  private
-
-  def sign_up_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role)
-  end
-
-  def account_update_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :role)
-  end
 class RegistrationsController < Devise::RegistrationsController
   def create
     super do |user|
@@ -60,19 +51,32 @@ class RegistrationsController < Devise::RegistrationsController
         end
       end
 
-      # If onboarding data existed, auto-confirm mentors/partners and sign them in.
-        # Founders should NOT be auto-confirmed — they must wait for approval email.
-        if ms.to_h.present? || ps.to_h.present?
-          flash[:notice] = "Welcome to Nailab! 🎉 Your founder account has been created successfully. Please check your email for confirmation and next steps to complete your profile setup."
-        end
+      # If onboarding data existed, handle flash and sign-in logic
+      if ms.to_h.present? || ps.to_h.present?
+        flash[:notice] = "Welcome to Nailab! 🎉 Your founder account has been created successfully. Please check your email for confirmation and next steps to complete your profile setup."
         # Sign in the user (bypass Devise confirmable gate if we just confirmed)
         sign_in(resource_name, user) unless user_signed_in?
-        elsif fs.to_h.present?
+      elsif fs.to_h.present?
         # Founders: leave unconfirmed in production and show a pending notice
         flash[:notice] = "Thanks for signing up. We'll review your application and send an approval email shortly."
       end
 
       # Clear onboarding session namespaces
+      # If there was a pending invite token (from invite acceptance flow), process it now
+      if session[:pending_invite_token].present?
+        begin
+          invite = StartupInvite.find_by(token: session[:pending_invite_token])
+          if invite && invite.invitee_email.to_s.downcase == user.email.to_s.downcase
+            invite.mark_accepted!(user)
+            Rails.logger.info("Processed pending invite token for user=#{user.email}")
+          end
+        rescue => e
+          Rails.logger.error("Failed to process pending invite token: #{e.message}")
+        ensure
+          session.delete(:pending_invite_token)
+        end
+      end
+
       session.delete(:onboarding_founders)
       session.delete(:onboarding_mentors)
       session.delete(:onboarding_partners)
@@ -88,13 +92,15 @@ class RegistrationsController < Devise::RegistrationsController
         link = Rails.application.routes.url_helpers.dev_confirm_email_path(raw)
         flash.now[:notice] = "Dev confirmation link: <a href='#{link}'>Confirm email</a>".html_safe
         Rails.logger.info("Dev confirmation link for user=#{user.email}: #{link}")
-       end
+      end
+    end
   end
 
   # Page shown to users whose sign up is pending manual approval/confirmation
   def pending
     render :pending
   end
+
   protected
 
   def after_sign_up_path_for(resource)
@@ -115,6 +121,17 @@ class RegistrationsController < Devise::RegistrationsController
     when :founder
       founder_onboarding_path
     else
-       root_path
+      root_path
     end
+  end
+
+  private
+
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :role)
+  end
+
+  def account_update_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :role)
+  end
 end

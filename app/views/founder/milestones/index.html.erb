@@ -1,5 +1,6 @@
 <%# app/views/founder/milestones/index.html.erb %>
-<div class="max-w-6xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-6xl mx-auto py-8 px-4">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold text-gray-900">Milestones</h1>
     <%= link_to 'Add New Milestone', new_founder_milestone_path, class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
@@ -31,4 +32,5 @@
       <%= link_to 'Create your first milestone', new_founder_milestone_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700" %>
     </div>
   <% end %>
+</div>
 </div>

@@ -1,5 +1,6 @@
 <%# app/views/founder/monthly_metrics/edit.html.erb %>
-<div class="max-w-4xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-4xl mx-auto py-8 px-4">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Monthly Metrics</h1>
   <div class="bg-white shadow rounded-lg p-6">
     <form action="<%= founder_monthly_metric_path(@monthly_metric) %>" method="post" class="space-y-6">
@@ -32,8 +33,9 @@
       </div>
       <div class="flex justify-end space-x-4">
         <a href="<%= founder_monthly_metrics_path %>" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">Cancel</a>
-        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">Update Metrics</button>
+        <button type="submit" class="btn btn-primary">Update Metrics</button>
       </div>
     </form>
   </div>
+</div>
 </div>

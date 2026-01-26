@@ -1,0 +1,73 @@
+<%= form_with(model: [:founder, @startup_update], local: true, class: "space-y-6") do |f| %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Month</span>
+        <%= f.select :report_month, months_options, {}, class: "select select-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Year</span>
+        <%= f.select :report_year, years_options, {}, class: "select select-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">MRR ($)</span>
+        <%= f.number_field :mrr, step: 0.01, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">New Paying Customers</span>
+        <%= f.number_field :new_paying_customers, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Churned Customers</span>
+        <%= f.number_field :churned_customers, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Cash at Hand ($)</span>
+        <%= f.number_field :cash_at_hand, step: 0.01, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Burn Rate ($/mo)</span>
+        <%= f.number_field :burn_rate, step: 0.01, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Product Progress <span class="text-xs text-base-content/60">(optional)</span></span>
+        <%= f.text_area :product_progress, rows: 2, class: "textarea textarea-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Funding Stage <span class="text-xs text-base-content/60">(optional)</span></span>
+        <%= f.text_field :funding_stage, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Funds Raised ($) <span class="text-xs text-base-content/60">(optional)</span></span>
+        <%= f.number_field :funds_raised, step: 0.01, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+    <div>
+      <label class="form-control w-full">
+        <span class="label-text">Investors Engaged <span class="text-xs text-base-content/60">(optional)</span></span>
+        <%= f.text_field :investors_engaged, class: "input input-bordered w-full" %>
+      </label>
+    </div>
+  </div>
+  <div class="pt-4">
+    <%= f.submit 'Submit Update', class: "btn btn-primary btn-lg w-full" %>
+  </div>
+<% end %>

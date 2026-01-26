@@ -2,7 +2,7 @@
 class SessionsController < ApplicationController
   def create
     # OmniAuth provides a hash with user information
-    auth_hash = request.env['omniauth.auth']
+    auth_hash = request.env["omniauth.auth"]
     # Process the data to find or create a user in your database
     # Example: User.find_or_create_from_omniauth(auth_hash)
     # Then log the user in and redirect
@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    flash[:alert] = 'Authentication failed.'
+    flash[:alert] = "Authentication failed."
     redirect_to root_path
   end
 end

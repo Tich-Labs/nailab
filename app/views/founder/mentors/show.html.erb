@@ -1,21 +1,22 @@
 <%# app/views/founder/mentors/show.html.erb %>
-<div class="max-w-4xl mx-auto py-8 px-4">
-  <div class="bg-gradient-to-r from-purple-50 to-teal-50 shadow rounded-lg p-6">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-4xl mx-auto py-8 px-4">
+  <div class="card bg-base-100 shadow rounded-lg p-6">
     <div class="flex items-start justify-between mb-6">
       <div class="flex items-center space-x-4">
-        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center overflow-hidden">
           <% if @mentor.photo.present? %>
             <img src="<%= @mentor.photo %>" alt="<%= @mentor.name || 'Mentor' %>" class="w-full h-full object-cover">
           <% else %>
-            <span class="text-purple-600 font-semibold text-xl">?</span>
+            <span class="text-primary font-semibold text-xl">?</span>
           <% end %>
         </div>
         <div>
           <h1 class="text-3xl font-bold text-gray-900"><%= @mentor.name || 'Unknown Mentor' %></h1>
-          <p class="text-sm text-teal-800"><%= @mentor.organization || 'No organization listed' %> • <%= @mentor.years_experience || 'Experience not specified' %> years experience</p>
+          <p class="text-sm text-secondary"><%= @mentor.organization || 'No organization listed' %> • <%= @mentor.years_experience || 'Experience not specified' %> years experience</p>
         </div>
       </div>
-      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "bg-nailab-teal text-white px-6 py-3 rounded-lg hover:bg-nailab-teal" %>
+      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "btn btn-primary" %>
     </div>
     <div class="mb-6">
       <h2 class="text-xl font-semibold mb-4">Bio</h2>
@@ -102,4 +103,5 @@
       </div>
     <% end %>
   </div>
+</div>
 </div>

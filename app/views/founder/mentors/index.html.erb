@@ -1,13 +1,14 @@
 <%# app/views/founder/mentors/index.html.erb %>
-<div class="max-w-6xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-6xl mx-auto py-8 px-4">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Mentors</h1>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @mentors.each do |mentor| %>
       <div class="bg-white shadow rounded-lg overflow-hidden">
         <div class="p-6">
           <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-              <span class="text-purple-600 font-semibold"><%= mentor.name.first %></span>
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+              <span class="text-primary font-semibold"><%= mentor.name.first %></span>
             </div>
             <div>
               <h3 class="text-lg font-semibold"><%= mentor.name %></h3>
@@ -19,7 +20,7 @@
             <span><%= mentor.company %></span>
             <span><%= mentor.years_experience %> years exp.</span>
           </div>
-          <%= link_to 'View Profile', founder_mentor_path(mentor), class: "w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 text-center block" %>
+          <%= link_to 'View Profile', founder_mentor_path(mentor), class: "btn btn-primary w-full text-center block" %>
         </div>
       </div>
     <% end %>
@@ -29,4 +30,5 @@
       <p class="text-gray-500">No mentors available at the moment.</p>
     </div>
   <% end %>
+</div>
 </div>

@@ -1,36 +1,38 @@
-<div class="max-w-4xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-4xl mx-auto py-8 px-4">
   <div class="mb-6">
-    <h1 class="text-2xl font-bold">Your Messages</h1>
-    <p class="text-sm text-gray-600">Sent and received messages with peers.</p>
+    <h1 class="text-2xl font-bold text-primary">Your Messages</h1>
+    <p class="text-sm text-base-content/60">Sent and received messages with peers.</p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <section class="bg-white p-6 rounded-lg shadow">
-      <h2 class="font-semibold mb-4">Sent</h2>
+    <section class="bg-base-100 p-6 rounded-lg shadow">
+      <h2 class="font-semibold mb-4 text-primary">Sent</h2>
       <% @sent.each do |msg| %>
-        <div class="mb-3 border-b pb-3">
-          <div class="text-sm text-gray-700">To: <%= msg.recipient.name %></div>
-          <div class="text-sm text-gray-500">Sent: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
-          <p class="mt-2 text-gray-800"><%= simple_format(msg.content) %></p>
+        <div class="mb-3 border-b border-base-200 pb-3">
+          <div class="text-sm text-base-content/70">To: <%= msg.recipient.name %></div>
+          <div class="text-sm text-base-content/50">Sent: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
+          <p class="mt-2 text-base-content"><%= simple_format(msg.content) %></p>
         </div>
       <% end %>
       <% if @sent.empty? %>
-        <p class="text-gray-500">No sent messages yet.</p>
+        <p class="text-base-content/50">No sent messages yet.</p>
       <% end %>
     </section>
 
-    <section class="bg-white p-6 rounded-lg shadow">
-      <h2 class="font-semibold mb-4">Received</h2>
+    <section class="bg-base-100 p-6 rounded-lg shadow">
+      <h2 class="font-semibold mb-4 text-primary">Received</h2>
       <% @received.each do |msg| %>
-        <div class="mb-3 border-b pb-3">
-          <div class="text-sm text-gray-700">From: <%= msg.sender.name %></div>
-          <div class="text-sm text-gray-500">Received: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
-          <p class="mt-2 text-gray-800"><%= simple_format(msg.content) %></p>
+        <div class="mb-3 border-b border-base-200 pb-3">
+          <div class="text-sm text-base-content/70">From: <%= msg.sender.name %></div>
+          <div class="text-sm text-base-content/50">Received: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
+          <p class="mt-2 text-base-content"><%= simple_format(msg.content) %></p>
         </div>
       <% end %>
       <% if @received.empty? %>
-        <p class="text-gray-500">No messages received yet.</p>
+        <p class="text-base-content/50">No messages received yet.</p>
       <% end %>
     </section>
   </div>
+</div>
 </div>

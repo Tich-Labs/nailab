@@ -1,20 +1,20 @@
 <%# Shared resource card partial - accepts `resource` and optional `variant` ('founder' or 'public') %>
 <% variant ||= 'public' %>
 
-<article class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition hover:border-slate-300">
+<article class="flex flex-col justify-between rounded-2xl border border-base-200 bg-base-100 p-6 shadow-lg transition hover:border-base-300">
   <% if variant == 'founder' %>
-    <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-4 py-3 -mx-6 mt-0">
+    <div class="bg-primary px-4 py-3 -mx-6 mt-0">
       <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
-        <span class="text-white text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
+        <span class="px-3 py-1 bg-primary-content/20 text-primary-content text-xs font-semibold rounded-full"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
+        <span class="text-primary-content text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
       </div>
     </div>
     <div class="p-6">
-      <h3 class="text-xl font-bold text-gray-900 mb-3"><%= resource.title %></h3>
-      <p class="text-gray-600 mb-6"><%= resource.description %></p>
+      <h3 class="text-xl font-bold text-primary mb-3"><%= resource.title %></h3>
+      <p class="text-base-content/70 mb-6"><%= resource.description %></p>
       <div class="flex space-x-3">
-        <%= link_to 'View Details', founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-all" %>
-        <%= link_to 'Download', download_founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal transition-all" %>
+        <%= link_to 'View Details', founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-primary text-primary-content text-sm font-semibold rounded-lg hover:bg-primary-focus transition-all" %>
+        <%= link_to 'Download', download_founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-secondary text-secondary-content text-sm font-semibold rounded-lg hover:bg-secondary-focus transition-all" %>
       </div>
     </div>
   <% else %>

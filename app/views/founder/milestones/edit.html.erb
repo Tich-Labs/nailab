@@ -1,5 +1,6 @@
 <%# app/views/founder/milestones/edit.html.erb %>
-<div class="max-w-4xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-4xl mx-auto py-8 px-4">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Milestone</h1>
   <div class="bg-white shadow rounded-lg p-6">
     <form action="<%= founder_milestone_path(@milestone) %>" method="post" class="space-y-6">
@@ -7,6 +8,7 @@
       <div>
         <label for="milestone_title" class="block text-sm font-medium text-gray-700">Title</label>
         <input type="text" name="milestone[title]" id="milestone_title" value="<%= @milestone.title %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" />
+      </div>
       </div>
       <div>
         <label for="milestone_description" class="block text-sm font-medium text-gray-700">Description</label>

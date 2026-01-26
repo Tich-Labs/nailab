@@ -1,26 +1,26 @@
 <%# app/views/founder/conversations/index.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Messages</h1>
-    <p class="text-xl text-gray-600">Stay connected with your mentors and fellow founders</p>
+    <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-4">Messages</h1>
+    <p class="text-xl text-base-content/60">Stay connected with your mentors and fellow founders</p>
   </div>
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
       <!-- Left: list -->
-      <div class="col-span-1 border-r border-gray-100">
-        <div class="bg-gradient-to-r from-purple-600 to-nailab-teal px-6 py-4">
-          <h2 class="text-lg font-bold text-white">Messages</h2>
+      <div class="col-span-1 border-r border-base-200">
+        <div class="bg-primary px-6 py-4">
+          <h2 class="text-lg font-bold text-primary-content">Messages</h2>
         </div>
-        <div class="divide-y divide-gray-100 h-[70vh] overflow-y-auto">
+        <div class="divide-y divide-base-200 h-[70vh] overflow-y-auto">
           <% @items.each do |item| %>
-            <%= link_to '#', class: "block p-4 hover:bg-gray-50 #{'bg-teal-50' if @selected_item && @selected_item[:type] == item[:type] && @selected_item[:id] == item[:id]}", data: { type: item[:type], id: item[:id] } do %>
+            <%= link_to '#', class: "block p-4 hover:bg-base-200 #{'bg-secondary/10' if @selected_item && @selected_item[:type] == item[:type] && @selected_item[:id] == item[:id]}", data: { type: item[:type], id: item[:id] } do %>
               <div class="flex items-start justify-between">
                 <div class="flex-1">
-                  <div class="text-sm text-gray-500"><%= item[:contact] %> <span class="mx-2">•</span> <%= item[:category] if item[:category].present? %></div>
-                  <div class="font-semibold text-gray-900"><%= item[:subject].presence || (item[:preview]&.truncate(60) || 'Message') %></div>
-                  <div class="text-xs text-gray-500 mt-1"><%= item[:preview]&.truncate(80) %></div>
+                  <div class="text-sm text-base-content/70"><%= item[:contact] %> <span class="mx-2">•</span> <%= item[:category] if item[:category].present? %></div>
+                  <div class="font-semibold text-primary"><%= item[:subject].presence || (item[:preview]&.truncate(60) || 'Message') %></div>
+                  <div class="text-xs text-base-content/50 mt-1"><%= item[:preview]&.truncate(80) %></div>
                 </div>
-                <div class="text-right text-xs text-gray-400">
+                <div class="text-right text-xs text-base-content/40">
                   <div><%= item[:updated_at].strftime('%b %d') rescue '' %></div>
                   <div class="mt-1"><%= item[:updated_at].strftime('%I:%M %p') rescue '' %></div>
                 </div>
@@ -28,7 +28,7 @@
             <% end %>
           <% end %>
           <% if @items.empty? %>
-            <div class="p-6 text-center text-gray-500">No messages yet.</div>
+            <div class="p-6 text-center text-base-content/50">No messages yet.</div>
           <% end %>
         </div>
       </div>
@@ -36,39 +36,39 @@
       <!-- Right: reading panel -->
       <div class="col-span-2 p-6">
         <% if @selected_item.nil? %>
-          <div class="text-center text-gray-500 py-12">Select a message to read.</div>
+          <div class="text-center text-base-content/50 py-12">Select a message to read.</div>
         <% else %>
           <% case @selected_item[:type]
           when :conversation %>
             <h3 class="text-xl font-bold mb-2">Conversation with <%= @selected_item[:contact] %></h3>
             <div class="space-y-4">
               <% @reading.each do |m| %>
-                <div class="p-4 rounded-lg <%= m.user_id == current_user.id ? 'bg-teal-50 ml-auto' : 'bg-gray-100' %>">
-                  <div class="text-sm text-gray-600"><strong><%= m.user.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                  <div class="mt-2 text-gray-900"><%= simple_format(m.content) %></div>
+                <div class="p-4 rounded-lg <%= m.user_id == current_user.id ? 'bg-secondary/10 ml-auto' : 'bg-base-200' %>">
+                  <div class="text-sm text-base-content/70"><strong><%= m.user.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                  <div class="mt-2 text-base-content"><%= simple_format(m.content) %></div>
                 </div>
               <% end %>
             </div>
           <% when :support_ticket %>
-            <h3 class="text-xl font-bold mb-2"><%= @reading.subject %> <span class="text-sm text-gray-500">• <%= @reading.category %></span></h3>
-            <div class="mb-4 text-sm text-gray-600">Created: <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+            <h3 class="text-xl font-bold mb-2 text-primary"><%= @reading.subject %> <span class="text-sm text-base-content/70">• <%= @reading.category %></span></h3>
+            <div class="mb-4 text-sm text-base-content/70">Created: <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
             <div class="space-y-4">
-              <div class="p-4 bg-gray-100 rounded-lg">
-                <div class="text-sm text-gray-600 font-semibold">You • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                <div class="mt-2 text-gray-900"><%= simple_format(@reading.description) %></div>
+              <div class="p-4 bg-base-200 rounded-lg">
+                <div class="text-sm text-base-content/70 font-semibold">You • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                <div class="mt-2 text-base-content"><%= simple_format(@reading.description) %></div>
               </div>
               <% @reading.replies.order(:created_at).each do |r| %>
-                <div class="p-4 rounded-lg <%= r.admin_reply? ? 'bg-teal-50 ml-auto' : 'bg-gray-100' %>">
-                  <div class="text-sm text-gray-600 font-semibold"><%= r.admin_reply? ? 'Support Team' : (r.user.try(:name) || 'You') %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                  <div class="mt-2 text-gray-900"><%= simple_format(r.body) %></div>
+                <div class="p-4 rounded-lg <%= r.admin_reply? ? 'bg-secondary/10 ml-auto' : 'bg-base-200' %>">
+                  <div class="text-sm text-base-content/70 font-semibold"><%= r.admin_reply? ? 'Support Team' : (r.user.try(:name) || 'You') %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                  <div class="mt-2 text-base-content"><%= simple_format(r.body) %></div>
                 </div>
               <% end %>
             </div>
           <% when :peer_message %>
-            <h3 class="text-xl font-bold mb-2">Message with <%= @selected_item[:contact] %></h3>
-            <div class="p-4 bg-gray-100 rounded-lg">
-              <div class="text-sm text-gray-600"><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-              <div class="mt-2 text-gray-900"><%= simple_format(@reading.content) %></div>
+            <h3 class="text-xl font-bold mb-2 text-primary">Message with <%= @selected_item[:contact] %></h3>
+            <div class="p-4 bg-base-200 rounded-lg">
+              <div class="text-sm text-base-content/70"><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+              <div class="mt-2 text-base-content"><%= simple_format(@reading.content) %></div>
             </div>
           <% end %>
         <% end %>

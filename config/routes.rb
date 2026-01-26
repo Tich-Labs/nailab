@@ -221,6 +221,11 @@ Rails.application.routes.draw do
     resources(:milestones)
     resources(:monthly_metrics, only: %i[new create edit update index])
 
+    # Startup Updates feature
+    resources :startup_updates, only: [ :index, :new, :create ]
+
+    resources :startup_invites, only: [ :new, :create ]
+
     get "mentorship", to: "mentorship#index"
     resources(:mentors, only: %i[index show])
     resources(:mentorship_requests, only: %i[index show new create edit update destroy])
@@ -300,6 +305,9 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback", to: "sessions#create"
   get "/auth/failure", to: "sessions#failure"
+
+  # Public invite acceptance
+  get "invites/accept", to: "invites#accept", as: :accept_invites
 
   get "auth/google_oauth2/callback", to: "google_calendar#callback"
   get "auth/google_oauth2", as: "google_oauth2_auth", to: "google_calendar#connect"

@@ -1,0 +1,25 @@
+<div class="max-w-2xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
+  <h2 class="text-2xl font-semibold mb-4">Invite a co-founder or team member</h2>
+
+  <%= form_with model: @invite, url: founder_startup_invites_path, local: true do |f| %>
+    <%= f.hidden_field :startup_id, value: @startup.id %>
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <%= f.label :invitee_name, class: 'block text-sm font-medium text-gray-700' %>
+        <%= f.text_field :invitee_name, class: 'input input-bordered w-full' %>
+      </div>
+      <div>
+        <%= f.label :invitee_email, class: 'block text-sm font-medium text-gray-700' %>
+        <%= f.email_field :invitee_email, required: true, class: 'input input-bordered w-full' %>
+      </div>
+      <div>
+        <%= f.label :role, 'Role', class: 'block text-sm font-medium text-gray-700' %>
+        <%= f.text_field :role, class: 'input input-bordered w-full', placeholder: 'Co-founder, CTO, COO' %>
+      </div>
+    </div>
+    <div class="mt-6 flex justify-end gap-3">
+      <%= link_to 'Cancel', founder_startup_profile_path, class: 'btn btn-ghost' %>
+      <%= f.submit 'Send Invite', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

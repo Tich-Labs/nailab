@@ -38,6 +38,11 @@
 		cursor: pointer !important;
 	}
 
+	body[data-theme="nailab_founder"] .btn,
+	body[data-theme="nailab_founder"] .btn-success {
+		@apply bg-nailab-purple text-white hover:bg-nailab-purple/90;
+	}
+
 	/* Container used by our custom admin partials */
 	.flex.gap-3.actions.form-actions {
 		display: flex !important;

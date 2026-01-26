@@ -38,7 +38,7 @@ class User < ApplicationRecord
   validate :password_complexity, if: -> { password.present? }
   has_one :user_profile, dependent: :destroy
   has_one :startup_profile, dependent: :destroy
-  has_one :startup, dependent: :destroy
+  has_many :startups, dependent: :destroy
   has_one :mentor, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy

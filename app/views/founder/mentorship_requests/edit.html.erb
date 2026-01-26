@@ -1,5 +1,6 @@
 <%# app/views/founder/mentorship_requests/edit.html.erb %>
-<div class="max-w-2xl mx-auto py-8 px-4">
+<div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
+  <div class="max-w-2xl mx-auto py-8 px-4">
   <div class="bg-white shadow rounded-lg p-8">
     <div class="mb-6">
       <h1 class="text-3xl font-bold text-gray-900">Edit Mentorship Request</h1>
@@ -16,8 +17,9 @@
       </div>
       <div class="flex justify-end space-x-4">
         <%= link_to 'Cancel', founder_mentorship_requests_path, class: "px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold" %>
-        <%= form.submit 'Save Changes', class: "px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold" %>
+        <%= form.submit 'Save Changes', class: "btn btn-primary font-semibold" %>
       </div>
     <% end %>
   </div>
+</div>
 </div>
