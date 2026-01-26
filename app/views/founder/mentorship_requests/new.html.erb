@@ -2,19 +2,19 @@
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-2xl mx-auto py-8 px-4">
   <div class="bg-white shadow rounded-lg p-8">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold text-gray-900">Request Mentorship</h1>
+    <div class="mb-6 bg-nailab-purple text-white p-6 rounded-lg">
+      <h1 class="text-4xl lg:text-5xl font-bold">Request Mentorship</h1>
       <% if @mentor %>
-        <p class="text-gray-600 mt-2">Request a mentorship session with <strong><%= @mentor.name %></strong></p>
+        <p class=" mt-2">Request a mentorship session with <strong><%= @mentor.name %></strong></p>
       <% else %>
-        <p class="text-gray-600 mt-2">Request a mentorship session</p>
+        <p class=" mt-2">Request a mentorship session</p>
       <% end %>
     </div>
     <%= form_with model: @request, url: founder_mentorship_requests_path, method: :post, local: true, class: "space-y-6" do |form| %>
       <% if @mentor.nil? %>
         <div>
           <%= form.label :mentor_id, "Select Mentor", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.collection_select :mentor_id, UserProfile.where(role: 'mentor', profile_visibility: true), :user_id, :full_name, { prompt: "Choose a mentor" }, { class: "select select-bordered w-full" } %>
+          <%= form.collection_select :mentor_id, UserProfile.where(role: 'mentor', profile_visibility: true), :user_id, :full_name, { prompt: "Choose a mentor" }, { class: "select select-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" } %>
         </div>
       <% else %>
         <%= form.hidden_field :mentor_id, value: @mentor.user_id %>
@@ -25,13 +25,13 @@
         </div>
         <div>
           <%= form.label :proposed_time, "Proposed time (optional)", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.datetime_local_field :proposed_time, value: (@request.proposed_time && @request.proposed_time.strftime('%Y-%m-%dT%H:%M')) , class: "input input-bordered w-full" %>
+          <%= form.datetime_local_field :proposed_time, value: (@request.proposed_time && @request.proposed_time.strftime('%Y-%m-%dT%H:%M')) , class: "input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" %>
           <small class="text-gray-500">Suggest a date and time for the session (mentor will confirm).</small>
         </div>
       <% end %>
       <div>
-        <%= form.label :message, "Message", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= form.text_area :message, placeholder: "Tell the mentor about your startup, what you're working on, and what kind of help you're looking for...", rows: 6, class: "textarea textarea-bordered w-full" %>
+        <%= form.label :message, "Message", class: "block text-sm font-medium text-gray-700 mb-2 border-b-2" %>
+        <%= form.text_area :message, placeholder: "Tell the mentor about your startup, what you're working on, and what kind of help you're looking for...", rows: 6, class: "textarea textarea-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" %>
       </div>
       <div class="flex justify-end space-x-4">
         <%= link_to 'Cancel', founder_mentorship_path, class: "px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold" %>

@@ -12,16 +12,16 @@
         <div class="space-y-6">
           <div>
             <label for="startup_profile_startup_name" class="block text-lg font-semibold text-primary mb-2">Name</label>
-            <input type="text" name="startup_profile[startup_name]" id="startup_profile_startup_name" value="<%= @startup_profile.startup_name %>" class="input input-bordered w-full" />
+            <input type="text" name="startup_profile[startup_name]" id="startup_profile_startup_name" value="<%= @startup_profile.startup_name %>" class="input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
           </div>
           <div>
             <label for="startup_profile_description" class="block text-lg font-semibold text-primary mb-2">Description</label>
-            <textarea name="startup_profile[description]" id="startup_profile_description" rows="4" class="textarea textarea-bordered w-full resize-none"><%= @startup_profile.description %></textarea>
+            <textarea name="startup_profile[description]" id="startup_profile_description" rows="4" class="textarea textarea-bordered w-full resize-none bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple"><%= @startup_profile.description %></textarea>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="startup_profile_stage" class="block text-sm font-medium text-base-content/70 mb-2">Stage</label>
-              <select name="startup_profile[stage]" id="startup_profile_stage" class="select select-bordered w-full">
+              <select name="startup_profile[stage]" id="startup_profile_stage" class="select select-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple">
                 <option value="Idea" <%= @startup_profile.stage == 'Idea' ? 'selected' : '' %>>Idea</option>
                 <option value="MVP" <%= @startup_profile.stage == 'MVP' ? 'selected' : '' %>>MVP</option>
                 <option value="Early Stage" <%= @startup_profile.stage == 'Early Stage' ? 'selected' : '' %>>Early Stage</option>
@@ -31,7 +31,7 @@
             </div>
             <div>
               <label for="startup_profile_sector" class="block text-sm font-medium text-base-content/70 mb-2">Sector</label>
-              <input type="text" name="startup_profile[sector]" id="startup_profile_sector" value="<%= @startup_profile.sector %>" class="input input-bordered w-full" />
+              <input type="text" name="startup_profile[sector]" id="startup_profile_sector" value="<%= @startup_profile.sector %>" class="input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
             </div>
           </div>
         </div>
@@ -39,7 +39,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="startup_profile_funding_stage" class="block text-sm font-medium text-base-content/70 mb-2">Funding stage</label>
-              <select name="startup_profile[funding_stage]" id="startup_profile_funding_stage" class="select select-bordered w-full">
+              <select name="startup_profile[funding_stage]" id="startup_profile_funding_stage" class="select select-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple">
                 <option value="Pre-seed" <%= @startup_profile.funding_stage == 'Pre-seed' ? 'selected' : '' %>>Pre-seed</option>
                 <option value="Seed" <%= @startup_profile.funding_stage == 'Seed' ? 'selected' : '' %>>Seed</option>
                 <option value="Series A" <%= @startup_profile.funding_stage == 'Series A' ? 'selected' : '' %>>Series A</option>
@@ -49,12 +49,12 @@
             </div>
             <div>
               <label for="startup_profile_funding_raised" class="block text-sm font-medium text-base-content/70 mb-2">Funding raised</label>
-              <input type="number" name="startup_profile[funding_raised]" id="startup_profile_funding_raised" value="<%= @startup_profile.funding_raised %>" class="input input-bordered w-full" />
+              <input type="number" name="startup_profile[funding_raised]" id="startup_profile_funding_raised" value="<%= @startup_profile.funding_raised %>" class="input input-bordered w-full bg-white border border-gray-300 rounded p-2 text-right focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
             </div>
           </div>
           <div>
             <label for="startup_profile_logo" class="block text-sm font-medium text-base-content/70 mb-2">Startup Logo</label>
-            <input type="file" name="startup_profile[logo]" id="startup_profile_logo" accept="image/*" class="file-input file-input-bordered w-full" />
+            <input type="file" name="startup_profile[logo]" id="startup_profile_logo" accept="image/*" class="file-input file-input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
             <% if @startup_profile.logo.attached? %>
               <div class="mt-2">
                 <img src="<%= url_for(@startup_profile.logo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Startup logo" class="h-16 w-16 rounded object-cover" />
@@ -63,18 +63,18 @@
           </div>
                 <div>
             <label for="startup_profile_target_market" class="block text-lg font-semibold text-gray-900 mb-2">Target market</label>
-            <input type="text" name="startup_profile[target_market]" id="startup_profile_target_market" value="<%= @startup_profile.target_market %>" class="input input-bordered w-full" />
+            <input type="text" name="startup_profile[target_market]" id="startup_profile_target_market" value="<%= @startup_profile.target_market %>" class="input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
                 </div>
                   <div>
                     <label for="startup_profile_value_proposition" class="block text-lg font-semibold text-gray-900 mb-2">Value proposition</label>
-                    <textarea name="startup_profile[value_proposition]" id="startup_profile_value_proposition" rows="3" class="textarea textarea-bordered w-full resize-none"><%= @startup_profile.value_proposition %></textarea>
+                    <textarea name="startup_profile[value_proposition]" id="startup_profile_value_proposition" rows="3" class="textarea textarea-bordered w-full resize-none bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple"><%= @startup_profile.value_proposition %></textarea>
                 </div>
               </div>
             </div>
             <div class="pt-8 border-t border-gray-200">
               <div class="flex flex-col sm:flex-row gap-4 justify-between">
                 <div class="flex items-start gap-3">
-                  <input type="checkbox" name="startup_profile[profile_visibility]" value="1" <%= 'checked' if @startup_profile.profile_visibility? %> class="mt-1" />
+                  <input type="checkbox" name="startup_profile[profile_visibility]" value="1" <%= 'checked' if @startup_profile.profile_visibility? %> class="form-checkbox h-5 w-5 text-nailab-purple border-gray-300 rounded mt-1" />
                   <div>
                     <p class="text-lg font-semibold text-teal-900">Share this profile in the public directory</p>
                     <p class="text-sm text-nailab-teal">When enabled, interested mentors, partners, and investors can view the information you choose to display.</p>

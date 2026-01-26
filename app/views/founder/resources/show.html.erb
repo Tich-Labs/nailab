@@ -4,11 +4,22 @@
   <div class="bg-base-100 shadow rounded-lg p-6">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h1 class="text-3xl font-bold text-primary mb-2"><%= @resource.title %></h1>
+        <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-2"><%= @resource.title %></h1>
         <p class="text-base-content/70"><%= @resource.description %></p>
       </div>
       <div class="flex space-x-2">
-        <%= link_to 'Download', download_founder_resource_path(@resource), class: "btn btn-primary" %>
+        <% rt = @resource.resource_type.to_s.downcase %>
+        <% action_map = {
+          'blog' => { label: 'Read', path: ->(r) { r.url.presence || founder_resource_path(r) } },
+          'article' => { label: 'Read', path: ->(r) { r.url.presence || founder_resource_path(r) } },
+          'template' => { label: 'Download', path: ->(r) { r.url.presence || download_founder_resource_path(r) } },
+          'opportunity' => { label: 'Apply', path: ->(r) { r.url.presence || founder_resource_path(r) } },
+          'event' => { label: 'Attend', path: ->(r) { r.url.presence || founder_resource_path(r) } }
+        } %>
+        <% action = action_map.fetch(rt, { label: 'Download', path: ->(r) { r.url.presence || download_founder_resource_path(r) } }) %>
+        <% primary_label = action[:label] %>
+        <% primary_path = action[:path].call(@resource) rescue download_founder_resource_path(@resource) %>
+        <%= link_to primary_label, primary_path, class: "btn btn-primary", target: ( @resource.url.present? ? '_blank' : nil ), rel: ( @resource.url.present? ? 'noreferrer' : nil ) %>
         <%= button_to 'Bookmark', bookmark_founder_resource_path(@resource), method: :post, class: "bg-base-200 text-base-content px-4 py-2 rounded-lg hover:bg-base-300" %>
       </div>
     </div>

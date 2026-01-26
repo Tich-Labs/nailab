@@ -4,7 +4,7 @@
   <div class="bg-white shadow rounded-lg p-6">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900">Session Details</h1>
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900">Session Details</h1>
         <span class="inline-block px-3 py-1 text-sm rounded-full <%= @session.status == 'scheduled' ? 'bg-blue-100 text-blue-800' : @session.status == 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %> mt-2">
           <%= @session.status.titleize %>
         </span>
@@ -12,26 +12,26 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div>
-        <h3 class="font-medium text-gray-700">Mentor</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Mentor</h3>
         <p class="text-gray-600 mt-1"><%= @session.mentor.name %></p>
         <p class="text-sm text-gray-500"><%= @session.mentor.expertise %></p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Date & Time</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Date & Time</h3>
         <p class="text-gray-600 mt-1"><%= @session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %></p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Duration</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Duration</h3>
         <p class="text-gray-600 mt-1"><%= @session.duration %> minutes</p>
       </div>
       <div>
-        <h3 class="font-medium text-gray-700">Session Type</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Session Type</h3>
         <p class="text-gray-600 mt-1"><%= @session.session_type %></p>
       </div>
     </div>
     <% if @session.agenda.present? %>
       <div class="mb-6">
-        <h3 class="font-medium text-gray-700">Agenda</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Agenda</h3>
         <p class="text-gray-600 mt-1"><%= @session.agenda %></p>
       </div>
     <% end %>

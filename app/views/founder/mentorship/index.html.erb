@@ -2,27 +2,27 @@
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-4">Mentorship</h1>
+  <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Mentorship</h1>
     <p class="text-xl text-base-content/60">Connect with experienced mentors to accelerate your startup journey</p>
   </div>
   <!-- Mentorship Request Modal -->
   <!-- Available Mentors -->
   <div class="lg:col-span-2">
     <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-primary px-8 py-6 rounded-t-xl">
-        <h2 class="text-2xl font-bold text-primary-content">Available Mentors</h2>
+      <div class="bg-nailab-purple text-white px-8 py-6 rounded-t-xl">
+        <h2 class="text-2xl font-bold text-white">Available Mentors</h2>
       </div>
       <div class="p-8 bg-base-100 rounded-b-xl">
         <div class="space-y-6">
           <% @mentors.each do |mentor| %>
-            <div class="card bg-primary/5 rounded-xl hover:bg-primary/10 transition-all">
+            <div class="card bg-base-200 rounded-xl hover:bg-base-300 transition-all">
               <div class="card-body p-6 flex items-center justify-between">
                   <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-                  <span class="text-primary-content font-bold text-xl"><%= mentor.name.first %></span>
+                <div class="w-16 h-16 bg-nailab-purple text-white rounded-full flex items-center justify-center">
+                  <span class="font-bold text-xl"><%= mentor.name.first %></span>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold text-primary"><%= mentor.name %></h3>
+                  <h3 class="text-lg font-semibold text-nailab-purple"><%= mentor.name %></h3>
                   <p class="text-base-content/70"><%= mentor.expertise&.join(', ') || 'No specialties listed' %></p>
                   <% if mentor.company.present? %>
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary">
@@ -32,26 +32,26 @@
                 </div>
                 </div>
                 <div class="flex space-x-3">
-                <%= link_to 'View Profile', founder_mentor_path(mentor), class: "inline-flex items-center px-4 py-2 bg-primary text-primary-content text-sm font-semibold rounded-lg hover:bg-primary-focus transition-all" %>
-                <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-4 py-2 bg-secondary text-secondary-content text-sm font-semibold rounded-lg hover:bg-secondary-focus transition-all" %>
+                <%= link_to 'View Profile', founder_mentor_path(mentor), class: "inline-flex items-center px-4 py-2 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
+                <%= link_to 'Request Session', new_founder_mentorship_request_path(mentor_id: mentor.id), class: "inline-flex items-center px-4 py-2 bg-nailab-teal text-secondary-content text-sm font-semibold rounded-lg hover:bg-secondary-focus transition-all" %>
               </div>
               </div>
             </div>
           <% end %>
         </div>
         <% if @selected_mentor %>
-          <div class="modal modal-open" role="dialog" aria-modal="true" aria-labelledby="mentorship-title">
+          <div class="modal modal-open" role="dialog" aria-modal="true" aria-labelledby="mentorship-title" data-controller="modal">
             <div class="modal-box relative">
-              <button class="btn btn-ghost btn-sm btn-circle absolute right-2 top-2" aria-label="Close" onclick="closeModal()">✕</button>
-              <h3 id="mentorship-title" class="text-lg font-semibold text-primary">Request Mentorship Session</h3>
+              <button class="btn btn-ghost btn-sm btn-circle absolute right-2 top-2" aria-label="Close" data-action="click->modal#close">✕</button>
+              <h3 id="mentorship-title" class="text-lg font-semibold text-nailab-purple">Request Mentorship Session</h3>
 
               <div class="card bg-base-100 my-4 rounded-lg">
                 <div class="card-body p-4 flex items-center space-x-3">
-                  <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center" aria-hidden="true">
-                    <span class="text-primary-content font-bold"><%= @selected_mentor.name.first %></span>
+                  <div class="w-12 h-12 bg-nailab-purple text-white rounded-full flex items-center justify-center" aria-hidden="true">
+                    <span class="font-bold"><%= @selected_mentor.name.first %></span>
                   </div>
                   <div>
-                    <h4 class="font-semibold text-primary"><%= @selected_mentor.name %></h4>
+                    <h4 class="font-semibold text-nailab-purple"><%= @selected_mentor.name %></h4>
                     <p class="text-sm text-base-content/70"><%= @selected_mentor.expertise %></p>
                   </div>
                 </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="flex justify-end space-x-3">
                   <%= link_to 'Cancel', founder_mentorship_path, class: "px-4 py-2 bg-base-200 text-base-content rounded-lg hover:bg-base-300 font-semibold" %>
-                  <%= form.submit 'Send Request', class: "px-6 py-2 bg-primary text-primary-content rounded-lg hover:bg-primary-focus font-semibold" %>
+                  <%= form.submit 'Send Request', class: "px-6 py-2 bg-nailab-purple text-white rounded-lg hover:bg-nailab-purple font-semibold" %>
                 </div>
               <% end %>
             </div>
@@ -75,23 +75,23 @@
       </div>
     </div>
     <!-- Upcoming Sessions -->
-    <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
-      <div class="bg-primary px-8 py-6">
-        <h3 class="text-2xl font-bold text-primary-content">Upcoming Sessions</h3>
+    <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden mt-10">
+      <div class="bg-nailab-purple text-white px-8 py-6">
+        <h3 class="text-2xl font-bold text-white">Upcoming Sessions</h3>
       </div>
       <div class="p-8">
         <div class="space-y-4">
           <% @sessions.each do |session| %>
-            <div class="p-4 bg-primary/5 rounded-xl">
-              <p class="font-semibold text-primary"><%= session.mentor.name %></p>
+            <div class="p-4 bg-base-200 rounded-xl">
+              <p class="font-semibold text-nailab-purple"><%= session.mentor.name %></p>
               <p class="text-sm text-base-content/70 mb-3"><%= session.scheduled_at.strftime('%B %d, %Y at %I:%M %p') %></p>
-              <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-primary text-primary-content text-sm font-semibold rounded-lg hover:bg-primary-focus transition-all" %>
+              <%= link_to 'Join Session', founder_session_path(session), class: "inline-flex items-center px-4 py-2 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
             </div>
           <% end %>
           <% if @sessions.empty? %>
             <div class="text-center py-8">
-              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <div class="w-12 h-12 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6 text-nailab-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
               </div>
@@ -104,8 +104,4 @@
   </div>
 </div>
 </div>
-<script>
-  function closeModal() {
-    window.location.href = '<%= founder_mentorship_path %>';
-  }
-</script>
+<!-- Modal close handled by Stimulus `modal_controller` which can use `data-modal-return-target-value` if needed -->

@@ -9,8 +9,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <style>
-      <%= File.read(Rails.root.join('app', 'assets', 'stylesheets', 'tailwind.css')).html_safe %>
+    <style nonce="<%= content_security_policy_nonce %>">
+      <%= File.read(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')).html_safe %>
     </style>
     <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
     <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />

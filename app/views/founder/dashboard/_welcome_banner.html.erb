@@ -1,4 +1,4 @@
-<section class="card bg-primary text-primary-content rounded-2xl p-6 lg:p-10 shadow-xl">
+<section class="card bg-nailab-purple text-white rounded-2xl p-6 lg:p-10 shadow-xl">
   <div class="max-w-4xl flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
     <div>
       <h1 class="text-3xl lg:text-4xl font-bold mb-2">
@@ -11,7 +11,7 @@
       <% missing_photo = !(user_profile&.photo&.attached?) %>
       <% missing_logo = startup_profile&.logo_url.blank? %>
       <% if missing_bio || missing_photo || missing_logo %>
-        <p class="text-sm lg:text-base text-primary-content/90 leading-relaxed mb-2">
+        <p class="text-sm lg:text-base text-white/90 leading-relaxed mb-2">
           <strong>Profile incomplete:</strong>
           <% if missing_bio && missing_photo && missing_logo %>
             Please add your bio, profile photo, and startup logo to complete your profile.

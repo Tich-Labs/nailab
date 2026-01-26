@@ -14,6 +14,8 @@ class Founder::MonthlyMetricsController < Founder::BaseController
 
   def create
     @monthly_metric = current_user.startup.monthly_metrics.build(monthly_metric_params)
+    @monthly_metric.user = current_user
+    # Ensure runway is always derived (not mass-assignable)
     if @monthly_metric.save
       redirect_to founder_monthly_metrics_path, notice: "Metric created."
     else
@@ -25,6 +27,7 @@ class Founder::MonthlyMetricsController < Founder::BaseController
   end
 
   def update
+    # Prevent manual editing of derived fields
     if @monthly_metric.update(monthly_metric_params)
       redirect_to founder_monthly_metrics_path, notice: "Metric updated."
     else
@@ -39,6 +42,10 @@ class Founder::MonthlyMetricsController < Founder::BaseController
   end
 
   def monthly_metric_params
-    params.require(:monthly_metric).permit(:month, :revenue, :customers, :runway, :burn_rate)
+    params.require(:monthly_metric).permit(
+      :period, :month, :mrr, :revenue, :new_paying_customers, :customers,
+      :churned_customers, :churn_rate, :cash_at_hand, :burn_rate,
+      :product_progress, :funding_stage, :funds_raised, :investors_engaged, :notes
+    )
   end
 end

@@ -1,15 +1,15 @@
 <%# app/views/founder/conversations/index.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-4">Messages</h1>
+    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Messages</h1>
     <p class="text-xl text-base-content/60">Stay connected with your mentors and fellow founders</p>
   </div>
   <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
       <!-- Left: list -->
       <div class="col-span-1 border-r border-base-200">
-        <div class="bg-primary px-6 py-4">
-          <h2 class="text-lg font-bold text-primary-content">Messages</h2>
+        <div class="bg-nailab-purple text-white px-6 py-4">
+          <h2 class="text-lg font-bold text-white">Messages</h2>
         </div>
         <div class="divide-y divide-base-200 h-[70vh] overflow-y-auto">
           <% @items.each do |item| %>
@@ -17,7 +17,7 @@
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <div class="text-sm text-base-content/70"><%= item[:contact] %> <span class="mx-2">•</span> <%= item[:category] if item[:category].present? %></div>
-                  <div class="font-semibold text-primary"><%= item[:subject].presence || (item[:preview]&.truncate(60) || 'Message') %></div>
+                  <div class="font-semibold text-nailab-purple"><%= item[:subject].presence || (item[:preview]&.truncate(60) || 'Message') %></div>
                   <div class="text-xs text-base-content/50 mt-1"><%= item[:preview]&.truncate(80) %></div>
                 </div>
                 <div class="text-right text-xs text-base-content/40">

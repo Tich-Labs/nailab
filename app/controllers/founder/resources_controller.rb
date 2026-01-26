@@ -19,12 +19,31 @@ class Founder::ResourcesController < Founder::BaseController
   end
 
   def download
-    # Validate file path to prevent directory traversal
-    file_path = @resource.file_path
-    return redirect_back(alert: "Invalid file") unless file_path&.start_with?(Rails.root.join("storage").to_s)
-    return redirect_back(alert: "File not found") unless File.exist?(file_path)
+    # Support several download sources in order of preference:
+    # 1) External URL (redirect)
+    # 2) Attached ActiveStorage file (stream via send_data)
+    # 3) Legacy `file_path` method (if model provides it) — kept for backwards compatibility
 
-    send_file file_path, type: "application/pdf", disposition: "attachment"
+    if @resource.url.present?
+      return redirect_to @resource.url
+    end
+
+    # If a hero_image is attached, stream it to the user
+    if @resource.respond_to?(:hero_image) && @resource.hero_image.attached?
+      blob = @resource.hero_image
+      data = blob.download
+      return send_data data, filename: blob.filename.to_s, type: blob.content_type || "application/octet-stream", disposition: "attachment"
+    end
+
+    # Backwards-compatible fallback: call `file_path` if the model defines it
+    if @resource.respond_to?(:file_path)
+      file_path = @resource.file_path
+      if file_path.present? && file_path.start_with?(Rails.root.join("storage").to_s) && File.exist?(file_path)
+        return send_file file_path, type: "application/pdf", disposition: "attachment"
+      end
+    end
+
+    redirect_back fallback_location: founder_resources_path, alert: "File not available for download"
   end
 
   private

@@ -1,14 +1,14 @@
 <%# app/views/founder/mentorship_requests/index.html.erb %>
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-6xl mx-auto py-8 px-4">
-  <h1 class="text-3xl font-bold text-gray-900 mb-8">My Mentorship Requests</h1>
+  <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">My Mentorship Requests</h1>
   <div class="space-y-6">
     <% @mentorship_requests.each do |request| %>
       <div class="bg-white shadow rounded-lg p-6">
         <div class="flex justify-between items-start mb-4">
           <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-              <span class="text-primary font-semibold"><%= request.mentor&.name&.first || '?' %></span>
+            <div class="w-12 h-12 bg-nailab-purple text-white rounded-full flex items-center justify-center">
+              <span class="font-semibold"><%= request.mentor&.name&.first || '?' %></span>
             </div>
             <div>
               <h3 class="text-lg font-semibold"><%= request.mentor&.name || 'Unknown Mentor' %></h3>
@@ -35,8 +35,8 @@
           <h4 class="font-medium text-gray-700">Message</h4>
           <p class="text-sm text-gray-600"><%= request.message %></p>
         </div>
-        <div class="flex items-center gap-4">
-          <%= link_to 'View Details', founder_mentorship_request_path(request), class: "text-primary text-sm" %>
+          <div class="flex items-center gap-4">
+          <%= link_to 'View Details', founder_mentorship_request_path(request), class: "text-nailab-purple text-sm" %>
           <%= link_to 'Edit', edit_founder_mentorship_request_path(request), class: "text-gray-600 hover:text-gray-800 text-sm" %>
           <%= button_to 'Delete', founder_mentorship_request_path(request), method: :delete, form: { data: { turbo: false } }, data: { confirm: 'Are you sure you want to delete this request?' }, class: "text-red-600 hover:text-red-800 text-sm bg-transparent border-0 p-0" %>
         </div>
@@ -46,7 +46,7 @@
   <% if @mentorship_requests.empty? %>
     <div class="text-center py-12">
       <p class="text-gray-500 mb-4">No mentorship requests yet.</p>
-      <%= link_to 'Browse Mentors', founder_mentorship_path, class: "btn btn-primary" %>
+      <%= link_to 'Browse Mentors', founder_mentorship_path, class: "inline-flex items-center px-4 py-2 bg-nailab-purple text-white rounded-md font-semibold" %>
     </div>
   <% end %>
 </div>

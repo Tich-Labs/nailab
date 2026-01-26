@@ -1,8 +1,8 @@
 <div class="bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
   <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-primary">Startup Profile</h2>
-    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-      <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <h2 class="text-2xl font-bold text-nailab-purple">Startup Profile</h2>
+    <div class="w-12 h-12 bg-base-200 rounded-full flex items-center justify-center">
+      <svg class="w-6 h-6 text-nailab-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
       </svg>
     </div>
@@ -29,8 +29,8 @@
       <span class="text-base-content font-semibold"><%= @startup_profile&.team_size || 'Not set' %></span>
     </div>
   </div>
-  <div class="mt-8">
-    <%= link_to founder_startup_profile_path, class: 'inline-flex items-center space-x-2 text-primary font-semibold hover:text-primary-focus transition-colors group' do %>
+    <div class="mt-8">
+    <%= link_to founder_startup_profile_path, class: 'inline-flex items-center space-x-2 text-nailab-purple font-semibold hover:text-nailab-purple transition-colors group' do %>
       <span>View Full Profile</span>
       <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>

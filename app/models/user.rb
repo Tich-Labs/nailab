@@ -61,6 +61,12 @@ class User < ApplicationRecord
 
   delegate :full_name, to: :user_profile, prefix: false, allow_nil: true
 
+  # Convenience accessor for a user's primary startup (first created)
+  # Many controllers expect `current_user.startup` to return a single startup.
+  def startup
+    startups.first
+  end
+
   def name
     full_name || email
   end

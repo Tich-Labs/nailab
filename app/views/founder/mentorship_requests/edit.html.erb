@@ -3,7 +3,7 @@
   <div class="max-w-2xl mx-auto py-8 px-4">
   <div class="bg-white shadow rounded-lg p-8">
     <div class="mb-6">
-      <h1 class="text-3xl font-bold text-gray-900">Edit Mentorship Request</h1>
+      <h1 class="text-4xl lg:text-5xl font-bold text-gray-900">Edit Mentorship Request</h1>
       <p class="text-gray-600 mt-2">Update your message or suggested time for this mentorship request.</p>
     </div>
     <%= form_with model: @request, url: founder_mentorship_request_path(@request), method: :patch, local: true, class: "space-y-6" do |form| %>
