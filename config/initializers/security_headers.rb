@@ -28,7 +28,7 @@ Rails.application.configure do
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
       "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
-      "img-src 'self' data: https:",
+      "img-src 'self' data: blob: https:",
       "font-src 'self'",
       "connect-src 'self' https://cdn.jsdelivr.net",
       "frame-ancestors 'none'",
@@ -64,7 +64,7 @@ if Rails.env.development?
       "default-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
       "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com",
-      "img-src 'self' data: http: https:",
+      "img-src 'self' data: blob: http: https:",
       "font-src 'self'",
       "connect-src 'self' https://cdn.jsdelivr.net ws: wss:",
       "frame-ancestors 'self'"  # Allow letter_opener iframe in development

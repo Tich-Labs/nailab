@@ -95,13 +95,13 @@ class FounderOnboardingController < ApplicationController
 
   def startup_params
     cast_boolean_param(
-      params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo, :logo_url, :website_url, :year_founded, :country_of_operation, :description, :stage, :target_market, :value_proposition, :team_size, :profile_visibility),
+      params.require(:founder_onboarding).require(:startup_profile).permit(:startup_name, :logo, :logo_url, :website_url, :founded_year, :location, :description, :stage, :target_market, :value_proposition, :team_size, :profile_visibility),
       :profile_visibility
     )
   end
 
   def additional_startup_params
-    params.require(:founder_onboarding).require(:additional_startup).permit(:startup_name, :logo, :website_url, :year_founded, :country_of_operation, :description, :team_size, :value_proposition)
+    params.require(:founder_onboarding).require(:additional_startup).permit(:startup_name, :logo, :website_url, :founded_year, :location, :description, :team_size, :value_proposition)
   end
 
   def invite_params

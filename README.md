@@ -1,3 +1,20 @@
+# JavaScript/Node.js Dependency Management
+
+This project uses **yarn** for all JavaScript and Node.js dependency management and scripts. Do not use `npm` or `npx`.
+
+**Install dependencies:**
+
+	yarn install
+
+**Build Tailwind CSS:**
+
+	yarn build:css
+
+**Watch Tailwind CSS:**
+
+	yarn watch:css
+
+If you see a `package-lock.json`, delete it. Only `yarn.lock` should be present.
 
 # Nailab - Startup Mentorship Platform
 

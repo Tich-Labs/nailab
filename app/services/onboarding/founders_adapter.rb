@@ -35,10 +35,11 @@ module Onboarding
               startup_name: params[:startup_name],
               description: params[:description],
               website_url: params[:website_url],
-              year_founded: params[:year_founded],
+              founded_year: params[:founded_year] || params[:year_founded],
               team_size: params[:team_size],
               value_proposition: params[:value_proposition],
-              target_market: params[:target_market]
+              target_market: params[:target_market],
+              location: params[:location] || params[:country_of_operation]
             )
             if params[:logo].present? && new_startup.respond_to?(:logo)
               new_startup.logo.attach(params[:logo]) rescue nil

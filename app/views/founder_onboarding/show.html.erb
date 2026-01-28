@@ -19,7 +19,7 @@
       <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: <%= percent_complete %>%"></div>
     </div>
   </div>
-  <%= form_with url: founder_onboarding_path(step: @step), method: :put, local: true, scope: 'founder_onboarding', html: { multipart: true } do |f| %>
+  <%= form_with url: founder_onboarding_path(step: @step), method: :put, local: true, scope: 'founder_onboarding', html: { multipart: true, novalidate: true, id: 'founder-onboarding-form' } do |f| %>
     <% if @errors.present? %>
       <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded">
         <h4 class="text-red-800 font-semibold mb-2">Please fix the following before continuing:</h4>
@@ -59,9 +59,64 @@
             <small id="city-help" class="text-gray-500">Enter your city name</small>
           </div>
           <div>
+            <div id="photo-dropzone" class="mb-4 border-2 border-dashed rounded-lg p-6 text-center text-gray-600 bg-white">
+                <%= file_field_tag 'founder_onboarding[user_profile][photo]', id: 'founder_profile_photo_input', accept: 'image/png,image/jpeg', class: 'hidden' %>
+                <div class="mb-3 flex flex-col items-center justify-center">
+                  <% if @user_profile&.photo&.attached? %>
+                    <%= image_tag url_for(@user_profile.photo), id: 'founder_profile_photo_preview', class: 'h-28 w-28 rounded-full object-cover mb-3', alt: 'Profile photo preview', style: 'display: inline-block;' %>
+                  <% else %>
+                    <img id="founder_profile_photo_preview" src="" alt="Profile photo preview" class="hidden h-28 w-28 rounded-full object-cover mb-3" style="display:none;" />
+                  <% end %>
+                  <svg id="photo-upload-icon" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400 mb-3 <%= @user_profile&.photo&.attached? ? 'hidden' : '' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16V8a4 4 0 014-4h2a4 4 0 014 4v8M7 16h10M7 16l-2 2m12-2 2 2" />
+                  </svg>
+                  <p class="font-medium">Choose a file or drag &amp; drop it here</p>
+                  <p class="text-sm text-gray-400">JPEG, PNG formats, up to 50MB</p>
+                </div>
+                <label for="founder_profile_photo_input" class="inline-block mt-2 px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer text-sm text-gray-700">Browse File</label>
+                <p id="founder_photo_filename" class="mt-2 text-sm text-gray-600"><%= @user_profile&.photo&.attached? ? @user_profile.photo.filename.to_s : '' %></p>
+              </div>
               <%= up.label :bio, 'Short professional bio (max 200 words)', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= up.file_field :photo, accept: 'image/png,image/jpeg', class: 'mb-2' %>
+              
               <%= up.text_area :bio, placeholder: 'Founder and product lead building a B2B logistics startup in East Africa, with experience in operations, customer discovery, and scaling early-stage teams.', rows: 5, maxlength: 1200, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+              <script>
+                (function(){
+                  var drop = document.getElementById('photo-dropzone');
+                  var input = document.getElementById('founder_profile_photo_input');
+                  var filename = document.getElementById('founder_photo_filename');
+                  var preview = document.getElementById('founder_profile_photo_preview');
+                  var icon = document.getElementById('photo-upload-icon');
+                  var prevUrl = null;
+                  if(!drop || !input) return;
+                  function showPreview(file){
+                    if(!file) return;
+                    try{ if(prevUrl) URL.revokeObjectURL(prevUrl); }catch(e){}
+                    var url = URL.createObjectURL(file);
+                    prevUrl = url;
+                    if(preview){
+                      preview.src = url;
+                      preview.classList.remove('hidden');
+                      preview.style.display = 'inline-block';
+                      preview.classList.add('rounded-full','object-cover');
+                      preview.style.width = '7rem';
+                      preview.style.height = '7rem';
+                    }
+                    if(icon) icon.classList.add('hidden');
+                    filename.textContent = file.name;
+                  }
+                  ['dragenter','dragover'].forEach(function(e){ drop.addEventListener(e,function(ev){ ev.preventDefault(); drop.classList.add('ring-2','ring-teal-400'); }); });
+                  ['dragleave','drop'].forEach(function(e){ drop.addEventListener(e,function(ev){ ev.preventDefault(); drop.classList.remove('ring-2','ring-teal-400'); }); });
+                  drop.addEventListener('drop', function(ev){
+                    ev.preventDefault();
+                    var files = ev.dataTransfer.files;
+                    if(files && files.length){
+                      showPreview(files[0]);
+                      try { var dt = new DataTransfer(); dt.items.add(files[0]); input.files = dt.files; } catch(err) { /* ignore */ }
+                    }
+                  });
+                  input.addEventListener('change', function(){ if(input.files && input.files.length) showPreview(input.files[0]); else { if(preview) preview.classList.add('hidden'); if(icon) icon.classList.remove('hidden'); filename.textContent = ''; } });
+                })();
+              </script>
             <small class="text-gray-500">Briefly describe yourself and your role in the startup.</small>
           </div>
         </div>
@@ -72,11 +127,58 @@
         <div class="grid grid-cols-1 gap-4">
           <div>
             <%= sp.label :startup_name, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :startup_name, required: true, aria: { required: true }, placeholder: 'Enter your startup name', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.text_field :startup_name, placeholder: 'Enter your startup name', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
           </div>
           <div>
             <%= sp.label :logo, 'Startup logo (JPEG or PNG)', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.file_field :logo, accept: 'image/png,image/jpeg', class: 'w-full' %>
+            <div id="logo-dropzone" class="mb-4 border-2 border-dashed rounded-lg p-6 text-center text-gray-600 bg-white">
+              <%= sp.file_field :logo, id: 'founder_startup_logo_input', accept: 'image/png,image/jpeg', class: 'hidden' %>
+              <div class="mb-3 flex flex-col items-center justify-center">
+                <% if @startup_profile&.logo&.attached? %>
+                  <%= image_tag url_for(@startup_profile.logo), id: 'founder_startup_logo_preview', class: 'h-28 w-28 rounded-full object-cover mb-3', alt: 'Startup logo preview', style: 'display:inline-block;' %>
+                <% else %>
+                  <img id="founder_startup_logo_preview" src="" alt="Startup logo preview" class="hidden h-28 w-28 rounded-full object-cover mb-3" style="display:none;" />
+                <% end %>
+                <svg id="startup-photo-upload-icon" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400 mb-3 <%= @startup_profile&.logo&.attached? ? 'hidden' : '' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16V8a4 4 0 014-4h2a4 4 0 014 4v8M7 16h10M7 16l-2 2m12-2 2 2" />
+                </svg>
+                <p class="font-medium">Choose a file or drag &amp; drop it here</p>
+                <p class="text-sm text-gray-400">JPEG, PNG formats, up to 50MB</p>
+              </div>
+              <label for="founder_startup_logo_input" class="inline-block mt-2 px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer text-sm text-gray-700">Browse File</label>
+              <p id="founder_logo_filename" class="mt-2 text-sm text-gray-600"><%= @startup_profile&.logo&.attached? ? @startup_profile.logo.filename.to_s : '' %></p>
+            </div>
+            <script>
+              (function(){
+                var drop = document.getElementById('logo-dropzone');
+                var input = document.getElementById('founder_startup_logo_input');
+                var filename = document.getElementById('founder_logo_filename');
+                var preview = document.getElementById('founder_startup_logo_preview');
+                var icon = document.getElementById('startup-photo-upload-icon');
+                var prevUrl = null;
+                if(!drop || !input) return;
+                function showPreview(file){
+                  if(!file) return;
+                  try{ if(prevUrl) URL.revokeObjectURL(prevUrl); }catch(e){}
+                  var url = URL.createObjectURL(file);
+                  prevUrl = url;
+                  if(preview){ preview.src = url; preview.classList.remove('hidden'); preview.style.display = 'inline-block'; preview.classList.add('rounded-full','object-cover'); preview.style.width = '7rem'; preview.style.height = '7rem'; }
+                  if(icon) icon.classList.add('hidden');
+                  filename.textContent = file.name;
+                }
+                ['dragenter','dragover'].forEach(function(e){ drop.addEventListener(e,function(ev){ ev.preventDefault(); drop.classList.add('ring-2','ring-teal-400'); }); });
+                ['dragleave','drop'].forEach(function(e){ drop.addEventListener(e,function(ev){ ev.preventDefault(); drop.classList.remove('ring-2','ring-teal-400'); }); });
+                drop.addEventListener('drop', function(ev){
+                  ev.preventDefault();
+                  var files = ev.dataTransfer.files;
+                  if(files && files.length){
+                    showPreview(files[0]);
+                    try { var dt = new DataTransfer(); dt.items.add(files[0]); input.files = dt.files; } catch(err) { /* ignore */ }
+                  }
+                });
+                input.addEventListener('change', function(){ if(input.files && input.files.length) showPreview(input.files[0]); else { if(preview) preview.classList.add('hidden'); if(icon) icon.classList.remove('hidden'); filename.textContent = ''; } });
+              })();
+            </script>
           </div>
           <div>
             <%= sp.label :website_url, 'Startup website', class: 'block text-sm font-medium text-gray-700 mb-2' %>
@@ -84,29 +186,29 @@
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <%= sp.label :year_founded, 'Year founded', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= sp.number_field :year_founded, min: 1900, max: Date.today.year, placeholder: 'e.g. 2020', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
+              <%= sp.label :founded_year, 'Year founded', class: 'block text-sm font-medium text-gray-700 mb-2' %>
+              <%= sp.number_field :founded_year, min: 1900, max: Date.today.year, placeholder: 'e.g. 2020', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
             </div>
             <div>
-              <%= sp.label :country_of_operation, 'Country / Market(s) of operation', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= sp.select :country_of_operation, country_list, { include_blank: 'Select country' }, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
+              <%= sp.label :location, 'Country / Market(s) of operation', class: 'block text-sm font-medium text-gray-700 mb-2' %>
+              <%= sp.select :location, country_list, { include_blank: 'Select country' }, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
             </div>
           </div>
           <div>
             <%= sp.label :description, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_area :description, required: true, aria: { required: true }, minlength: 250, maxlength: 1000, placeholder: 'Provide a concise overview of your business (min 250, max 1000 chars)', rows: 6, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.text_area :description, maxlength: 1000, placeholder: 'Provide a concise overview of your business (min 250, max 1000 chars)', rows: 6, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
           </div>
           <div>
             <%= sp.label :stage, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.select :stage, (defined?(STAGE_OPTIONS) ? STAGE_OPTIONS : ['Idea', 'Early', 'Growth', 'Scaling', 'Other']), {}, { required: true, aria: { required: true }, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' } %>
+            <%= sp.select :stage, (defined?(STAGE_OPTIONS) ? STAGE_OPTIONS : ['Idea', 'Early', 'Growth', 'Scaling', 'Other']), {}, { class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' } %>
           </div>
           <div>
             <%= sp.label :target_market, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :target_market, required: true, aria: { required: true }, placeholder: 'Who is your target market?', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.text_field :target_market, placeholder: 'Who is your target market?', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
           </div>
           <div>
             <%= sp.label :value_proposition, 'Unique Value Proposition', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :value_proposition, required: true, aria: { required: true }, placeholder: 'What makes your startup unique?', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.text_field :value_proposition, placeholder: 'What makes your startup unique?', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
           </div>
           <div class="flex items-start gap-3">
             <%= sp.check_box :profile_visibility, class: 'checkbox checkbox-primary mt-1' %>
@@ -244,6 +346,11 @@
               <i class="fas fa-edit mr-1"></i> Edit
             <% end %>
           </div>
+          <% if @startup_profile&.logo&.attached? %>
+            <div class="mb-4">
+              <%= image_tag url_for(@startup_profile.logo), alt: 'Startup logo', class: 'h-24 w-24 rounded-full object-cover' %>
+            </div>
+          <% end %>
           <dl class="space-y-4">
             <div>
               <dt class="text-sm font-medium text-gray-500">Startup Name:</dt>
@@ -306,52 +413,62 @@
       <% end %>
     <% end %>
     <div class="flex justify-between mt-8">
-      <% if @step != 'personal' %>
-        <%= link_to 'Back', founder_onboarding_path(step: steps[steps.index { |s| s[:key] == @step } - 1][:key]), class: 'btn btn-outline btn-secondary' %>
+      <% current_index = steps.index { |s| s[:key] == @step } %>
+      <% if current_index && current_index > 0 %>
+        <%= link_to 'Back', founder_onboarding_path(step: steps[current_index - 1][:key]), class: 'btn btn-outline btn-secondary' %>
       <% else %>
         <span></span>
       <% end %>
       <div class="flex gap-4">
-        <%= button_tag type: 'submit', form: 'founder-onboarding-save-exit-form',
+        <%= button_tag type: 'submit', formaction: founder_onboarding_save_and_exit_path(step: @step), formmethod: 'patch',
                        class: "btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold" do %>
           <i class="fas fa-save mr-2"></i> Save & Exit
+        <% end %>
+        <%# Add Skip button for optional steps %>
+        <% optional_steps = %w[additional invite_cofounders invite_team professional mentorship] %>
+        <% all_steps = Onboarding::FoundersAdapter::STEPS %>
+        <% if optional_steps.include?(@step) && all_steps %>
+          <% idx = all_steps.index(@step) %>
+          <% next_step = all_steps[idx + 1] if idx && idx + 1 < all_steps.size %>
+          <% if next_step %>
+            <%= link_to 'Skip', founder_onboarding_path(step: next_step), class: 'btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-semibold' %>
+          <% end %>
         <% end %>
         <% if @step == 'confirm' %>
           <% if current_user %>
             <%= f.submit 'Finish', class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
           <% end %>
         <% else %>
-          <%= f.submit 'Next', class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
+          <%= f.submit 'Next', id: 'onboarding-next-btn', form: 'founder-onboarding-form', class: 'btn btn-primary bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg' %>
         <% end %>
       </div>
     </div>
   <% end %>
 </div>
-<!-- Hidden form for Save & Exit -->
-<%= form_with url: founder_onboarding_save_and_exit_path, method: :patch, id: 'founder-onboarding-save-exit-form', local: true do |f| %>
-  <%= hidden_field_tag :step, @step %>
-  <%= fields_for 'founder_onboarding[user_profile]', @user_profile do |up| %>
-    <%= up.hidden_field :full_name %>
-    <%= up.hidden_field :phone %>
-    <%= up.hidden_field :country %>
-    <%= up.hidden_field :city %>
-    <%= up.hidden_field :bio %>
-  <% end %>
-  <% if @startup_profile %>
-    <%= fields_for 'founder_onboarding[startup_profile]', @startup_profile do |sp| %>
-      <%= sp.hidden_field :startup_name %>
-      <%= sp.hidden_field :logo_url %>
-      <%= sp.hidden_field :description %>
-      <%= sp.hidden_field :stage %>
-      <%= sp.hidden_field :target_market %>
-      <%= sp.hidden_field :value_proposition %>
-      <%= sp.hidden_field :profile_visibility %>
-      <%= sp.hidden_field :sector %>
-      <%= sp.hidden_field :funding_stage %>
-      <%= sp.hidden_field :funding_raised %>
-      <%= sp.hidden_field :mentorship_areas %>
-      <%= sp.hidden_field :challenge_details %>
-      <%= sp.hidden_field :preferred_mentorship_mode %>
-    <% end %>
-  <% end %>
-<% end %>
+<script>
+  (function(){
+    try {
+      var next = document.getElementById('onboarding-next-btn');
+      if(!next) return;
+      var form = next.form || (next.closest ? next.closest('form') : null);
+      next.addEventListener('click', function(e){
+        try{ console.log('Onboarding: Next clicked — attempting submit for step', '<%= j @step %>'); }catch(e){}
+        if(form){
+          try{
+            if(typeof form.requestSubmit === 'function'){
+              form.requestSubmit();
+            } else if (typeof form.submit === 'function'){
+              form.submit();
+            }
+          }catch(err){ console.log('submit attempt error', err); try{ form.submit(); }catch(e){} }
+        } else {
+          console.log('Onboarding: no form found to submit for Next button');
+        }
+      });
+      if(form){
+        form.addEventListener('submit', function(){ console.log('Onboarding form submit event fired for step', '<%= j @step %>'); });
+      }
+    } catch(e) { console.log('Onboarding debug handler error', e); }
+  })();
+</script>
+<!-- Save & Exit now submits the main multipart form directly so file inputs are included -->
