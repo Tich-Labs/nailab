@@ -6,6 +6,10 @@ set -o errexit
 bundle install
 
 
+
+# Install Node dependencies
+yarn install
+
 # Precompile Tailwind CSS
 tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify
 
