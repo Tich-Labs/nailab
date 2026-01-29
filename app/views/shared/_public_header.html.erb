@@ -105,3 +105,37 @@
     menu.classList.toggle('hidden');
   }
 </script>
+
+<script>
+  // Fallback for mobile menu if Stimulus controller isn't attached
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      var mobileEl = document.querySelector('[data-controller="mobile-menu"]');
+      if (!mobileEl) return;
+      var hasStimulus = window && window.Stimulus && window.Stimulus.getControllerForElementAndIdentifier && window.Stimulus.getControllerForElementAndIdentifier(mobileEl, 'mobile-menu');
+      if (hasStimulus) return; // Stimulus is handling the menu
+
+      var btn = mobileEl.querySelector('button[data-action]');
+      var menu = mobileEl.querySelector('[data-mobile-menu-target="menu"]');
+      var icon = mobileEl.querySelector('[data-mobile-menu-target="icon"]');
+      if (!btn || !menu) return;
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+        // Basic icon toggle: rotate
+        if (icon) icon.classList.toggle('open');
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!mobileEl.contains(e.target)) {
+          menu.classList.add('hidden');
+          if (icon) icon.classList.remove('open');
+        }
+      });
+    } catch (err) {
+      // noop
+    }
+  });
+</script>

@@ -14,10 +14,10 @@
   p_class = admin_preview ? 'text-gray-700 break-words' : 'text-gray-700'
 %>
 
-<section class="py-20 bg-white">
-    <div class="max-w-6xl mx-auto px-4 text-center">
+<section class="py-20 bg-base-100">
+  <div class="container mx-auto px-4 text-center">
     <% unless admin_preview %>
-      <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Focus Areas</h2>
+      <h2 class="text-3xl lg:text-5xl font-bold text-base-content mb-6">Our Focus Areas</h2>
     <% end %>
     <div class="flex flex-wrap justify-center gap-6">
       <% if focus_items.present? %>
@@ -35,9 +35,9 @@
           </div>
         <% else %>
           <% focus_items.each do |fa| %>
-            <div class="<%= card_class %>">
-              <h3 class="<%= h3_class %>"><%= fa.title %></h3>
-              <p class="<%= p_class %>"><%= fa.description %></p>
+            <div class="card bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow flex flex-col items-center justify-center">
+              <h3 class="text-xl font-semibold text-nailab-purple mb-2"><%= fa.title %></h3>
+              <p class="text-base-content/70"><%= fa.description %></p>
             </div>
           <% end %>
         <% end %>
@@ -61,17 +61,17 @@
             </div>
           </div>
         <% else %>
-          <div class="<%= card_class %>">
-            <h3 class="<%= h3_class %>">HealthTech</h3>
-            <p class="<%= p_class %>">Innovative solutions improving healthcare accessibility and quality across Africa</p>
+          <div class="card bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow flex flex-col items-center justify-center">
+            <h3 class="text-xl font-semibold text-nailab-purple mb-2">HealthTech</h3>
+            <p class="text-base-content/70">Innovative solutions improving healthcare accessibility and quality across Africa</p>
           </div>
-          <div class="<%= card_class %>">
-            <h3 class="<%= h3_class %>">AgriTech</h3>
-            <p class="<%= p_class %>">Technologies enhancing agricultural productivity and sustainability.</p>
+          <div class="card bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow flex flex-col items-center justify-center">
+            <h3 class="text-xl font-semibold text-nailab-purple mb-2">AgriTech</h3>
+            <p class="text-base-content/70">Technologies enhancing agricultural productivity and sustainability.</p>
           </div>
-          <div class="bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow">
+          <div class="card bg-purple-50 border border-purple-100 rounded-xl px-8 py-6 w-64 shadow flex flex-col items-center justify-center">
             <h3 class="text-xl font-semibold text-nailab-purple mb-2">FinTech</h3>
-            <p class="text-gray-700">Innovations making banking, payments, and financial services more accessible.</p>
+            <p class="text-base-content/70">Innovations making banking, payments, and financial services more accessible.</p>
           </div>
         <% end %>
       <% end %>

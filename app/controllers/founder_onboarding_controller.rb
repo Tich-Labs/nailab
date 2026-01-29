@@ -3,6 +3,7 @@ require "ostruct"
 class FounderOnboardingController < ApplicationController
   include CountryHelper
   before_action :ensure_signed_in
+  before_action :ensure_founder_role
 
   STEPS = %w[personal startup additional invite_cofounders invite_team professional mentorship confirm]
 
@@ -88,6 +89,12 @@ class FounderOnboardingController < ApplicationController
   end
 
   private
+
+  def ensure_founder_role
+    unless current_user&.role == "founder"
+      redirect_to root_path, alert: "You must be a founder to access onboarding."
+    end
+  end
 
   def personal_params
     params.require(:founder_onboarding).require(:user_profile).permit(:full_name, :phone, :country, :city, :bio, :linkedin_url, :photo)

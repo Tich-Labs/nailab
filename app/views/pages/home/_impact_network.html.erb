@@ -3,37 +3,43 @@
 <% asset_logos = local_assigns[:asset_logos] || (defined?(@asset_logos) ? @asset_logos : []) %>
 <% partners = local_assigns[:partners] || @partners || [] %>
 <section class="py-20 bg-gray-50">
-  <div class="max-w-6xl mx-auto px-4 text-center">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">Our Impact Network</h2>
     <div class="flex flex-wrap justify-center gap-8 items-center">
       <% if logos.present? %>
         <% logos.each do |logo| %>
-          <div class="bg-white rounded-xl shadow p-6 flex items-center justify-center w-48 h-24">
-            <% if logo.respond_to?(:image) && logo.image.attached? %>
-              <% img_url = begin
-                url_for(logo.image.variant(resize_to_limit: [200, 80]))
-              rescue StandardError
-                url_for(logo.image)
-              end %>
-              <%= image_tag img_url, alt: (logo.name.presence || "Partner logo"), class: "max-h-16 max-w-full mx-auto" %>
-            <% elsif logo.respond_to?(:logo_url) %>
-              <img src="<%= logo.logo_url %>" alt="<%= logo.name %>" class="max-h-16 max-w-full mx-auto" />
-            <% else %>
-              <p class="text-gray-500">No image</p>
-            <% end %>
+          <div class="card bg-white shadow-xl rounded w-48 h-24 flex items-center justify-center">
+            <div class="flex items-center justify-center w-full h-full">
+              <% if logo.respond_to?(:image) && logo.image.attached? %>
+                <% img_url = begin
+                  url_for(logo.image.variant(resize_to_limit: [200, 80]))
+                rescue StandardError
+                  url_for(logo.image)
+                end %>
+                <%= image_tag img_url, alt: (logo.name.presence || "Partner logo"), class: "max-h-16 max-w-full mx-auto" %>
+              <% elsif logo.respond_to?(:logo_url) %>
+                <img src="<%= logo.logo_url %>" alt="<%= logo.name %>" class="max-h-16 max-w-full mx-auto" />
+              <% else %>
+                <p class="text-gray-500">No image</p>
+              <% end %>
+            </div>
           </div>
         <% end %>
       <% else %>
         <% if asset_logos.any? %>
           <% asset_logos.each do |filename| %>
-            <div class="bg-white rounded-xl shadow p-6 flex items-center justify-center w-48 h-24">
-              <%= image_tag "logos/#{filename}", alt: filename, class: "max-h-16 max-w-full mx-auto" %>
+            <div class="card bg-white shadow-xl rounded w-48 h-24 flex items-center justify-center">
+              <div class="flex items-center justify-center w-full h-full">
+                <%= image_tag "logos/#{filename}", alt: filename, class: "max-h-16 max-w-full mx-auto" %>
+              </div>
             </div>
           <% end %>
         <% else %>
           <% partners.each do |partner| %>
-            <div class="bg-white rounded-xl shadow p-6 flex items-center justify-center w-48 h-24">
-              <img src="<%= partner.logo_url %>" alt="<%= partner.name %>" class="max-h-16 max-w-full mx-auto" />
+            <div class="card bg-white shadow-xl rounded w-48 h-24 flex items-center justify-center">
+              <div class="flex items-center justify-center w-full h-full">
+                <img src="<%= partner.logo_url %>" alt="<%= partner.name %>" class="max-h-16 max-w-full mx-auto" />
+              </div>
             </div>
           <% end %>
         <% end %>

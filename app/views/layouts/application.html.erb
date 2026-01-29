@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= content_for?(:title) ? yield(:title) : 'Nailab' %></title>
     <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : 'Nailab — supporting founders with programs, mentorship, and funding across Africa.' %>" />
-    <%= yield :head %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <%# Prefer the compiled builds/tailwind.css in production (fingerprinted via manifest).
-        Fall back to the local builds file or to application.css if needed. %>
-    <link rel="preload" href="/builds/tailwind.css" as="style" onload="this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="/builds/tailwind.css" /></noscript>
+    <link rel="stylesheet" href="/builds/tailwind.css" data-turbo-track="reload">
+    <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
+
   <body class="<%= ['bg-white text-gray-900', (devise_controller? ? 'nailab-devise' : nil)].compact.join(' ') %>">
     <%= render 'shared/public_header' %>
     <%= yield %>

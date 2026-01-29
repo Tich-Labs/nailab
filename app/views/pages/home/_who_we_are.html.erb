@@ -1,4 +1,4 @@
-<section class="py-20 bg-white">
+<section class="py-20 bg-base-100">
   <% content = @who_we_are_content || {} %>
   <% title = content[:title].presence || 'Who We Are' %>
   <% paragraph_one = content[:paragraph_one].presence || 'Nailab is a startup incubator and accelerator, founded in 2010, dedicated to supporting early-stage and growth-stage startups with the skills, mentorship, networks, and funding they need to turn bold ideas into scalable, tech-enabled businesses solving real challenges in sectors like healthcare, agriculture, fintech, education, and more.' %>
@@ -7,37 +7,37 @@
   <% cta_label = content[:cta_label].presence || 'More About Us' %>
   <% cta_link = content[:cta_link].presence || about_path %>
   <% image_url = content[:image_url].presence || 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1200' %>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div class="space-y-6">
-        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900">
+        <h2 class="text-4xl lg:text-5xl font-bold text-base-content">
           <%= title %>
         </h2>
         <% if subheading %>
-          <p class="text-lg text-gray-600 font-semibold"><%= subheading %></p>
+          <p class="text-lg text-base-content/70 font-semibold"><%= subheading %></p>
         <% end %>
-        <p class="text-lg text-gray-700 leading-relaxed">
+        <p class="text-lg text-base-content/70 leading-relaxed">
           <%= paragraph_one %>
         </p>
-        <p class="text-lg text-gray-700 leading-relaxed">
+        <p class="text-lg text-base-content/70 leading-relaxed">
           <%= paragraph_two %>
         </p>
-        <%= link_to cta_link, class: 'inline-flex items-center space-x-2 text-nailab-purple font-semibold text-lg hover:text-nailab-purple transition-colors group' do %>
+        <%= link_to cta_link, class: 'inline-flex items-center text-nailab-purple font-semibold text-lg px-0 group' do %>
           <span><%= cta_label %></span>
-          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg class="w-5 h-5 ml-1.8 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
         <% end %>
       </div>
-      <div class="relative">
-        <div class="relative rounded-2xl overflow-hidden shadow-xl">
+      <div class="relative flex items-center justify-center">
+        <div class="card bg-white shadow-xl rounded-2xl overflow-hidden w-full max-w-xl">
           <img
             src="<%= image_url %>"
             alt="<%= title %>"
-            class="w-full h-[450px] object-cover"
-            />
-          </div>
-          <div class="absolute -bottom-4 -right-4 w-40 h-40 bg-purple-100 rounded-2xl -z-10"></div>
-          <div class="absolute -top-4 -left-4 w-40 h-40 bg-teal-100 rounded-2xl -z-10"></div>
+            class="w-full h-[350px] md:h-[450px] object-cover"
+          />
         </div>
+        <div class="absolute -bottom-4 -right-4 w-40 h-40 bg-purple-100 rounded-2xl -z-10"></div>
+        <div class="absolute -top-4 -left-4 w-40 h-40 bg-teal-100 rounded-2xl -z-10"></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>

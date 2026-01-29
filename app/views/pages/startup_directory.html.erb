@@ -1,7 +1,7 @@
 <div class="bg-gray-50">
   <% active_filters = [@filters[:sector], @filters[:stage], @filters[:location]].compact.reject(&:empty?).size %>
   <%= form_with url: startups_path, method: :get, local: true, class: 'space-y-6' do |form| %>
-    <section class="py-20 bg-gradient-to-br from-teal-50 to-blue-50">
+    <section class="py-20 bg-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 text-center">Startup Directory</h1>
         <p class="text-xl text-gray-700 text-center max-w-3xl mx-auto mb-10">
@@ -9,12 +9,12 @@
         </p>
         <div class="max-w-2xl mx-auto">
           <div class="relative">
-            <span class="absolute inset-y-0 left-4 flex items-center text-gray-400">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1016.5 16.5z" />
+            <span class="absolute inset-y-0 left-4 flex items-center text-slate-400">
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M8.5 2a6.5 6.5 0 014.845 10.785l3.935 3.936a1 1 0 01-1.414 1.414L11.93 14.2A6.5 6.5 0 118.5 2zm0 2a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" fill="currentColor"></path>
               </svg>
             </span>
-            <%= form.text_field :q, value: @filters[:search], placeholder: 'Search by name, sector, or description...', class: 'w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 shadow-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= form.text_field :q, value: @filters[:search], placeholder: 'Search by name, sector, or description...', class: 'w-full rounded-2xl border border-gray-300 bg-white/90 px-12 py-4 text-sm text-slate-700 shadow-lg focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200' %>
           </div>
         </div>
       </div>
@@ -71,61 +71,70 @@
       <% if @filtered_startups.any? %>
         <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           <% @filtered_startups.each do |startup| %>
-            <article class="bg-white rounded-2xl shadow-lg p-6 flex flex-col h-full hover:shadow-2xl transition-shadow">
-              <div class="flex items-start gap-4 mb-4">
-                <div class="w-16 h-16 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center">
-                  <%= image_tag(startup.logo_url.presence || 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=200&q=80', alt: startup.startup_name, class: 'w-full h-full object-cover') %>
+            <div class="card bg-base-100 shadow-xl rounded-2xl flex flex-col h-full">
+              <div class="card-body p-6 flex flex-col h-full">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="avatar">
+                    <div class="w-16 h-16 rounded-2xl ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden flex items-center justify-center">
+                      <%= image_tag(startup.logo_url.presence || 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=200&q=80', alt: startup.startup_name, class: 'w-full h-full object-cover') %>
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="card-title text-lg font-bold text-base-content"><%= startup.startup_name %></h3>
+                    <% if startup.stage.present? %>
+                      <span class="badge badge-info badge-outline px-2 py-1 mt-1 text-xs font-semibold"><%= startup_stage_label(startup.stage) %></span>
+                    <% end %>
+                  </div>
                 </div>
-                <div class="flex-1">
-                  <h3 class="text-lg font-bold text-gray-900"><%= startup.startup_name %></h3>
-                  <% if startup.stage.present? %>
-                    <span class="inline-flex items-center px-2 py-1 mt-1 text-xs font-semibold rounded-full bg-teal-100 text-nailab-teal">
-                      <%= startup_stage_label(startup.stage) %>
-                    </span>
+                <p class="text-base-content/70 text-sm mb-4 line-clamp-3"><%= startup.description %></p>
+                <div class="space-y-2 text-sm text-base-content/60 mb-4">
+                  <% if startup.sector.present? %>
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-nailab-teal"></span>
+                      <span><%= startup.sector %></span>
+                    </div>
+                  <% end %>
+                  <% if startup.location.present? %>
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-nailab-purple"></span>
+                      <span><%= startup.location %></span>
+                    </div>
+                  <% end %>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span><%= startup.team_size %> team member<%= 's' unless startup.team_size == 1 %></span>
+                  </div>
+                  <% if startup.funding_stage.present? %>
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                      <span><%= funding_stage_label(startup.funding_stage) %></span>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="mt-auto">
+                  <% if startup.public_viewable? %>
+                    <%= link_to public_startup_profile_path(startup), class: 'btn w-full font-semibold', style: 'background-color: #923f99; color: #fff;' do %>
+                      View profile
+                    <% end %>
+                  <% else %>
+                    <span class="btn w-full font-semibold bg-gray-200 text-gray-600 border-0 cursor-not-allowed hover:bg-nailab-teal hover:text-white transition-colors">Profile private</span>
                   <% end %>
                 </div>
               </div>
-              <p class="text-gray-700 text-sm mb-4 line-clamp-3"><%= startup.description %></p>
-              <div class="space-y-2 text-sm text-gray-600 mb-4">
-                <% if startup.sector.present? %>
-                  <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-nailab-teal"></span>
-                    <span><%= startup.sector %></span>
-                  </div>
-                <% end %>
-                <% if startup.location.present? %>
-                  <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-nailab-purple"></span>
-                    <span><%= startup.location %></span>
-                  </div>
-                <% end %>
-                <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                  <span><%= startup.team_size %> team member<%= 's' unless startup.team_size == 1 %></span>
-                </div>
-                <% if startup.funding_stage.present? %>
-                  <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                    <span><%= funding_stage_label(startup.funding_stage) %></span>
-                  </div>
-                <% end %>
-              </div>
-              <div class="mt-auto">
-                <% if startup.public_viewable? %>
-                  <%= link_to public_startup_profile_path(startup), class: 'inline-flex items-center justify-center w-full px-4 py-3 bg-nailab-purple text-white font-semibold rounded-xl hover:opacity-90 transition-colors' do %>
-                    View profile
-                  <% end %>
-                <% else %>
-                  <span class="inline-flex items-center justify-center w-full px-4 py-3 bg-gray-200 text-gray-600 font-semibold rounded-xl">Profile private</span>
-                <% end %>
-              </div>
-            </article>
+            </div>
           <% end %>
         </div>
       <% else %>
-        <div class="text-center py-16">
-          <p class="text-xl text-gray-600">No startups matched your criteria.</p>
-          <%= link_to 'Clear filters', startups_path, class: 'mt-4 inline-block text-nailab-teal hover:text-nailab-teal font-semibold' %>
+        <div class="flex flex-col items-center justify-center py-16">
+          <div class="card bg-base-100 shadow-lg p-8 max-w-md w-full">
+            <div class="card-body items-center text-center">
+              <svg class="w-12 h-12 text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <p class="text-xl text-base-content/60 mb-4">No startups matched your criteria.</p>
+              <%= link_to 'Clear filters', startups_path, class: 'btn btn-outline btn-primary mt-2' %>
+            </div>
+          </div>
         </div>
       <% end %>
     </div>

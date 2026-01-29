@@ -5,6 +5,7 @@ import ProgramFilterController from "./program_filter_controller"
 import PasswordVisibilityController from "./password_visibility_controller"
 import InviteModalController from "./invite_modal_controller"
 import ModalController from "./modal_controller"
+import MobileMenuController from "./mobile_menu_controller"
 
 application.register("notifications", NotificationsController)
 application.register("ajax-flash", AjaxFlashController)
@@ -12,6 +13,7 @@ application.register("program-filter", ProgramFilterController)
 application.register("password-visibility", PasswordVisibilityController)
 application.register("invite-modal", InviteModalController)
 application.register("modal", ModalController)
+application.register("mobile-menu", MobileMenuController)
 
 // All controllers are auto-registered via pin_all_from
 // No manual registration needed

@@ -10,58 +10,57 @@
 
 <% if stored['our_impact'].present? %>
   <% impact = stored['our_impact'] %>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="container mx-auto px-4 py-10">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
       <div class="flex flex-col md:col-span-4 justify-center pr-4">
-        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900"><%= impact["title"] %></h2>
-        <p class="text-lg text-gray-700 leading-relaxed"><%= impact["description"] %></p>
+        <h2 class="text-4xl lg:text-5xl font-bold text-base-content"><%= impact["title"] %></h2>
+        <p class="text-lg text-base-content/70 leading-relaxed"><%= impact["description"] %></p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 md:col-span-8 gap-6">
-        <% (impact["stats"] || []).each do |stat| %>
-          <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-            <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2"><%= stat["value"] %></p>
-            <p class="text-sm md:text-sm font-base text-gray-700"><%= stat["label"] %></p>
-          </div>
-        <% end %>
+      <div class="md:col-span-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <% (impact["stats"] || []).each do |stat| %>
+            <div class="card bg-cyan-200 border-4 border-teal-400 rounded-lg p-6 text-center shadow-md">
+              <div class="text-nailab-purple text-3xl md:text-4xl font-bold"><%= stat["value"] %></div>
+              <div class="text-sm text-base-content/70 mt-2"><%= stat["label"] %></div>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
 <% else %>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="container mx-auto px-4 py-8">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
       <div class="flex flex-col md:col-span-4 justify-center pr-4">
-        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900">Our Impact</h2>
-        <p class="text-lg text-gray-700 leading-relaxed">We partner with founders, mentors and partners to support startups across Africa.</p>
+        <h2 class="text-4xl lg:text-5xl font-bold text-base-content">Our Impact</h2>
+        <p class="text-lg text-base-content/70 leading-relaxed">We partner with founders, mentors and partners to support startups across Africa.</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 md:col-span-8 gap-6">
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">10+</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">Years of Impact</p>
-        </div>
-
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">54</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">African Countries</p>
-        </div>
-
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">30+</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">Innovation Programs</p>
-        </div>
-
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">$100M</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">Funding Facilitated</p>
-        </div>
-
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">1000</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">Startups Supported</p>
-        </div>
-
-        <div class="value-card w-full bg-nailab-purple/10 pt-4 pb-4 px-3 text-center rounded-lg flex flex-col items-center justify-center">
-          <p class="text-nailab-purple text-3xl md:text-4xl font-bold mb-2">50+</p>
-          <p class="text-sm md:text-sm font-base text-gray-700">Partners</p>
+      <div class="md:col-span-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card bg-cyan-200 border-4 border-teal-400 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">10+</div>
+            <div class="text-sm text-base-content/70 mt-2">Years of Impact</div>
+          </div>
+          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">54</div>
+            <div class="text-sm text-base-content/70 mt-2">African Countries</div>
+          </div>
+          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">30+</div>
+            <div class="text-sm text-base-content/70 mt-2">Innovation Programs</div>
+          </div>
+          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">$100M</div>
+            <div class="text-sm text-base-content/70 mt-2">Funding Facilitated</div>
+          </div>
+          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">1000</div>
+            <div class="text-sm text-base-content/70 mt-2">Startups Supported</div>
+          </div>
+          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+            <div class="text-nailab-purple text-3xl md:text-4xl font-bold">50+</div>
+            <div class="text-sm text-base-content/70 mt-2">Partners</div>
+          </div>
         </div>
       </div>
     </div>

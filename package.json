@@ -11,9 +11,10 @@
     "tailwindcss": "^3.3.0"
   },
   "scripts": {
-    "build:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./public/builds/tailwind.css --config ./tailwind.config.js --minify",
-    "watch:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./public/builds/tailwind.css --config ./tailwind.config.js --watch"
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --watch"
   },
+
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@rails/actiontext": "^8.1.200",

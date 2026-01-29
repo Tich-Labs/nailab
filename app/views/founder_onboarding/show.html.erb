@@ -217,19 +217,7 @@
               <p class="text-sm text-gray-500">Enabling this lets mentors and partners see the public details you have provided.</p>
             </div>
           </div>
-          <div class="mt-4">
-            <%# Additional actions: invite modal and add another startup link %>
-            <div class="flex gap-3 items-center">
-              <button type="button" class="btn btn-outline btn-sm" data-action="click->invite-modal#open">+ Invite co-founder / team</button>
-              <%= link_to 'Add another startup', founder_onboarding_path(step: 'additional'), class: 'text-sm text-nailab-teal underline' %>
-            </div>
-            <noscript>
-              <div class="mt-2">
-                <%= link_to '+ Invite co-founder / team (no JS)', new_founder_startup_invite_path(startup_id: current_user&.startup&.id), class: 'text-sm text-blue-600 underline' %>
-              </div>
-            </noscript>
-          </div>
-          <%= render 'founder_onboarding/invite_modal' %>
+          <!-- No invite or add another startup actions here; handled in dedicated steps. -->
         </div>
       <% end %>
     <% elsif @step == 'additional' %>

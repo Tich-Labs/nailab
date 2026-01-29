@@ -1,7 +1,7 @@
 <!-- app/views/pages/contact.html.erb -->
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <section class="py-20 bg-gradient-to-br from-nailab-purple/10 to-teal-50">
+  <section class="py-20 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
         <%= @contact_content[:title].presence || 'Contact Us' %>
@@ -10,22 +10,22 @@
         <%= @contact_content[:intro].presence || "Have a question, partnership inquiry, or want to get in touch? We'd love to hear from you." %>
       </p>
 
-      <!-- Contact Info Card -->
-      <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 space-y-6">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900">Email</h3>
-          <% email = (@contact_content[:email].presence || 'ceo@nailab.co.ke').to_s %>
-          <a href="mailto:<%= email %>" class="text-xl text-nailab-purple hover:opacity-90 transition-colors">
-            <%= email %>
-          </a>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900">Phone</h3>
-          <% phone_display = (@contact_content[:phone].presence || '+254 790 492 467').to_s %>
-          <% phone_href = phone_display.gsub(/[^\d\+]/, '') %>
-          <a href="tel:<%= phone_href %>" class="text-xl text-nailab-purple hover:opacity-90 transition-colors">
-            <%= phone_display %>
-          </a>
+      <!-- Contact Info Card (DaisyUI) -->
+      <div class="max-w-2xl mx-auto">
+        <div class="card bg-white p-6 md:p-10 rounded">
+          <div class="card-body p-0">
+            <h3 class="card-title text-lg font-semibold text-gray-900">Email</h3>
+            <% email = (@contact_content[:email].presence || 'ceo@nailab.co.ke').to_s %>
+            <a href="mailto:<%= email %>" class="text-xl text-primary hover:underline">
+              <%= email %>
+            </a>
+            <h3 class="card-title text-lg font-semibold text-gray-900 mt-6">Phone</h3>
+            <% phone_display = (@contact_content[:phone].presence || '+254 790 492 467').to_s %>
+            <% phone_href = phone_display.gsub(/[^\d\+]/, '') %>
+            <a href="tel:<%= phone_href %>" class="text-xl text-primary hover:underline">
+              <%= phone_display %>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -34,44 +34,42 @@
   <!-- Main Content: Form + FAQ -->
   <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- Contact Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- Contact Form (Tailwind utility, original style, inside card) -->
         <div>
           <h2 class="text-3xl font-bold text-gray-900 mb-8">Send us a message</h2>
-          <%= form_with url: '#', local: true, class: "space-y-6" do |f| %>
-            <div>
-              <%= f.label :name, "Name", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_field :name, required: true, autofocus: true, placeholder: "Your full name", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
+          <div class="card bg-base-100 shadow-xl border border-teal-200 p-6 md:p-10">
+            <div class="card-body p-0">
+              <%= form_with url: '#', local: true, class: "space-y-6" do |f| %>
+                <div>
+                  <%= f.label :name, "Name", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= f.text_field :name, required: true, autofocus: true, placeholder: "Your full name", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
+                </div>
+                <div>
+                  <%= f.label :email, "Email", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= f.email_field :email, required: true, placeholder: "you@example.com", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
+                </div>
+                <div>
+                  <%= f.label :subject, "Subject", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= f.text_field :subject, required: true, placeholder: "e.g. Partnership Inquiry", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
+                </div>
+                <div>
+                  <%= f.label :message, "Message", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= f.text_area :message, required: true, rows: 6, placeholder: "Tell us how we can help...", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition resize-none" %>
+                </div>
+                <%= f.submit "Send Message", class: "w-full bg-nailab-purple text-white py-4 rounded-lg font-semibold hover:opacity-90 hover:-translate-y-0.5 shadow-lg hover:shadow-xl transition-all cursor-pointer" %>
+              <% end %>
             </div>
-            <div>
-              <%= f.label :email, "Email", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.email_field :email, required: true, placeholder: "you@example.com", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
-            </div>
-            <div>
-              <%= f.label :subject, "Subject", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_field :subject, required: true, placeholder: "e.g. Partnership Inquiry", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition" %>
-            </div>
-            <div>
-              <%= f.label :message, "Message", class: "block text-sm font-semibold text-gray-700 mb-2" %>
-              <%= f.text_area :message, required: true, rows: 6, placeholder: "Tell us how we can help...", class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-nailab-purple focus:ring-4 focus:ring-nailab-purple/10 transition resize-none" %>
-            </div>
-            <%= f.submit "Send Message", class: "w-full bg-nailab-purple text-white py-4 rounded-lg font-semibold hover:opacity-90 hover:-translate-y-0.5 shadow-lg hover:shadow-xl transition-all cursor-pointer" %>
-          <% end %>
+          </div>
         </div>
 
-        <!-- FAQ Grid (static content) -->
-        <div class="bg-gray-50 rounded-2xl p-8">
+        <!-- FAQ Grid (button toggle, classic) -->
+        <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
           <h2 class="text-4xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
           <div class="space-y-4" data-controller="faq">
-              <% (@faqs || []).first(8).each_with_index do |faq, idx| %>
+            <% (@faqs || []).first(8).each_with_index do |faq, idx| %>
               <div id="faq-<%= idx %>" class="bg-white rounded-xl shadow-md overflow-hidden">
-                <button
-                  type="button"
-                  class="w-full px-6 py-5 flex justify-between items-center text-left font-semibold text-gray-900 hover:bg-gray-50 transition faq-toggle"
-                  aria-expanded="false"
-                  aria-controls="faq-answer-<%= idx %>"
-                  data-faq-index="<%= idx %>"
-                >
+                <button type="button" class="w-full px-6 py-5 flex justify-between items-center text-left font-semibold text-gray-900 hover:bg-gray-50 transition faq-toggle" aria-expanded="false" aria-controls="faq-answer-<%= idx %>" data-faq-index="<%= idx %>">
                   <span><%= faq[:question] || faq['question'] %></span>
                   <svg class="w-6 h-6 text-nailab-purple transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -82,7 +80,6 @@
                 </div>
               </div>
             <% end %>
-
             <script>
               document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.faq-toggle').forEach(function(btn) {
