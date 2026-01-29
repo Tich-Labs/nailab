@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  future: {
+    applyComplexClasses: true,
+  },
   content: [
     './app/views/**/*.erb',
     './app/helpers/**/*.rb',
