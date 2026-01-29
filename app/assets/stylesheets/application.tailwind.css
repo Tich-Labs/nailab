@@ -1,7 +1,6 @@
-@reference "tailwindcss";
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+
+@import "tailwindcss";
+@config "../../../tailwind.config.js";
 
 /* Put any custom CSS below this line */
 
