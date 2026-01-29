@@ -6,7 +6,7 @@ services:
     plan: starter
     buildCommand: |
       bundle install --jobs 4 --retry 3
-      npm install
+      yarn install
       tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify
       # Ensure importmap pins and mappings are generated so controllers are available to the asset pipeline
       bin/importmap
