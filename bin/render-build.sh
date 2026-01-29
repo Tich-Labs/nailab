@@ -5,6 +5,10 @@ set -o errexit
 # Install dependencies
 bundle install
 
+
+# Precompile Tailwind CSS
+tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify
+
 # Precompile assets
 bundle exec rails assets:precompile
 
