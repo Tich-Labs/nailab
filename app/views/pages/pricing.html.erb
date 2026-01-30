@@ -1,15 +1,15 @@
 <div class="min-h-screen bg-white">
-  <section class="py-20 bg-gray-100">
+  <section class="py-16 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+      <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
         <%= (@pricing_hero || {})[:title] || "Pricing" %>
       </h1>
-      <div class="text-xl text-gray-700 max-w-3xl mx-auto">
+      <div class="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
         <%= raw((@pricing_hero || {})[:subtitle].to_s.gsub(/\n/, '<br/>')) %>
       </div>
     </div>
   </section>
-  <section class="py-20 bg-white">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <%= render 'shared/pricing_grid', pricing_tiers: (@pricing_tiers || []) %>
     </div>

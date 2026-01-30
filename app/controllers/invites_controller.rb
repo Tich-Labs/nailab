@@ -1,6 +1,4 @@
 class InvitesController < ApplicationController
-  skip_before_action :ensure_signed_in, only: [ :accept ]
-
   def accept
     token = params[:token]
     invite = StartupInvite.find_by(token: token)

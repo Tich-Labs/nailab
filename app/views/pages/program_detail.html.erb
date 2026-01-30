@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-white">
   <% content_for :title, "#{@program.title} — Nailab" if defined?(@program) %>
   <% content_for :meta_description, (@program.short_summary.presence || strip_tags(@program.description.to_s).truncate(160)) if defined?(@program) %>
   <%# JSON-LD Program schema for SEO %>
@@ -18,32 +18,51 @@
   <% end %>
   <%= render 'pages/program_detail/hero' %>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="bg-white rounded-2xl shadow-lg p-8 lg:p-12">
+    <div class="card bg-base-100 shadow-xl p-8 lg:p-12">
       <div class="mb-8">
         <div class="mb-2">
-          <span class="inline-block px-3 py-1 bg-gray-100 text-nailab-teal text-xs font-semibold rounded-full">
+          <span class="inline-block px-3 py-1 bg-gray-100 text-nailab-purple text-xs font-semibold rounded-lg">
             <%= (@program.categories.first&.name.presence) || @program.program_type&.titleize || 'Uncategorized' %>
           </span>
         </div>
-        <p class="text-xl text-gray-600 mb-4 leading-relaxed">
+        <p class="text-xl text-base-content/70 mb-4 leading-relaxed">
           <%= @program.short_summary %>
         </p>
-        <div class="prose prose-lg max-w-none text-gray-800">
+        <div class="prose prose-lg max-w-none text-base-content space-y-4 [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2">
           <% if @program.description.respond_to?(:body) && @program.description.body.present? %>
             <%= @program.description.body.to_trix_html %>
           <% else %>
             <%= sanitize(@program.description.to_s) %>
           <% end %>
         </div>
-        <div class="mt-6">
-          <strong>Type:</strong> <%= @program.program_type&.humanize %><br>
-          <strong>Status:</strong> <%= @program.status&.humanize %><br>
-          <% if @program.start_date.present? %>
-            <strong>Start Date:</strong> <%= @program.start_date.strftime('%b %d, %Y') %><br>
-          <% end %>
-          <% if @program.end_date.present? %>
-            <strong>End Date:</strong> <%= @program.end_date.strftime('%b %d, %Y') %><br>
-          <% end %>
+        <div class="mt-8 pt-8 border-t border-base-300">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-base-content mb-6">Program Details</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="flex flex-col">
+              <p class="text-xs uppercase tracking-wider text-base-content/60 mb-2">Type</p>
+              <p class="text-base font-semibold text-base-content"><%= @program.program_type&.humanize %></p>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-xs uppercase tracking-wider text-base-content/60 mb-2">Status</p>
+              <p class="text-base font-semibold">
+                <span class="badge <%= @program.status == 'completed' ? 'badge-success' : 'badge-info' %>">
+                  <%= @program.status&.humanize %>
+                </span>
+              </p>
+            </div>
+            <% if @program.start_date.present? %>
+              <div class="flex flex-col">
+                <p class="text-xs uppercase tracking-wider text-base-content/60 mb-2">Start Date</p>
+                <p class="text-base font-semibold text-base-content"><%= @program.start_date.strftime('%b %d, %Y') %></p>
+              </div>
+            <% end %>
+            <% if @program.end_date.present? %>
+              <div class="flex flex-col">
+                <p class="text-xs uppercase tracking-wider text-base-content/60 mb-2">End Date</p>
+                <p class="text-base font-semibold text-base-content"><%= @program.end_date.strftime('%b %d, %Y') %></p>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
       <%= render 'pages/program_detail/cta' %>

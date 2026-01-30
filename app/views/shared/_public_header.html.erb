@@ -23,9 +23,9 @@
         </div>
         <%= link_to 'Programs', programs_path, class: "text-gray-700 hover:text-nailab-teal px-3 py-2 text-base font-medium transition-colors #{request.path.start_with?(programs_path) ? 'text-nailab-teal' : ''}" %>
         <% current_resource_slug = params[:category].presence || @selected_category.presence || @resource_category_slug.presence || 'all' %>
-        <% resources_active = request.path.start_with?(resources_path) %>
+        <% resources_active = request.path == resources_path || request.path.start_with?("/resources") %>
         <div class="relative">
-          <button type="button" onclick="toggleDropdown(this)" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium w-full #{resources_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
+          <button type="button" onclick="toggleDropdown(this)" class="inline-flex items-center gap-1 transition-colors px-3 py-2 text-base font-medium #{resources_active ? 'text-nailab-teal' : 'text-gray-700 hover:text-nailab-teal'}">
             Resources
             <span class="text-xs">▼</span>
           </button>

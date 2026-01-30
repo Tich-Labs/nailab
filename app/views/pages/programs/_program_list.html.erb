@@ -1,10 +1,9 @@
-<section class="py-20 bg-gray-50">
+<section class="py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <% if @programs.empty? %>
-      <div class="text-center py-12">
-        <p class="text-xl text-gray-600">
-          No programs found in this category.
-        </p>
+      <div class="bg-white border border-dashed border-gray-200 rounded-lg p-8 text-center">
+        <p class="text-gray-600 font-semibold">No programs found in this category.</p>
+        <p class="text-sm text-gray-500 mt-2">Try another category.</p>
       </div>
     <% else %>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
