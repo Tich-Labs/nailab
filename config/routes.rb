@@ -222,7 +222,8 @@ Rails.application.routes.draw do
 
   namespace :founder do
     root to: "dashboard#show"
-  resource :profile, only: [ :show ]
+    resource :profile, only: [ :show ]
+    get "messages", to: "peer_messages#index", as: :messages
 
     resource(:startup_profile, only: %i[show edit update])
     resource(:progress, only: %i[show])

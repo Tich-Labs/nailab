@@ -21,8 +21,8 @@ class Founder::PeerMessagesController < Founder::BaseController
   end
 
   def index
-    @sent = current_user.peer_messages.order(created_at: :desc)
-    @received = current_user.received_peer_messages.order(created_at: :desc)
+    # Unified inbox: combine all message types (for now, just peer messages)
+    @messages = (current_user.peer_messages + current_user.received_peer_messages).sort_by(&:created_at).reverse
   end
 
   private

@@ -2,37 +2,41 @@
   <div class="max-w-4xl mx-auto py-8 px-4">
   <div class="mb-8">
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Your Messages</h1>
-    <p class="text-xl text-base-content/60">Sent and received messages with peers.</p>
+    <p class="text-xl text-base-content/60">All your messages: peer, support, community, mentorship. Filter and tag just like WhatsApp.</p>
+    <div class="flex gap-2 mt-4">
+      <% ["all", "peer", "support", "community", "mentorship"].each do |type| %>
+        <%= button_to type.titleize, founder_peer_messages_path(filter: type), method: :get, class: "btn btn-sm btn-outline" %>
+      <% end %>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <section class="bg-base-100 p-6 rounded-lg shadow">
-      <h2 class="font-semibold mb-4 text-primary">Sent</h2>
-      <% @sent.each do |msg| %>
-        <div class="mb-3 border-b border-base-200 pb-3">
-          <div class="text-sm text-base-content/70">To: <%= msg.recipient.name %></div>
-          <div class="text-sm text-base-content/50">Sent: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
-          <p class="mt-2 text-base-content"><%= simple_format(msg.content) %></p>
+  <div class="bg-base-100 p-6 rounded-lg shadow">
+    <h2 class="font-semibold mb-4 text-primary">Inbox</h2>
+    <% @messages.each do |msg| %>
+      <div class="mb-3 border-b border-base-200 pb-3">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="badge badge-sm badge-outline"><%= (msg.respond_to?(:message_type) && msg.message_type.present?) ? msg.message_type.titleize : 'Peer' %></span>
+          <% if msg.respond_to?(:group_id) && msg.group_id.present? %>
+            <span class="badge badge-sm badge-info">Group: <%= msg.group.name %></span>
+          <% end %>
+          <% if msg.respond_to?(:tag) && msg.tag.present? %>
+            <span class="badge badge-sm badge-secondary"><%= msg.tag %></span>
+          <% end %>
         </div>
-      <% end %>
-      <% if @sent.empty? %>
-        <p class="text-base-content/50">No sent messages yet.</p>
-      <% end %>
-    </section>
-
-    <section class="bg-base-100 p-6 rounded-lg shadow">
-      <h2 class="font-semibold mb-4 text-primary">Received</h2>
-      <% @received.each do |msg| %>
-        <div class="mb-3 border-b border-base-200 pb-3">
-          <div class="text-sm text-base-content/70">From: <%= msg.sender.name %></div>
-          <div class="text-sm text-base-content/50">Received: <%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
-          <p class="mt-2 text-base-content"><%= simple_format(msg.content) %></p>
+        <div class="text-sm text-base-content/70">
+          <% if msg.respond_to?(:group_id) && msg.group_id.present? %>
+            From: <%= msg.sender.name %> in <%= msg.group.name %>
+          <% else %>
+            From: <%= msg.sender.name %> To: <%= msg.recipient.name %>
+          <% end %>
         </div>
-      <% end %>
-      <% if @received.empty? %>
-        <p class="text-base-content/50">No messages received yet.</p>
-      <% end %>
-    </section>
+        <div class="text-sm text-base-content/50"><%= msg.created_at.strftime('%b %d, %Y %H:%M') %></div>
+        <p class="mt-2 text-base-content"><%= simple_format(msg.content) %></p>
+      </div>
+    <% end %>
+    <% if @messages.empty? %>
+      <p class="text-base-content/50">No messages yet.</p>
+    <% end %>
   </div>
 </div>
 </div>
