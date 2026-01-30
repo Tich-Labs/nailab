@@ -1,21 +1,20 @@
-<section class="py-12 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-    <div class="flex flex-col gap-3 text-center">
-      <p class="text-sm uppercase tracking-[0.5em] text-slate-500">Resource Library</p>
-      <h2 class="text-3xl font-semibold text-slate-900">Curated content for founders</h2>
-      <p class="text-sm text-slate-600">
-        <%= pluralize(resources.count, 'item') %> available across blogs, templates, opportunities, and events.
-      </p>
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="text-sm text-gray-500"><%= resources.count %> <%= 'resource'.pluralize(resources.count) %> found</p>
+      </div>
     </div>
     <% if resources.any? %>
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <% resources.each do |resource| %>
           <%= render partial: 'shared/resource_card', locals: { resource: resource, variant: 'public' } %>
         <% end %>
       </div>
     <% else %>
-      <div class="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-slate-600">
-        No resources match that selection—try another category or keyword.
+      <div class="bg-white border border-dashed border-gray-200 rounded-lg p-8 text-center">
+        <p class="text-gray-600 font-semibold">No resources match that selection.</p>
+        <p class="text-sm text-gray-500 mt-2">Try another category or keyword.</p>
       </div>
     <% end %>
   </div>

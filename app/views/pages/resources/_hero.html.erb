@@ -1,38 +1,38 @@
-<section class="py-20 bg-gradient-to-br from-teal-50 to-blue-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-center">
-    <p class="text-sm uppercase tracking-[0.5em] text-nailab-teal">Resources</p>
-    <h1 class="text-4xl lg:text-5xl font-bold text-slate-900">Resources Hub</h1>
-    <p class="text-lg text-slate-700 max-w-3xl mx-auto">
+<section class="py-20 bg-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 text-center">Resources Hub</h1>
+    <p class="text-xl text-gray-700 text-center max-w-3xl mx-auto mb-10">
       Access templates, guides, opportunities, and events curated to keep founders moving forward.
     </p>
-
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-4 flex items-center text-slate-400">
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M8.5 2a6.5 6.5 0 014.845 10.785l3.935 3.936a1 1 0 01-1.414 1.414L11.93 14.2A6.5 6.5 0 118.5 2zm0 2a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" fill="currentColor"></path>
+          </svg>
+        </span>
+        <% form_url = selected_category == 'all' ? resources_path : resources_category_path(category: selected_category) %>
+        <%= form_with url: form_url, method: :get, local: true, class: 'space-y-6' do |form| %>
+          <%= form.text_field :q, value: query, placeholder: 'Search by title, description, or type...', class: 'w-full rounded-2xl border border-gray-300 bg-white/90 px-12 py-4 text-sm text-slate-700 shadow-lg focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-8 border-b border-gray-200 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="flex flex-wrap items-center gap-4">
+      <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 text-sm font-semibold text-gray-700">
+        Filters
+      </span>
       <% form_url = selected_category == 'all' ? resources_path : resources_category_path(category: selected_category) %>
-      <%= form_with url: form_url, method: :get, local: true, class: 'space-y-6' do |form| %>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-4 flex items-center text-slate-400">
-            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path
-                d="M8.5 2a6.5 6.5 0 014.845 10.785l3.935 3.936a1 1 0 01-1.414 1.414L11.93 14.2A6.5 6.5 0 118.5 2zm0 2a4.5 4.5 0 100 9 4.5 4.5 0 000-9z"
-                fill="currentColor"
-              />
-            </svg>
-          </span>
-          <%= form.text_field :q,
-            value: query,
-            placeholder: 'Search resources...',
-            class: 'w-full rounded-2xl border border-gray-300 bg-white/90 px-12 py-4 text-sm text-slate-700 shadow-lg focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200'
-          %>
-          <%= form.hidden_field :category, value: selected_category %>
-          <button type="submit" class="sr-only">Search resources</button>
-        </div>
-        <div class="flex flex-wrap gap-3 justify-center">
-          <% categories.each do |category| %>
-            <% active = selected_category == category[:slug] %>
-            <% target_path = category[:slug] == 'all' ? resources_path(q: query) : resources_category_path(category: category[:slug], q: query) %>
-            <%= link_to category[:label], target_path, class: "px-6 py-2 rounded-lg text-sm font-semibold transition #{active ? 'bg-nailab-teal text-white shadow-lg shadow-teal-500/30' : 'bg-white text-slate-700 shadow-sm hover:shadow-md'}" %>
-          <% end %>
-        </div>
+      <%= link_to 'Clear category', resources_path, class: 'text-sm text-gray-600 hover:text-gray-900' unless selected_category == 'all' %>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <% categories.each do |category| %>
+        <% active = selected_category == category[:slug] %>
+        <% target_path = category[:slug] == 'all' ? resources_path(q: query) : resources_category_path(category: category[:slug], q: query) %>
+        <%= link_to category[:label], target_path, class: "px-4 py-2 rounded-lg font-medium transition-colors #{active ? 'bg-nailab-teal text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
       <% end %>
     </div>
   </div>
