@@ -231,6 +231,9 @@ Rails.application.routes.draw do
     # Startup Updates feature
     resources :startup_updates, only: [ :index, :new, :create ]
 
+    # Allow founders to add additional startups after onboarding
+    resources :startups, only: %i[new create]
+
     resources :startup_invites, only: [ :new, :create ]
 
     get "mentorship", to: "mentorship#index"

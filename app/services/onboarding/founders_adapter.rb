@@ -4,7 +4,7 @@ module Onboarding
   # Adapter for founder onboarding steps. Persists to UserProfile and StartupProfile
   # or to session for guest flows. Returns OpenStruct service results.
   class FoundersAdapter
-    STEPS = %w[personal startup additional invite_cofounders invite_team professional mentorship confirm].freeze
+    STEPS = %w[personal startup professional mentorship confirm].freeze
 
     def initialize(session_store:)
       @session_store = session_store
@@ -27,27 +27,7 @@ module Onboarding
           startup.onboarding_step = step if startup.respond_to?(:onboarding_step)
           success = startup.update(params)
           build_result(success, startup, step)
-        when "additional"
-          # Allow founders to add additional startups (creates Startup records)
-          # Params expected to include keys matching Startup model
-          begin
-            new_startup = actor.startups.create(
-              startup_name: params[:startup_name],
-              description: params[:description],
-              website_url: params[:website_url],
-              founded_year: params[:founded_year] || params[:year_founded],
-              team_size: params[:team_size],
-              value_proposition: params[:value_proposition],
-              target_market: params[:target_market],
-              location: params[:location] || params[:country_of_operation]
-            )
-            if params[:logo].present? && new_startup.respond_to?(:logo)
-              new_startup.logo.attach(params[:logo]) rescue nil
-            end
-            build_result(new_startup.persisted?, new_startup, step)
-          rescue => e
-            OpenStruct.new(success?: false, errors: [ e.message ], next_step: step, completed?: false)
-          end
+        # 'additional' startups and invites are handled in the Startup Profile UI after onboarding.
         when "confirm"
           # Validate all fields before marking onboarding as complete
           profile = actor.user_profile || actor.build_user_profile

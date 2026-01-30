@@ -220,50 +220,21 @@
           <!-- No invite or add another startup actions here; handled in dedicated steps. -->
         </div>
       <% end %>
-    <% elsif @step == 'additional' %>
-      <h2 class="text-2xl font-semibold mb-6">Add Additional Startup (Optional)</h2>
-      <div class="bg-gray-50 rounded-lg p-6">
-        <p class="text-sm text-gray-600 mb-4">You can showcase multiple startups. Fill the fields below to add another startup.</p>
-        <%= fields_for :additional_startup do |asp| %>
-          <div class="grid grid-cols-1 gap-4">
-            <div>
-              <%= asp.label :startup_name, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= asp.text_field :startup_name, placeholder: 'Startup name', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
-            </div>
-            <div>
-              <%= asp.label :website_url, 'Website', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= asp.url_field :website_url, placeholder: 'https://', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
-            </div>
-            <div>
-              <%= asp.label :description, 'Brief description', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= asp.text_area :description, rows: 4, minlength: 100, maxlength: 1000, placeholder: 'Short description of this startup', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
-            </div>
-            <div>
-              <%= asp.label :team_size, 'Number of team members', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= asp.number_field :team_size, min: 1, placeholder: 'e.g. 5', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
-            </div>
-            <div>
-              <%= asp.label :value_proposition, 'Unique Value Proposition', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-              <%= asp.text_area :value_proposition, rows: 3, minlength: 50, maxlength: 1000, placeholder: 'What makes this startup unique?', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg' %>
-            </div>
-          </div>
-        <% end %>
-      </div>
     <% elsif @step == 'professional' %>
       <h2 class="text-2xl font-semibold mb-6">Professional Background</h2>
       <%= f.fields_for :startup_profile, @startup_profile do |sp| %>
         <div class="grid grid-cols-1 gap-4">
           <div>
             <%= sp.label :sector, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :sector, placeholder: 'Industry sector', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.text_field :sector, placeholder: 'Industry sector (e.g. Tech)', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
           </div>
           <div>
             <%= sp.label :stage, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :stage, placeholder: 'Startup stage', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.select :stage, (defined?(STAGE_OPTIONS) ? STAGE_OPTIONS : ['Idea Stage', 'Early Stage', 'Growth', 'Scaling', 'Other']), {}, { class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' } %>
           </div>
           <div>
             <%= sp.label :funding_stage, 'Funding Stage', class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.text_field :funding_stage, placeholder: 'e.g. Seed, Series A', class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' %>
+            <%= sp.select :funding_stage, ['Pre-seed', 'Seed', 'Series A', 'Series B+','Bootstrapped','Other'], {}, { class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' } %>
           </div>
           <div>
             <%= sp.label :funding_raised, class: 'block text-sm font-medium text-gray-700 mb-2' %>
@@ -277,7 +248,16 @@
         <div class="grid grid-cols-1 gap-4">
           <div>
             <%= sp.label :mentorship_areas, class: 'block text-sm font-medium text-gray-700 mb-2' %>
-            <%= sp.select :mentorship_areas, ['Product', 'Go-to-market', 'Fundraising', 'Team', 'Other'], {}, { multiple: true, required: true, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent' } %>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <% options = ['Product', 'Go-to-market', 'Fundraising', 'Team', 'Other'] %>
+              <% selected = Array(@startup_profile&.mentorship_areas) %>
+              <% options.each do |opt| %>
+                <label class="inline-flex items-center gap-2">
+                  <input type="checkbox" name="founder_onboarding[startup_profile][mentorship_areas][]" value="<%= opt %>" <%= 'checked' if selected.include?(opt) %> class="checkbox checkbox-primary" />
+                  <span class="text-sm text-gray-700"><%= opt %></span>
+                </label>
+              <% end %>
+            </div>
           </div>
           <div>
             <%= sp.label :challenge_details, class: 'block text-sm font-medium text-gray-700 mb-2' %>
@@ -413,7 +393,7 @@
           <i class="fas fa-save mr-2"></i> Save & Exit
         <% end %>
         <%# Add Skip button for optional steps %>
-        <% optional_steps = %w[additional invite_cofounders invite_team professional mentorship] %>
+        <% optional_steps = %w[professional mentorship] %>
         <% all_steps = Onboarding::FoundersAdapter::STEPS %>
         <% if optional_steps.include?(@step) && all_steps %>
           <% idx = all_steps.index(@step) %>

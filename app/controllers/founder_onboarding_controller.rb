@@ -5,7 +5,7 @@ class FounderOnboardingController < ApplicationController
   before_action :ensure_signed_in
   before_action :ensure_founder_role
 
-  STEPS = %w[personal startup additional invite_cofounders invite_team professional mentorship confirm]
+  STEPS = %w[personal startup professional mentorship confirm]
 
   def show
     prepare_profiles
@@ -17,8 +17,6 @@ class FounderOnboardingController < ApplicationController
     step_params = case @step
     when "personal" then personal_params
     when "startup" then startup_params
-    when "additional" then additional_startup_params
-    when "invite_cofounders", "invite_team" then invite_params
     when "professional" then professional_params
     when "mentorship" then mentorship_params
     else {}
@@ -107,20 +105,14 @@ class FounderOnboardingController < ApplicationController
     )
   end
 
-  def additional_startup_params
-    params.require(:founder_onboarding).require(:additional_startup).permit(:startup_name, :logo, :website_url, :founded_year, :location, :description, :team_size, :value_proposition)
-  end
-
-  def invite_params
-    params.fetch(:founder_onboarding, {}).permit(invites: [ :invitee_name, :invitee_email, :role, :startup_id ])
-  end
+  # Additional startups and invites are handled from the Startup Profile UI after onboarding.
 
   def professional_params
     params.require(:founder_onboarding).require(:startup_profile).permit(:sector, :stage, :funding_stage, :funding_raised)
   end
 
   def mentorship_params
-    params.require(:founder_onboarding).require(:startup_profile).permit(:mentorship_areas, :challenge_details, :preferred_mentorship_mode)
+    params.require(:founder_onboarding).require(:startup_profile).permit(:challenge_details, :preferred_mentorship_mode, mentorship_areas: [])
   end
 
   def prepare_profiles

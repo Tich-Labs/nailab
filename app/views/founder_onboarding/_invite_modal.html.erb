@@ -5,7 +5,7 @@
       <div data-invite-modal-target="flash" class="my-2"></div>
       <form data-invite-modal-target="form" action="<%= founder_startup_invites_path %>" method="post">
         <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-        <%= hidden_field_tag :startup_id, (current_user&.startups&.first&.id) %>
+        <%= hidden_field_tag :startup_id, (local_assigns[:startup_id] || current_user&.startups&.first&.id) %>
         <div class="grid grid-cols-1 gap-2 mt-4">
           <div>
             <label class="block text-sm font-medium text-gray-700">Name</label>
