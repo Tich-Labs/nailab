@@ -6,7 +6,7 @@
   </div>
   
   <!-- Hero Header -->
-  <div class="card bg-white border border-nailab-teal/20 shadow-xl mb-8">
+  <div class="card bg-nailab-teal border border-nailab-teal shadow-xl mb-8">
     <div class="card-body">
       <div class="flex items-center gap-6">
         <% if @startup_profile.logo.attached? %>
@@ -19,8 +19,8 @@
           </figure>
         <% end %>
         <div>
-          <h1 class="text-4xl font-bold text-nailab-purple"><%= @startup_profile.startup_name %></h1>
-          <p class="text-base-content/70 mt-2 text-lg"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
+          <h1 class="text-4xl font-bold text-white"><%= @startup_profile.startup_name %></h1>
+          <p class="text-white/80 mt-2 text-lg"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
         </div>
       </div>
     </div>

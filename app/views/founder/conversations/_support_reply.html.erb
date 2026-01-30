@@ -1,0 +1,6 @@
+<div class="flex <%= reply.user_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+  <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= reply.user_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
+    <div class="text-xs <%= reply.user_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> font-semibold mb-1"><%= reply.user_id == current_user.id ? 'You' : 'Support Team' %> • <%= reply.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+    <div class="text-sm"><%= simple_format(reply.body) %></div>
+  </div>
+</div>

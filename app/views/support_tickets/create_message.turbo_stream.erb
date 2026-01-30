@@ -1,0 +1,3 @@
+<%= turbo_stream.append "support-replies-container" do %>
+  <%= render partial: "support_tickets/support_reply", locals: { reply: @reply, current_user: current_user } %>
+<% end %>

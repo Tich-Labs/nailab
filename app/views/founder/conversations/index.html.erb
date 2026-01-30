@@ -1,74 +1,147 @@
 <%# app/views/founder/conversations/index.html.erb %>
+<% if @selected_item && @selected_item[:type] == :peer_message %>
+  <%= turbo_stream_from "peer_messages_#{current_user.id}" %>
+<% elsif @selected_item && @selected_item[:type] == :support_ticket %>
+  <%= turbo_stream_from "support_ticket_#{@selected_item[:id]}" %>
+<% elsif @selected_item && @selected_item[:type] == :conversation %>
+  <%= turbo_stream_from "conversation_#{@selected_item[:id]}" %>
+<% end %>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Messages</h1>
     <p class="text-xl text-base-content/60">Stay connected with your mentors and fellow founders</p>
   </div>
   <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[80vh]">
       <!-- Left: list -->
-      <div class="col-span-1 border-r border-base-200">
-        <div class="bg-nailab-purple text-white px-6 py-4">
-          <h2 class="text-lg font-bold text-white">Messages</h2>
+      <div class="col-span-1 border-r border-base-200 flex flex-col">
+        <div class="bg-nailab-teal text-white px-6 py-5 flex-shrink-0">
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            Conversations
+          </h2>
         </div>
-        <div class="divide-y divide-base-200 h-[70vh] overflow-y-auto">
+        <div class="divide-y divide-base-200 flex-1 overflow-y-auto" data-controller="conversation-list">
           <% @items.each do |item| %>
-            <%= link_to '#', class: "block p-4 hover:bg-base-200 #{'bg-secondary/10' if @selected_item && @selected_item[:type] == item[:type] && @selected_item[:id] == item[:id]}", data: { type: item[:type], id: item[:id] } do %>
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <div class="text-sm text-base-content/70"><%= item[:contact] %> <span class="mx-2">•</span> <%= item[:category] if item[:category].present? %></div>
-                  <div class="font-semibold text-nailab-purple"><%= item[:subject].presence || (item[:preview]&.truncate(60) || 'Message') %></div>
-                  <div class="text-xs text-base-content/50 mt-1"><%= item[:preview]&.truncate(80) %></div>
+            <a href="<%= founder_conversations_path(selected_type: item[:type], selected_id: item[:id]) %>"
+               class="block p-4 hover:bg-base-200 transition-colors #{'bg-nailab-teal/10 border-l-4 border-nailab-teal' if @selected_item && @selected_item[:type] == item[:type] && @selected_item[:id] == item[:id]}"
+               data-action="click->conversation-list#select"
+               data-type="<%= item[:type] %>"
+               data-id="<%= item[:id] %>">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-nailab-teal flex-shrink-0"></div>
+                    <div class="text-sm font-medium text-base-content/80 truncate"><%= item[:contact] %></div>
+                    <% if item[:category].present? %>
+                      <span class="badge badge-sm badge-outline"><%= item[:category] %></span>
+                    <% end %>
+                  </div>
+                  <div class="font-semibold text-nailab-purple mt-1 truncate"><%= item[:subject].presence || (item[:preview]&.truncate(40) || 'Message') %></div>
+                  <div class="text-xs text-base-content/50 mt-1 line-clamp-1"><%= item[:preview]&.truncate(60) %></div>
                 </div>
-                <div class="text-right text-xs text-base-content/40">
+                <div class="text-right text-xs text-base-content/40 flex-shrink-0">
                   <div><%= item[:updated_at].strftime('%b %d') rescue '' %></div>
                   <div class="mt-1"><%= item[:updated_at].strftime('%I:%M %p') rescue '' %></div>
                 </div>
               </div>
-            <% end %>
+            </a>
           <% end %>
           <% if @items.empty? %>
-            <div class="p-6 text-center text-base-content/50">No messages yet.</div>
+            <div class="p-6 text-center text-base-content/50">No conversations yet.</div>
           <% end %>
         </div>
       </div>
 
       <!-- Right: reading panel -->
-      <div class="col-span-2 p-6">
+      <div class="col-span-2 p-6 flex flex-col overflow-hidden">
         <% if @selected_item.nil? %>
-          <div class="text-center text-base-content/50 py-12">Select a message to read.</div>
+          <div class="flex flex-col items-center justify-center h-full text-base-content/50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <p class="text-lg">Select a conversation to get started</p>
+          </div>
         <% else %>
           <% case @selected_item[:type]
           when :conversation %>
-            <h3 class="text-xl font-bold mb-2">Conversation with <%= @selected_item[:contact] %></h3>
-            <div class="space-y-4">
+            <div class="border-b border-base-200 pb-4 mb-4 flex-shrink-0">
+              <h3 class="text-xl font-bold text-nailab-purple mb-1">Conversation with <%= @selected_item[:contact] %></h3>
+              <p class="text-sm text-base-content/60"><%= @selected_item[:category] if @selected_item[:category].present? %></p>
+            </div>
+            <div id="peer-messages-container" class="flex-1 overflow-y-auto space-y-4 mb-4">
               <% @reading.each do |m| %>
-                <div class="p-4 rounded-lg <%= m.user_id == current_user.id ? 'bg-secondary/10 ml-auto' : 'bg-base-200' %>">
-                  <div class="text-sm text-base-content/70"><strong><%= m.user.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                  <div class="mt-2 text-base-content"><%= simple_format(m.content) %></div>
+                <div class="flex <%= m.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+                  <div class="max-w-xs lg:max-w-md xl:max-w-lg p-4 rounded-lg <%= m.sender_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
+                    <div class="text-xs <%= m.sender_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> mb-1"><strong><%= m.sender.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %I:%M %p') %></div>
+                    <div class="text-sm"><%= simple_format(m.content) %></div>
+                  </div>
                 </div>
+              <% end %>
+            </div>
+            <div class="border-t border-base-200 pt-4 flex-shrink-0">
+              <%= form_with url: create_message_founder_conversation_path(@selected_item[:id], selected_type: @selected_item[:type], selected_id: @selected_item[:id]), method: :post, local: true, class: "flex gap-2" do |f| %>
+                <%= f.text_field :message_content, placeholder: "Type your message...", class: "input input-bordered flex-1 text-sm", required: true %>
+                <%= f.button type: "submit", class: "btn btn-nailab-teal text-white" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.9429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 C22.9702544,11.6889879 22.9702544,11.5318905 22.9702544,11.4743931 L4.13399899,1.0574073 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.98721575 L3.03521743,10.4282088 C3.03521743,10.5853061 3.19218622,10.7424035 3.50612381,10.7424035 L16.6915026,11.5278905 C16.6915026,11.5278905 17.1624089,11.5278905 17.1624089,11.0566983 L17.1624089,12.0442787 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z"/>
+                  </svg>
+                <% end %>
               <% end %>
             </div>
           <% when :support_ticket %>
-            <h3 class="text-xl font-bold mb-2 text-primary"><%= @reading.subject %> <span class="text-sm text-base-content/70">• <%= @reading.category %></span></h3>
-            <div class="mb-4 text-sm text-base-content/70">Created: <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-            <div class="space-y-4">
+            <div class="border-b border-base-200 pb-4 mb-4 flex-shrink-0">
+              <h3 class="text-xl font-bold text-nailab-purple mb-1"><%= @reading.subject %></h3>
+              <p class="text-sm text-base-content/60"><%= @reading.category %> • <%= @reading.created_at.strftime('%b %d, %Y') %></p>
+            </div>
+            <div id="support-replies-container" class="flex-1 overflow-y-auto space-y-4 mb-4">
               <div class="p-4 bg-base-200 rounded-lg">
-                <div class="text-sm text-base-content/70 font-semibold">You • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                <div class="mt-2 text-base-content"><%= simple_format(@reading.description) %></div>
+                <div class="text-sm text-base-content/70 font-semibold mb-2">You • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                <div class="text-base-content"><%= simple_format(@reading.description) %></div>
               </div>
               <% @reading.replies.order(:created_at).each do |r| %>
-                <div class="p-4 rounded-lg <%= r.admin_reply? ? 'bg-secondary/10 ml-auto' : 'bg-base-200' %>">
-                  <div class="text-sm text-base-content/70 font-semibold"><%= r.admin_reply? ? 'Support Team' : (r.user.try(:name) || 'You') %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                  <div class="mt-2 text-base-content"><%= simple_format(r.body) %></div>
+                <div class="flex <%= r.user_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+                  <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= r.user_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
+                    <div class="text-xs <%= r.user_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> font-semibold mb-1"><%= r.user_id == current_user.id ? 'You' : 'Support Team' %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                    <div class="text-sm"><%= simple_format(r.body) %></div>
+                  </div>
                 </div>
               <% end %>
             </div>
+            <div class="border-t border-base-200 pt-4 flex-shrink-0">
+              <%= form_with url: create_message_founder_conversation_path(@selected_item[:id], selected_type: @selected_item[:type], selected_id: @selected_item[:id]), method: :post, local: true, class: "flex gap-2" do |f| %>
+                <%= f.text_field :message_content, placeholder: "Type your reply...", class: "input input-bordered flex-1 text-sm", required: true %>
+                <%= f.button type: "submit", class: "btn btn-nailab-teal text-white" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.9429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 C22.9702544,11.6889879 22.9702544,11.5318905 22.9702544,11.4743931 L4.13399899,1.0574073 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.98721575 L3.03521743,10.4282088 C3.03521743,10.5853061 3.19218622,10.7424035 3.50612381,10.7424035 L16.6915026,11.5278905 C16.6915026,11.5278905 17.1624089,11.5278905 17.1624089,11.0566983 L17.1624089,12.0442787 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z"/>
+                  </svg>
+                <% end %>
+              <% end %>
+            </div>
           <% when :peer_message %>
-            <h3 class="text-xl font-bold mb-2 text-primary">Message with <%= @selected_item[:contact] %></h3>
-            <div class="p-4 bg-base-200 rounded-lg">
-              <div class="text-sm text-base-content/70"><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-              <div class="mt-2 text-base-content"><%= simple_format(@reading.content) %></div>
+            <div class="border-b border-base-200 pb-4 mb-4 flex-shrink-0">
+              <h3 class="text-xl font-bold text-nailab-purple mb-1">Message with <%= @selected_item[:contact] %></h3>
+            </div>
+            <div class="flex-1 overflow-y-auto space-y-4 mb-4">
+              <div class="flex <%= @reading.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+                <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= @reading.sender_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
+                  <div class="text-xs <%= @reading.sender_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> mb-1"><strong><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %></strong> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                  <div class="text-sm"><%= simple_format(@reading.content) %></div>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-base-200 pt-4 flex-shrink-0">
+              <%= form_with url: create_message_founder_conversation_path(@selected_item[:id], selected_type: @selected_item[:type], selected_id: @selected_item[:id]), method: :post, local: true, class: "flex gap-2" do |f| %>
+                <%= f.text_field :message_content, placeholder: "Type your message...", class: "input input-bordered flex-1 text-sm", required: true %>
+                <%= f.button type: "submit", class: "btn btn-nailab-teal text-white" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.9429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 C22.9702544,11.6889879 22.9702544,11.5318905 22.9702544,11.4743931 L4.13399899,1.0574073 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.98721575 L3.03521743,10.4282088 C3.03521743,10.5853061 3.19218622,10.7424035 3.50612381,10.7424035 L16.6915026,11.5278905 C16.6915026,11.5278905 17.1624089,11.5278905 17.1624089,11.0566983 L17.1624089,12.0442787 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z"/>
+                  </svg>
+                <% end %>
+              <% end %>
             </div>
           <% end %>
         <% end %>

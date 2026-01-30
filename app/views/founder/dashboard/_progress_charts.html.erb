@@ -1,30 +1,33 @@
 <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
   <div class="card-body">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="card-title text-2xl text-nailab-purple">Progress Overview</h2>
-      <div class="mask mask-squircle w-12 h-12 bg-nailab-teal/10 flex items-center justify-center">
-        <svg aria-hidden="true" class="w-6 h-6 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="card-title text-xl text-nailab-purple">Progress Overview</h2>
+      <div class="mask mask-squircle w-10 h-10 bg-nailab-teal/10 flex items-center justify-center">
+        <svg aria-hidden="true" class="w-5 h-5 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
       </div>
     </div>
-    <p class="text-sm text-base-content/70 mb-6">Track your startup's key metrics and milestones</p>
-    <div class="divider my-0"></div>
-    <div class="space-y-4">
-      <div class="stat">
-        <div class="stat-title">Revenue Growth</div>
-        <div class="stat-value text-nailab-purple text-3xl">+23%</div>
-        <div class="stat-desc text-nailab-teal">↗︎ 2% from last month</div>
+    <div class="divider my-2"></div>
+    <div class="space-y-3">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-xs text-base-content/70 font-medium">Revenue Growth</div>
+          <div class="text-xl font-bold text-nailab-purple">+23%</div>
+        </div>
+        <span class="text-xs text-nailab-teal">↗︎ +2%</span>
       </div>
-      <div class="stat">
-        <div class="stat-title">Active Milestones</div>
-        <div class="stat-value text-nailab-teal text-3xl"><%= @milestones.where(completed: false).count %></div>
-        <div class="stat-desc text-base-content/70">Pending completion</div>
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-xs text-base-content/70 font-medium">Active Milestones</div>
+          <div class="text-xl font-bold text-nailab-teal"><%= @milestones.where(completed: false).count %></div>
+        </div>
+        <span class="text-xs text-base-content/50">Pending</span>
       </div>
     </div>
-    <div class="card-actions justify-end mt-6">
-      <%= link_to founder_progress_path, class: 'btn btn-sm bg-nailab-teal text-white hover:bg-nailab-teal/80' do %>
-        View Full Progress →
+    <div class="card-actions justify-end mt-4">
+      <%= link_to founder_progress_path, class: 'btn btn-xs btn-outline' do %>
+        View Progress →
       <% end %>
     </div>
   </div>

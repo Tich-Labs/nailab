@@ -244,6 +244,9 @@ Rails.application.routes.draw do
 
     resources(:conversations, path: "messages", only: %i[index show]) do
       resources(:messages, only: %i[create])
+      member do
+        post :create_message
+      end
     end
 
     resources(:resources, only: %i[index show]) do

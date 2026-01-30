@@ -1,0 +1,3 @@
+<%= turbo_stream.append "peer-messages-container" do %>
+  <%= render partial: "peer_messages/peer_message", locals: { message: @peer_message } %>
+<% end %>
