@@ -207,6 +207,7 @@ Rails.application.routes.draw do
   get "mentors", to: "pages#mentor_directory"
   get "pricing", to: "pages#pricing"
   get "contact", to: "pages#contact"
+  post "contact", to: "pages#create_contact_message"
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
 

@@ -255,6 +255,17 @@ class PagesController < ApplicationController
     load_contact_content
   end
 
+  def create_contact_message
+    @contact_message = ContactUs.new(contact_params)
+    if @contact_message.save
+      redirect_to contact_path, notice: "Thank you! Your message has been sent successfully."
+    else
+      load_contact_content
+      flash.now[:alert] = "There was an error sending your message. Please try again."
+      render :contact
+    end
+  end
+
   def home_content_json
     @home_content_json
   end
@@ -389,10 +400,16 @@ class PagesController < ApplicationController
   end
 
   def terms
-  render layout: "application"
+    render layout: "application"
   end
 
   def privacy
     render layout: "application"
+  end
+
+  private
+
+  def contact_params
+    params.permit(:name, :email, :subject, :message)
   end
 end

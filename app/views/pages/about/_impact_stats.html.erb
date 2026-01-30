@@ -10,7 +10,8 @@
 
 <% if stored['our_impact'].present? %>
   <% impact = stored['our_impact'] %>
-  <div class="container mx-auto px-4 py-10">
+  <section class="bg-white py-20">
+    <div class="container mx-auto px-4">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
       <div class="flex flex-col md:col-span-4 justify-center pr-4">
         <h2 class="text-4xl lg:text-5xl font-bold text-base-content"><%= impact["title"] %></h2>
@@ -19,7 +20,7 @@
       <div class="md:col-span-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <% (impact["stats"] || []).each do |stat| %>
-            <div class="card bg-cyan-200 border-4 border-teal-400 rounded-lg p-6 text-center shadow-md">
+            <div class="card border-4 border-teal-100 rounded-lg p-6 text-center shadow-md">
               <div class="text-nailab-purple text-3xl md:text-4xl font-bold"><%= stat["value"] %></div>
               <div class="text-sm text-base-content/70 mt-2"><%= stat["label"] %></div>
             </div>
@@ -27,9 +28,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 <% else %>
-  <div class="container mx-auto px-4 py-8">
+  <section class="bg-white py-16">
+    <section class="container mx-auto px-4">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
       <div class="flex flex-col md:col-span-4 justify-center pr-4">
         <h2 class="text-4xl lg:text-5xl font-bold text-base-content">Our Impact</h2>
@@ -37,32 +39,32 @@
       </div>
       <div class="md:col-span-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="card bg-cyan-200 border-4 border-teal-400 rounded-lg p-6 text-center shadow-md">
+          <div class="card border-4 border-teal-400 rounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">10+</div>
             <div class="text-sm text-base-content/70 mt-2">Years of Impact</div>
           </div>
-          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+          <div class="card rounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">54</div>
             <div class="text-sm text-base-content/70 mt-2">African Countries</div>
           </div>
-          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+          <div class="card rounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">30+</div>
             <div class="text-sm text-base-content/70 mt-2">Innovation Programs</div>
           </div>
-          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+          <div class="card rounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">$100M</div>
             <div class="text-sm text-base-content/70 mt-2">Funding Facilitated</div>
           </div>
-          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+          <div class="cardrounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">1000</div>
             <div class="text-sm text-base-content/70 mt-2">Startups Supported</div>
           </div>
-          <div class="card bg-cyan-200 rounded-lg p-6 text-center shadow-md">
+          <div class="cardrounded-lg p-6 text-center shadow-md">
             <div class="text-nailab-purple text-3xl md:text-4xl font-bold">50+</div>
             <div class="text-sm text-base-content/70 mt-2">Partners</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 <% end %>

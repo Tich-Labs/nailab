@@ -1,130 +1,173 @@
-<div class="bg-gradient-to-br from-nailab-purple to-nailab-teal py-12">
+<section class="bg-nailab-purple py-16">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
-    <h1 class="text-4xl font-bold"><%= @startup_profile.startup_name %></h1>
-    <p class="mt-2 text-lg"><%= @startup_profile.value_proposition.presence || 'Building the next generation of African innovation.' %></p>
-    <div class="mt-4 flex flex-wrap gap-3 text-sm">
+    <h1 class="text-4xl lg:text-5xl font-bold mb-4"><%= @startup_profile.startup_name %></h1>
+    <p class="text-lg text-white/90 max-w-3xl"><%= @startup_profile.value_proposition.presence || 'Building the next generation of African innovation.' %></p>
+    <div class="mt-6 flex flex-wrap gap-3">
       <% if @startup_profile.stage.present? %>
-        <span class="px-3 py-1 rounded-full bg-white/20"><%= @startup_profile.stage %></span>
+        <span class="badge badge-lg bg-white/20 text-white border-white/30"><%= @startup_profile.stage %></span>
       <% end %>
       <% if @startup_profile.sector.present? %>
-        <span class="px-3 py-1 rounded-full bg-white/20"><%= @startup_profile.sector %></span>
+        <span class="badge badge-lg bg-white/20 text-white border-white/30"><%= @startup_profile.sector %></span>
       <% end %>
       <% if @startup_profile.funding_stage.present? %>
-        <span class="px-3 py-1 rounded-full bg-white/20"><%= funding_stage_label(@startup_profile.funding_stage) %></span>
+        <span class="badge badge-lg bg-white/20 text-white border-white/30"><%= funding_stage_label(@startup_profile.funding_stage) %></span>
       <% end %>
     </div>
   </div>
-</div>
+</section>
+
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="grid gap-8 lg:grid-cols-3">
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg p-8 space-y-6">
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-900">About the startup</h2>
-        <p class="mt-4 text-gray-700 leading-relaxed"><%= @startup_profile.description %></p>
-      </section>
-      <section class="grid gap-6 sm:grid-cols-2">
-        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-          <h3 class="text-md font-semibold text-gray-500 uppercase tracking-wide">Target market</h3>
-          <p class="mt-3 text-gray-900"><%= @startup_profile.target_market %></p>
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card bg-base-100 shadow-xl p-8">
+        <div class="card-body p-0">
+          <h2 class="text-3xl font-bold text-base-content mb-6">About the Startup</h2>
+          <p class="text-base-content/70 leading-relaxed break-words"><%= @startup_profile.description %></p>
         </div>
-        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-          <h3 class="text-md font-semibold text-gray-500 uppercase tracking-wide">Challenge</h3>
-          <p class="mt-3 text-gray-900"><%= @startup_profile.challenge_details %></p>
-        </div>
-      </section>
-      <section>
-        <h3 class="text-lg font-semibold text-gray-900 mb-3">Mentorship focus</h3>
-        <div class="space-y-2 text-gray-700 text-sm">
-          <% Array(@startup_profile.mentorship_areas).each do |area| %>
-            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-nailab-purple/10 text-nailab-purple">■ <%= area %></span>
-          <% end %>
-        </div>
-      </section>
-    </div>
-    <div class="space-y-6">
-      <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
-        <h3 class="text-lg font-semibold text-gray-900">Quick facts</h3>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <% if @startup_profile.location.present? %>
-            <li><strong>Location:</strong> <%= @startup_profile.location %></li>
-          <% end %>
-          <% if @startup_profile.website_url.present? %>
-            <li><strong>Website:</strong> <%= link_to @startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noreferrer', class: 'text-nailab-purple hover:underline' %></li>
-          <% end %>
-          <% if @startup_profile.founded_year.present? %>
-            <li><strong>Founded:</strong> <%= @startup_profile.founded_year %></li>
-          <% end %>
-          <% if @startup_profile.team_size&.positive? %>
-            <li><strong>Team size:</strong> <%= @startup_profile.team_size %></li>
-          <% end %>
-          <% if @startup_profile.funding_raised.present? %>
-            <li><strong>Funds raised:</strong> $<%= number_with_delimiter(@startup_profile.funding_raised) %></li>
-          <% end %>
-        </ul>
       </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+          <div class="card-body">
+            <p class="text-xs uppercase tracking-wider font-bold text-base-content/60 mb-2">Target Market</p>
+            <p class="text-base-content"><%= @startup_profile.target_market %></p>
+          </div>
+        </div>
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+          <div class="card-body">
+            <p class="text-xs uppercase tracking-wider font-bold text-base-content/60 mb-2">Challenge</p>
+            <p class="text-base-content"><%= @startup_profile.challenge_details %></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl p-8">
+        <div class="card-body p-0">
+          <h3 class="text-2xl font-bold text-base-content mb-4">Mentorship Focus</h3>
+          <div class="flex flex-wrap gap-2">
+            <% Array(@startup_profile.mentorship_areas).each do |area| %>
+              <span class="badge badge-lg bg-nailab-purple/10 text-nailab-purple border-nailab-purple/20"><%= area %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Quick Facts Card -->
+      <div class="card bg-base-100 shadow-xl p-6">
+        <div class="card-body p-0">
+          <h3 class="text-xl font-bold text-base-content mb-4">Quick Facts</h3>
+          <ul class="space-y-3 text-sm">
+            <% if @startup_profile.location.present? %>
+              <li class="flex gap-2">
+                <span class="font-semibold text-base-content/70">Location:</span>
+                <span class="text-base-content"><%= @startup_profile.location %></span>
+              </li>
+            <% end %>
+            <% if @startup_profile.website_url.present? %>
+              <li class="flex gap-2">
+                <span class="font-semibold text-base-content/70">Website:</span>
+                <%= link_to @startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noreferrer', class: 'link link-primary text-nailab-purple' %>
+              </li>
+            <% end %>
+            <% if @startup_profile.founded_year.present? %>
+              <li class="flex gap-2">
+                <span class="font-semibold text-base-content/70">Founded:</span>
+                <span class="text-base-content"><%= @startup_profile.founded_year %></span>
+              </li>
+            <% end %>
+            <% if @startup_profile.team_size&.positive? %>
+              <li class="flex gap-2">
+                <span class="font-semibold text-base-content/70">Team Size:</span>
+                <span class="text-base-content"><%= @startup_profile.team_size %></span>
+              </li>
+            <% end %>
+            <% if @startup_profile.funding_raised.present? %>
+              <li class="flex gap-2">
+                <span class="font-semibold text-base-content/70">Funds Raised:</span>
+                <span class="text-base-content">$<%= number_with_delimiter(@startup_profile.funding_raised) %></span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Founder Card -->
       <% if @startup_profile.user&.user_profile.present? %>
-        <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
-          <h3 class="text-lg font-semibold text-gray-900">Founder</h3>
-          <div class="flex items-center space-x-4">
-            <% if @startup_profile.user.user_profile.photo_visibility && @startup_profile.user.user_profile.photo.attached? %>
-              <%= image_tag @startup_profile.user.user_profile.photo.variant(resize_to_limit: [100, 100]), alt: @startup_profile.user.user_profile.full_name, class: "w-16 h-16 rounded-full object-cover border-2 border-gray-200" %>
-            <% else %>
-              <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                <span class="text-gray-500 text-lg font-semibold"><%= @startup_profile.user.user_profile.full_name&.first&.upcase %></span>
+        <div class="card bg-base-100 shadow-xl p-6">
+          <div class="card-body p-0">
+            <h3 class="text-xl font-bold text-base-content mb-4">Founder</h3>
+            
+            <div class="flex items-center gap-4 mb-4">
+              <% if @startup_profile.user.user_profile.photo_visibility && @startup_profile.user.user_profile.photo.attached? %>
+                <%= image_tag @startup_profile.user.user_profile.photo.variant(resize_to_limit: [80, 80]), alt: @startup_profile.user.user_profile.full_name, class: "avatar w-16 h-16 rounded-full object-cover ring-2 ring-base-300" %>
+              <% else %>
+                <div class="avatar placeholder">
+                  <div class="w-16 rounded-full bg-nailab-purple text-white">
+                    <span class="text-lg font-semibold"><%= @startup_profile.user.user_profile.full_name&.first&.upcase %></span>
+                  </div>
+                </div>
+              <% end %>
+              <div>
+                <h4 class="font-bold text-base-content"><%= @startup_profile.user.user_profile.full_name %></h4>
+                <% if @startup_profile.user.user_profile.title.present? %>
+                  <p class="text-sm text-base-content/70"><%= @startup_profile.user.user_profile.title %></p>
+                <% end %>
               </div>
+            </div>
+
+            <% if @startup_profile.user.user_profile.organization.present? %>
+              <p class="text-xs text-base-content/60 mb-3"><%= @startup_profile.user.user_profile.organization %></p>
             <% end %>
-            <div>
-              <h4 class="font-semibold text-gray-900"><%= @startup_profile.user.user_profile.full_name %></h4>
-              <% if @startup_profile.user.user_profile.title.present? %>
-                <p class="text-sm text-gray-600"><%= @startup_profile.user.user_profile.title %></p>
+
+            <% if @startup_profile.user.user_profile.bio.present? %>
+              <p class="text-sm text-base-content/70 leading-relaxed mb-4"><%= @startup_profile.user.user_profile.bio %></p>
+            <% end %>
+
+            <!-- Social Links -->
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-base-300">
+              <% if @startup_profile.user.user_profile.linkedin_url.present? %>
+                <%= link_to @startup_profile.user.user_profile.linkedin_url, target: '_blank', rel: 'noreferrer', class: 'btn btn-sm btn-ghost' do %>
+                  <%= social_media_icon('linkedin') %>
+                <% end %>
               <% end %>
-              <% if @startup_profile.user.user_profile.organization.present? %>
-                <p class="text-sm text-gray-600"><%= @startup_profile.user.user_profile.organization %></p>
+              <% if @startup_profile.user.user_profile.twitter_url.present? %>
+                <%= link_to @startup_profile.user.user_profile.twitter_url, target: '_blank', rel: 'noreferrer', class: 'btn btn-sm btn-ghost' do %>
+                  <%= social_media_icon('x') %>
+                <% end %>
+              <% end %>
+              <% if @startup_profile.user.user_profile.other_social_url.present? && @startup_profile.user.user_profile.other_social_platform.present? %>
+                <%= link_to @startup_profile.user.user_profile.other_social_url, target: '_blank', rel: 'noreferrer', class: 'btn btn-sm btn-ghost' do %>
+                  <%= social_media_icon(@startup_profile.user.user_profile.other_social_platform) %>
+                <% end %>
               <% end %>
             </div>
-          </div>
-          <% if @startup_profile.user.user_profile.bio.present? %>
-            <div class="mt-4">
-              <p class="text-sm text-gray-700 leading-relaxed"><%= @startup_profile.user.user_profile.bio %></p>
-            </div>
-          <% end %>
-          <!-- Social Media Links -->
-          <div class="mt-4 space-y-2">
-            <% if @startup_profile.user.user_profile.linkedin_url.present? %>
-              <%= link_to @startup_profile.user.user_profile.linkedin_url, target: '_blank', rel: 'noreferrer', class: 'inline-flex items-center text-sm text-blue-600 hover:text-blue-800' do %>
-                <%= social_media_icon('linkedin') %>
-                LinkedIn
-              <% end %>
-            <% end %>
-            <% if @startup_profile.user.user_profile.twitter_url.present? %>
-              <%= link_to @startup_profile.user.user_profile.twitter_url, target: '_blank', rel: 'noreferrer', class: 'inline-flex items-center text-sm text-gray-600 hover:text-gray-800 ml-4' do %>
-                <%= social_media_icon('x') %>
-                X (Twitter)
-              <% end %>
-            <% end %>
-            <% if @startup_profile.user.user_profile.other_social_url.present? && @startup_profile.user.user_profile.other_social_platform.present? %>
-              <%= link_to @startup_profile.user.user_profile.other_social_url, target: '_blank', rel: 'noreferrer', class: 'inline-flex items-center text-sm text-gray-600 hover:text-gray-800 ml-4' do %>
-                <%= social_media_icon(@startup_profile.user.user_profile.other_social_platform) %>
-                <%= @startup_profile.user.user_profile.other_social_platform.humanize %>
-              <% end %>
-            <% end %>
           </div>
         </div>
       <% end %>
+
+      <!-- Team Card -->
       <% if @startup_profile.team_size&.> 1 %>
-        <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 space-y-4">
-          <h3 class="text-lg font-semibold text-gray-900">Team</h3>
-          <div class="text-sm text-gray-600">
-            <p><strong>Team size:</strong> <%= @startup_profile.team_size %> members</p>
-            <p class="mt-2 text-xs text-gray-500">Detailed team member profiles coming soon.</p>
+        <div class="card bg-base-100 shadow-xl p-6">
+          <div class="card-body p-0">
+            <h3 class="text-xl font-bold text-base-content mb-2">Team</h3>
+            <p class="text-sm text-base-content/70 mb-2"><strong><%= @startup_profile.team_size %></strong> members</p>
+            <p class="text-xs text-base-content/50">Detailed team member profiles coming soon.</p>
           </div>
         </div>
       <% end %>
+
+      <!-- Owner Viewing Card -->
       <% if @owner_viewing %>
-        <div class="bg-gradient-to-r from-nailab-purple to-teal-500 text-white rounded-3xl p-6 shadow-lg">
-          <h3 class="text-lg font-semibold">You are viewing your public profile</h3>
-          <p class="mt-2 text-sm">Toggle the visibility flag in your profile settings to hide or share this page.</p>
-          <%= link_to 'Edit Startup Profile', founder_startup_profile_path, class: 'mt-4 inline-flex px-4 py-2 bg-white text-nailab-purple font-semibold rounded-full' %>
+        <div class="card bg-nailab-purple text-white shadow-xl p-6">
+          <div class="card-body p-0">
+            <h3 class="text-lg font-bold mb-2">Your Public Profile</h3>
+            <p class="text-sm text-white/90 mb-4">You are viewing your public profile. Toggle visibility in your settings.</p>
+            <%= link_to 'Edit Profile', founder_startup_profile_path, class: 'btn btn-sm bg-white text-nailab-purple hover:bg-gray-100 rounded-full' %>
+          </div>
         </div>
       <% end %>
     </div>
