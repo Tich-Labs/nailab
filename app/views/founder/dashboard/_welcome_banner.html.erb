@@ -1,7 +1,7 @@
-<section class="card bg-nailab-teal text-white rounded-2xl p-6 lg:p-10 shadow-xl">
-  <div class="max-w-4xl flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-    <div>
-      <h1 class="text-3xl lg:text-4xl font-bold mb-2">
+<section class="rounded-2xl shadow-lg min-h-72 bg-white border border-nailab-teal/20 mb-8">
+  <div class="flex-col lg:flex-row lg:justify-between w-full px-8 py-12 flex items-center">
+    <div class="flex-1">
+      <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">
         Welcome back, <%= (defined?(current_user) && current_user) ? (current_user.user_profile&.full_name || current_user.email) : (@user&.user_profile&.full_name || @user&.email) %> 👋
       </h1>
       <% user = current_user || @user %>
@@ -11,39 +11,42 @@
       <% missing_photo = !(user_profile&.photo&.attached?) %>
       <% missing_logo = startup_profile&.logo_url.blank? && !(startup_profile&.logo&.attached?) %>
       <% if missing_bio || missing_photo || missing_logo %>
-        <p class="text-sm lg:text-base text-white/90 leading-relaxed mb-2">
-          <strong>Profile incomplete:</strong>
-          <% if missing_bio && missing_photo && missing_logo %>
-            Please add your bio, profile photo, and startup logo to complete your profile.
-          <% elsif missing_bio && missing_photo %>
-            Please add your bio and profile photo to complete your profile.
-          <% elsif missing_bio && missing_logo %>
-            Please add your bio and startup logo to complete your profile.
-          <% elsif missing_photo && missing_logo %>
-            Please add your profile photo and startup logo to complete your profile.
-          <% elsif missing_bio %>
-            Please add your bio to complete your profile.
-          <% elsif missing_photo %>
-            Please add your profile photo to complete your profile.
-          <% elsif missing_logo %>
-            Please add your startup logo to complete your profile.
-          <% end %>
-        </p>
-        <div class="flex flex-wrap items-center gap-3">
+        <div class="alert bg-nailab-teal/10 border border-nailab-teal/30 rounded-xl mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-nailab-teal w-6 h-6 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div class="text-base-content">
+            <strong>Profile incomplete:</strong>
+            <% if missing_bio && missing_photo && missing_logo %>
+              Please add your bio, profile photo, and startup logo to complete your profile.
+            <% elsif missing_bio && missing_photo %>
+              Please add your bio and profile photo to complete your profile.
+            <% elsif missing_bio && missing_logo %>
+              Please add your bio and startup logo to complete your profile.
+            <% elsif missing_photo && missing_logo %>
+              Please add your profile photo and startup logo to complete your profile.
+            <% elsif missing_bio %>
+              Please add your bio to complete your profile.
+            <% elsif missing_photo %>
+              Please add your profile photo to complete your profile.
+            <% elsif missing_logo %>
+              Please add your startup logo to complete your profile.
+            <% end %>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3">
           <% if missing_bio || missing_photo %>
-            <%= link_to 'Add bio & photo', founder_account_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+            <%= link_to 'Add bio & photo', founder_account_path, class: 'btn btn-sm md:btn-md btn-outline' %>
           <% end %>
           <% if missing_logo %>
-            <%= link_to 'Add startup logo', edit_founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+            <%= link_to 'Add startup logo', edit_founder_startup_profile_path, class: 'btn btn-sm md:btn-md btn-outline' %>
           <% end %>
-          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+          <%= link_to 'Browse mentors', mentors_path, class: 'btn btn-sm md:btn-md btn-outline' %>
         </div>
       <% else %>
-        <p class="text-sm lg:text-base text-white/90 leading-relaxed">
-          Profile <strong>100%</strong> complete
+        <p class="text-lg text-base-content mb-6 leading-relaxed">
+          Profile <span class="badge badge-success badge-lg">100% complete</span>
         </p>
-        <div class="flex items-center gap-3">
-          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+        <div class="flex">
+          <%= link_to 'Browse mentors', mentors_path, class: 'btn btn-sm md:btn-md btn-outline' %>
         </div>
       <% end %>
     </div>

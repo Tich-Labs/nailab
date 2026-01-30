@@ -2,7 +2,7 @@
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-2xl mx-auto py-8 px-4">
   <div class="bg-white shadow rounded-lg p-8">
-    <div class="mb-6 bg-nailab-purple text-white p-6 rounded-lg">
+    <div class="mb-6 bg-nailab-teal text-white p-6 rounded-lg">
       <h1 class="text-4xl lg:text-5xl font-bold">Request Mentorship</h1>
       <% if @mentor %>
         <p class=" mt-2">Request a mentorship session with <strong><%= @mentor.name %></strong></p>
@@ -35,7 +35,7 @@
       </div>
       <div class="flex justify-end space-x-4">
         <%= link_to 'Cancel', founder_mentorship_path, class: "px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold" %>
-        <%= form.submit 'Send Request', class: "btn btn-primary font-semibold" %>
+        <%= form.submit 'Send Request', class: "inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors" %>
       </div>
     <% end %>
   </div>

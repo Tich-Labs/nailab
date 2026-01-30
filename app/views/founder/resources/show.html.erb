@@ -1,13 +1,13 @@
 <%# app/views/founder/resources/show.html.erb %>
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-4xl mx-auto py-8 px-4">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4"><%= @resource.title %></h1>
+    <p class="text-xl text-base-content/60"><%= @resource.description %></p>
+  </div>
   <div class="bg-base-100 shadow rounded-lg p-6">
-    <div class="flex justify-between items-start mb-6">
+    <div class="flex justify-between items-start">
       <div>
-        <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-2"><%= @resource.title %></h1>
-        <p class="text-base-content/70"><%= @resource.description %></p>
-      </div>
-      <div class="flex space-x-2">
         <% rt = @resource.resource_type.to_s.downcase %>
         <% action_map = {
           'blog' => { label: 'Read', path: ->(r) { r.url.presence || founder_resource_path(r) } },
@@ -19,8 +19,8 @@
         <% action = action_map.fetch(rt, { label: 'Download', path: ->(r) { r.url.presence || download_founder_resource_path(r) } }) %>
         <% primary_label = action[:label] %>
         <% primary_path = action[:path].call(@resource) rescue download_founder_resource_path(@resource) %>
-        <%= link_to primary_label, primary_path, class: "btn btn-primary", target: ( @resource.url.present? ? '_blank' : nil ), rel: ( @resource.url.present? ? 'noreferrer' : nil ) %>
-        <%= button_to 'Bookmark', bookmark_founder_resource_path(@resource), method: :post, class: "bg-base-200 text-base-content px-4 py-2 rounded-lg hover:bg-base-300" %>
+        <%= link_to primary_label, primary_path, class: "inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors", target: ( @resource.url.present? ? '_blank' : nil ), rel: ( @resource.url.present? ? 'noreferrer' : nil ) %>
+        <%= button_to 'Bookmark', bookmark_founder_resource_path(@resource), method: :post, class: "inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors" %>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

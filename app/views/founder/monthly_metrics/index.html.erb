@@ -1,8 +1,13 @@
 <%# app/views/founder/monthly_metrics/index.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Monthly Metrics</h1>
-    <%= link_to 'Add New Metrics', new_founder_monthly_metric_path, class: "btn btn-primary" %>
+  <div class="mb-8">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Monthly Metrics</h1>
+        <p class="text-xl text-base-content/60">Track and analyze your startup's key performance indicators</p>
+      </div>
+      <%= link_to 'Add New Metrics', new_founder_monthly_metric_path, class: "btn btn-outline" %>
+    </div>
   </div>
   <div class="bg-white shadow rounded-lg overflow-hidden">
     <div class="px-6 py-4 border-b">

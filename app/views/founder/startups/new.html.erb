@@ -1,8 +1,8 @@
 <%# app/views/founder/startups/new.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-4">Add an Additional Startup</h1>
-    <p class="text-xl text-base-content/60">Add details about your new startup to manage it on Nailab.</p>
+  <div class="mb-8 bg-nailab-teal text-white px-8 py-6 rounded-t-xl">
+    <h1 class="text-4xl lg:text-5xl font-bold text-white mb-2">Add an Additional Startup</h1>
+    <p class="text-lg text-white/80">Add details about your new startup to manage it on Nailab.</p>
   </div>
   <div class="bg-base-100 rounded-xl shadow-lg p-8 lg:p-12">
     <%= form_with model: @startup, url: founder_startups_path, local: true, html: { multipart: true, class: 'space-y-8' } do |f| %>
@@ -45,8 +45,8 @@
         </div>
       </div>
       <div class="mt-6 flex justify-end gap-3">
-        <%= link_to 'Cancel', founder_startup_profile_path, class: 'btn btn-ghost' %>
-        <%= f.submit 'Add Startup', class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50' %>
+        <%= f.submit 'Add Startup', class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white text-lg font-semibold rounded-xl shadow-lg hover:bg-gray-50 transition-colors' %>
       </div>
     <% end %>
   </div>

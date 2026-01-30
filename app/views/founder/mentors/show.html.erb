@@ -16,7 +16,7 @@
           <p class="text-sm text-secondary"><%= @mentor.organization || 'No organization listed' %> • <%= @mentor.years_experience || 'Experience not specified' %> years experience</p>
         </div>
       </div>
-      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "inline-flex items-center px-4 py-2 bg-nailab-purple text-white rounded-md font-semibold" %>
+      <%= link_to 'Request Mentorship', new_founder_mentorship_request_path(mentor_id: @mentor.id), class: "inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-md font-semibold hover:bg-gray-50 transition-colors" %>
     </div>
     <div class="mb-6">
       <h2 class="text-xl font-semibold mb-4">Bio</h2>

@@ -1,47 +1,31 @@
-<div class="bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-nailab-purple">Progress Overview</h2>
-    <div class="w-12 h-12 bg-base-200 rounded-full flex items-center justify-center">
-      <svg aria-hidden="true" class="w-6 h-6 text-nailab-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-      </svg>
-    </div>
-  </div>
-  <p class="text-base-content/60 mb-6">Track your startup's key metrics and milestones</p>
-  <div class="space-y-6">
-    <div class="bg-base-200 rounded-xl p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-semibold text-nailab-purple">Revenue Growth</h3>
-          <p class="text-2xl font-bold text-nailab-purple">+23%</p>
-        </div>
-          <div class="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center">
-            <svg aria-hidden="true" class="w-8 h-8 text-nailab-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-          </svg>
-        </div>
+<div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+  <div class="card-body">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="card-title text-2xl text-nailab-purple">Progress Overview</h2>
+      <div class="mask mask-squircle w-12 h-12 bg-nailab-teal/10 flex items-center justify-center">
+        <svg aria-hidden="true" class="w-6 h-6 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
       </div>
     </div>
-    <div class="bg-secondary/5 rounded-xl p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-semibold text-secondary">Active Milestones</h3>
-          <p class="text-2xl font-bold text-secondary"><%= @milestones.where(completed: false).count %></p>
-        </div>
-        <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center">
-          <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
+    <p class="text-sm text-base-content/70 mb-6">Track your startup's key metrics and milestones</p>
+    <div class="divider my-0"></div>
+    <div class="space-y-4">
+      <div class="stat">
+        <div class="stat-title">Revenue Growth</div>
+        <div class="stat-value text-nailab-purple text-3xl">+23%</div>
+        <div class="stat-desc text-nailab-teal">↗︎ 2% from last month</div>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Active Milestones</div>
+        <div class="stat-value text-nailab-teal text-3xl"><%= @milestones.where(completed: false).count %></div>
+        <div class="stat-desc text-base-content/70">Pending completion</div>
       </div>
     </div>
-  </div>
-  <div class="mt-8">
-    <%= link_to founder_progress_path, class: 'inline-flex items-center space-x-2 text-nailab-purple font-semibold hover:text-nailab-purple transition-colors group' do %>
-      <span>View Full Progress</span>
-      <svg aria-hidden="true" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
-    <% end %>
+    <div class="card-actions justify-end mt-6">
+      <%= link_to founder_progress_path, class: 'btn btn-sm bg-nailab-teal text-white hover:bg-nailab-teal/80' do %>
+        View Full Progress →
+      <% end %>
+    </div>
   </div>
 </div>

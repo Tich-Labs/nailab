@@ -1,99 +1,150 @@
 <%# app/views/founder/startup_profiles/show.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <%= render 'shared/dashboard_page_header', title: 'Startup Profile', subtitle: "Manage your startup's information and visibility" %>
-    <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
-    <div class="bg-nailab-purple text-white px-8 py-6 rounded-t-xl">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Startup Profile</h1>
+    <p class="text-xl text-base-content/60">Manage your startup's information and visibility</p>
+  </div>
+  
+  <!-- Hero Header -->
+  <div class="card bg-white border border-nailab-teal/20 shadow-xl mb-8">
+    <div class="card-body">
       <div class="flex items-center gap-6">
         <% if @startup_profile.logo.attached? %>
-          <%= image_tag @startup_profile.logo.variant(resize_to_limit: [120, 120]), class: 'w-24 h-24 rounded-lg object-cover border border-white/20' %>
+          <figure class="flex-shrink-0">
+            <%= image_tag @startup_profile.logo.variant(resize_to_limit: [120, 120]), class: 'w-24 h-24 rounded-lg object-cover border border-white/20' %>
+          </figure>
         <% elsif @startup_profile.logo_url.present? %>
-          <%= image_tag @startup_profile.logo_url, class: 'w-24 h-24 rounded-lg object-cover border border-white/20' %>
+          <figure class="flex-shrink-0">
+            <%= image_tag @startup_profile.logo_url, class: 'w-24 h-24 rounded-lg object-cover border border-white/20' %>
+          </figure>
         <% end %>
         <div>
-          <h2 class="text-2xl font-bold text-white"><%= @startup_profile.startup_name %></h2>
-          <p class="text-white/70 mt-1"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
+          <h1 class="text-4xl font-bold text-nailab-purple"><%= @startup_profile.startup_name %></h1>
+          <p class="text-base-content/70 mt-2 text-lg"><%= @startup_profile.value_proposition || 'Building the future of innovation' %></p>
         </div>
       </div>
     </div>
-    <div class="p-8 bg-base-100 rounded-b-xl">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-lg font-semibold text-nailab-purple mb-4">Company Details</h3>
-            <div class="space-y-4">
-              <div class="flex justify-between items-start py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Description</span>
-                <div class="text-base-content text-right ml-4 max-w-xl overflow-hidden" style="display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;">
-                  <%= (@startup_profile.description.presence || 'Not provided') %>
-                </div>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Stage</span>
-                <span class="text-base-content font-semibold"><%= @startup_profile.stage %></span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Sector</span>
-                <span class="text-base-content font-semibold"><%= @startup_profile.sector %></span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Website</span>
-                <span class="text-base-content font-semibold"><%= link_to(@startup_profile.website_url, @startup_profile.website_url, target: '_blank', rel: 'noopener') if @startup_profile.website_url.present? %></span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Country / Markets</span>
-                <span class="text-base-content font-semibold"><%= @startup_profile.location.presence || 'Not provided' %></span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-base-content/60 font-medium">Funding Stage</span>
-                <span class="text-base-content font-semibold"><%= @startup_profile.funding_stage %></span>
-              </div>
-              <div class="flex justify-between items-center py-2">
-                <span class="text-base-content/60 font-medium">Funding Raised</span>
-                <span class="text-base-content font-semibold">$<%= number_with_delimiter(@startup_profile.funding_raised) %></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-lg font-semibold text-nailab-purple mb-4">Market & Vision</h3>
-            <div class="space-y-4">
-              <div>
-                <span class="text-base-content/60 font-medium">Target Market</span>
-                <p class="text-base-content mt-1"><%= @startup_profile.target_market %></p>
-              </div>
-              <div>
-                <span class="text-base-content/60 font-medium">Value Proposition</span>
-                <p class="text-base-content mt-1"><%= @startup_profile.value_proposition %></p>
-              </div>
-            </div>
+  </div>
+
+  <!-- Main Content Cards -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Company Details Card -->
+    <div class="lg:col-span-2">
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-2xl text-nailab-purple mb-4">Company Details</h2>
+          <div class="divider"></div>
+          
+          <div class="overflow-x-auto">
+            <table class="table table-sm w-full">
+              <tbody>
+                <tr>
+                  <td class="font-semibold text-base-content/70">Description</td>
+                  <td><%= truncate(@startup_profile.description.presence || 'Not provided', length: 200) %></td>
+                </tr>
+                <tr class="bg-base-200/50">
+                  <td class="font-semibold text-base-content/70">Stage</td>
+                  <td><span class="badge badge-primary"><%= @startup_profile.stage %></span></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-base-content/70">Sector</td>
+                  <td><span class="badge badge-secondary"><%= @startup_profile.sector %></span></td>
+                </tr>
+                <tr class="bg-base-200/50">
+                  <td class="font-semibold text-base-content/70">Website</td>
+                  <td><% if @startup_profile.website_url.present? %><a href="<%= @startup_profile.website_url %>" target="_blank" rel="noopener" class="link link-primary"><%= @startup_profile.website_url %></a><% else %>Not provided<% end %></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-base-content/70">Country / Markets</td>
+                  <td><%= @startup_profile.location.presence || 'Not provided' %></td>
+                </tr>
+                <tr class="bg-base-200/50">
+                  <td class="font-semibold text-base-content/70">Funding Stage</td>
+                  <td><span class="badge badge-outline"><%= @startup_profile.funding_stage %></span></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-base-content/70">Funding Raised</td>
+                  <td class="font-bold text-nailab-teal">$<%= number_with_delimiter(@startup_profile.funding_raised) %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="mt-6">
-        <h3 class="text-lg font-semibold text-nailab-purple mb-4">Mentorship & Challenges</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <dt class="text-sm font-semibold text-nailab-purple uppercase tracking-wide">Mentorship Areas</dt>
-            <dd class="text-sm text-gray-900 mt-1"><%= Array(@startup_profile&.mentorship_areas).join(', ').presence || 'Not provided' %></dd>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-xl text-nailab-purple mb-4">Quick Stats</h2>
+        <div class="divider"></div>
+        <div class="space-y-4">
+          <div class="stat p-0">
+            <div class="stat-title text-xs">Founded</div>
+            <div class="stat-value text-2xl text-nailab-teal"><%= @startup_profile.founded_year %></div>
           </div>
-          <div>
-            <dt class="text-sm font-semibold text-nailab-purple uppercase tracking-wide">Preferred Mentorship Mode</dt>
-            <dd class="text-sm text-gray-900 mt-1"><%= @startup_profile&.preferred_mentorship_mode.presence || 'Not provided' %></dd>
-          </div>
-          <div class="md:col-span-3">
-            <dt class="text-sm font-semibold text-nailab-purple uppercase tracking-wide">Key Challenges</dt>
-            <dd class="text-sm text-gray-900 mt-1"><%= @startup_profile&.challenge_details.presence || 'Not provided' %></dd>
+          <div class="stat p-0">
+            <div class="stat-title text-xs">Team Size</div>
+            <div class="stat-value text-2xl text-nailab-purple"><%= @startup_profile.team_size %></div>
           </div>
         </div>
       </div>
-      <div class="mt-8 pt-8 border-t border-base-200">
-        <div class="flex flex-wrap items-center gap-3">
-          <%= link_to 'Edit Profile', edit_founder_startup_profile_path, class: 'inline-flex items-center px-6 py-3 bg-nailab-purple text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-nailab-purple transition-all' %>
-          <a class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50" href="/founder/startups/new">Add Additional Startup</a>
-          <a class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50" href="/founder/startup_invites/new?startup_id=<%= @startup_profile&.user&.startups&.first&.id %>">Invite team member</a>
-          <!-- Modals removed: now using regular links for Add Startup and Invite -->
+    </div>
+  </div>
+
+  <!-- Market & Vision Section -->
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title text-2xl text-nailab-purple mb-4">Market & Vision</h2>
+      <div class="divider"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-bold text-nailab-purple mb-3">Target Market</h3>
+          <p class="text-base-content/80"><%= @startup_profile.target_market || 'Not specified' %></p>
         </div>
+        <div>
+          <h3 class="font-bold text-nailab-purple mb-3">Value Proposition</h3>
+          <p class="text-base-content/80"><%= @startup_profile.value_proposition || 'Not specified' %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mentorship & Challenges Section -->
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title text-2xl text-nailab-purple mb-4">Mentorship & Challenges</h2>
+      <div class="divider"></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card bg-nailab-teal/5 border border-nailab-teal/20">
+          <div class="card-body">
+            <h3 class="font-bold text-nailab-teal mb-2">Mentorship Areas</h3>
+            <p class="text-sm text-base-content/80"><%= Array(@startup_profile&.mentorship_areas).join(', ').presence || 'Not provided' %></p>
+          </div>
+        </div>
+        <div class="card bg-nailab-purple/5 border border-nailab-purple/20">
+          <div class="card-body">
+            <h3 class="font-bold text-nailab-purple mb-2">Preferred Mode</h3>
+            <p class="text-sm text-base-content/80"><%= @startup_profile&.preferred_mentorship_mode.presence || 'Not provided' %></p>
+          </div>
+        </div>
+        <div class="card bg-warning/5 border border-warning/20 md:col-span-3">
+          <div class="card-body">
+            <h3 class="font-bold text-warning mb-2">Key Challenges</h3>
+            <p class="text-sm text-base-content/80"><%= @startup_profile&.challenge_details.presence || 'Not provided' %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex flex-wrap gap-3 items-center">
+        <%= link_to 'Edit Profile', edit_founder_startup_profile_path, class: 'btn btn-outline' %>
+        <%= link_to 'Add Additional Startup', new_founder_startup_path, class: 'btn btn-outline' %>
+        <%= link_to 'Invite Team Member', new_founder_startup_invite_path(startup_id: @startup_profile&.user&.startups&.first&.id), class: 'btn btn-outline' %>
       </div>
     </div>
   </div>

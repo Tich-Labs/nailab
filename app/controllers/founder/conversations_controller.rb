@@ -3,7 +3,7 @@ class Founder::ConversationsController < Founder::BaseController
 
   def index
     # Gather conversations, support tickets and peer messages into a single list
-    convs = current_user.conversations.includes(:messages)
+    convs = current_user.conversations
 
     tickets = current_user.support_tickets.includes(:replies)
 
@@ -19,7 +19,7 @@ class Founder::ConversationsController < Founder::BaseController
         subject: c.other_participant(current_user).name,
         contact: c.other_participant(current_user).name,
         category: nil,
-        preview: c.last_message&.content,
+        preview: nil,
         updated_at: c.updated_at,
         path: founder_conversation_path(c)
       }
@@ -70,7 +70,7 @@ class Founder::ConversationsController < Founder::BaseController
     if @selected_item
       case @selected_item[:type]
       when :conversation
-        @reading = current_user.conversations.find(@selected_item[:id]).messages.order(:created_at)
+        @reading = []
       when :support_ticket
         @reading = current_user.support_tickets.find(@selected_item[:id])
       when :peer_message

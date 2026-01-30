@@ -1,40 +1,40 @@
-<div class="bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-nailab-purple">Recommended Mentors</h2>
-    <div class="w-12 h-12 bg-base-200 rounded-full flex items-center justify-center">
-      <svg aria-hidden="true" class="w-6 h-6 text-nailab-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-      </svg>
+<div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+  <div class="card-body">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="card-title text-2xl text-nailab-purple">Recommended Mentors</h2>
+      <div class="mask mask-squircle w-12 h-12 bg-nailab-teal/10 flex items-center justify-center">
+        <svg aria-hidden="true" class="w-6 h-6 text-nailab-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
     </div>
-  </div>
-  <p class="text-base-content/60 mb-6">Connect with experienced mentors in your industry</p>
-  <div class="space-y-6">
-    <% @recommended_mentors.each do |mentor| %>
-      <div class="flex items-center justify-between p-6 bg-secondary/5 rounded-lg shadow-md hover:shadow-lg transition-all">
-        <div class="flex items-center space-x-6">
-          <div class="w-14 h-14 bg-secondary/20 rounded-full flex items-center justify-center">
-            <span class="text-secondary font-bold text-lg"><%= mentor.name&.first || '?' %></span>
-          </div>
-          <div>
-            <h3 class="font-bold text-secondary text-lg"><%= mentor.name || 'Unknown Mentor' %></h3>
-            <p class="text-sm text-base-content/70 mt-1"><%= mentor.expertise&.first(3)&.join(', ') || 'No specialties listed' %></p>
+    <p class="text-sm text-base-content/70 mb-6">Connect with experienced mentors in your industry</p>
+    <div class="divider my-0"></div>
+    <div class="space-y-4 my-6">
+      <% @recommended_mentors.each do |mentor| %>
+        <div class="card card-side bg-base-200 shadow-md hover:shadow-lg transition-shadow">
+          <figure class="flex-shrink-0">
+            <div class="w-24 h-24 bg-nailab-teal/20 flex items-center justify-center rounded-l-lg">
+              <span class="text-nailab-teal font-bold text-2xl"><%= mentor.name&.first || '?' %></span>
+            </div>
+          </figure>
+          <div class="card-body">
+            <h3 class="card-title text-lg text-nailab-purple"><%= mentor.name || 'Unknown Mentor' %></h3>
+            <p class="text-sm text-base-content/70"><%= mentor.expertise&.first(3)&.join(', ') || 'No specialties listed' %></p>
             <% if mentor.company.present? %>
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-base-200 text-nailab-purple mt-2">
-                <%= mentor.company %>
-              </span>
+              <div class="badge badge-outline"><%= mentor.company %></div>
             <% end %>
+            <div class="card-actions justify-end">
+              <%= link_to 'View Profile', founder_mentor_path(mentor), class: 'btn btn-xs bg-nailab-teal text-white hover:bg-nailab-teal/80' %>
+            </div>
           </div>
         </div>
-        <%= link_to 'View Profile', founder_mentor_path(mentor), class: 'inline-flex items-center px-5 py-2 bg-nailab-purple text-white text-sm font-bold rounded-lg hover:bg-nailab-purple transition-colors' %>
-      </div>
-    <% end %>
-  </div>
-  <div class="mt-8">
-    <%= link_to founder_mentorship_path, class: 'inline-flex items-center space-x-2 text-nailab-purple font-semibold hover:text-nailab-purple transition-colors group' do %>
-      <span>Browse All Mentors</span>
-      <svg aria-hidden="true" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
-    <% end %>
+      <% end %>
+    </div>
+    <div class="card-actions justify-end mt-6">
+      <%= link_to founder_mentorship_path, class: 'btn btn-sm bg-nailab-teal text-white hover:bg-nailab-teal/80' do %>
+        Browse All Mentors →
+      <% end %>
+    </div>
   </div>
 </div>

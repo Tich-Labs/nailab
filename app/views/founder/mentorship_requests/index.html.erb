@@ -1,7 +1,10 @@
 <%# app/views/founder/mentorship_requests/index.html.erb %>
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
   <div class="max-w-6xl mx-auto py-8 px-4">
-  <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">My Mentorship Requests</h1>
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">My Mentorship Requests</h1>
+    <p class="text-xl text-base-content/60">View and manage your mentorship requests</p>
+  </div>
   <div class="space-y-6">
     <% @mentorship_requests.each do |request| %>
       <div class="bg-white shadow rounded-lg p-6">

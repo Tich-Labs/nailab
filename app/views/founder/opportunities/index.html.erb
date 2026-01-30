@@ -2,7 +2,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8">
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Opportunities</h1>
-    <p class="text-xl text-gray-600">Discover funding opportunities, competitions, and partnerships to grow your startup</p>
+    <p class="text-xl text-base-content/60">Discover funding opportunities, competitions, and partnerships to grow your startup</p>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     <% @opportunities.each do |opportunity| %>
@@ -31,8 +31,8 @@
             </div>
           </div>
           <div class="flex space-x-3">
-            <%= link_to 'View Details', founder_opportunity_path(opportunity), class: "btn btn-primary flex-1 inline-flex items-center justify-center text-sm font-semibold" %>
-            <%= link_to 'Apply Now', apply_founder_opportunity_path(opportunity), class: "btn btn-secondary flex-1 inline-flex items-center justify-center text-sm font-semibold" %>
+            <%= link_to 'View Details', founder_opportunity_path(opportunity), class: "inline-flex items-center justify-center flex-1 px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors" %>
+            <%= link_to 'Apply Now', apply_founder_opportunity_path(opportunity), class: "inline-flex items-center justify-center flex-1 px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors" %>
           </div>
         </div>
       </div>
