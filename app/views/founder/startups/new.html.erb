@@ -1,28 +1,53 @@
 <%# app/views/founder/startups/new.html.erb %>
-<div class="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow p-6">
-  <h2 class="text-2xl font-semibold mb-4">Add an Additional Startup</h2>
-  <%= form_with model: @startup, url: founder_startups_path, local: true, html: { multipart: true } do |f| %>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <%= f.label :startup_name, class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.text_field :startup_name, class: 'input input-bordered w-full' %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-primary mb-4">Add an Additional Startup</h1>
+    <p class="text-xl text-base-content/60">Add details about your new startup to manage it on Nailab.</p>
+  </div>
+  <div class="bg-base-100 rounded-xl shadow-lg p-8 lg:p-12">
+    <%= form_with model: @startup, url: founder_startups_path, local: true, html: { multipart: true, class: 'space-y-8' } do |f| %>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <div>
+            <%= f.label :name, 'Startup name', class: 'block text-lg font-semibold text-primary mb-2' %>
+            <%= f.text_field :name, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+          </div>
+          <div>
+            <%= f.label :description, class: 'block text-lg font-semibold text-primary mb-2' %>
+            <%= f.text_area :description, rows: 4, class: 'textarea textarea-bordered w-full resize-none bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <%= f.label :stage, 'Stage', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.text_field :stage, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            </div>
+            <div>
+              <%= f.label :sector, 'Sector', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.text_field :sector, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            </div>
+          </div>
+        </div>
+        <div>
+          <%= f.label :logo, 'Logo (optional)', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+          <%= f.file_field :logo, accept: 'image/*', class: 'file-input file-input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+        </div>
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <%= f.label :website_url, 'Website', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.url_field :website_url, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            </div>
+            <div>
+              <%= f.label :team_size, 'Team size', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.number_field :team_size, min: 1, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <%= f.label :website_url, 'Website', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.url_field :website_url, class: 'input input-bordered w-full' %>
+      <div class="mt-6 flex justify-end gap-3">
+        <%= link_to 'Cancel', founder_startup_profile_path, class: 'btn btn-ghost' %>
+        <%= f.submit 'Add Startup', class: 'btn btn-primary' %>
       </div>
-      <div>
-        <%= f.label :description, class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.text_area :description, rows: 4, class: 'textarea textarea-bordered w-full' %>
-      </div>
-      <div>
-        <%= f.label :team_size, 'Team size', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.number_field :team_size, min: 1, class: 'input input-bordered w-full' %>
-      </div>
-    </div>
-    <div class="mt-6 flex justify-end gap-3">
-      <%= link_to 'Cancel', founder_startup_profile_path, class: 'btn btn-ghost' %>
-      <%= f.submit 'Add Startup', class: 'btn btn-primary' %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

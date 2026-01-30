@@ -814,3 +814,20 @@ puts "✅ Seeded Support Tickets."
 # Load program seeds if present (keeps programs data available when running `rails db:seed`).
 programs_seed = Rails.root.join('db', 'seeds', 'programs.rb')
 require_relative 'seeds/programs' if File.exist?(programs_seed)
+
+# ---
+# FOUNDER 4 — Add a second startup for testing
+founder4 = User.find_by(slug: 'founder4-test-nailab-app')
+if founder4
+  Startup.create!(
+    user: founder4,
+    name: "TestCo Two",
+    sector: "Fintech",
+    stage: "growth_stage",
+    website_url: "https://testco-two.example",
+    description: "Second test startup for founder4, focused on digital payments."
+  )
+  puts "✅ Added second startup for founder4."
+else
+  puts "⚠️  founder4 user not found, skipping second startup seed."
+end

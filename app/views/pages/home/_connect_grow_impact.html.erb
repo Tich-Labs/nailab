@@ -5,7 +5,7 @@
     <p class="text-xl text-base-content/70 mb-8 max-w-3xl mx-auto"><%= @connect_intro %></p>
   </div>
   <div class="mt-12 container mx-auto px-4">
-    <div class="bg-base-100 rounded-2xl p-8">
+    <div class="rounded-2xl p-8">
       <div class="grid lg:grid-cols-3 gap-8">
       <% @connect_cards.each_with_index do |card, idx| %>
         <% btn_class, svg_color = case idx

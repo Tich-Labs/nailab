@@ -26,9 +26,10 @@ module.exports = {
     themes: [
       {
         nailab_founder: {
-          primary: "#913F98",
+          primary: "#14b8a6", // teal-500
+          'primary-content': '#ffffff',
           secondary: "#35C9C9",
-          accent: "#F472B6",
+          accent: "#2dd4bf", // teal-400
           neutral: "#1F2937",
           "base-100": "#ffffff",
           "base-200": "#f3f4f6",

@@ -1,0 +1,72 @@
+<%# app/views/founder/profiles/show.html.erb %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Founder Profile</h1>
+    <p class="text-xl text-base-content/60">Your personal details and startups</p>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Founder Details -->
+    <div class="bg-white rounded-xl shadow-lg p-8 lg:col-span-1">
+      <div class="flex items-center gap-6 mb-6">
+        <% if @profile&.photo&.attached? %>
+          <%= image_tag @profile.photo.variant(resize_to_limit: [120, 120]), class: 'w-24 h-24 rounded-full object-cover border border-gray-200' %>
+        <% else %>
+          <div class="w-24 h-24 rounded-full bg-base-200 flex items-center justify-center text-4xl font-bold text-nailab-purple">
+            <%= @profile&.full_name&.first || @user.email.first.upcase %>
+          </div>
+        <% end %>
+        <div>
+          <h2 class="text-2xl font-bold text-nailab-purple"><%= @profile&.full_name || @user.email %></h2>
+          <p class="text-base-content/70 mt-1"><%= @profile&.bio.presence || 'No bio provided.' %></p>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div><span class="font-semibold">Email:</span> <%= @user.email %></div>
+        <div><span class="font-semibold">Country:</span> <%= @profile&.country %></div>
+        <div><span class="font-semibold">City:</span> <%= @profile&.city %></div>
+        <div><span class="font-semibold">Phone:</span> <%= @profile&.phone %></div>
+        <div><span class="font-semibold">LinkedIn:</span> <% if @profile&.linkedin_url.present? %><a href="<%= @profile.linkedin_url %>" class="text-blue-600 underline" target="_blank">Profile</a><% else %>—<% end %></div>
+        <div><span class="font-semibold">Joined:</span> <%= @user.created_at.strftime('%B %d, %Y') %></div>
+      </div>
+    </div>
+    <!-- Current Startup Profile (if exists) -->
+    <div class="bg-white rounded-xl shadow-lg p-8 lg:col-span-2 mb-8">
+      <h3 class="text-xl font-bold text-nailab-purple mb-6 flex items-center gap-2">
+        <span>Your Current Startup Profile</span>
+        <span class="inline-flex items-center px-2 py-1 text-xs font-semibold bg-nailab-purple text-white rounded">Current</span>
+      </h3>
+      <% if @user.startup_profile.present? %>
+        <div class="card bg-base-100 border-2 border-nailab-purple rounded-xl shadow p-6 mb-8">
+          <h4 class="text-lg font-semibold text-nailab-purple mb-2"><%= @user.startup_profile.startup_name %></h4>
+          <div class="text-base-content/70 mb-2 break-words whitespace-pre-line max-w-2xl"><%= @user.startup_profile.description %></div>
+          <div class="flex flex-wrap gap-2 text-sm mb-2">
+            <span class="bg-base-200 rounded px-2 py-1">Stage: <%= @user.startup_profile.stage %></span>
+            <span class="bg-base-200 rounded px-2 py-1">Sector: <%= @user.startup_profile.sector %></span>
+            <span class="bg-base-200 rounded px-2 py-1">Website: <% if @user.startup_profile.website_url.present? %><a href="<%= @user.startup_profile.website_url %>" class="text-blue-600 underline" target="_blank"><%= @user.startup_profile.website_url %></a><% else %>—<% end %></span>
+          </div>
+        </div>
+      <% else %>
+        <div class="text-base-content/60 mb-8">You have not set up your main Startup Profile yet.</div>
+      <% end %>
+      <h3 class="text-xl font-bold text-nailab-purple mb-6">Other Startups</h3>
+      <% if @startups.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <% @startups.each do |startup| %>
+            <% next if @user.startup_profile && startup.id == @user.startup_profile.id %>
+            <div class="card bg-base-100 rounded-xl shadow p-6">
+              <h4 class="text-lg font-semibold text-nailab-purple mb-2"><%= startup.name %></h4>
+              <div class="text-base-content/70 mb-2"><%= startup.description %></div>
+              <div class="flex flex-wrap gap-2 text-sm">
+                <span class="bg-base-200 rounded px-2 py-1">Stage: <%= startup.stage %></span>
+                <span class="bg-base-200 rounded px-2 py-1">Sector: <%= startup.sector %></span>
+                <span class="bg-base-200 rounded px-2 py-1">Website: <% if startup.website_url.present? %><a href="<%= startup.website_url %>" class="text-blue-600 underline" target="_blank"><%= startup.website_url %></a><% else %>—<% end %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-base-content/60">You have not added any other startups yet.</div>
+      <% end %>
+    </div>
+  </div>
+</div>

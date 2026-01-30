@@ -1,4 +1,4 @@
-<section class="card bg-nailab-purple text-white rounded-2xl p-6 lg:p-10 shadow-xl">
+<section class="card bg-nailab-teal text-white rounded-2xl p-6 lg:p-10 shadow-xl">
   <div class="max-w-4xl flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
     <div>
       <h1 class="text-3xl lg:text-4xl font-bold mb-2">
@@ -9,7 +9,7 @@
       <% startup_profile = user&.startup_profile %>
       <% missing_bio = user_profile&.bio.blank? || user_profile&.bio.to_s.length < 30 %>
       <% missing_photo = !(user_profile&.photo&.attached?) %>
-      <% missing_logo = startup_profile&.logo_url.blank? %>
+      <% missing_logo = startup_profile&.logo_url.blank? && !(startup_profile&.logo&.attached?) %>
       <% if missing_bio || missing_photo || missing_logo %>
         <p class="text-sm lg:text-base text-white/90 leading-relaxed mb-2">
           <strong>Profile incomplete:</strong>
@@ -31,19 +31,19 @@
         </p>
         <div class="flex flex-wrap items-center gap-3">
           <% if missing_bio || missing_photo %>
-            <%= link_to 'Add bio & photo', founder_account_path, class: 'btn btn-secondary' %>
+            <%= link_to 'Add bio & photo', founder_account_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
           <% end %>
           <% if missing_logo %>
-            <%= link_to 'Add startup logo', edit_founder_startup_profile_path, class: 'btn btn-secondary' %>
+            <%= link_to 'Add startup logo', edit_founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
           <% end %>
-          <%= link_to 'Browse mentors', mentors_path, class: 'btn btn-outline' %>
+          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
         </div>
       <% else %>
         <p class="text-sm lg:text-base text-white/90 leading-relaxed">
           Profile <strong>100%</strong> complete
         </p>
         <div class="flex items-center gap-3">
-          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-3 py-2 border border-white/30 rounded-lg text-white/95 hover:bg-white/10 transition-colors' %>
+          <%= link_to 'Browse mentors', mentors_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
         </div>
       <% end %>
     </div>

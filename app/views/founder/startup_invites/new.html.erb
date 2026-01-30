@@ -1,5 +1,9 @@
-<div class="max-w-2xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
-  <h2 class="text-2xl font-semibold mb-4">Invite a co-founder or team member</h2>
+<% content_for :title, "Invite Team Member | Nailab" %>
+<div class="mb-8">
+  <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Invite a Team Member</h1>
+  <p class="text-xl text-base-content/60">Send an invitation to add a co-founder or team member to your startup.</p>
+</div>
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
 
   <%= form_with model: @invite, url: founder_startup_invites_path, local: true do |f| %>
     <%= f.hidden_field :startup_id, value: @startup.id %>

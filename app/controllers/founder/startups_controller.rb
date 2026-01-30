@@ -1,7 +1,7 @@
 module Founder
   class StartupsController < ApplicationController
+    layout "founder_dashboard"
     before_action :ensure_signed_in
-    before_action :ensure_founder_role
 
     def new
       @startup = Startup.new
@@ -12,7 +12,7 @@ module Founder
       respond_to do |format|
         if @startup.save
           format.html { redirect_to founder_startup_profile_path, notice: "Startup added successfully. You can invite team members from the profile." }
-          format.json { render json: { success: true, startup: @startup.as_json(only: %i[id startup_name website_url description]) }, status: :created }
+          format.json { render json: { success: true, startup: @startup.as_json(only: %i[id name website_url description]) }, status: :created }
         else
           format.html do
             flash.now[:alert] = "There were errors creating the startup."
@@ -26,7 +26,7 @@ module Founder
     private
 
     def startup_params
-      params.require(:startup).permit(:startup_name, :description, :website_url, :founded_year, :team_size, :value_proposition, :target_market, :location, :logo)
+      params.require(:startup).permit(:name, :description, :website_url, :founded_year, :team_size, :value_proposition, :target_market, :location, :logo)
     end
   end
 end

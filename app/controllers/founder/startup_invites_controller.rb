@@ -1,5 +1,5 @@
 module Founder
-  class StartupInvitesController < ApplicationController
+  class StartupInvitesController < Founder::BaseController
     before_action :ensure_signed_in
     before_action :set_startup
 

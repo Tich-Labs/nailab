@@ -1,9 +1,9 @@
-<div data-controller="invite-modal" id="add-startup-modal-root">
-  <div class="modal" data-invite-modal-target="modal" style="display:none">
+<div data-controller="add-startup-modal" id="add-startup-modal-root">
+  <div class="modal" data-add-startup-modal-target="modal" style="display:none">
     <div class="modal-box w-11/12 max-w-2xl">
       <h3 class="font-bold text-lg">Add an Additional Startup</h3>
-      <div data-invite-modal-target="flash" class="my-2"></div>
-      <form data-invite-modal-target="form" action="<%= founder_startups_path %>" method="post" enctype="multipart/form-data">
+      <div data-add-startup-modal-target="flash" class="my-2"></div>
+      <form data-add-startup-modal-target="form" action="<%= founder_startups_path %>" method="post" enctype="multipart/form-data">
         <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div>
@@ -28,8 +28,8 @@
           </div>
         </div>
         <div class="modal-action mt-4">
-          <button type="button" class="btn btn-ghost" data-action="click->invite-modal#close">Cancel</button>
-          <button type="submit" class="btn btn-primary" data-action="invite-modal#submit">Add Startup</button>
+          <button type="button" class="btn btn-ghost" data-action="click->add-startup-modal#close">Cancel</button>
+          <button type="submit" class="btn btn-primary" data-action="add-startup-modal#submit">Add Startup</button>
         </div>
       </form>
     </div>
