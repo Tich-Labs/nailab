@@ -9,8 +9,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <link rel="preload" href="/builds/tailwind.css" as="style" onload="this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="/builds/tailwind.css" /></noscript>
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <style nonce="<%= content_security_policy_nonce %>">
       /* Founder-scoped form control defaults: make inputs visible on all themes */
       [data-theme="nailab_founder"] input[type="text"],

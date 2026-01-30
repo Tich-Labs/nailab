@@ -6,10 +6,7 @@
     <title><%= content_for?(:title) ? yield(:title) : 'Nailab | Mentor Dashboard' %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <style>
-      <%= File.read(Rails.root.join('app', 'assets', 'stylesheets', 'tailwind.css')).html_safe %>
-    </style>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= stylesheet_link_tag 'application.tailwind', 'data-turbo-track': 'reload' %>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-50 text-gray-900">

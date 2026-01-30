@@ -6,9 +6,7 @@
     <title><%= content_for?(:title) ? yield(:title) : 'Nailab | Founder Dashboard' %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <style nonce="<%= content_security_policy_nonce %>">
-      <%= File.read(Rails.root.join('app', 'assets', 'builds', 'tailwind.css')).html_safe %>
-    </style>
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-50 text-gray-900" data-theme="nailab_founder">

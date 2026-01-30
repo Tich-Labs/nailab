@@ -24,6 +24,7 @@ gem "rails_admin" # CMS/Admin interface
 gem "rack-attack" # Rate limiting and security
 gem "hotwire-rails" # Turbo/Stimulus for interactivity
 gem "cssbundling-rails" # TailwindCSS integration
+gem "tailwindcss-rails", "~> 3.3.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "google-apis-calendar_v3"   # or 'googleapis_calendar_v3' depending on exact name
@@ -73,7 +74,6 @@ group :development, :test do
 end
 gem "sassc-rails"
 
-gem "tailwindcss-rails", "~> 4.4"
 
 gem "rails_best_practices", "~> 1.23", group: :development
 

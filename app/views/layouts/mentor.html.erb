@@ -9,12 +9,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <style>
-      <%= File.read(Rails.root.join('app', 'assets', 'stylesheets', 'tailwind.css')).html_safe %>
-    </style>
-    <%# Preload stylesheet and apply on load to avoid "preloaded but not used" warnings in some browsers %>
-    <link rel="preload" href="<%= asset_path('application.css') %>" as="style" onload="this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="<%= asset_path('application.css') %>" /></noscript>
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-base-200">
