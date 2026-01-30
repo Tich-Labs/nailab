@@ -22,8 +22,7 @@
 <% end %>
 
 <% if section_data.is_a?(Hash) && (section_data['title'].present? || section_data['paragraph_one'].present? || image_url.present?) %>
-  <section class=" bg-base-200">
-    <section class="py-20 bg-gray-50">
+  <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
@@ -59,7 +58,7 @@
 <% elsif stored[section_key].present? %>
   <%= raw stored[section_key] %>
 <% else %>
-  <section class="py-20 bg-base-100">
+  <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
