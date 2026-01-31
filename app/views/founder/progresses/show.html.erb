@@ -116,8 +116,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-base-content mb-2">No updates yet</h3>
-            <p class="text-base-content/70 mb-6">Submit your first monthly update to get started.</p>
+            <div class="text-center py-12">
+              <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-base-content mb-2">No updates yet</h3>
+              <p class="text-base-content/70 mb-6">To unlock mentorship and track your progress, please share your startup metrics for the last 3 months.</p>
+              <%= link_to 'Start 3-Month Onboarding', onboarding_founder_progress_index_path, class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+            </div>
             <%= link_to 'Submit Update', new_founder_startup_update_path, class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
           </div>
         <% end %>

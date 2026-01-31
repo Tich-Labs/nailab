@@ -226,7 +226,14 @@ Rails.application.routes.draw do
     get "messages", to: "peer_messages#index", as: :messages
 
     resource(:startup_profile, only: %i[show edit update])
-    resource(:progress, only: %i[show])
+
+    resource(:progress, only: %i[show]) do
+      collection do
+        get :onboarding
+        post :onboarding
+      end
+    end
+
     resources(:milestones)
     resources(:monthly_metrics, only: %i[new create edit update index])
 

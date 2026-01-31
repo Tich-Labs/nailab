@@ -1,0 +1,66 @@
+<%# DaisyUI-styled Multi-Month Onboarding Wizard for Founders %>
+<div class="max-w-2xl mx-auto py-12">
+  <div class="mb-8 text-center">
+    <h1 class="text-4xl font-bold text-nailab-purple mb-2">Welcome to Nailab!</h1>
+    <p class="text-lg text-base-content/70">To unlock mentorship and track your progress, please share your startup metrics for the last 3 months. You can update missing months later.</p>
+  </div>
+  <div class="mb-6 flex justify-center">
+    <div class="tabs tabs-boxed bg-base-200">
+      <% @periods.each_with_index do |period, idx| %>
+        <a class="tab <%= 'tab-active' if idx == 0 %> onboarding-tab" data-tab="<%= idx %>">
+          <%= period.strftime('%b %Y') %>
+        </a>
+      <% end %>
+    </div>
+  </div>
+  <%= form_with url: onboarding_founder_progress_index_path, method: :post, local: true, html: { data: { controller: "onboarding" } } do |f| %>
+    <% @monthly_metrics.each_with_index do |metric, idx| %>
+      <div class="onboarding-step <%= idx == 0 ? '' : 'hidden' %>" data-step="<%= idx %>">
+        <div class="card bg-base-100 shadow-lg mb-6">
+          <div class="card-body">
+            <h2 class="card-title text-nailab-teal mb-2">Update for <%= @periods[idx].strftime('%B %Y') %></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
+                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
+              </div>
+              <div>
+                <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
+                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
+              </div>
+              <div>
+                <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
+                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
+              </div>
+              <div>
+                <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
+                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
+              </div>
+              <div>
+                <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
+                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4">
+              <div class="badge badge-info">Net Growth: <span data-onboarding-target="netGrowth<%= idx %>">0</span></div>
+              <div class="badge badge-accent">Runway: <span data-onboarding-target="runway<%= idx %>">0</span> mo</div>
+            </div>
+            <div class="mt-4 flex justify-between">
+              <% if idx > 0 %>
+                <button type="button" class="btn btn-outline btn-secondary onboarding-prev">Previous</button>
+              <% end %>
+              <% if idx < @monthly_metrics.size - 1 %>
+                <button type="button" class="btn btn-primary onboarding-next">Next</button>
+              <% else %>
+                <%= submit_tag "Submit All Updates", class: "btn btn-success" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<script type="module">
+// Stimulus controller will be added in app/javascript/controllers/onboarding_controller.js
+</script>
