@@ -1,10 +1,32 @@
 <%# app/views/founder/mentorship/index.html.erb %>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
   <!-- Header Section -->
   <div class="mb-8">
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Mentorship</h1>
     <p class="text-xl text-base-content/60">Connect with experienced mentors to accelerate your startup journey</p>
   </div>
+
+  <!-- Pending Mentorship Requests Summary -->
+  <% pending_requests = @mentorship_requests.select { |r| r.status == "pending" } %>
+  <% if pending_requests.any? %>
+    <div class="mb-8">
+      <div class="alert alert-warning flex items-center gap-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 4v2M7.08 6.47A9.969 9.969 0 0112 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5.003M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <div>
+          <strong>You have <%= pending_requests.size %> pending mentorship request<%= 's' if pending_requests.size > 1 %>.</strong>
+          <ul class="list-disc ml-6 mt-2">
+            <% pending_requests.each do |req| %>
+              <li>
+                <%= req.mentor&.name || 'Unknown Mentor' %> — <%= req.created_at.strftime('%b %d, %Y') %>
+                <%= link_to 'View', founder_mentorship_requests_path, class: "ml-2 text-nailab-purple underline text-sm" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <!-- Upcoming Sessions Section -->
   <div class="mb-12">

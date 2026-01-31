@@ -15,32 +15,35 @@
   <% action = action_map.fetch(rt, default_action) %>
 
   <% if variant == 'founder' %>
-    <div class="bg-nailab-purple text-white px-4 py-3 -mx-6 mt-0">
+    <div class="bg-white px-4 py-3 -mx-6 mt-0 border-b border-nailab-teal/30">
       <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-white/10 text-white text-s font-semibold rounded"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
-        <%# Avoid showing the same label twice (category vs file_type). Prefer published date when available. %>
+        <span class="px-3 py-1 bg-nailab-teal/10 text-nailab-teal text-s font-semibold rounded"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
         <% if resource.respond_to?(:published_at) && resource.published_at.present? %>
-          <span class="text-white text-sm font-medium"><%= resource.published_at.strftime('%b %d, %Y') %></span>
+          <span class="text-nailab-teal text-sm font-medium"><%= resource.published_at.strftime('%b %d, %Y') %></span>
         <% else %>
-          <span class="text-white text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
+          <span class="text-nailab-teal text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
         <% end %>
       </div>
     </div>
-    <div class="p-6">
-      <h3 class="text-xl font-bold text-nailab-purple mb-3"><%= resource.title %></h3>
-      <p class="text-base-content/70 mb-6"><%= resource.description %></p>
-      <div class="flex space-x-3">
-        <% primary_label = action[:label] %>
-        <% primary_path = action[:path].call(resource) rescue founder_resource_path(resource) %>
-        <% details_path = (begin; founder_resource_path(resource) rescue nil; end) %>
-        <%# If the primary path already points to the details page (or the public detail), only render a single primary CTA to avoid duplicates. %>
-        <% if primary_path.to_s == details_path.to_s || primary_path.to_s == resource_detail_path(resource.slug).to_s %>
-          <%= link_to primary_label, primary_path, class: "w-full inline-flex items-center justify-center px-4 py-3 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
-        <% else %>
-          <%= link_to primary_label, primary_path, class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-nailab-purple text-white text-sm font-semibold rounded-lg hover:bg-nailab-purple transition-all" %>
-          <%= link_to 'Details', details_path || founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-secondary text-secondary-content text-sm font-semibold rounded-lg hover:bg-secondary-focus transition-all" %>
-        <% end %>
-      </div>
+    <header class="space-y-3 p-6">
+      <h3 class="text-xl font-semibold text-black"><%= resource.title %></h3>
+      <p class="text-sm text-base-content/70"><%= truncate(resource.description, length: 180) %></p>
+    </header>
+    <div class="px-6 pb-6 flex items-center justify-between text-sm font-semibold text-base-content">
+      <% primary_label = action[:label] %>
+      <% primary_path = action[:path].call(resource) rescue founder_resource_path(resource) %>
+      <% details_path = (begin; founder_resource_path(resource) rescue nil; end) %>
+      <% if primary_label == 'Download' %>
+        <div class="flex gap-3 w-full">
+          <%= link_to primary_path, class: "flex-1 inline-flex items-center justify-center px-4 py-3 text-nailab-teal border border-nailab-teal bg-white rounded-lg hover:bg-nailab-teal/10 transition-all" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" /></svg>
+            Download
+          <% end %>
+          <%= link_to 'Details', details_path || founder_resource_path(resource), class: "flex-1 inline-flex items-center justify-center px-4 py-3 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal/90 transition-all" %>
+        </div>
+      <% else %>
+        <%= link_to primary_label, primary_path, class: "w-full inline-flex items-center justify-center px-4 py-3 bg-nailab-teal text-white text-sm font-semibold rounded-lg hover:bg-nailab-teal/90 transition-all" %>
+      <% end %>
     </div>
   <% else %>
     <header class="space-y-3">

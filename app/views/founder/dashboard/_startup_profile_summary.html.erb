@@ -11,20 +11,20 @@
     <div class="divider my-2"></div>
     <div class="space-y-2">
       <div class="flex justify-between items-center">
-        <span class="text-xs font-medium text-base-content/70">Name</span>
-        <span class="badge badge-outline badge-sm"><%= @startup_profile&.startup_name || 'Not set' %></span>
+        <span class="text-sm font-medium text-base-content/70">Name</span>
+        <span class="badge badge-outline badge-sm px-4 py-2 text-sm font-semibold rounded-full"><%= @startup_profile&.startup_name || 'Not set' %></span>
       </div>
       <div class="flex justify-between items-center">
-        <span class="text-xs font-medium text-base-content/70">Stage</span>
-        <span class="badge badge-primary badge-sm"><%= @startup_profile&.stage || 'Not set' %></span>
+        <span class="text-sm font-medium text-base-content/70">Stage</span>
+        <span class="badge badge-primary badge-sm px-4 py-2 text-sm font-semibold rounded-full"><%= @startup_profile&.stage || 'Not set' %></span>
       </div>
       <div class="flex justify-between items-center">
-        <span class="text-xs font-medium text-base-content/70">Industry</span>
-        <span class="badge badge-secondary badge-sm"><%= @startup_profile&.sector || 'Not set' %></span>
+        <span class="text-sm font-medium text-base-content/70">Industry</span>
+        <span class="badge badge-secondary badge-sm px-4 py-2 text-sm font-semibold rounded-full"><%= @startup_profile&.sector || 'Not set' %></span>
       </div>
     </div>
     <div class="card-actions justify-end mt-4">
-      <%= link_to founder_startup_profile_path, class: 'btn btn-xs btn-outline' do %>
+      <%= link_to founder_startup_profile_path, class: 'btn btn-sm btn-outline' do %>
         View Profile →
       <% end %>
     </div>

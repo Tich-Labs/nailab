@@ -2,7 +2,7 @@
 <aside class="hidden md:block w-64 h-screen bg-white border-r border-gray-200 fixed top-0 left-0 z-40 shadow-sm">
   <div class="flex flex-col h-full">
     <!-- Logo/Brand -->
-    <div class="flex items-center justify-center h-16 px-4 border-b border-gray-200">
+    <div class="flex items-center justify-center h-20 px-4 border-b border-gray-200" style="margin-bottom: 0.75rem;">
       <%= link_to root_path, class: "flex items-center" do %>
         <%= image_tag "logo-blue.original.png", alt: "Nailab", class: "h-14 w-auto" %>
       <% end %>
@@ -39,6 +39,10 @@
           <li>
             <%= link_to 'Mentorship', founder_mentorship_path,
                 class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{current_page?(founder_mentorship_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
+          </li>
+          <li>
+            <%= link_to 'Mentorship Requests', founder_mentorship_requests_path,
+                class: "block px-3 py-2 rounded-lg text-sm font-medium transition-colors #{request.path.start_with?(founder_mentorship_requests_path) ? 'bg-teal-50 text-nailab-teal' : 'text-gray-700 hover:bg-gray-50'}" %>
           </li>
         </ul>
       </div>

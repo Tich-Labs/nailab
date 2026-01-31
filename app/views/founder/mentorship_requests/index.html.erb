@@ -15,12 +15,19 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold"><%= request.mentor&.name || 'Unknown Mentor' %></h3>
-              <p class="text-sm text-gray-600"><%= Array(request.mentor&.expertise).join(', ').presence || 'No expertise specified' %></p>
+              <div class="flex flex-wrap gap-1 mt-1">
+                <% Array(request.mentor&.expertise).each do |exp| %>
+                  <span class="badge badge-outline bg-nailab-teal/10 text-nailab-teal border-nailab-teal px-4 py-1 text-sm font-semibold rounded-full"><%= exp %></span>
+                <% end %>
+                <% if Array(request.mentor&.expertise).empty? %>
+                  <span class="text-sm text-gray-400">No expertise specified</span>
+                <% end %>
+              </div>
               <p class="text-xs text-gray-500 mt-1"><%= request.mentor&.preferred_mentorship_mode.present? ? request.mentor.preferred_mentorship_mode : "Mentorship mode not specified" %></p>
               <p class="text-xs text-gray-500"><%= request.mentor&.availability_hours_month.present? ? "Availability: #{request.mentor.availability_hours_month} hrs/month" : "Availability not specified" %></p>
             </div>
           </div>
-          <span class="px-3 py-1 text-sm rounded-full <%= request.status == 'approved' ? 'bg-green-100 text-green-800' : request.status == 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800' %>">
+          <span class="px-4 py-1 text-sm font-semibold rounded-full <%= request.status == 'approved' ? 'bg-green-100 text-green-800' : request.status == 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800' %>">
             <%= request.status.titleize %>
           </span>
         </div>

@@ -54,12 +54,12 @@
           </div>
           <div>
             <label for="startup_profile_logo" class="block text-sm font-medium text-base-content/70 mb-2">Startup Logo</label>
-            <input type="file" name="startup_profile[logo]" id="startup_profile_logo" accept="image/*" class="file-input file-input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
-            <% if @startup_profile.logo.attached? %>
-              <div class="mt-2">
+            <div class="flex items-center gap-4">
+              <input type="file" name="startup_profile[logo]" id="startup_profile_logo" accept="image/*" class="file-input file-input-bordered bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple" />
+              <% if @startup_profile.logo.attached? %>
                 <img src="<%= url_for(@startup_profile.logo.variant(resize_to_limit: [200, 200])) rescue nil %>" alt="Startup logo" class="h-16 w-16 rounded object-cover" />
-              </div>
-            <% end %>
+              <% end %>
+            </div>
           </div>
                 <div>
             <label for="startup_profile_target_market" class="block text-lg font-semibold text-gray-900 mb-2">Target market</label>
@@ -87,14 +87,5 @@
               </div>
             </div>
           </form>
-          <div class="mt-4">
-            <button type="button" class="btn btn-outline btn-sm" data-action="click->invite-modal#open">+ Invite co-founder / team</button>
-            <%= render 'founder_onboarding/invite_modal' %>
-            <noscript>
-              <div class="mt-2">
-                <%= link_to '+ Invite co-founder / team (no JS)', new_founder_startup_invite_path(startup_id: @startup_profile&.user&.startups&.first&.id), class: 'text-sm text-blue-600 underline' %>
-              </div>
-            </noscript>
-          </div>
         </div>
       </div>
