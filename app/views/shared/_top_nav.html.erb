@@ -15,7 +15,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z" />
         </svg>
         <span class="sr-only"><%= unread_count %> unread notifications</span>
-      </a>
+      </button>
 
       <% if unread_count.positive? %>
         <!-- Ping animation behind the badge for attention -->
@@ -39,11 +39,13 @@
     <!-- Avatar -->
     <div>
       <% avatar_url = user&.user_profile&.photo_url rescue nil %>
+      <%# Choose a safe profile link: founders -> founder account, otherwise prompt sign-in %>
+      <% profile_link = user.present? ? founder_account_path : new_user_session_path %>
       <% if avatar_url.present? && (avatar_url =~ %r{\Ahttps?://} || avatar_url.start_with?("/") || avatar_url.include?("blob") || avatar_url.start_with?("data:")) %>
-        <%= link_to (image_tag avatar_url, alt: "Profile", class: "h-9 w-9 rounded-full object-cover border transition-transform transform hover:scale-105"), profile_path, aria: { label: "Account settings" } %>
+        <%= link_to (image_tag avatar_url, alt: "Profile", class: "h-9 w-9 rounded-full object-cover border transition-transform transform hover:scale-105"), profile_link, aria: { label: "Account settings" } %>
       <% else %>
         <% initials = (user&.user_profile&.full_name || user&.email || "U").split(" ").map(&:first).join.upcase[0,2] %>
-        <%= link_to(profile_path || "/profile", aria: { label: "Account settings" }, class: "inline-flex") do %>
+        <%= link_to(profile_link, aria: { label: "Account settings" }, class: "inline-flex") do %>
           <div class="h-9 w-9 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-semibold transition-transform transform hover:scale-105"> <%= initials %> </div>
         <% end %>
       <% end %>

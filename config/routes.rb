@@ -223,7 +223,10 @@ Rails.application.routes.draw do
   namespace :founder do
     root to: "dashboard#show"
     resource :profile, only: [ :show ]
-    get "messages", to: "peer_messages#index", as: :messages
+    # Duplicate route commented out so `conversations` (WhatsApp-like UI)
+    # defined later with `resources :conversations, path: "messages"` takes
+    # precedence for /founder/messages
+    # get "messages", to: "peer_messages#index", as: :messages
 
     resource(:startup_profile, only: %i[show edit update])
 

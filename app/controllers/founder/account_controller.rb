@@ -1,5 +1,8 @@
 class Founder::AccountController < Founder::BaseController
   def show
+    # Provide profile and startups data (merged from former profiles#show)
+    @profile = current_user.user_profile
+    @startups = current_user.startups || []
   end
 
   def edit

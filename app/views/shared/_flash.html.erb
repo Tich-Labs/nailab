@@ -2,7 +2,7 @@
   <div class="alert alert-warning fixed left-1/2 top-16 z-50 shadow-lg flex items-center gap-3 animate-fade-in w-full max-w-md rounded-2xl border border-warning/30" style="width: 380px; transform: translateX(-50%);">
     <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/></svg>
     <span class="font-semibold"><%= flash[:alert] %></span>
-    <a href="/users/sign_up" class="ml-4 btn btn-sm btn-primary">Sign Up</a>
+    <a href="/users/sign_up" class="ml-4 btn btn-sm bg-nailab-purple text-white">Sign Up</a>
   </div>
 <% end %>
 
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="justify-end">
-        <a href="<%= founder_path %>" class="btn btn-sm btn-ghost">View dashboard</a>
+        <a href="<%= founder_root_path %>" class="btn btn-sm btn-ghost">View dashboard</a>
       </div>
     </div>
   </div>

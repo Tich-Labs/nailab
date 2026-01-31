@@ -54,7 +54,22 @@ class Founder::ConversationsController < Founder::BaseController
       }
     end
 
+    # compute counts before filtering
+    grouped = items.group_by { |i| i[:type].to_s }
+    @counts = {
+      "all" => items.size,
+      "conversation" => (grouped["conversation"] || []).size,
+      "peer_message" => (grouped["peer_message"] || []).size,
+      "support_ticket" => (grouped["support_ticket"] || []).size
+    }
+
     @items = items.sort_by { |i| i[:updated_at] || Time.at(0) }.reverse
+
+    # Server-side filter (persisted via URL)
+    @filter = params[:filter]&.to_s || "all"
+    if @filter.present? && @filter != "all"
+      @items = @items.select { |it| it[:type].to_s == @filter }
+    end
 
     # Selected item for reading panel (params override or default to first)
     selected_type = params[:selected_type]&.to_sym

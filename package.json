@@ -12,6 +12,7 @@
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify",
     "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --watch",
     "screenshots": "node scripts/screenshots.js",
+    "screenshots:founder": "node scripts/founder-screenshots.js",
     "playwright:install": "npx playwright install chromium"
   },
   "dependencies": {

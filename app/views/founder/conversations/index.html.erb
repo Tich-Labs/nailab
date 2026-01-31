@@ -15,7 +15,7 @@
   <div class="bg-base-100 rounded-xl shadow-lg overflow-hidden">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[80vh]">
       <!-- Left: list -->
-      <div class="col-span-1 border-r border-base-200 flex flex-col">
+      <div class="col-span-1 border-r border-base-200 flex flex-col" data-controller="conversation-list" data-initial-filter="<%= @filter || 'all' %>">
         <div class="bg-nailab-teal text-white px-6 py-5 flex-shrink-0">
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -24,7 +24,14 @@
             Conversations
           </h2>
         </div>
-        <div class="divide-y divide-base-200 flex-1 overflow-y-auto" data-controller="conversation-list">
+        <div class="p-3 border-b border-base-200 flex gap-2 items-center">
+          <a href="<%= founder_conversations_path(filter: 'all') %>" data-action="click->conversation-list#filter" data-filter="all" class="<%= @filter == 'all' ? 'btn btn-sm bg-purple-600 text-white' : 'btn btn-sm bg-white text-black' %>">All (<%= @counts['all'] %>)</a>
+          <a href="<%= founder_conversations_path(filter: 'conversation') %>" data-action="click->conversation-list#filter" data-filter="conversation" class="<%= @filter == 'conversation' ? 'btn btn-sm bg-purple-600 text-white' : 'btn btn-sm bg-white text-black' %>">Mentor (<%= @counts['conversation'] %>)</a>
+          <a href="<%= founder_conversations_path(filter: 'peer_message') %>" data-action="click->conversation-list#filter" data-filter="peer_message" class="<%= @filter == 'peer_message' ? 'btn btn-sm bg-purple-600 text-white' : 'btn btn-sm bg-white text-black' %>">Peer (<%= @counts['peer_message'] %>)</a>
+          <a href="<%= founder_conversations_path(filter: 'support_ticket') %>" data-action="click->conversation-list#filter" data-filter="support_ticket" class="<%= @filter == 'support_ticket' ? 'btn btn-sm bg-purple-600 text-white' : 'btn btn-sm bg-white text-black' %>">Support (<%= @counts['support_ticket'] %>)</a>
+        </div>
+
+        <div class="divide-y divide-base-200 flex-1 overflow-y-auto">
           <% @items.each do |item| %>
             <a href="<%= founder_conversations_path(selected_type: item[:type], selected_id: item[:id]) %>"
                class="block p-4 hover:bg-base-200 transition-colors #{'bg-nailab-teal/10 border-l-4 border-nailab-teal' if @selected_item && @selected_item[:type] == item[:type] && @selected_item[:id] == item[:id]}"
@@ -74,12 +81,12 @@
             </div>
             <div id="peer-messages-container" class="flex-1 overflow-y-auto space-y-4 mb-4">
               <% @reading.each do |m| %>
-                <div class="flex <%= m.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
-                  <div class="max-w-xs lg:max-w-md xl:max-w-lg p-4 rounded-lg <%= m.sender_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
-                    <div class="text-xs <%= m.sender_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> mb-1"><strong><%= m.sender.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %I:%M %p') %></div>
-                    <div class="text-sm"><%= simple_format(m.content) %></div>
+                  <div class="flex <%= m.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+                    <div class="max-w-xs lg:max-w-md xl:max-w-lg p-4 rounded-lg <%= m.sender_id == current_user.id ? 'bg-nailab-teal/10 text-black' : 'bg-base-200 text-base-content' %>">
+                      <div class="text-xs <%= m.sender_id == current_user.id ? 'text-black/70' : 'text-base-content/60' %> mb-1"><strong><%= m.sender.try(:name) || 'You' %></strong> • <%= m.created_at.strftime('%b %d, %I:%M %p') %></div>
+                      <div class="text-sm"><%= simple_format(m.content) %></div>
+                    </div>
                   </div>
-                </div>
               <% end %>
             </div>
             <div class="border-t border-base-200 pt-4 flex-shrink-0">
@@ -104,8 +111,8 @@
               </div>
               <% @reading.replies.order(:created_at).each do |r| %>
                 <div class="flex <%= r.user_id == current_user.id ? 'justify-end' : 'justify-start' %>">
-                  <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= r.user_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
-                    <div class="text-xs <%= r.user_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> font-semibold mb-1"><%= r.user_id == current_user.id ? 'You' : 'Support Team' %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                  <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= r.user_id == current_user.id ? 'bg-nailab-teal/10 text-black' : 'bg-base-200 text-base-content' %>">
+                    <div class="text-xs <%= r.user_id == current_user.id ? 'text-black/70' : 'text-base-content/60' %> font-semibold mb-1"><%= r.user_id == current_user.id ? 'You' : 'Support Team' %> • <%= r.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
                     <div class="text-sm"><%= simple_format(r.body) %></div>
                   </div>
                 </div>
@@ -127,11 +134,11 @@
             </div>
             <div class="flex-1 overflow-y-auto space-y-4 mb-4">
               <div class="flex <%= @reading.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
-                <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= @reading.sender_id == current_user.id ? 'bg-nailab-teal text-white' : 'bg-base-200 text-base-content' %>">
-                  <div class="text-xs <%= @reading.sender_id == current_user.id ? 'text-white/70' : 'text-base-content/60' %> mb-1"><strong><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %></strong> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
-                  <div class="text-sm"><%= simple_format(@reading.content) %></div>
+                  <div class="max-w-xs lg:max-w-md p-4 rounded-lg <%= @reading.sender_id == current_user.id ? 'bg-nailab-teal/10 text-black' : 'bg-base-200 text-base-content' %>">
+                    <div class="text-xs <%= @reading.sender_id == current_user.id ? 'text-black/70' : 'text-base-content/60' %> mb-1"><strong><%= @reading.sender_id == current_user.id ? 'You' : (@reading.sender.try(:name) || 'Peer') %></strong> • <%= @reading.created_at.strftime('%b %d, %Y %I:%M %p') %></div>
+                    <div class="text-sm"><%= simple_format(@reading.content) %></div>
+                  </div>
                 </div>
-              </div>
             </div>
             <div class="border-t border-base-200 pt-4 flex-shrink-0">
               <%= form_with url: create_message_founder_conversation_path(@selected_item[:id], selected_type: @selected_item[:type], selected_id: @selected_item[:id]), method: :post, local: true, class: "flex gap-2" do |f| %>

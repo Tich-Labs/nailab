@@ -1,20 +1,39 @@
 class Founder::PeerMessagesController < Founder::BaseController
   def create
     @message = PeerMessage.create(peer_message_params.merge(sender: current_user))
-    if @message.save
-      # Notify recipient
+    if @message.persisted?
+      recipient = User.find_by(id: peer_message_params[:recipient_id])
+
+      # Broadcast to both sender and recipient so UI updates in real-time (conversations view listens on peer_messages_<user_id>)
+      Turbo::StreamsChannel.broadcast_append_to(
+        "peer_messages_#{current_user.id}",
+        target: "peer-messages-container",
+        partial: "peer_messages/peer_message",
+        locals: { message: @message, current_user: current_user }
+      )
+
+      Turbo::StreamsChannel.broadcast_append_to(
+        "peer_messages_#{recipient.id}",
+        target: "peer-messages-container",
+        partial: "peer_messages/peer_message",
+        locals: { message: @message, current_user: current_user }
+      ) if recipient
+
+      # Create notification linking into the conversations UI
       begin
-        recipient = User.find(peer_message_params[:recipient_id])
         Notification.create!(user: recipient,
-                 title: "New message",
-                 message: "#{current_user.name} sent you a message (subscription: #{current_user.subscription&.tier || 'free'})",
-                 link: pricing_path,
-                 notif_type: "message",
-                 metadata: { sender_subscription: current_user.subscription&.tier })
+                 title: "New message from #{current_user.name}",
+                 message: @message.content.to_s.truncate(100),
+                 link: founder_conversations_path(selected_type: :peer_message, selected_id: @message.id),
+                 notif_type: "message")
       rescue => _e
         # ignore notification failures
       end
-      redirect_to founder_peer_messages_path, notice: "Message sent."
+
+      respond_to do |format|
+        format.html { redirect_to founder_conversations_path(selected_type: :peer_message, selected_id: @message.id), notice: "Message sent." }
+        format.turbo_stream { render "peer_messages/create" }
+      end
     else
       redirect_back fallback_location: founder_community_path, alert: "Error."
     end

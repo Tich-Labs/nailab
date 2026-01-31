@@ -9,6 +9,7 @@ import MobileMenuController from "./mobile_menu_controller"
 import BookmarkButtonController from "./bookmark_button_controller"
 import RequireSignupController from "./require_signup_controller"
 import DashboardController from "./dashboard_controller"
+import ConversationListController from "./conversation_list_controller"
 
 application.register("notifications", NotificationsController)
 application.register("ajax-flash", AjaxFlashController)
@@ -20,6 +21,7 @@ application.register("mobile-menu", MobileMenuController)
 application.register("bookmark-button", BookmarkButtonController)
 application.register("dashboard", DashboardController)
 application.register("require-signup", RequireSignupController)
+application.register("conversation-list", ConversationListController)
 
 // All controllers are auto-registered via pin_all_from
 // No manual registration needed
