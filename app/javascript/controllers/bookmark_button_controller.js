@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 // data-bookmarked-value="true|false"
 // data-resource-id-value="123"
 export default class extends Controller {
-  static values = { bookmarked: Boolean, resourceId: Number };
+  static values = { bookmarked: Boolean, resourceId: Number, signedIn: Boolean };
   static targets = ["button"];
 
   connect() {
@@ -28,6 +28,11 @@ export default class extends Controller {
   bookmark(event) {
     event.preventDefault();
     if (this.bookmarkedValue) return;
+    if (!this.signedInValue) {
+      // Prompt unauthenticated users to create a paid account.
+      alert("Please sign in or create a paid account to access this content.");
+      return;
+    }
     const url = `/founder/resources/${this.resourceIdValue}/bookmark`;
     fetch(url, {
       method: "POST",

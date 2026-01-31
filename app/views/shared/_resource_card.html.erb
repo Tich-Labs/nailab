@@ -68,7 +68,7 @@
           "Google for Startups Founders Funds - Africa 2025"
         ] %>
         <% if premium_titles.include?(resource.title) %>
-          <span class="absolute -top-3 left-4 bg-nailab-teal text-white text-xs font-bold px-3 py-1 rounded shadow-sm">Premium Content</span>
+          <span class="absolute -top-3 left-4 bg-yellow-200 text-yellow-800 text-xs font-bold px-3 py-1 rounded shadow-sm">Premium Content</span>
         <% end %>
         <% if resource.published_at %>
           <span><%= resource.published_at.strftime('%b %d, %Y') %></span>
@@ -82,12 +82,12 @@
       <% public_label = action[:label] %>
       <% public_path = action[:path].call(resource) rescue resource_detail_path(resource.slug) %>
       <%# If the primary public path is the same as the resource detail, label the details link with the primary label and avoid a duplicate span. %>
-      <% if public_path.to_s == resource_detail_path(resource.slug).to_s %>
-        <%= link_to public_label, resource_detail_path(resource.slug), class: 'link link-hover' %>
-      <% else %>
-        <%= link_to 'View details', resource_detail_path(resource.slug), class: 'link link-hover' %>
-        <%= link_to public_label, public_path, class: 'text-xs uppercase tracking-[0.3em] text-base-content/50 link link-hover' %>
-      <% end %>
+        <% if public_path.to_s == resource_detail_path(resource.slug).to_s %>
+          <%= link_to public_label, resource_detail_path(resource.slug), class: 'link link-hover', data: { controller: 'require-signup', 'require-signup-signed-in-value': user_signed_in?, action: 'click->require-signup#maybeBlock' } %>
+        <% else %>
+          <%= link_to 'View details', resource_detail_path(resource.slug), class: 'link link-hover', data: { controller: 'require-signup', 'require-signup-signed-in-value': user_signed_in?, action: 'click->require-signup#maybeBlock' } %>
+          <%= link_to public_label, public_path, class: 'text-xs uppercase tracking-[0.3em] text-base-content/50 link link-hover', data: { controller: 'require-signup', 'require-signup-signed-in-value': user_signed_in?, action: 'click->require-signup#maybeBlock' } %>
+        <% end %>
     </div>
   <% end %>
 </article>

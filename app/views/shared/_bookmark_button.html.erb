@@ -4,6 +4,7 @@
   data-controller="bookmark-button"
   data-bookmark-button-bookmarked-value="<%= is_bookmarked %>"
   data-bookmark-button-resource-id-value="<%= resource.id %>"
+  data-bookmark-button-signed-in-value="<%= user_signed_in? %>"
   data-action="click->bookmark-button#bookmark"
   data-bookmark-button-target="button"
   class="ml-2 btn btn-xs <%= is_bookmarked ? 'bg-gray-400 cursor-default' : 'bg-nailab-purple' %> text-white border-nailab-purple hover:bg-nailab-purple/90"
