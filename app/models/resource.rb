@@ -1,4 +1,5 @@
 class Resource < ApplicationRecord
+  has_many :bookmarks, dependent: :destroy
   has_one_attached :hero_image
   has_many_attached :inline_images
   has_many :ratings, dependent: :destroy

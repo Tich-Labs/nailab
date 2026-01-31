@@ -3,6 +3,19 @@
   <div class="mb-8">
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Resource Library</h1>
     <p class="text-xl text-base-content/60">Access tools, templates, and guides to accelerate your startup growth</p>
+    <div class="mt-6 flex flex-wrap gap-4 items-center">
+      <%= form_with url: founder_resources_path, method: :get, local: true, class: "flex flex-wrap gap-2 items-center" do |f| %>
+        <%= f.label :resource_type, "Type", class: "mr-2 font-semibold" %>
+        <%= f.select :resource_type, options_for_select([['All', '']] + @resource_types.map { |t| [t.titleize, t] }, @selected_type), {}, class: "select select-bordered select-sm mr-4" %>
+        <%= f.label :search, "Search", class: "mr-2 font-semibold" %>
+        <%= f.text_field :search, value: @search, placeholder: "Search resources...", class: "input input-bordered input-sm mr-4" %>
+        <label class="flex items-center gap-1 font-semibold text-sm mr-4">
+          <%= f.check_box :bookmarked, { checked: @bookmarked_only, class: "checkbox checkbox-sm align-middle" }, '1', '0' %>
+          Bookmarked
+        </label>
+        <%= f.submit "Filter", class: "btn btn-sm bg-nailab-purple text-white border-nailab-purple hover:bg-nailab-purple/90" %>
+      <% end %>
+    </div>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     <% @resources.each do |resource| %>

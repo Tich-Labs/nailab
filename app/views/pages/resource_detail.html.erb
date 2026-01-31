@@ -25,7 +25,13 @@
         <% if primary_path.present? && primary_path != resource_detail_path(@resource.slug) %>
           <%= link_to primary_label, primary_path, target: '_blank', rel: 'noreferrer', class: 'btn btn-primary rounded-full' %>
         <% end %>
-        <%= link_to 'Back to resources', resources_path, class: 'btn rounded bg-nailab-teal border-nailab-teal text-white hover:bg-white hover:border-nailab-teal hover:text-slate-900' %>
+        <%= render partial: 'shared/bookmark_button', locals: { resource: @resource } %>
+        <% back_url = if params[:return_to].present? && params[:return_to].include?(founder_resources_path)
+          params[:return_to]
+        else
+          resources_path
+        end %>
+        <%= link_to 'Back to resources', back_url, class: 'btn rounded bg-nailab-teal border-nailab-teal text-white hover:bg-white hover:border-nailab-teal hover:text-slate-900' %>
       </div>
     </div>
   </section>
@@ -54,7 +60,7 @@
             <% @related_resources.each do |related| %>
               <div class="flex items-center justify-between rounded-2xl bg-base-200 px-4 py-3">
                 <div>
-                  <p class="text-sm font-semibold text-base-content"><%= link_to related.title, resource_detail_path(related.slug), class: 'link link-hover' %></p>
+                  <p class="text-sm font-semibold text-base-content"><%= link_to related.title, resource_detail_path(related.slug, return_to: params[:return_to]), class: 'link link-hover' %></p>
                   <p class="text-xs uppercase tracking-[0.3em] text-base-content/60"><%= related.resource_type&.titleize %></p>
                 </div>
                 <span class="text-xs text-base-content/60"><%= related.published_at&.strftime('%b %d, %Y') %></span>

@@ -1,13 +1,10 @@
 <%# app/views/founder/resources/show.html.erb %>
 <div data-theme="nailab_founder" class="min-h-screen bg-base-100 text-base-content">
-  <div class="max-w-4xl mx-auto py-8 px-4">
-  <div class="mb-8">
-    <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4"><%= @resource.title %></h1>
-    <p class="text-xl text-base-content/60"><%= @resource.description %></p>
-  </div>
-  <div class="bg-base-100 shadow rounded-lg p-6">
-    <div class="flex justify-between items-start">
-      <div>
+  <div class="max-w-3xl mx-auto py-10 px-4">
+    <div class="mb-8">
+      <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-2"><%= @resource.title %></h1>
+      <p class="text-lg text-base-content/70 mb-4"><%= @resource.description %></p>
+      <div class="flex flex-wrap gap-3 mb-4">
         <% rt = @resource.resource_type.to_s.downcase %>
         <% action_map = {
           'blog' => { label: 'Read', path: ->(r) { r.url.presence || founder_resource_path(r) } },
@@ -19,39 +16,51 @@
         <% action = action_map.fetch(rt, { label: 'Download', path: ->(r) { r.url.presence || download_founder_resource_path(r) } }) %>
         <% primary_label = action[:label] %>
         <% primary_path = action[:path].call(@resource) rescue download_founder_resource_path(@resource) %>
-        <%= link_to primary_label, primary_path, class: "inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors", target: ( @resource.url.present? ? '_blank' : nil ), rel: ( @resource.url.present? ? 'noreferrer' : nil ) %>
-        <%= button_to 'Bookmark', bookmark_founder_resource_path(@resource), method: :post, class: "inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors" %>
+        <%= link_to primary_label, primary_path, class: "btn btn-sm bg-black text-white border-black hover:bg-gray-900", target: (@resource.url.present? ? '_blank' : nil), rel: (@resource.url.present? ? 'noreferrer' : nil) %>
+        <% is_bookmarked = current_user && current_user.bookmarks.exists?(resource: @resource) %>
+        <button 
+          data-controller="bookmark-button"
+          data-bookmark-button-bookmarked-value="<%= is_bookmarked %>"
+          data-bookmark-button-resource-id-value="<%= @resource.id %>"
+          data-action="click->bookmark-button#bookmark"
+          data-bookmark-button-target="button"
+          class="btn btn-sm <%= is_bookmarked ? 'bg-gray-400 cursor-default' : 'bg-nailab-purple' %> text-white border-nailab-purple hover:bg-nailab-purple/90"
+          <%= 'disabled' if is_bookmarked %>
+        >
+          <%= is_bookmarked ? 'Bookmarked' : 'BOOKMARK' %>
+        </button>
+        <% back_url = params[:return_to].presence || founder_resources_path %>
+        <%= link_to 'Back to resources', back_url, class: 'btn btn-outline ml-2' %>
       </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <div>
-        <h3 class="font-medium text-base-content">Category</h3>
-        <p class="text-base-content/70 mt-1"><%= @resource.category %></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="card bg-base-200 p-4">
+        <h3 class="font-semibold text-base-content mb-1">Category</h3>
+        <p class="text-base-content/70"><%= @resource.category %></p>
       </div>
-      <div>
-        <h3 class="font-medium text-base-content">Type</h3>
-        <p class="text-base-content/70 mt-1"><%= @resource.file_type %></p>
+      <div class="card bg-base-200 p-4">
+        <h3 class="font-semibold text-base-content mb-1">Type</h3>
+        <p class="text-base-content/70"><%= @resource.file_type %></p>
       </div>
-      <div>
-        <h3 class="font-medium text-base-content">Author</h3>
-        <p class="text-base-content/70 mt-1"><%= @resource.author %></p>
+      <div class="card bg-base-200 p-4">
+        <h3 class="font-semibold text-base-content mb-1">Author</h3>
+        <p class="text-base-content/70"><%= @resource.author %></p>
       </div>
-      <div>
-        <h3 class="font-medium text-base-content">Published</h3>
-        <p class="text-base-content/70 mt-1"><%= @resource.created_at.strftime('%B %d, %Y') %></p>
+      <div class="card bg-base-200 p-4">
+        <h3 class="font-semibold text-base-content mb-1">Published</h3>
+        <p class="text-base-content/70"><%= @resource.created_at.strftime('%B %d, %Y') %></p>
       </div>
     </div>
     <% if @resource.content.present? %>
-      <div class="border-t border-base-200 pt-6">
-        <h3 class="font-medium text-base-content mb-4">Content Preview</h3>
+      <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 class="font-semibold text-base-content mb-4">Content Preview</h3>
         <div class="prose max-w-none">
           <%= sanitize(@resource.content) %>
         </div>
       </div>
     <% end %>
-    <!-- Rating Section -->
-    <div class="border-t border-base-200 pt-6 mt-6">
-      <h3 class="font-medium text-base-content mb-4">Rate this Resource</h3>
+    <div class="bg-base-100 border-t border-base-200 pt-6 mt-6">
+      <h3 class="font-semibold text-base-content mb-4">Rate this Resource</h3>
       <div class="flex space-x-2">
         <% (1..5).each do |rating| %>
           <%= button_to rating, rate_founder_resource_path(@resource, score: rating), method: :post, class: "w-8 h-8 bg-base-200 rounded-full hover:bg-warning flex items-center justify-center text-sm font-medium" %>
@@ -59,5 +68,4 @@
       </div>
     </div>
   </div>
-</div>
 </div>

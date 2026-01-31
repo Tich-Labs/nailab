@@ -18,15 +18,27 @@
     <div class="bg-white px-4 py-3 -mx-6 mt-0 border-b border-nailab-teal/30">
       <div class="flex items-center justify-between">
         <span class="px-3 py-1 bg-nailab-teal/10 text-nailab-teal text-s font-semibold rounded"><%= resource.respond_to?(:category) ? resource.category : resource.resource_type&.capitalize %></span>
-        <% if resource.respond_to?(:published_at) && resource.published_at.present? %>
-          <span class="text-nailab-teal text-sm font-medium"><%= resource.published_at.strftime('%b %d, %Y') %></span>
-        <% else %>
-          <span class="text-nailab-teal text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
-        <% end %>
+        <div class="flex items-center gap-2">
+          <% if defined?(@bookmarked_ids) && @bookmarked_ids.include?(resource.id) %>
+            <span class="bg-nailab-purple rounded-full p-1" title="Bookmarked">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20">
+                <path fill="#fff" d="M5 3a2 2 0 0 0-2 2v12a1 1 0 0 0 1.447.894L10 16.118l5.553 1.776A1 1 0 0 0 17 17V5a2 2 0 0 0-2-2H5zm0 2h10v11.382l-4.553-1.455a1 1 0 0 0-.894 0L5 16.382V5z"/>
+              </svg>
+            </span>
+          <% end %>
+          <% if resource.respond_to?(:published_at) && resource.published_at.present? %>
+            <span class="text-nailab-teal text-sm font-medium"><%= resource.published_at.strftime('%b %d, %Y') %></span>
+          <% else %>
+            <span class="text-nailab-teal text-sm font-medium"><%= resource.respond_to?(:file_type) ? resource.file_type : (resource.file_type || '') %></span>
+          <% end %>
+          <%# Only show the bookmark icon, not the button, for founder cards %>
+        </div>
       </div>
     </div>
     <header class="space-y-3 p-6">
-      <h3 class="text-xl font-semibold text-black"><%= resource.title %></h3>
+      <h3 class="text-xl font-semibold text-black">
+        <%= link_to resource.title, resource_detail_path(resource.slug, return_to: request.fullpath), class: "hover:underline" %>
+      </h3>
       <p class="text-sm text-base-content/70"><%= truncate(resource.description, length: 180) %></p>
     </header>
     <div class="px-6 pb-6 flex items-center justify-between text-sm font-semibold text-base-content">
@@ -49,6 +61,15 @@
     <header class="space-y-3">
       <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-base-content/60">
         <span><%= resource.resource_type&.capitalize %></span>
+        <% premium_titles = [
+          "Scaling Your African Startup: A Fireside Chat with Flutterwave Founders",
+          "Fundraising Checklist: From Seed to Series A",
+          "Building Scalable Startups in Africa: Lessons from Flutterwave",
+          "Google for Startups Founders Funds - Africa 2025"
+        ] %>
+        <% if premium_titles.include?(resource.title) %>
+          <span class="ml-2 px-2 py-1 rounded bg-nailab-teal text-white text-xs font-bold">Premium Content</span>
+        <% end %>
         <% if resource.published_at %>
           <span><%= resource.published_at.strftime('%b %d, %Y') %></span>
         <% end %>
@@ -57,6 +78,7 @@
       <p class="text-sm text-base-content/70"><%= truncate(resource.description, length: 180) %></p>
     </header>
     <div class="mt-6 flex items-center justify-between text-sm font-semibold text-base-content">
+      <%= render partial: 'shared/bookmark_button', locals: { resource: resource } %>
       <% public_label = action[:label] %>
       <% public_path = action[:path].call(resource) rescue resource_detail_path(resource.slug) %>
       <%# If the primary public path is the same as the resource detail, label the details link with the primary label and avoid a duplicate span. %>

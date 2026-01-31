@@ -156,6 +156,13 @@ class PagesController < ApplicationController
     selected_option ||= RESOURCE_CATEGORY_OPTIONS.find { |option| option[:value] == incoming_category }
     @selected_category = selected_option ? selected_option[:slug] : "all"
     search_term = params[:q]&.strip
+    premium_titles = [
+      "Scaling Your African Startup: A Fireside Chat with Flutterwave Founders",
+      "Fundraising Checklist: From Seed to Series A",
+      "Building Scalable Startups in Africa: Lessons from Flutterwave",
+      "Google for Startups Founders Funds - Africa 2025"
+    ]
+    # Show all resources, but mark premium ones for public users
     base_scope = Resource.where(active: true)
     filtered_value = selected_option.present? ? selected_option[:value] : "all"
     scoped = if filtered_value == "all"
@@ -173,8 +180,24 @@ class PagesController < ApplicationController
   end
 
   def resource_detail
+    premium_titles = [
+      "Scaling Your African Startup: A Fireside Chat with Flutterwave Founders",
+      "Fundraising Checklist: From Seed to Series A",
+      "Building Scalable Startups in Africa: Lessons from Flutterwave",
+      "Google for Startups Founders Funds - Africa 2025"
+    ]
+    premium_titles = [
+      "Scaling Your African Startup: A Fireside Chat with Flutterwave Founders",
+      "Fundraising Checklist: From Seed to Series A",
+      "Building Scalable Startups in Africa: Lessons from Flutterwave",
+      "Google for Startups Founders Funds - Africa 2025"
+    ]
     active_resources = Resource.where(active: true)
     @resource = active_resources.detect { |resource| resource.slug == params[:slug] }
+    if @resource && premium_titles.include?(@resource.title) && !user_signed_in?
+      flash[:alert] = "This is premium content. Please create a paid account to access."
+      redirect_to resources_path and return
+    end
     return redirect_to resources_path, alert: "Resource not found" if @resource.nil?
 
     category_option = RESOURCE_CATEGORY_OPTIONS.find { |option| option[:value] == @resource.resource_type }

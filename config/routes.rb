@@ -256,6 +256,9 @@ Rails.application.routes.draw do
         post :rate
         get  :download
       end
+      collection do
+        post :download_all_templates
+      end
     end
 
     resources(:opportunities, only: %i[index show]) do
