@@ -1,7 +1,7 @@
 <%# Shared resource card partial - accepts `resource` and optional `variant` ('founder' or 'public') %>
 <% variant ||= 'public' %>
 
-<article class="flex flex-col justify-between rounded-2xl border border-base-200 bg-white p-6 shadow-lg transition hover:border-base-300">
+<article class="relative flex flex-col justify-between rounded-2xl border border-base-200 bg-white p-6 shadow-lg transition hover:border-base-300">
   <%# Compute action label and path based on resource_type so CTAs are consistent %>
   <% rt = resource.resource_type.to_s.downcase %>
   <% action_map = {
@@ -68,7 +68,7 @@
           "Google for Startups Founders Funds - Africa 2025"
         ] %>
         <% if premium_titles.include?(resource.title) %>
-          <span class="ml-2 px-2 py-1 rounded bg-nailab-teal text-white text-xs font-bold">Premium Content</span>
+          <span class="absolute -top-3 left-4 bg-nailab-teal text-white text-xs font-bold px-3 py-1 rounded shadow-sm">Premium Content</span>
         <% end %>
         <% if resource.published_at %>
           <span><%= resource.published_at.strftime('%b %d, %Y') %></span>
