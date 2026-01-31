@@ -8,7 +8,9 @@ export default class extends Controller {
   maybeBlock(event) {
     if (this.signedInValue) return;
     event.preventDefault();
-    // Prompt unauthenticated users to create a paid account
-    alert("Please sign in or create a paid account to access this content.");
+    // Prompt unauthenticated users to sign up; redirect to registration if they confirm.
+    if (confirm("Please sign up to access this content. Create an account now?")) {
+      window.location.href = '/users/sign_up';
+    }
   }
 }
