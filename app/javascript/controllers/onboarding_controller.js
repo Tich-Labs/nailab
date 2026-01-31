@@ -21,9 +21,14 @@ export default class extends Controller {
     this.showStep(initialIdx)
     this.updateDisabledStates(initialIdx)
     this.recalcAll()
-    // Wire up the "Submit All" button to enable all inputs before submitting
+    // Wire up the "Submit All" button to validate all steps then submit
     const submitAll = this.element.querySelector("input[type='submit']:not([name='save_step']), button[type='submit']:not([name='save_step'])")
-    if (submitAll) submitAll.addEventListener('click', () => this.enableAllControls())
+    if (submitAll) submitAll.addEventListener('click', (e) => this.validateAllThenSubmit(e))
+    // Also intercept the form submit (covers Enter key submissions) and route through our validator
+    const form = this.element.querySelector('form')
+    if (form) {
+      form.addEventListener('submit', (e) => this.handleFormSubmit(e))
+    }
   }
 
   showStep(idx) {
@@ -91,6 +96,49 @@ export default class extends Controller {
         c.disabled = false
       })
     })
+  }
+
+  validateAllThenSubmit(event) {
+    if (event && typeof event.preventDefault === 'function') event.preventDefault()
+    const form = this.element.querySelector('form')
+    let firstMissing = null
+    this.steps.forEach((step, idx) => {
+      if (firstMissing) return
+      const requiredInputs = Array.from(step.querySelectorAll('[required]'))
+      requiredInputs.forEach(i => {
+        const v = i.value
+        const empty = v === null || v === undefined || (String(v).trim() === '')
+        if (empty && !firstMissing) firstMissing = { input: i, idx }
+      })
+    })
+    if (firstMissing) {
+      const step = this.steps[firstMissing.idx]
+      const existingAlert = step.querySelector('.onboarding-missing-alert')
+      if (existingAlert) existingAlert.remove()
+      const alert = document.createElement('div')
+      alert.className = 'alert alert-error onboarding-missing-alert mt-2'
+      alert.innerHTML = `<div><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728"/></svg><span>Please fill required fields for this month before submitting all.</span></div>`
+      const body = step.querySelector('.card-body') || step
+      body.prepend(alert)
+      this.showStep(firstMissing.idx)
+      setTimeout(() => { try { firstMissing.input.focus() } catch(e) {} }, 300)
+      return
+    }
+    // All fields present — enable controls and submit the form
+    this.enableAllControls()
+    if (form) form.submit()
+  }
+
+  handleFormSubmit(event) {
+    // If submit originated from a per-step save button, let it proceed
+    try {
+      const submitter = event.submitter
+      if (submitter && submitter.name === 'save_step') return
+    } catch (e) {
+      // ignore
+    }
+    // Otherwise, validate all and only submit when valid
+    this.validateAllThenSubmit(event)
   }
 
   recalc(event) {
@@ -163,13 +211,18 @@ export default class extends Controller {
     const btn = event.currentTarget
     const isOpen = body && !body.classList.contains('hidden')
     // close all
-    document.querySelectorAll('.definition-body').forEach(d => d.classList.add('hidden'))
     document.querySelectorAll('[data-explain-key]').forEach(c => {
+      const b = c.querySelector('.definition-body')
+      const t = c.querySelector('.definition-teaser')
       const toggleBtn = c.querySelector('button[data-action\="click->onboarding#toggleDefinition\"]')
+      if (b) b.classList.add('hidden')
+      if (t) t.classList.remove('hidden')
       if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false')
     })
     if (!isOpen && body) {
       body.classList.remove('hidden')
+      const teaser = explain.querySelector('.definition-teaser')
+      if (teaser) teaser.classList.add('hidden')
       btn.setAttribute('aria-expanded', 'true')
       explain.scrollIntoView({ behavior: 'smooth', block: 'center' })
       explain.classList.add('ring', 'ring-nailab-teal', 'ring-opacity-40')
@@ -253,7 +306,8 @@ export default class extends Controller {
       // Runway: improved handling. If burn > 0 use cash / burn; if burn == 0 and cash>0 show infinity; else '-'
       let runway = '-'
       if (burn > 0) {
-        runway = (cash / burn).toFixed(1)
+        const r = cash / burn
+        runway = r > 0 ? r.toFixed(1) : '-'
       } else if (burn === 0 && cash > 0) {
         runway = '∞'
       }

@@ -103,7 +103,9 @@ class Founder::ProgressesController < Founder::BaseController
       # Month and year selects for onboarding (months Jan..Dec, years 2020..2030)
       @month_options = (1..12).map { |m| [ Date::MONTHNAMES[m], m ] }
       @year_options = (2020..2030).to_a
-      @monthly_metrics = @periods.map { |period| MonthlyMetric.new(period: period) }
+      @monthly_metrics = @periods.map do |period|
+        current_user.startup&.monthly_metrics&.find_or_initialize_by(period: period) || MonthlyMetric.new(period: period)
+      end
       @presets = ScenarioPreset.all
       # Flag first-time onboarding when the startup has no stored monthly metrics
       @first_time = current_user.startup&.monthly_metrics&.none?

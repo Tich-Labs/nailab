@@ -3,12 +3,11 @@
   <div class="mb-6 text-center">
     <h1 class="text-4xl font-bold text-nailab-purple mb-2">Current Status & Monthly Update</h1>
     <p class="text-base text-base-content/70 mb-2">This update helps your mentor quickly understand your startup’s health and where support is needed. You can update missed months later.</p>
-    <a href="#" class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#openLearnMore">Learn how this works</a>
   </div>
   <div class="mb-6 flex justify-center">
 
   </div>
-  <div class="md:flex md:items-start md:gap-20">
+  <div class="md:flex md:items-start md:gap-20" data-controller="onboarding">
     <aside class="md:w-1/2 mb-6 md:mb-0 md:pr-10">
       <div class="sticky top-20">
         <h3 class="text-lg font-semibold mb-3">Quick definitions</h3>
@@ -18,10 +17,11 @@
               <h4 class="font-semibold">Monthly Recurring Revenue (MRR)</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="mrr" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">MRR is recurring income from subscriptions or retainers.</p>
             <div class="mt-2 text-sm definition-body hidden">
+              <p class="mb-1">MRR is recurring income from subscriptions or retainers..</p>
               <p class="mb-1">Exclude one-off grants or irregular payments.</p>
-              <p class="mt-1"><strong>Example:</strong> 10 customers × $50 = $500 MRR.</p>
+              <p class="mt-1"><strong>How to calculate:</strong> Average Revenue Per User (ARPU) × paying customers = MRR.</p>
+              <p class="mt-1"><strong>Example:</strong> ARPU $50 × 10 paying customers = $500 MRR.</p>
             </div>
           </div>
           <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="new_customers">
@@ -29,9 +29,9 @@
               <h4 class="font-semibold">New Paying Customers</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="new_customers" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Count only first-time paying customers in the month.</p>
             <div class="mt-2 text-sm definition-body hidden">
-              <p>Exclude returning or reactivated users.</p>
+              <p class="mb-1">Count only first-time paying customers in the month.</p>
+              <p class="mb-1">Exclude returning or reactivated users.</p>
             </div>
           </div>
           <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="churn">
@@ -39,9 +39,9 @@
               <h4 class="font-semibold">Churned Customers</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="churn" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Customers who cancelled or did not renew.</p>
             <div class="mt-2 text-sm definition-body hidden">
-              <p>Mentors use this to understand retention problems.</p>
+              <p class="mb-1">Customers who cancelled or did not renew.</p>
+              <p class="mb-1">Mentors use this to understand retention problems.</p>
             </div>
           </div>
           <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="cash">
@@ -49,9 +49,9 @@
               <h4 class="font-semibold">Cash at Hand</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="cash" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Include balances in bank accounts and mobile money at the end of the month.</p>
             <div class="mt-2 text-sm definition-body hidden">
-              <p>This is a snapshot for runway estimates — use end-of-month balances.</p>
+              <p class="mb-1" accordion>Include balances in bank accounts and mobile money at the end of the month.</p>
+              <p class="mb-1">This is a snapshot for runway estimates — use end-of-month balances.</p>
             </div>
           </div>
           <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="burn">
@@ -59,9 +59,9 @@
               <h4 class="font-semibold">Burn Rate</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="burn" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Monthly spend (payroll, rent, tools).</p>
             <div class="mt-2 text-sm definition-body hidden">
-              <p>A simple 3-month average is fine if exact numbers aren't available.</p>
+              <p class="mb-1">Monthly spend (payroll, rent, tools).</p>
+              <p class="mb-1">A simple 3-month average is fine if exact numbers aren't available.</p>
             </div>
           </div>
           <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="runway">
@@ -69,9 +69,10 @@
               <h4 class="font-semibold">Runway (read‑only)</h4>
               <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="runway" aria-expanded="false">Read</button>
             </div>
-            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Runway = (cash at hand) / (burn rate).</p>
             <div class="mt-2 text-sm definition-body hidden">
-              <p>If burn = 0 and cash &gt; 0 the runway is shown as ∞.</p>
+              <p class="mb-1">Runway = (cash at hand) / (burn rate).</p>
+              <p class="mb-1">Indicates how many months you can operate before funds run out.</p>
+              <p class="mb-1">If burn = 0 and cash &gt; 0 the runway is shown as ∞.</p>
             </div>
           </div>
         </div>
@@ -79,7 +80,7 @@
     </aside>
     <main class="md:w-1/2 md:pl-12 md:border-l md:border-base-200">
       <% selected_step = params[:step].to_i rescue 0 %>
-      <%= form_with url: onboarding_founder_progress_path, method: :post, local: true, html: { data: { controller: "onboarding" } } do |f| %>
+      <%= form_with url: onboarding_founder_progress_path, method: :post, local: true, html: { novalidate: true } do |f| %>
       <% @monthly_metrics.each_with_index do |metric, idx| %>
   <div class="onboarding-step <%= idx == selected_step ? '' : 'hidden' %>" data-step="<%= idx %>">
         <div class="card bg-base-100 shadow-lg mb-6">
@@ -99,13 +100,13 @@
                 <label class="label">Month</label>
                 <%= select_tag "monthly_metrics[#{idx}][period_month]",
                   options_for_select(@month_options.map { |name, num| [name, num] }, (@periods[idx] ? @periods[idx].month : Date.today.month)),
-                  class: "select select-bordered w-full" %>
+                  class: "select select-bordered w-full", disabled: metric.persisted? %>
               </div>
               <div>
                 <label class="label">Year</label>
                 <%= select_tag "monthly_metrics[#{idx}][period_year]",
                   options_for_select(@year_options, (@periods[idx] ? @periods[idx].year : Date.today.year)),
-                  class: "select select-bordered w-full" %>
+                  class: "select select-bordered w-full", disabled: metric.persisted? %>
               </div>
             </div>
             <% unless current_user.startup&.monthly_metrics&.exists?(period: (@periods[idx])) %>
@@ -124,35 +125,35 @@
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, placeholder: "e.g. 5000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, placeholder: "e.g. 10", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, placeholder: "e.g. 2", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, placeholder: "e.g. 12000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, placeholder: "e.g. 4000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
             </div>
@@ -161,7 +162,6 @@
                   <div class="badge badge-info px-4 py-3 text-lg h-auto">Net Growth: <span class="font-semibold" data-onboarding-target="netGrowth<%= idx %>">—</span></div>
                   <div class="badge badge-secondary px-4 py-3 text-lg h-auto">MRR Δ: <span class="font-semibold" data-onboarding-target="mrrChange<%= idx %>">—</span> <span class="text-sm text-base-content/60" data-onboarding-target="mrrChangePct<%= idx %>"></span></div>
                   <div class="badge badge-neutral px-4 py-3 text-lg h-auto">Runway: <span class="font-semibold" data-onboarding-target="runway<%= idx %>">—</span> <span class="text-sm">mo</span></div>
-                  <button type="button" class="ml-2 btn btn-ghost btn-sm" data-action="click->onboarding#toggleAccordion" data-accordion-idx="<%= idx %>" data-accordion-key="runway_explain" aria-expanded="false">How is this calculated?</button>
                 </div>
                 
                 <div class="mt-4 flex justify-between">
@@ -189,7 +189,7 @@
                           <input name="projection[length]" type="number" min="3" max="12" value="3" class="input input-bordered w-24" />
                         </div>
                       <% end %>
-                      <%= submit_tag "Submit All Updates", class: "btn btn-success" %>
+                      <button type="button" class="btn btn-success" data-action="click->onboarding#validateAllThenSubmit">Submit All Updates</button>
                     <% end %>
                   </div>
                 </div>
@@ -226,4 +226,40 @@
 
 <script type="module">
 // Stimulus controller will be added in app/javascript/controllers/onboarding_controller.js
+</script>
+
+<script>
+  // Toggle: only show definition body on Read; keep keywords visible otherwise.
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('button[data-def-key]').forEach(function(btn) {
+      btn.classList.add('definition-toggle')
+      btn.addEventListener('click', function(e) {
+        e.preventDefault()
+        var key = btn.getAttribute('data-def-key')
+        var explain = document.querySelector("[data-explain-key='" + key + "']")
+        if (!explain) return
+        var body = explain.querySelector('.definition-body')
+        var teaser = explain.querySelector('.definition-teaser')
+        var isOpen = body && !body.classList.contains('hidden')
+        // Close all definition bodies first (single-open behavior)
+        document.querySelectorAll('[data-explain-key]').forEach(function(c) {
+          var b = c.querySelector('.definition-body')
+          var t = c.querySelector('.definition-teaser')
+          var toggleBtn = c.querySelector('button[data-def-key]')
+          if (b) b.classList.add('hidden')
+          if (t) t.classList.remove('hidden')
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false')
+        })
+        // If it was closed, open it and hide teaser
+        if (!isOpen) {
+          if (body) body.classList.remove('hidden')
+          if (teaser) teaser.classList.add('hidden')
+          btn.setAttribute('aria-expanded', 'true')
+          explain.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          explain.classList.add('ring', 'ring-nailab-teal', 'ring-opacity-40')
+          setTimeout(function() { explain.classList.remove('ring', 'ring-nailab-teal', 'ring-opacity-40') }, 1600)
+        }
+      })
+    })
+  })
 </script>
