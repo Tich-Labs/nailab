@@ -3,6 +3,9 @@ class MonthlyMetric < ApplicationRecord
   belongs_to :startup
   belongs_to :user, optional: true
 
+  # Temporary flags used by controller/view to relax validations for baseline rows
+  attr_accessor :baseline
+
   # Legacy-friendly attribute aliases so older views/forms continue to work
   alias_attribute :month, :period
   alias_attribute :revenue, :mrr
@@ -21,8 +24,9 @@ class MonthlyMetric < ApplicationRecord
   ].freeze
 
   # Validations
+  # Allow baseline rows (first onboarding row) to skip presence validation
   validates :mrr, :new_paying_customers, :churned_customers, :cash_at_hand, :burn_rate,
-            presence: true
+            presence: true, unless: :baseline?
 
   validates :mrr, :cash_at_hand, :burn_rate, :funds_raised,
             numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
@@ -58,5 +62,9 @@ class MonthlyMetric < ApplicationRecord
 
     # Legacy `notes` -> `product_progress`
     self.product_progress = self.notes if respond_to?(:notes) && self.notes.present? && self.product_progress.blank?
+  end
+
+  def baseline?
+    !!baseline
   end
 end

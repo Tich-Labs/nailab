@@ -82,6 +82,8 @@ gem "sassc-rails"
 gem "rails_best_practices", "~> 1.23", group: :development
 
 gem "importmap-rails", "~> 2.2"
+gem "chartkick"
+gem "groupdate"
 
 # Optional client-side WYSIWYG helpers (small convenience). Removed because incompatible with Rails 8+.
 # gem 'wysiwyg-rails' (removed)

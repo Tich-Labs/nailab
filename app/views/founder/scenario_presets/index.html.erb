@@ -1,0 +1,22 @@
+<div class="max-w-4xl mx-auto py-8">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Projection Presets</h1>
+    <%= link_to 'New Preset', new_founder_scenario_preset_path, class: 'btn btn-primary' %>
+  </div>
+  <div class="grid grid-cols-1 gap-4">
+    <% @presets.each do |p| %>
+      <div class="card bg-base-100 shadow">
+        <div class="card-body flex justify-between items-center">
+          <div>
+            <h3 class="font-semibold"><%= p.name %></h3>
+            <p class="text-sm text-base-content/70">Growth: <%= p.growth_pct %>% · Churn: <%= p.churn_pct %>% · Burn change: <%= p.burn_change_pct %>%</p>
+          </div>
+          <div class="flex gap-2">
+            <%= link_to 'Edit', edit_founder_scenario_preset_path(p), class: 'btn btn-outline' %>
+            <%= button_to 'Delete', founder_scenario_preset_path(p), method: :delete, data: { confirm: 'Delete preset?' }, class: 'btn btn-error' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -231,11 +231,14 @@ Rails.application.routes.draw do
       collection do
         get :onboarding
         post :onboarding
+        get :stage
+        post :stage
       end
     end
 
     resources(:milestones)
     resources(:monthly_metrics, only: %i[new create edit update index])
+    resources :scenario_presets, only: %i[index new create edit update destroy]
 
     # Startup Updates feature
     resources :startup_updates, only: [ :index, :new, :create ]

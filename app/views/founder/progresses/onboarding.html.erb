@@ -1,66 +1,229 @@
 <%# DaisyUI-styled Multi-Month Onboarding Wizard for Founders %>
-<div class="max-w-2xl mx-auto py-12">
-  <div class="mb-8 text-center">
-    <h1 class="text-4xl font-bold text-nailab-purple mb-2">Welcome to Nailab!</h1>
-    <p class="text-lg text-base-content/70">To unlock mentorship and track your progress, please share your startup metrics for the last 3 months. You can update missing months later.</p>
+<div class="max-w-5xl mx-auto py-12">
+  <div class="mb-6 text-center">
+    <h1 class="text-4xl font-bold text-nailab-purple mb-2">Current Status & Monthly Update</h1>
+    <p class="text-base text-base-content/70 mb-2">This update helps your mentor quickly understand your startup’s health and where support is needed. You can update missed months later.</p>
+    <a href="#" class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#openLearnMore">Learn how this works</a>
   </div>
   <div class="mb-6 flex justify-center">
-    <div class="tabs tabs-boxed bg-base-200">
-      <% @periods.each_with_index do |period, idx| %>
-        <a class="tab <%= 'tab-active' if idx == 0 %> onboarding-tab" data-tab="<%= idx %>">
-          <%= period.strftime('%b %Y') %>
-        </a>
-      <% end %>
-    </div>
+
   </div>
-  <%= form_with url: onboarding_founder_progress_index_path, method: :post, local: true, html: { data: { controller: "onboarding" } } do |f| %>
-    <% @monthly_metrics.each_with_index do |metric, idx| %>
-      <div class="onboarding-step <%= idx == 0 ? '' : 'hidden' %>" data-step="<%= idx %>">
-        <div class="card bg-base-100 shadow-lg mb-6">
-          <div class="card-body">
-            <h2 class="card-title text-nailab-teal mb-2">Update for <%= @periods[idx].strftime('%B %Y') %></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
-                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
-              </div>
-              <div>
-                <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
-                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
-              </div>
-              <div>
-                <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
-                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
-              </div>
-              <div>
-                <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
-                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
-              </div>
-              <div>
-                <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
-                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, class: "input input-bordered w-full", required: true, data: { action: "input->onboarding#recalc" } %>
-              </div>
+  <div class="md:flex md:items-start md:gap-20">
+    <aside class="md:w-1/2 mb-6 md:mb-0 md:pr-10">
+      <div class="sticky top-20">
+        <h3 class="text-lg font-semibold mb-3">Quick definitions</h3>
+        <div class="space-y-3">
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="mrr">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">Monthly Recurring Revenue (MRR)</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="mrr" aria-expanded="false">Read</button>
             </div>
-            <div class="mt-4 flex flex-wrap gap-4">
-              <div class="badge badge-info">Net Growth: <span data-onboarding-target="netGrowth<%= idx %>">0</span></div>
-              <div class="badge badge-accent">Runway: <span data-onboarding-target="runway<%= idx %>">0</span> mo</div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">MRR is recurring income from subscriptions or retainers.</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p class="mb-1">Exclude one-off grants or irregular payments.</p>
+              <p class="mt-1"><strong>Example:</strong> 10 customers × $50 = $500 MRR.</p>
             </div>
-            <div class="mt-4 flex justify-between">
-              <% if idx > 0 %>
-                <button type="button" class="btn btn-outline btn-secondary onboarding-prev">Previous</button>
-              <% end %>
-              <% if idx < @monthly_metrics.size - 1 %>
-                <button type="button" class="btn btn-primary onboarding-next">Next</button>
-              <% else %>
-                <%= submit_tag "Submit All Updates", class: "btn btn-success" %>
-              <% end %>
+          </div>
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="new_customers">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">New Paying Customers</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="new_customers" aria-expanded="false">Read</button>
+            </div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Count only first-time paying customers in the month.</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p>Exclude returning or reactivated users.</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="churn">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">Churned Customers</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="churn" aria-expanded="false">Read</button>
+            </div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Customers who cancelled or did not renew.</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p>Mentors use this to understand retention problems.</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="cash">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">Cash at Hand</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="cash" aria-expanded="false">Read</button>
+            </div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Include balances in bank accounts and mobile money at the end of the month.</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p>This is a snapshot for runway estimates — use end-of-month balances.</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="burn">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">Burn Rate</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="burn" aria-expanded="false">Read</button>
+            </div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Monthly spend (payroll, rent, tools).</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p>A simple 3-month average is fine if exact numbers aren't available.</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 p-4 shadow-sm" data-explain-key="runway">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold">Runway (read‑only)</h4>
+              <button class="text-sm text-nailab-teal hover:underline" data-action="click->onboarding#toggleDefinition" data-def-key="runway" aria-expanded="false">Read</button>
+            </div>
+            <p class="text-sm text-base-content/70 mt-1 definition-teaser">Runway = (cash at hand) / (burn rate).</p>
+            <div class="mt-2 text-sm definition-body hidden">
+              <p>If burn = 0 and cash &gt; 0 the runway is shown as ∞.</p>
             </div>
           </div>
         </div>
       </div>
-    <% end %>
-  <% end %>
+    </aside>
+    <main class="md:w-1/2 md:pl-12 md:border-l md:border-base-200">
+      <% selected_step = params[:step].to_i rescue 0 %>
+      <%= form_with url: onboarding_founder_progress_path, method: :post, local: true, html: { data: { controller: "onboarding" } } do |f| %>
+      <% @monthly_metrics.each_with_index do |metric, idx| %>
+  <div class="onboarding-step <%= idx == selected_step ? '' : 'hidden' %>" data-step="<%= idx %>">
+        <div class="card bg-base-100 shadow-lg mb-6">
+          <div class="card-body">
+            <h2 class="card-title text-nailab-teal mb-2">Monthly Update</h2>
+            <% if @first_time %>
+              <div class="alert alert-info mb-3">
+                <div>
+                  <span class="font-medium">First update?</span>
+                  <span class="ml-2">Since this is your first update, please enter data for up to the last 3 months.</span>
+                </div>
+              </div>
+            <% end %>
+            <%# Month and Year selects (separate) - default to the precomputed period when present %>
+            <div class="mb-2 grid grid-cols-2 gap-4">
+              <div>
+                <label class="label">Month</label>
+                <%= select_tag "monthly_metrics[#{idx}][period_month]",
+                  options_for_select(@month_options.map { |name, num| [name, num] }, (@periods[idx] ? @periods[idx].month : Date.today.month)),
+                  class: "select select-bordered w-full" %>
+              </div>
+              <div>
+                <label class="label">Year</label>
+                <%= select_tag "monthly_metrics[#{idx}][period_year]",
+                  options_for_select(@year_options, (@periods[idx] ? @periods[idx].year : Date.today.year)),
+                  class: "select select-bordered w-full" %>
+              </div>
+            </div>
+            <% unless current_user.startup&.monthly_metrics&.exists?(period: (@periods[idx])) %>
+              <div class="mt-2"><span class="badge badge-warning">Missing</span></div>
+            <% end %>
+            <% if @monthly_metrics[idx].respond_to?(:errors) && @monthly_metrics[idx].errors.any? %>
+              <div class="alert alert-error mt-2">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728"/></svg>
+                  <span><strong>Errors:</strong> <%= @monthly_metrics[idx].errors.full_messages.join(', ') %></span>
+                </div>
+              </div>
+            <% end %>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
+                </div>
+                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
+                </div>
+                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
+                </div>
+                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
+                </div>
+                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
+                </div>
+                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, class: "input input-bordered w-full", required: (idx == 0 ? false : true), data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                
+              </div>
+            </div>
+                <div class="mt-4 flex flex-wrap gap-4 items-center">
+                  <div class="badge badge-primary px-4 py-3 text-lg h-auto">MRR: <span class="font-semibold">$<span data-onboarding-target="mrr<%= idx %>">—</span></span></div>
+                  <div class="badge badge-info px-4 py-3 text-lg h-auto">Net Growth: <span class="font-semibold" data-onboarding-target="netGrowth<%= idx %>">—</span></div>
+                  <div class="badge badge-secondary px-4 py-3 text-lg h-auto">MRR Δ: <span class="font-semibold" data-onboarding-target="mrrChange<%= idx %>">—</span> <span class="text-sm text-base-content/60" data-onboarding-target="mrrChangePct<%= idx %>"></span></div>
+                  <div class="badge badge-neutral px-4 py-3 text-lg h-auto">Runway: <span class="font-semibold" data-onboarding-target="runway<%= idx %>">—</span> <span class="text-sm">mo</span></div>
+                  <button type="button" class="ml-2 btn btn-ghost btn-sm" data-action="click->onboarding#toggleAccordion" data-accordion-idx="<%= idx %>" data-accordion-key="runway_explain" aria-expanded="false">How is this calculated?</button>
+                </div>
+                
+                <div class="mt-4 flex justify-between">
+                  <% if idx > 0 %>
+                    <button type="button" class="btn btn-outline btn-secondary onboarding-prev">Previous</button>
+                  <% end %>
+
+                  <div class="flex gap-2">
+                    <button type="submit" name="save_step" value="<%= idx %>" class="btn btn-outline">Save this month</button>
+                    <% if idx < @monthly_metrics.size - 1 %>
+                      <button type="button" class="btn btn-primary onboarding-next">Next</button>
+                    <% else %>
+                      <% if session[:progress_mode] == 'projection' %>
+                        <div class="mb-4">
+                          <label class="label">Projection preset</label>
+                          <select name="projection[preset_id]" class="select select-bordered w-full max-w-xs">
+                            <option value="">Select preset (optional)</option>
+                            <% @presets.each do |p| %>
+                              <option value="<%= p.id %>"><%= p.name %> (growth: <%= p.growth_pct %>%)</option>
+                            <% end %>
+                          </select>
+                        </div>
+                        <div class="mb-4">
+                          <label class="label">Projection months (3-12)</label>
+                          <input name="projection[length]" type="number" min="3" max="12" value="3" class="input input-bordered w-24" />
+                        </div>
+                      <% end %>
+                      <%= submit_tag "Submit All Updates", class: "btn btn-success" %>
+                    <% end %>
+                  </div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <% end %>
+    </main>
+  </div>
 </div>
+<!-- Learn more modal / bottom sheet -->
+<div id="onboarding-learnmore" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/50" data-action="click->onboarding#closeLearnMore"></div>
+  <div class="absolute left-0 right-0 bottom-0 bg-base-100 rounded-t-lg p-6 max-h-[80vh] overflow-auto">
+    <div class="flex justify-between items-start">
+      <h3 class="text-lg font-semibold">How this works</h3>
+      <button class="btn btn-ghost" data-action="click->onboarding#closeLearnMore">Close</button>
+    </div>
+    <div class="mt-4 text-base text-base-content/70">
+      <p class="mb-2">We collect a few key metrics so your mentor can quickly assess your startup health. Only the highlighted fields are required — you can edit them later.</p>
+      <p class="mb-2">Why we ask: consistent metrics help mentors spot retention, revenue, and runway issues quickly.</p>
+      <p class="mb-2">You can always update missed months from this page later.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.onboarding-accordion { transition: max-height 220ms ease, opacity 180ms ease; }
+.onboarding-accordion.hidden { max-height: 0; opacity: 0; overflow: hidden; }
+.onboarding-accordion:not(.hidden) { max-height: 400px; opacity: 1; }
+.badge-animate { transform: translateY(-4px); transition: transform 220ms ease, opacity 220ms ease; }
+</style>
+
 <script type="module">
 // Stimulus controller will be added in app/javascript/controllers/onboarding_controller.js
 </script>

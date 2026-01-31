@@ -5,3 +5,20 @@
     <a href="/users/sign_up" class="ml-4 btn btn-sm btn-primary">Sign Up</a>
   </div>
 <% end %>
+
+<% if flash[:notice] %>
+  <div class="toast fixed left-1/2 top-16 z-50 transform -translate-x-1/2">
+    <div class="alert alert-success shadow-lg max-w-md rounded-2xl">
+      <div>
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
+        <div>
+          <h3 class="font-semibold">Update submitted successfully</h3>
+          <div class="text-sm"><%= flash[:notice] %></div>
+        </div>
+      </div>
+      <div class="justify-end">
+        <a href="<%= founder_path %>" class="btn btn-sm btn-ghost">View dashboard</a>
+      </div>
+    </div>
+  </div>
+<% end %>

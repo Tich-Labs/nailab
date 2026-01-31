@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_30_054226) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -300,13 +300,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_054226) do
     t.string "funding_stage"
     t.decimal "funds_raised", precision: 10, scale: 2
     t.string "investors_engaged"
+    t.boolean "is_projection", default: false, null: false
     t.decimal "mrr"
     t.integer "new_paying_customers"
     t.date "period"
     t.text "product_progress"
+    t.integer "projection_index"
     t.bigint "startup_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["startup_id", "is_projection", "projection_index"], name: "index_monthly_metrics_on_projection"
     t.index ["startup_id"], name: "index_monthly_metrics_on_startup_id"
     t.index ["user_id"], name: "index_monthly_metrics_on_user_id"
   end
@@ -422,6 +425,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_054226) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "projection_audits", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "field"
+    t.text "new_value"
+    t.text "old_value"
+    t.date "period"
+    t.string "reason"
+    t.bigint "startup_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["startup_id"], name: "index_projection_audits_on_startup_id"
+    t.index ["user_id"], name: "index_projection_audits_on_user_id"
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "resource_id", null: false
@@ -448,6 +465,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_054226) do
     t.index ["active"], name: "index_resources_on_active"
     t.index ["published_at"], name: "index_resources_on_published_at"
     t.index ["slug"], name: "index_resources_on_slug", unique: true
+  end
+
+  create_table "scenario_presets", force: :cascade do |t|
+    t.decimal "burn_change_pct", precision: 5, scale: 2, default: "0.0"
+    t.decimal "churn_pct", precision: 5, scale: 2, default: "2.0"
+    t.datetime "created_at", null: false
+    t.decimal "growth_pct", precision: 5, scale: 2, default: "8.0"
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_scenario_presets_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|

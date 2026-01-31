@@ -7,6 +7,7 @@ import InviteModalController from "./invite_modal_controller"
 import ModalController from "./modal_controller"
 import MobileMenuController from "./mobile_menu_controller"
 import BookmarkButtonController from "./bookmark_button_controller"
+import DashboardController from "./dashboard_controller"
 
 application.register("notifications", NotificationsController)
 application.register("ajax-flash", AjaxFlashController)
@@ -16,6 +17,7 @@ application.register("invite-modal", InviteModalController)
 application.register("modal", ModalController)
 application.register("mobile-menu", MobileMenuController)
 application.register("bookmark-button", BookmarkButtonController)
+application.register("dashboard", DashboardController)
 
 // All controllers are auto-registered via pin_all_from
 // No manual registration needed

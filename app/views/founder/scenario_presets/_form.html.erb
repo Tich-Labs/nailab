@@ -1,0 +1,25 @@
+<div class="card bg-base-100 shadow">
+  <div class="card-body">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <%= form.label :name, class: 'label' %>
+        <%= form.text_field :name, class: 'input input-bordered w-full', required: true %>
+      </div>
+      <div>
+        <%= form.label :growth_pct, "Monthly growth %", class: 'label' %>
+        <%= form.number_field :growth_pct, step: 0.1, class: 'input input-bordered w-full' %>
+      </div>
+      <div>
+        <%= form.label :churn_pct, "Monthly churn %", class: 'label' %>
+        <%= form.number_field :churn_pct, step: 0.1, class: 'input input-bordered w-full' %>
+      </div>
+      <div>
+        <%= form.label :burn_change_pct, "Monthly burn change %", class: 'label' %>
+        <%= form.number_field :burn_change_pct, step: 0.1, class: 'input input-bordered w-full' %>
+      </div>
+    </div>
+    <div class="mt-4 flex justify-end">
+      <%= form.submit class: 'btn btn-primary' %>
+    </div>
+  </div>
+</div>

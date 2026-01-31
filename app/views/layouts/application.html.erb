@@ -9,6 +9,13 @@
     <%= csp_meta_tag %>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chartkick@4.1.1/dist/chartkick.min.js"></script>
+    <script>
+      // Wait for Chartkick to load and initialize
+      if (window.Chartkick) {
+        window.dispatchEvent(new Event('chartkick:load'));
+      }
+    </script>
     <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>

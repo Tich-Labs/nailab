@@ -1,0 +1,6 @@
+<div class="max-w-2xl mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-4">New Preset</h1>
+  <%= form_with model: @preset, url: founder_scenario_presets_path, local: true do |form| %>
+    <%= render 'form', form: form %>
+  <% end %>
+</div>

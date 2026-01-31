@@ -10,7 +10,9 @@
   },
   "scripts": {
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify",
-    "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --watch"
+    "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --watch",
+    "screenshots": "node scripts/screenshots.js",
+    "playwright:install": "npx playwright install chromium"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",

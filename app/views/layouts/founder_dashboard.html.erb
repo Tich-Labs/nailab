@@ -7,6 +7,31 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartkick@4.1.1/dist/chartkick.min.js"></script>
+    <script>
+      (function() {
+        var initChartkick = function() {
+          try {
+            if (window.Chart && window.Chartkick) {
+              if (typeof Chartkick.use === 'function') {
+                Chartkick.use(window.Chart);
+              }
+              window.dispatchEvent(new Event('chartkick:load'));
+              return true;
+            }
+          } catch (e) {
+            console.error('Chartkick init error', e);
+          }
+          return false;
+        };
+
+        if (!initChartkick()) {
+          window.addEventListener('load', function() { initChartkick(); });
+        }
+      })();
+    </script>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-50 text-gray-900" data-theme="nailab_founder">

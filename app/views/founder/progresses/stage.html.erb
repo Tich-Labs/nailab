@@ -1,0 +1,26 @@
+<div class="max-w-xl mx-auto py-12">
+  <div class="card bg-base-100 shadow-lg">
+    <div class="card-body">
+      <h2 class="card-title">Tell us about your startup</h2>
+      <p class="text-sm text-base-content/70">This helps Nailab choose the right onboarding flow. You can change this later.</p>
+      <%= form_with url: stage_founder_progress_path, method: :post, local: true do |f| %>
+        <div class="mt-4">
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <input type="radio" name="mode" value="projection" class="radio radio-primary" />
+              <span class="label-text ml-2">Pre-launch / Zero-Start (projections)</span>
+            </label>
+            <label class="label cursor-pointer">
+              <input type="radio" name="mode" value="historical" class="radio radio-secondary" checked />
+              <span class="label-text ml-2">Generating revenue / In-business (historical)</span>
+            </label>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+          <a href="<%= onboarding_founder_progress_path %>" class="btn btn-ghost">Skip</a>
+          <%= f.submit "Continue", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

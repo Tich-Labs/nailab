@@ -4,6 +4,20 @@
     <h1 class="text-4xl lg:text-5xl font-bold text-nailab-purple mb-4">Progress Tracker</h1>
     <p class="text-xl text-base-content/60">Monitor your startup's milestones and key metrics</p>
   </div>
+  <% unless current_user.monthly_metrics.where(is_projection: [nil, false]).exists? %>
+    <div class="mx-auto max-w-4xl bg-nailab-teal/10 border border-nailab-teal/20 rounded-lg p-6 mb-6 text-center">
+      <h2 class="text-2xl font-semibold text-nailab-purple mb-2">Welcome to Nailab!</h2>
+      <p class="text-base text-base-content/70 mb-4">Please provide a baseline (previous month) and metrics for the last 3 months. Baseline is optional and improves delta calculations.</p>
+      <%= link_to 'Provide Metrics', onboarding_founder_progress_path, class: 'btn btn-md bg-nailab-purple text-white border-nailab-purple hover:bg-nailab-purple/90' %>
+    </div>
+  <% end %>
+          <div class="mb-4">
+            <%= form_with url: founder_progress_path, method: :get, local: true, class: "flex flex-wrap gap-2 items-center" do |f| %>
+              <%= f.label :year, "Year", class: "mr-2 font-semibold" %>
+              <%= f.select :year, options_for_select(@available_years.map { |y| [y, y] }, @selected_year), {}, class: "select select-bordered select-sm mr-4" %>
+              <%= f.submit "Filter", class: "btn btn-sm bg-nailab-purple text-white border-nailab-purple hover:bg-nailab-purple/90" %>
+            <% end %>
+          </div>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Milestones -->
     <!-- <div class="card bg-base-100 shadow-lg overflow-hidden">
@@ -57,53 +71,150 @@
           <div class="bg-nailab-teal px-8 py-6">
             <div class="flex justify-between items-center">
               <h2 class="text-2xl font-bold text-white">Startup Monthly Updates</h2>
-              <%= link_to 'Submit Update', new_founder_startup_update_path, class: 'inline-flex items-center px-4 py-2 border-2 border-nailab-teal text-nailab-purple bg-white rounded-md font-semibold hover:bg-gray-50 transition-colors' %>
+              <%= link_to 'Add Monthly Metrics', onboarding_founder_progress_path, class: 'btn btn-sm bg-nailab-purple text-white border-nailab-purple hover:bg-nailab-purple/90' %>
             </div>
           </div>
       <div class="p-8">
-        <% if @startup_updates.any? %>
-          <!-- KPI Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <% latest = @startup_updates.first %>
-            <div class="card bg-base-200 p-4">
-              <div class="text-sm text-base-content/60 mb-1">MRR</div>
-              <div class="text-2xl font-bold text-nailab-purple">$<%= number_with_delimiter(latest.mrr) %></div>
+        <% if @monthly_metrics.any? %>
+          <!-- KPI Cards + Charts (MVP) -->
+          <% latest_actual = @monthly_metrics.where(is_projection: [nil, false]).order(period: :desc).first %>
+          <% prev_actual = @monthly_metrics.where(is_projection: [nil, false]).order(period: :desc).offset(1).first %>
+
+          <div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div class="card bg-base-200 p-4">
+                <div class="text-sm text-base-content/60 mb-1">MRR</div>
+                <div class="text-2xl font-bold text-nailab-purple">$<%= number_with_delimiter((latest_actual&.mrr || 0).to_i) %></div>
+                <div class="text-sm text-base-content/50 mt-1"><% if prev_actual %>↗ <%= number_to_percentage(((latest_actual.mrr - prev_actual.mrr) / [prev_actual.mrr, 1].max.to_f) * 100, precision: 0) %> MoM<% end %></div>
+              </div>
+              <div class="card bg-base-200 p-4">
+                <div class="text-sm text-base-content/60 mb-1">Total Customers</div>
+                <div class="text-2xl font-bold text-secondary"><%= number_with_delimiter(latest_actual&.customers || 0) %></div>
+                <div class="text-sm text-base-content/50 mt-1"><% if prev_actual %>∆ <%= number_to_percentage(((latest_actual.customers.to_f - prev_actual.customers.to_f) / [prev_actual.customers, 1].max.to_f) * 100, precision: 0) %><% end %></div>
+              </div>
+              <div class="card bg-base-200 p-4">
+                <div class="text-sm text-base-content/60 mb-1">Runway</div>
+                <div class="text-2xl font-bold text-accent"><%= latest_actual&.runway || '-' %> mo</div>
+                <div class="text-sm text-base-content/50 mt-1">Burn: $<%= number_with_delimiter(latest_actual&.burn_rate || 0) %></div>
+              </div>
             </div>
-            <div class="card bg-base-200 p-4">
-              <div class="text-sm text-base-content/60 mb-1">Burn Rate</div>
-              <div class="text-2xl font-bold text-secondary">$<%= number_with_delimiter(latest.burn_rate) %></div>
+
+            <!-- Charts (enhanced with Chartkick + Chart.js options) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div class="card bg-base-200 shadow-xl p-4">
+                <h3 class="text-lg font-semibold mb-2">MRR Trend</h3>
+                <%= area_chart @mrr_data,
+                  height: "240px",
+                  library: {
+                    elements: { line: { tension: 0.35, borderWidth: 3 }, point: { radius: 3 } },
+                    scales: { y: { beginAtZero: true } },
+                    plugins: {
+                      tooltip: { mode: 'index', intersect: false }
+                    },
+                    datasets: [
+                      { backgroundColor: "rgba(99,102,241,0.18)", borderColor: "#6366f1", fill: true },
+                      { borderDash: [6,4], borderColor: "#9ca3af", backgroundColor: "rgba(156,163,175,0.08)" }
+                    ]
+                  },
+                  colors: ["#6366f1"]
+                %>
+              </div>
+
+              <div class="card bg-base-200 shadow-xl">
+                  <div class="card-body">
+                    <h3 class="card-title">Customer Growth</h3>
+
+                    <%= column_chart [
+                      { name: "New Customers", data: @new_customers_data },
+                      { name: "Churned Customers", data: @churn_data.map { |k, v| [k, -v] } }
+                    ],
+                      stacked: true,
+                      height: "320px",
+                      library: {
+                        plugins: { tooltip: { mode: 'index', intersect: false } },
+                        scales: {
+                          x: { stacked: true },
+                          y: {
+                            stacked: true,
+                            beginAtZero: false,
+                            grid: { color: "rgba(0,0,0,0.05)" },
+                            ticks: { stepSize: 5 }
+                          }
+                        },
+                        datasets: [
+                          { backgroundColor: "#10b981" },
+                          { backgroundColor: "#ef4444" }
+                        ],
+                        animation: { duration: 800 }
+                      }
+                    %>
+
+                    <% if @latest_total.present? %>
+                      <div class="mt-4 pt-4 border-t border-base-300">
+                        <div class="stat place-items-center">
+                          <div class="stat-title">Current Total Customers</div>
+                          <div class="stat-value text-primary"><%= number_with_delimiter(@latest_total) %></div>
+                          <div class="stat-desc">as of <%= @latest_period.strftime("%b %Y") %></div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              </div>
             </div>
-            <div class="card bg-base-200 p-4">
-              <div class="text-sm text-base-content/60 mb-1">Runway</div>
-              <div class="text-2xl font-bold text-accent"><%= latest.runway || '-' %> mo</div>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-4 p-8">
+              <div class="card bg-base-200 shadow-xl p-4">
+                <h3 class="text-lg font-semibold mb-2">Runway</h3>
+                <%= column_chart @runway_data,
+                  height: "160px",
+                  library: {
+                    scales: { y: { suggestedMin: -6 } },
+                    plugins: {
+                      tooltip: { mode: 'nearest', intersect: true },
+                      annotation: { annotations: {
+                        safe: { type: "line", yMin: 12, yMax: 12, borderColor: "#10b981", borderWidth: 2, label: { content: "Safe (>12)" } },
+                        caution: { type: "line", yMin: 6, yMax: 6, borderColor: "#fbbf24", borderWidth: 2, label: { content: "Caution" } }
+                      } }
+                    },
+                    datasets: [
+                      { backgroundColor: @runway_colors }
+                    ]
+                  }
+                %>
+              </div>
             </div>
+          <!-- Updates Table (monthly_metrics) -->
+          <div class="mx-auto max-w-4xl text-center border border-base-300 bg-nailab-teal/10 rounded-lg px-4 py-3 text-sm text-base-content/60 mb-4 mt-4 shadow-sm">
+            Cash = cash at hand (end of month). Calculated as previous cash + MRR - burn rate for projections; actual rows reflect reported cash.
           </div>
-          <!-- Updates Table -->
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto mt-8 bg-danger/10 rounded-lg p-4">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
                   <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">MRR</th>
-                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">New Customers</th>
+                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Customers</th>
+                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">New</th>
                   <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Churned</th>
-                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Cash</th>
+                      <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><span title="Cash at hand (end of month). For projections: previous cash + MRR - burn rate">Cash</span></th>
                   <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Burn Rate</th>
                   <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Runway</th>
+                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <% @startup_updates.each do |update| %>
+                <% @monthly_metrics.order(period: :desc).each do |m| %>
                   <tr class="odd:bg-white even:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= Date::MONTHNAMES[update.report_month] %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= update.report_year %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(update.mrr) %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= number_with_delimiter(update.new_paying_customers) %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= number_with_delimiter(update.churned_customers) %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(update.cash_at_hand) %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(update.burn_rate) %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= update.runway || '-' %> mo</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= m.period.strftime('%b %Y') %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(m.mrr || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= number_with_delimiter(m.customers || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= number_with_delimiter(m.new_paying_customers || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= number_with_delimiter(m.churned_customers || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(m.cash_at_hand || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(m.burn_rate || 0) %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><%= m.runway || '-' %> mo</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500"><span class="badge <%= m.is_projection ? 'badge-ghost' : 'badge-success' %>"><%= m.is_projection ? 'Projection' : 'Actual' %></span></td>
                   </tr>
                 <% end %>
               </tbody>
@@ -124,9 +235,8 @@
               </div>
               <h3 class="text-lg font-semibold text-base-content mb-2">No updates yet</h3>
               <p class="text-base-content/70 mb-6">To unlock mentorship and track your progress, please share your startup metrics for the last 3 months.</p>
-              <%= link_to 'Start 3-Month Onboarding', onboarding_founder_progress_index_path, class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
+              <%= link_to 'Start 3-Month Onboarding', onboarding_founder_progress_path, class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
             </div>
-            <%= link_to 'Submit Update', new_founder_startup_update_path, class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white rounded-lg font-semibold hover:bg-gray-50 transition-colors' %>
           </div>
         <% end %>
       </div>
