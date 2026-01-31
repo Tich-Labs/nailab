@@ -7,7 +7,7 @@
   data-bookmark-button-signed-in-value="<%= user_signed_in? %>"
   data-action="click->bookmark-button#bookmark"
   data-bookmark-button-target="button"
-  class="ml-2 btn btn-xs <%= is_bookmarked ? 'bg-gray-400 cursor-default' : 'bg-nailab-purple' %> text-white border-nailab-purple hover:bg-nailab-purple/90"
+  class="ml-2 btn btn-sm <%= is_bookmarked ? 'bg-gray-400 cursor-default' : 'bg-nailab-purple' %> text-white border-nailab-purple hover:bg-nailab-purple/90"
   <%= 'disabled' if is_bookmarked %>
 >
   <%= is_bookmarked ? 'Bookmarked' : 'Bookmark' %>
