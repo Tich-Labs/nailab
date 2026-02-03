@@ -8,7 +8,16 @@ class ProgressService
   end
 
   def get_monthly_metrics
-    @user.monthly_metrics.order(period: :asc)
+    # Include metrics from both the user and their primary startup
+    user_metrics = @user.monthly_metrics.order(period: :asc)
+    startup_metrics = @user.startup&.monthly_metrics&.order(period: :asc) || []
+    
+    # Combine and deduplicate by period, preferring startup metrics
+    combined = {}
+    user_metrics.each { |m| combined[m.period] = m }
+    startup_metrics.each { |m| combined[m.period] = m }
+    
+    combined.values.sort_by(&:period)
   end
 
   def get_available_years
