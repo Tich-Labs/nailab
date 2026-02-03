@@ -11,12 +11,12 @@ class ProgressService
     # Include metrics from both the user and their primary startup
     user_metrics = @user.monthly_metrics.order(period: :asc)
     startup_metrics = @user.startup&.monthly_metrics&.order(period: :asc) || []
-    
+
     # Combine and deduplicate by period, preferring startup metrics
     combined = {}
     user_metrics.each { |m| combined[m.period] = m }
     startup_metrics.each { |m| combined[m.period] = m }
-    
+
     combined.values.sort_by(&:period)
   end
 
@@ -39,7 +39,6 @@ class ProgressService
     return [] if metrics.empty?
 
     @metrics_for_charts = metrics
-      .order(:period)
       .group_by { |m| m.period.beginning_of_month }
       .map do |month, group|
         {
