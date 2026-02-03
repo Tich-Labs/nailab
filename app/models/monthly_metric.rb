@@ -11,7 +11,7 @@ class MonthlyMetric < ApplicationRecord
   alias_attribute :revenue, :mrr
   alias_attribute :users, :customers
   alias_attribute :notes, :product_progress
-  alias_attribute :churn_rate, :churned_customers
+  alias_attribute :churn_rate, :churned_customers if column_names.include?("churned_customers")
 
   # Funding stage options (human-friendly strings stored in DB)
   FUNDING_STAGES = [
