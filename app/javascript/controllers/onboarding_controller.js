@@ -313,6 +313,19 @@ export default class extends Controller {
       }
       const runwayEl = step.querySelector(`[data-onboarding-target='runway${idx}']`)
       if (runwayEl) runwayEl.textContent = runway
+
+      // Update projected total customers for the visible step
+      try {
+        const baseEl = document.getElementById('onboarding-current-customers')
+        if (baseEl && !step.classList.contains('hidden')) {
+          const baseRaw = baseEl.dataset.baseCustomers || baseEl.textContent || '0'
+          const base = parseInt(String(baseRaw).replace(/[^0-9\-]/g, '')) || 0
+          const projected = base + (isNaN(newCustomers) ? 0 : newCustomers) - (isNaN(churned) ? 0 : churned)
+          baseEl.textContent = projected.toLocaleString()
+        }
+      } catch (e) {
+        // ignore errors updating projected total
+      }
     })
   }
 }

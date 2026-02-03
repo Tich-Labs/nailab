@@ -4,6 +4,7 @@
     <!-- avatar removed for cleaner onboarding layout -->
     <h1 class="text-4xl font-bold text-nailab-purple mb-2">Current Status & Monthly Update</h1>
     <p class="text-base text-base-content/70 mb-2">This update helps your mentor quickly understand your startup's health and where support is needed. You can update missed months later.</p>
+      <!-- Projected total customers display moved to dashboard; removed here to simplify onboarding -->
   </div>
 
   <div class="md:flex md:items-start md:gap-20" data-controller="onboarding">
@@ -75,6 +76,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="mt-6">
+        <%= link_to 'Back to Dashboard', founder_progress_path, class: 'btn btn-outline w-full' %>
       </div>
     </aside>
     <main class="md:w-1/2 md:pl-12 md:border-l md:border-base-200">

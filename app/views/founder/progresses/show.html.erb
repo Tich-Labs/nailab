@@ -77,8 +77,8 @@
       <div class="p-8">
         <% if @monthly_metrics.any? %>
           <!-- KPI Cards + Charts (MVP) -->
-          <% latest_actual = @monthly_metrics.select { |m| !m.is_projection? }.max_by(&:period) %>
-          <% prev_actual = @monthly_metrics.select { |m| !m.is_projection? }.sort_by(&:period).reverse[1] %>
+          <% latest_actual = @latest_actual_db || @monthly_metrics.select { |m| !m.is_projection? }.max_by(&:period) %>
+          <% prev_actual = @prev_actual_db || @monthly_metrics.select { |m| !m.is_projection? }.sort_by(&:period).reverse[1] %>
 
           <div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -90,7 +90,12 @@
               <div class="card bg-base-200 p-4">
                 <div class="text-sm text-base-content/60 mb-1">Total Customers</div>
                 <div class="text-2xl font-bold text-secondary"><%= number_with_delimiter(latest_actual&.customers || 0) %></div>
-                <div class="text-sm text-base-content/50 mt-1"><% if prev_actual %>∆ <%= number_to_percentage(((latest_actual.customers.to_f - prev_actual.customers.to_f) / [prev_actual.customers, 1].max.to_f) * 100, precision: 0) %><% end %></div>
+                <div class="text-sm text-base-content/50 mt-1">
+                  <% if prev_actual %>
+                    <% denom = [prev_actual.customers.to_f, 1.0].max %>
+                    ∆ <%= number_to_percentage(((latest_actual.customers.to_f - prev_actual.customers.to_f) / denom) * 100, precision: 0) %>
+                  <% end %>
+                </div>
               </div>
               <div class="card bg-base-200 p-4">
                 <div class="text-sm text-base-content/60 mb-1">Runway</div>

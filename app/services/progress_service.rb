@@ -38,19 +38,44 @@ class ProgressService
   def prepare_chart_data(metrics)
     return [] if metrics.empty?
 
-    @metrics_for_charts = metrics
-      .group_by { |m| m.period.beginning_of_month }
-      .map do |month, group|
-        {
-          period: month.strftime("%b %Y"),
-          period_date: month.to_date,
-          mrr: group.map(&:mrr).compact.sum.round(2),
-          customers: group.map(&:customers).compact.max || 0,
-          runway: group.map(&:runway).compact.first || 0,
-          new: group.map(&:new_paying_customers).compact.sum || 0,
-          churn: group.map(&:churned_customers).compact.sum || 0
-        }
+    # Normalize to one entry per month (ascending) and compute cumulative customers when absent.
+    grouped = metrics.group_by { |m| m.period.beginning_of_month }
+    months = grouped.keys.sort
+
+    result = []
+    prev_customers = nil
+
+    months.each do |month|
+      group = grouped[month]
+      month_date = month.to_date
+      mrr = group.map(&:mrr).compact.sum.round(2)
+      new_count = group.map(&:new_paying_customers).compact.sum || 0
+      churn_count = group.map(&:churned_customers).compact.sum || 0
+      runway_val = group.map(&:runway).compact.first || 0
+
+      # Prefer an explicitly provided customers value when present; otherwise derive from previous
+      explicit_customers = group.map(&:customers).compact.max
+      customers = if explicit_customers && explicit_customers > 0
+        explicit_customers
+      else
+        base = prev_customers || 0
+        [ base + new_count.to_i - churn_count.to_i, 0 ].max
       end
+
+      prev_customers = customers
+
+      result << {
+        period: month.strftime("%b %Y"),
+        period_date: month_date,
+        mrr: mrr,
+        customers: customers,
+        runway: runway_val,
+        new: new_count,
+        churn: churn_count
+      }
+    end
+
+    @metrics_for_charts = result
   end
 
   def format_chart_labels(metrics_data)
