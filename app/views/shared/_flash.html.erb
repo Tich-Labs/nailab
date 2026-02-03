@@ -1,24 +1,23 @@
 <% if flash[:alert] %>
-  <div class="alert alert-warning fixed left-1/2 top-16 z-50 shadow-lg flex items-center gap-3 animate-fade-in w-full max-w-md rounded-2xl border border-warning/30" style="width: 380px; transform: translateX(-50%);">
-    <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/></svg>
+  <div class="alert alert-warning fixed left-1/2 top-16 z-50 shadow-lg flex items-center gap-3 animate-fade-in max-w-lg rounded-2xl border border-warning/30" style="transform: translateX(-50%);">
+    <svg class="w-6 h-6 text-warning flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/></svg>
     <span class="font-semibold"><%= flash[:alert] %></span>
-    <a href="/users/sign_up" class="ml-4 btn btn-sm bg-nailab-purple text-white">Sign Up</a>
+    <a href="/users/sign_up" class="ml-4 btn btn-sm bg-nailab-purple text-white flex-shrink-0">Sign Up</a>
   </div>
 <% end %>
 
 <% if flash[:notice] %>
   <div class="toast fixed left-1/2 top-16 z-50 transform -translate-x-1/2">
-    <div class="alert alert-success shadow-lg max-w-md rounded-2xl">
-      <div>
-        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
-        <div>
-          <h3 class="font-semibold">Update submitted successfully</h3>
-          <div class="text-sm"><%= flash[:notice] %></div>
+    <div class="alert alert-success shadow-lg max-w-lg rounded-2xl">
+      <div class="flex items-start gap-2">
+        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
+        <div class="text-sm break-words leading-tight max-w-[20rem]"><%= flash[:notice] %></div>
+      </div>
+      <% if user_signed_in? %>
+        <div class="justify-end">
+          <a href="<%= founder_root_path %>" class="btn btn-sm btn-ghost">View dashboard</a>
         </div>
-      </div>
-      <div class="justify-end">
-        <a href="<%= founder_root_path %>" class="btn btn-sm btn-ghost">View dashboard</a>
-      </div>
+      <% end %>
     </div>
   </div>
 <% end %>
