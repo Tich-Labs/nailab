@@ -8,21 +8,34 @@ module Founder
     end
 
     def create
-      @invite = @startup.startup_invites.build(invite_params.merge(inviter: current_user))
+      # Normalize role param to one of the allowed enum keys to avoid ArgumentError
+      raw_role = params.dig(:startup_invite, :role).to_s.downcase.strip
+      role = StartupInvite.roles.key?(raw_role) ? raw_role : 'member'
+
+      @invite = @startup.startup_invites.build(invite_params.merge(inviter: current_user, role: role))
 
       if @invite.save
         InviteMailer.invite_email(@invite.id).deliver_later
         @invite.mark_sent!
-        render json: { success: true, id: @invite.id }, status: :created
+        respond_to do |format|
+          format.html { redirect_to founder_startup_profile_path, notice: "Invitation sent." }
+          format.json { render json: { success: true, id: @invite.id }, status: :created }
+        end
       else
-        render json: { success: false, errors: @invite.errors.full_messages }, status: :unprocessable_entity
+        respond_to do |format|
+          format.html do
+            flash.now[:alert] = @invite.errors.full_messages.join(", ")
+            render :new, status: :unprocessable_entity
+          end
+          format.json { render json: { success: false, errors: @invite.errors.full_messages }, status: :unprocessable_entity }
+        end
       end
     end
 
     private
 
     def set_startup
-      startup_id = params[:startup_id] || params.dig(:startup, :id) || params[:id]
+      startup_id = params[:startup_id] || params.dig(:startup, :id) || params[:id] || params.dig(:startup_invite, :startup_id)
 
       if startup_id.present?
         @startup = current_user.startups.find(startup_id)

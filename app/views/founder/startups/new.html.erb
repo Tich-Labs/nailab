@@ -2,51 +2,77 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="mb-8 bg-nailab-teal text-white px-8 py-6 rounded-t-xl">
     <h1 class="text-4xl lg:text-5xl font-bold text-white mb-2">Add an Additional Startup</h1>
-    <p class="text-lg text-white/80">Add details about your new startup to manage it on Nailab.</p>
+    <p class="text-lg text-white/80">Add details about your new startup to manage it on Nailab. You'll automatically be added as the owner.</p>
   </div>
   <div class="bg-base-100 rounded-xl shadow-lg p-8 lg:p-12">
     <%= form_with model: @startup, url: founder_startups_path, local: true, html: { multipart: true, class: 'space-y-8' } do |f| %>
+      <% if @startup.errors.any? %>
+        <div class="alert alert-error shadow-lg mb-6">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l-2-2m0 0l-2-2m2 2l2-2m-2 2l-2 2m2-2l2 2m-2-2l-2-2m2 2l2 2M9 11l2 2m0 0l2 2"></path></svg>
+            <span><strong>Please fix the following errors:</strong></span>
+          </div>
+          <ul class="ml-6 list-disc">
+            <% @startup.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="space-y-6">
           <div>
-            <%= f.label :name, 'Startup name', class: 'block text-lg font-semibold text-primary mb-2' %>
-            <%= f.text_field :name, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            <%= f.label :name, 'Startup name *', class: 'block text-lg font-semibold text-primary mb-2' %>
+            <%= f.text_field :name, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', placeholder: 'Enter your startup name', required: true %>
           </div>
           <div>
-            <%= f.label :description, class: 'block text-lg font-semibold text-primary mb-2' %>
-            <%= f.text_area :description, rows: 4, class: 'textarea textarea-bordered w-full resize-none bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            <%= f.label :description, 'Description *', class: 'block text-lg font-semibold text-primary mb-2' %>
+            <%= f.text_area :description, rows: 4, class: 'textarea textarea-bordered w-full resize-none bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', placeholder: 'Describe your startup', required: true %>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <%= f.label :stage, 'Stage', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
-              <%= f.text_field :stage, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+              <%= f.label :stage, 'Stage *', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.select :stage, @stage_options, { prompt: 'Select a stage' }, class: 'select select-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', required: true %>
             </div>
             <div>
-              <%= f.label :sector, 'Sector', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
-              <%= f.text_field :sector, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+              <%= f.label :sector, 'Sector *', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.select :sector, @sector_options, { prompt: 'Select a sector' }, class: 'select select-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', required: true %>
             </div>
           </div>
-        </div>
-        <div>
-          <%= f.label :logo, 'Logo (optional)', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
-          <%= f.file_field :logo, accept: 'image/*', class: 'file-input file-input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
         </div>
         <div class="space-y-6">
+          <div>
+            <%= f.label :logo, 'Logo (optional)', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+            <%= f.file_field :logo, accept: 'image/*', class: 'file-input file-input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+            <p class="text-xs text-base-content/60 mt-1">Accepted: JPEG, PNG, WebP. Max 5MB</p>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <%= f.label :website_url, 'Website', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
-              <%= f.url_field :website_url, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+              <%= f.label :website_url, 'Website (optional)', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+              <%= f.url_field :website_url, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', placeholder: 'https://example.com' %>
             </div>
             <div>
               <%= f.label :team_size, 'Team size', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
-              <%= f.number_field :team_size, min: 1, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
+              <%= f.number_field :team_size, min: 1, value: 1, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple' %>
             </div>
+          </div>
+          <div>
+            <%= f.label :location, 'Location (optional)', class: 'block text-sm font-medium text-base-content/70 mb-2' %>
+            <%= f.text_field :location, class: 'input input-bordered w-full bg-white border border-gray-300 rounded p-2 focus:border-nailab-purple focus:ring-2 focus:ring-nailab-purple', placeholder: 'City, Country' %>
           </div>
         </div>
       </div>
-      <div class="mt-6 flex justify-end gap-3">
-        <%= link_to 'Cancel', founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50' %>
-        <%= f.submit 'Add Startup', class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white text-lg font-semibold rounded-xl shadow-lg hover:bg-gray-50 transition-colors' %>
+
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-6">
+        <p class="text-sm text-blue-900">
+          <strong>Note:</strong> You'll automatically be added as the owner of this startup with team size = 1. You can invite team members from your startup profile.
+        </p>
+      </div>
+
+      <div class="mt-8 flex justify-end gap-3">
+        <%= link_to 'Cancel', founder_startup_profile_path, class: 'inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors' %>
+        <%= f.submit 'Create Startup', class: 'inline-flex items-center px-6 py-3 border-2 border-nailab-teal text-nailab-purple bg-white text-lg font-semibold rounded-xl shadow-lg hover:bg-gray-50 transition-colors' %>
       </div>
     <% end %>
   </div>

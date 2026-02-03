@@ -1,72 +1,36 @@
 class Founder::ProgressesController < Founder::BaseController
   def show
-    @milestones = current_user.milestones
-    @monthly_metrics = current_user.monthly_metrics
-    # years available for filtering (include 'All')
-    years = @monthly_metrics.map { |m| m.period.year }.uniq.sort
-    @available_years = ([ "All" ] + years.map(&:to_s)).freeze
+    @service = ProgressService.new(current_user)
+
+    @milestones = @service.get_milestones
+    @monthly_metrics = @service.get_monthly_metrics
+    @available_years = @service.get_available_years
 
     # Determine selected year: prefer explicit param, otherwise default to 'All'
     @selected_year = params[:year].presence || "All"
 
-    # If a numeric year is selected, restrict metrics to that year
-    if @selected_year.present? && @selected_year != "All"
-      selected_year_int = @selected_year.to_i
-      start_date = Date.new(selected_year_int, 1, 1)
-      end_date = start_date.end_of_year
-      @monthly_metrics = @monthly_metrics.where(period: start_date..end_date)
-    end
+    # Filter metrics by year if specified
+    @monthly_metrics = @service.filter_metrics_by_year(@selected_year)
+
     @startup = current_user.startup
-    @startup_updates = @startup&.startup_updates&.order(report_year: :desc, report_month: :desc) || []
+    @startup_updates = @service.get_startup_updates(@startup)
 
-    # Prepare grouped metrics for charts (group by month in memory)
-    if @monthly_metrics.any?
-      @metrics_for_charts = @monthly_metrics
-        .order(:period)
-        .group_by { |m| m.period.beginning_of_month }
-        .map do |month, metrics|
-          {
-            period: month.strftime("%b %Y"),
-            period_date: month.to_date,
-            mrr: metrics.map(&:mrr).compact.sum.round(2),
-            customers: metrics.map(&:customers).compact.max || 0,
-            runway: metrics.map(&:runway).compact.first || 0,
-            new: metrics.map(&:new_paying_customers).compact.sum || 0,
-            churn: metrics.map(&:churned_customers).compact.sum || 0
-          }
-        end
-    else
-      @metrics_for_charts = []
-    end
+    # Prepare grouped metrics for charts
+    @metrics_for_charts = @service.prepare_chart_data(@monthly_metrics)
 
-    # Build chart-ready datasets (use short single-letter month labels; show two-digit year on year changes)
-    labels = []
-    prev_year = nil
-    @metrics_for_charts.each do |m|
-      d = m[:period_date]
-      y = d.year
-      short_month = d.strftime("%b")[0]
-      label = if prev_year != y
-        "#{short_month} '#{y.to_s[-2..-1]}"
-      else
-        short_month
-      end
-      labels << label
-      prev_year = y
-    end
+    # Build chart-ready datasets
+    labels = @service.format_chart_labels(@metrics_for_charts)
+    chart_data = @service.build_chart_datasets(labels, @metrics_for_charts)
 
-    @mrr_data = labels.zip(@metrics_for_charts.map { |m| m[:mrr].to_f })
-    @total_customers_data = labels.zip(@metrics_for_charts.map { |m| m[:customers].to_i })
-    @new_customers_data = labels.zip(@metrics_for_charts.map { |m| m[:new].to_i })
-    @churn_customers_data = labels.zip(@metrics_for_charts.map { |m| m[:churn].to_i })
-    # alias expected by some view examples
-    @churn_data = @churn_customers_data
-    @runway_data = labels.zip(@metrics_for_charts.map { |m| m[:runway].to_f })
-    @runway_colors = @metrics_for_charts.map do |m|
-      v = m[:runway].to_f
-      v > 12 ? "#10b981" : v > 6 ? "#fbbf24" : "#ef4444"
-    end
+    @mrr_data = chart_data[:mrr_data]
+    @total_customers_data = chart_data[:total_customers_data]
+    @new_customers_data = chart_data[:new_customers_data]
+    @churn_customers_data = chart_data[:churn_customers_data]
+    @churn_data = @churn_customers_data # alias expected by some view examples
+    @runway_data = chart_data[:runway_data]
+    @runway_colors = chart_data[:runway_colors]
   end
+
 
   def onboarding
     if request.get?

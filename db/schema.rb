@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_000005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -441,11 +441,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
 
   create_table "ratings", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "rated_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.integer "rating_score"
     t.bigint "resource_id", null: false
     t.integer "score"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["resource_id"], name: "index_ratings_on_resource_id"
+    t.index ["user_id", "resource_id"], name: "index_ratings_on_user_id_and_resource_id", unique: true
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
@@ -457,14 +460,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
     t.string "hero_image_url"
     t.text "inline_image_urls", default: [], array: true
     t.datetime "published_at"
+    t.boolean "requires_subscription", default: false
     t.string "resource_type"
     t.string "slug"
+    t.integer "tier", default: 0
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.string "url"
     t.index ["active"], name: "index_resources_on_active"
     t.index ["published_at"], name: "index_resources_on_published_at"
+    t.index ["requires_subscription"], name: "index_resources_on_requires_subscription"
     t.index ["slug"], name: "index_resources_on_slug", unique: true
+    t.index ["tier"], name: "index_resources_on_tier"
   end
 
   create_table "scenario_presets", force: :cascade do |t|
@@ -516,6 +523,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
     t.decimal "funding_raised", precision: 14, scale: 2
     t.string "funding_stage"
     t.string "location"
+    t.string "logo_content_type"
+    t.integer "logo_file_size"
     t.string "logo_url"
     t.jsonb "mentorship_areas"
     t.string "phone_number"
@@ -565,11 +574,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
     t.string "sector"
     t.string "stage"
     t.string "status"
+    t.boolean "team_initialized", default: false
+    t.integer "team_size", default: 1
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.string "website_url"
     t.index ["active"], name: "index_startups_on_active"
     t.index ["sector"], name: "index_startups_on_sector"
+    t.index ["team_initialized"], name: "index_startups_on_team_initialized"
+    t.index ["team_size"], name: "index_startups_on_team_size"
     t.index ["user_id"], name: "index_startups_on_user_id"
   end
 
@@ -591,8 +604,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
     t.string "payment_method"
     t.string "status"
     t.string "tier"
+    t.integer "trial_days", default: 5
+    t.datetime "trial_started_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["trial_started_at"], name: "index_subscriptions_on_trial_started_at"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -633,6 +649,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
     t.index ["portal"], name: "index_support_tickets_on_portal"
     t.index ["status"], name: "index_support_tickets_on_status"
     t.index ["user_id"], name: "index_support_tickets_on_user_id"
+  end
+
+  create_table "team_members", force: :cascade do |t|
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.boolean "is_founder", default: false
+    t.datetime "joined_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.integer "role", default: 2, null: false
+    t.bigint "startup_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["is_founder"], name: "index_team_members_on_is_founder"
+    t.index ["role"], name: "index_team_members_on_role"
+    t.index ["startup_id", "user_id"], name: "index_team_members_on_startup_id_and_user_id", unique: true
+    t.index ["startup_id"], name: "index_team_members_on_startup_id"
+    t.index ["user_id"], name: "index_team_members_on_user_id"
   end
 
   create_table "testimonials", force: :cascade do |t|
@@ -765,5 +797,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_000002) do
   add_foreign_key "support_messages", "users"
   add_foreign_key "support_ticket_replies", "support_tickets"
   add_foreign_key "support_tickets", "users"
+  add_foreign_key "team_members", "startups"
+  add_foreign_key "team_members", "users"
   add_foreign_key "user_profiles", "users"
 end

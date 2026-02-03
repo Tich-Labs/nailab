@@ -18,7 +18,7 @@
       </div>
       <div>
         <%= f.label :role, 'Role', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.text_field :role, class: 'input input-bordered w-full', placeholder: 'Co-founder, CTO, COO' %>
+        <%= f.select :role, StartupInvite.roles.keys.map { |r| [r.humanize.titleize, r] }, {}, class: 'select select-bordered w-full' %>
       </div>
     </div>
     <div class="mt-6 flex justify-end gap-3">

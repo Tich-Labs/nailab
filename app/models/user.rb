@@ -39,6 +39,8 @@ class User < ApplicationRecord
   has_one :user_profile, dependent: :destroy
   has_one :startup_profile, dependent: :destroy
   has_many :startups, dependent: :destroy
+  has_many :team_members, dependent: :destroy
+  has_many :team_startups, through: :team_members, source: :startup
   has_one :mentor, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :monthly_metrics, dependent: :destroy
@@ -56,6 +58,9 @@ class User < ApplicationRecord
   has_many :identities, dependent: :destroy
   has_many :support_tickets, dependent: :destroy
   has_many :support_ticket_replies, as: :user, dependent: :destroy
+
+  # Callback to initialize subscription on user creation
+  after_create :create_initial_subscription!
 
   public
 
@@ -88,6 +93,42 @@ class User < ApplicationRecord
     role == "admin" || admin == true
   end
 
+  # Subscription & trial helpers
+  def trial_active?
+    subscription&.trial_active? || false
+  end
+
+  def subscription_valid?
+    subscription&.can_access_resources? || false
+  end
+
+  def trial_days_remaining
+    subscription&.days_remaining || 0
+  end
+
+  def premium_resources_accessible?
+    subscription&.can_access_resources? || false
+  end
+
+  def create_initial_subscription!
+    return if subscription.present?
+    Subscription.create!(user: self, status: :trial, trial_started_at: Time.current, trial_days: 5)
+  rescue => e
+    Rails.logger.error("Failed to create initial subscription for user #{id}: #{e.message}")
+  end
+
+  # Counts how many startups the user has created (founder count)
+  def founder_startup_count
+    startups.count
+  end
+
+  # Team size for the user's primary startup (includes the founder themselves).
+  # Returns 0 if the user has no startups, otherwise at least 1.
+  def primary_startup_team_size
+    s = startup
+    return 0 unless s
+    s.team_size
+  end
   # Check if user has any elevated privileges
   def privileged?
     admin? || mentor?
