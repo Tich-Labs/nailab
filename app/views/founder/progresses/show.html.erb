@@ -77,8 +77,8 @@
       <div class="p-8">
         <% if @monthly_metrics.any? %>
           <!-- KPI Cards + Charts (MVP) -->
-          <% latest_actual = @monthly_metrics.where(is_projection: [nil, false]).order(period: :desc).first %>
-          <% prev_actual = @monthly_metrics.where(is_projection: [nil, false]).order(period: :desc).offset(1).first %>
+          <% latest_actual = @monthly_metrics.select { |m| !m.is_projection? }.max_by(&:period) %>
+          <% prev_actual = @monthly_metrics.select { |m| !m.is_projection? }.sort_by(&:period).reverse[1] %>
 
           <div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
