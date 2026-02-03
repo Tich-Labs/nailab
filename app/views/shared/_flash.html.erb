@@ -7,11 +7,11 @@
 <% end %>
 
 <% if flash[:notice] %>
-  <div class="toast fixed left-1/2 top-16 z-50 transform -translate-x-1/2">
-    <div class="alert alert-success shadow-lg max-w-lg rounded-2xl">
-      <div class="flex items-start gap-2">
-        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
-        <div class="text-sm break-words leading-tight max-w-[20rem]"><%= flash[:notice] %></div>
+  <div class="toast fixed left-1/2 top-16 z-50 transform -translate-x-1/2 w-full px-4 sm:px-0">
+    <div class="alert alert-success shadow-lg rounded-2xl max-w-xl mx-auto">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+        <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
+        <div class="text-sm leading-tight max-w-[26rem] whitespace-normal break-words"><%= flash[:notice] %></div>
       </div>
       <% if user_signed_in? %>
         <div class="justify-end">

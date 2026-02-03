@@ -129,13 +129,20 @@ class Rack::Attack
 end
 
 # Cache mechanism for Rack::Attack (important for performance)
-# Use Redis in production when available (supports `increment`),
-# otherwise fall back to an in-memory store which also supports `increment`.
+# Prefer Redis when a URL is provided, otherwise reuse whatever cache store Rails is already
+# configured to use so we don't log a warning every deployment.
 unless Rails.env.test?
-  if ENV["REDIS_URL"].present?
-    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: ENV["REDIS_URL"])
+  cache_store = if ENV["REDIS_URL"].present?
+    ActiveSupport::Cache::RedisCacheStore.new(url: ENV["REDIS_URL"])
   else
-    Rails.logger.warn "Rack::Attack: REDIS_URL not set; using MemoryStore for rate limiting"
-    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+    Rails.logger.debug "Rack::Attack: REDIS_URL not set; using Rails.cache (#{Rails.cache.class}) for rate limiting"
+    Rails.cache
   end
+
+  unless cache_store.respond_to?(:increment)
+    Rails.logger.warn "Rack::Attack: selected cache store (#{cache_store.class}) does not support increment; falling back to MemoryStore"
+    cache_store = ActiveSupport::Cache::MemoryStore.new
+  end
+
+  Rack::Attack.cache.store = cache_store
 end
