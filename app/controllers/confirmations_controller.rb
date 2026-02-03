@@ -11,8 +11,8 @@ class ConfirmationsController < Devise::ConfirmationsController
       self.resource = resource_class.send_confirmation_instructions(resource_params)
     rescue StandardError => e
       Rails.logger.error("Confirmations#create: failed to send confirmation instructions: #{e.class}: #{e.message}")
-      # Build a resource with the submitted params so the form can re-render
-      self.resource = resource_class.new(resource_params)
+      # Build a resource with just the email so the form can re-render
+      self.resource = resource_class.new(email: params.dig(:user, :email))
       flash.now[:alert] = "We're experiencing technical difficulties with email delivery. Please try again in a few minutes, or contact support if the issue persists."
       render :new, status: :unprocessable_entity and return
     end

@@ -6,8 +6,8 @@ class PasswordsController < Devise::PasswordsController
       self.resource = resource_class.send_reset_password_instructions(resource_params)
     rescue StandardError => e
       Rails.logger.error("Passwords#create: failed to send reset instructions: #{e.class}: #{e.message}")
-      # Build a resource with the submitted params so the form can re-render
-      self.resource = resource_class.new(resource_params)
+      # Build a resource with just the email so the form can re-render
+      self.resource = resource_class.new(email: params.dig(:user, :email))
       flash.now[:alert] = "We're experiencing technical difficulties with email delivery. Please try again in a few minutes, or contact support if the issue persists."
       render :new, status: :unprocessable_entity and return
     end
