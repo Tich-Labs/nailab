@@ -204,7 +204,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <% @monthly_metrics.order(period: :desc).each do |m| %>
+                <% @monthly_metrics.sort_by(&:period).reverse.each do |m| %>
                   <tr class="odd:bg-white even:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= m.period.strftime('%b %Y') %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">$<%= number_with_delimiter(m.mrr || 0) %></td>
