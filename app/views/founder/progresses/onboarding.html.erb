@@ -130,35 +130,35 @@
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.mrr, placeholder: "e.g. 5000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.try(:mrr), placeholder: "e.g. 5000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.new_paying_customers, placeholder: "e.g. 10", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.try(:new_paying_customers), placeholder: "e.g. 10", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.churned_customers, placeholder: "e.g. 2", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.try(:churned_customers), placeholder: "e.g. 2", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.cash_at_hand, placeholder: "e.g. 12000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.try(:cash_at_hand), placeholder: "e.g. 12000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
               <div>
                 <div class="flex items-baseline justify-between">
                   <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
                 </div>
-                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.burn_rate, placeholder: "e.g. 4000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
+                <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.try(:burn_rate), placeholder: "e.g. 4000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
                 
               </div>
             </div>
