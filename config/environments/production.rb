@@ -70,38 +70,18 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host/protocol for links generated in mailers (Devise confirmation, resets, etc.)
-  # Render: set APP_HOST to your public domain, e.g. "nailab.org".
+  # Render: set APP_HOST to your public domain, e.g. "nailab.app".
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST", "example.com"),
-    protocol: ENV.fetch("APP_PROTOCOL", "https")
+    host: ENV.fetch("APP_HOST", "nailab.app"),
+    protocol: "https"
   }
 
-  # Email delivery
-  # Render: set SMTP_* env vars in the dashboard.
-  # If SMTP isn't configured, do NOT crash requests that attempt to send mail
-  # (sign-up, confirmation, password reset, etc.).
-  if ENV["SMTP_ADDRESS"].present? && ENV["SMTP_USERNAME"].present? && ENV["SMTP_PASSWORD"].present?
-    config.action_mailer.perform_deliveries = true
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.raise_delivery_errors = true
-
-    config.action_mailer.smtp_settings = {
-      address: ENV.fetch("SMTP_ADDRESS"),
-      port: Integer(ENV.fetch("SMTP_PORT", "587")),
-      domain: ENV["SMTP_DOMAIN"],
-      user_name: ENV["SMTP_USERNAME"],
-      password: ENV["SMTP_PASSWORD"],
-      authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
-      enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true"
-    }
-  else
-    config.action_mailer.perform_deliveries = false
-    config.action_mailer.raise_delivery_errors = false
-
-    # NOTE: Rails.logger may not be initialized yet during certain boot phases
-    # (e.g., assets:precompile), so write directly to STDERR.
-    $stderr.puts("[nailab] ActionMailer SMTP not configured (missing SMTP_ADDRESS/SMTP_USERNAME/SMTP_PASSWORD); email delivery disabled.")
-  end
+  # Email delivery is configured in config/initializers/sendgrid.rb
+  # Required environment variables on Render:
+  # - SENDGRID_API_KEY: Your SendGrid API key
+  # - SENDGRID_DOMAIN: Your verified sender domain (e.g., nailab.app)
+  # - APP_HOST: Your app's public domain (e.g., nailab.app)
+  # - DEVISE_MAILER_SENDER: The from address for emails (e.g., noreply@nailab.app)
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

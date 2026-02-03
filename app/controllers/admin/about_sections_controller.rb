@@ -1,5 +1,6 @@
 module Admin
   class AboutSectionsController < ApplicationController
+    include AdminAuthorization
     before_action :set_about_section, only: %i[ show edit update destroy ]
 
     def index

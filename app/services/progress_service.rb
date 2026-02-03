@@ -12,7 +12,7 @@ class ProgressService
   end
 
   def get_available_years
-    years = get_monthly_metrics.map { |m| m.period.year }.uniq.sort
+    years = get_monthly_metrics.map { |m| m.period&.year }.compact.uniq.sort
     ([ "All" ] + years.map(&:to_s)).freeze
   end
 

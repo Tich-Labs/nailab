@@ -44,7 +44,14 @@
     protected
 
     def after_sign_up_path_for(resource)
-      session.delete(:user_return_to) || stored_location_for(resource) || founder_root_path
+      stored_path = session.delete(:user_return_to) || stored_location_for(resource)
+
+      # Clear admin path if user is not an admin
+      if stored_path&.start_with?("/admin") && !resource.admin?
+        stored_path = nil
+      end
+
+      stored_path || founder_root_path
     end
 
     def after_sign_in_path_for(resource)
@@ -55,7 +62,15 @@
         Rails.logger.error("Onboarding session merge failed: #{e.message}")
       end
 
-      session.delete(:user_return_to) || stored_location_for(resource) || begin
+      # Get the stored return path, but filter out admin paths for non-admin users
+      stored_path = session.delete(:user_return_to) || stored_location_for(resource)
+
+      # Clear admin path if user is not an admin (prevents non-admins being redirected to /admin)
+      if stored_path&.start_with?("/admin") && !resource.admin?
+        stored_path = nil
+      end
+
+      stored_path || begin
         case resource.user_profile&.role&.to_sym
         when :mentor
           mentor_root_path

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_000005) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -306,9 +306,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_000005) do
     t.date "period"
     t.text "product_progress"
     t.integer "projection_index"
+    t.integer "runway"
     t.bigint "startup_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["period"], name: "index_monthly_metrics_on_period"
     t.index ["startup_id", "is_projection", "projection_index"], name: "index_monthly_metrics_on_projection"
     t.index ["startup_id"], name: "index_monthly_metrics_on_startup_id"
     t.index ["user_id"], name: "index_monthly_metrics_on_user_id"

@@ -1,5 +1,6 @@
 module Admin
   class ResourcesController < ApplicationController
+    include AdminAuthorization
     before_action :set_resource, only: [ :edit, :update, :destroy, :preview ]
 
     def index

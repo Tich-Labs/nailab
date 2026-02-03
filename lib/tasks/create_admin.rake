@@ -1,15 +1,15 @@
 namespace :admin do
   desc "Create or promote an admin user. Use ADMIN_EMAIL and ADMIN_PASSWORD env vars. If no password provided, a secure one will be generated and printed."
   task create: :environment do
-    require 'securerandom'
+    require "securerandom"
 
-    email = ENV.fetch('ADMIN_EMAIL', nil)
-    unless email && email.include?('@')
+    email = ENV.fetch("ADMIN_EMAIL", nil)
+    unless email && email.include?("@")
       puts "ERROR: set ADMIN_EMAIL (e.g. ADMIN_EMAIL=mary@nailab.co.ke)"
       exit 1
     end
 
-    password = ENV['ADMIN_PASSWORD']
+    password = ENV["ADMIN_PASSWORD"]
     generated = false
     if password.blank?
       password = SecureRandom.urlsafe_base64(12)
@@ -22,7 +22,7 @@ namespace :admin do
       u.password_confirmation = password
     else
       # Only overwrite password if ADMIN_FORCE_PASSWORD=1 is set
-      if ENV['ADMIN_FORCE_PASSWORD'] == '1'
+      if ENV["ADMIN_FORCE_PASSWORD"] == "1"
         u.password = password
         u.password_confirmation = password
       end

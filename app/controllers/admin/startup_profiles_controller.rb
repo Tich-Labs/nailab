@@ -1,8 +1,7 @@
 module Admin
   class StartupProfilesController < ApplicationController
+    include AdminAuthorization
     layout "rails_admin/application"
-
-    # Temporarily no auth for convenience
 
     def index
       @startups = StartupProfile.all.order(updated_at: :desc)
