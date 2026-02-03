@@ -132,7 +132,7 @@ export default class extends Controller {
   handleFormSubmit(event) {
     // If submit originated from a per-step save button, let it proceed
     try {
-      const submitter = event.submitter
+      const submitter = event.submitter || document.activeElement
       if (submitter && submitter.name === 'save_step') return
     } catch (e) {
       // ignore

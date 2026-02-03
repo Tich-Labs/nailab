@@ -1,17 +1,11 @@
-<%# DaisyUI-styled Multi-Month Onboarding Wizard for Founders %>
+<%# Multi-Month Onboarding Wizard for Founders %>
 <div class="max-w-5xl mx-auto py-12">
   <div class="mb-6 text-center">
-    <div class="avatar mb-4">
-      <div class="w-24 rounded-full">
-        <img src="https://via.placeholder.com/100x100/cccccc/000000?text=Founder" alt="Founder Avatar" />
-      </div>
-    </div>
+    <!-- avatar removed for cleaner onboarding layout -->
     <h1 class="text-4xl font-bold text-nailab-purple mb-2">Current Status & Monthly Update</h1>
-    <p class="text-base text-base-content/70 mb-2">This update helps your mentor quickly understand your startup’s health and where support is needed. You can update missed months later.</p>
+    <p class="text-base text-base-content/70 mb-2">This update helps your mentor quickly understand your startup's health and where support is needed. You can update missed months later.</p>
   </div>
-  <div class="mb-6 flex justify-center">
 
-  </div>
   <div class="md:flex md:items-start md:gap-20" data-controller="onboarding">
     <aside class="md:w-1/2 mb-6 md:mb-0 md:pr-10">
       <div class="sticky top-20">
@@ -127,49 +121,27 @@
             <% end %>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div class="flex items-baseline justify-between">
-                  <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
-                </div>
+                <%= label_tag "monthly_metrics[#{idx}][mrr]", "Monthly Recurring Revenue (MRR)", class: "label" %>
                 <%= number_field_tag "monthly_metrics[#{idx}][mrr]", metric.try(:mrr), placeholder: "e.g. 5000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
-                
               </div>
               <div>
-                <div class="flex items-baseline justify-between">
-                  <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
-                </div>
+                <%= label_tag "monthly_metrics[#{idx}][new_paying_customers]", "New Paying Customers", class: "label" %>
                 <%= number_field_tag "monthly_metrics[#{idx}][new_paying_customers]", metric.try(:new_paying_customers), placeholder: "e.g. 10", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
-                
               </div>
               <div>
-                <div class="flex items-baseline justify-between">
-                  <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
-                </div>
+                <%= label_tag "monthly_metrics[#{idx}][churned_customers]", "Churned Customers", class: "label" %>
                 <%= number_field_tag "monthly_metrics[#{idx}][churned_customers]", metric.try(:churned_customers), placeholder: "e.g. 2", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
-                
               </div>
               <div>
-                <div class="flex items-baseline justify-between">
-                  <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
-                </div>
+                <%= label_tag "monthly_metrics[#{idx}][cash_at_hand]", "Cash at Hand (end of month)", class: "label" %>
                 <%= number_field_tag "monthly_metrics[#{idx}][cash_at_hand]", metric.try(:cash_at_hand), placeholder: "e.g. 12000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
-                
               </div>
               <div>
-                <div class="flex items-baseline justify-between">
-                  <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
-                </div>
+                <%= label_tag "monthly_metrics[#{idx}][burn_rate]", "Burn Rate (monthly)", class: "label" %>
                 <%= number_field_tag "monthly_metrics[#{idx}][burn_rate]", metric.try(:burn_rate), placeholder: "e.g. 4000", class: "input input-bordered w-full", required: (idx == 0 ? false : true), disabled: metric.persisted?, data: { action: "input->onboarding#recalc input->onboarding#animateBadge" } %>
-                
               </div>
             </div>
-                <div class="mt-4 flex flex-wrap gap-4 items-center">
-                  <div class="badge badge-primary px-4 py-3 text-lg h-auto">MRR: <span class="font-semibold">$<span data-onboarding-target="mrr<%= idx %>">—</span></span></div>
-                  <div class="badge badge-info px-4 py-3 text-lg h-auto">Net Growth: <span class="font-semibold" data-onboarding-target="netGrowth<%= idx %>">—</span></div>
-                  <div class="badge badge-secondary px-4 py-3 text-lg h-auto">MRR Δ: <span class="font-semibold" data-onboarding-target="mrrChange<%= idx %>">—</span> <span class="text-sm text-base-content/60" data-onboarding-target="mrrChangePct<%= idx %>"></span></div>
-                  <div class="badge badge-neutral px-4 py-3 text-lg h-auto">Runway: <span class="font-semibold" data-onboarding-target="runway<%= idx %>">—</span> <span class="text-sm">mo</span></div>
-                </div>
-                
-                <div class="mt-4 flex justify-between">
+            <!-- summary badges removed to simplify onboarding form -->
                   <% if idx > 0 %>
                     <button type="button" class="btn btn-outline btn-secondary onboarding-prev">Previous</button>
                   <% end %>
@@ -223,46 +195,41 @@
 </div>
 
 <style>
-.onboarding-accordion { transition: max-height 220ms ease, opacity 180ms ease; }
-.onboarding-accordion.hidden { max-height: 0; opacity: 0; overflow: hidden; }
-.onboarding-accordion:not(.hidden) { max-height: 400px; opacity: 1; }
-.badge-animate { transform: translateY(-4px); transition: transform 220ms ease, opacity 220ms ease; }
+  .onboarding-accordion { transition: max-height 220ms ease, opacity 180ms ease; }
+  .onboarding-accordion.hidden { max-height: 0; opacity: 0; overflow: hidden; }
+  .onboarding-accordion:not(.hidden) { max-height: 400px; opacity: 1; }
+  .badge-animate { transform: translateY(-4px); transition: transform 220ms ease, opacity 220ms ease; }
 </style>
 
-<script type="module">
-// Stimulus controller will be added in app/javascript/controllers/onboarding_controller.js
-</script>
-
 <script>
-  // Toggle: only show definition body on Read; keep keywords visible otherwise.
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('button[data-def-key]').forEach(function(btn) {
-      btn.classList.add('definition-toggle')
       btn.addEventListener('click', function(e) {
         e.preventDefault()
-        var key = btn.getAttribute('data-def-key')
-        var explain = document.querySelector("[data-explain-key='" + key + "']")
+        const key = btn.getAttribute('data-def-key')
+        const explain = document.querySelector("[data-explain-key='" + key + "']")
         if (!explain) return
-        var body = explain.querySelector('.definition-body')
-        var teaser = explain.querySelector('.definition-teaser')
-        var isOpen = body && !body.classList.contains('hidden')
-        // Close all definition bodies first (single-open behavior)
+        
+        const body = explain.querySelector('.definition-body')
+        const isOpen = body && !body.classList.contains('hidden')
+        
+        // Close all definition bodies
         document.querySelectorAll('[data-explain-key]').forEach(function(c) {
-          var b = c.querySelector('.definition-body')
-          var t = c.querySelector('.definition-teaser')
-          var toggleBtn = c.querySelector('button[data-def-key]')
+          const b = c.querySelector('.definition-body')
+          const toggleBtn = c.querySelector('button[data-def-key]')
           if (b) b.classList.add('hidden')
-          if (t) t.classList.remove('hidden')
           if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false')
         })
-        // If it was closed, open it and hide teaser
+        
+        // Open clicked one
         if (!isOpen) {
           if (body) body.classList.remove('hidden')
-          if (teaser) teaser.classList.add('hidden')
           btn.setAttribute('aria-expanded', 'true')
           explain.scrollIntoView({ behavior: 'smooth', block: 'center' })
           explain.classList.add('ring', 'ring-nailab-teal', 'ring-opacity-40')
-          setTimeout(function() { explain.classList.remove('ring', 'ring-nailab-teal', 'ring-opacity-40') }, 1600)
+          setTimeout(function() { 
+            explain.classList.remove('ring', 'ring-nailab-teal', 'ring-opacity-40') 
+          }, 1600)
         }
       })
     })
