@@ -32,7 +32,7 @@ class ProgressService
     selected_year_int = year.to_i
     start_date = Date.new(selected_year_int, 1, 1)
     end_date = start_date.end_of_year
-    metrics.where(period: start_date..end_date)
+    metrics.select { |m| m.period >= start_date && m.period <= end_date }
   end
 
   def prepare_chart_data(metrics)

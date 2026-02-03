@@ -1,10 +1,10 @@
 namespace :db do
-  desc "Seed founder4 monthly metrics (idempotent). Usage: RAILS_ENV=production FOUNDER4_SLUG=slug bin/rails db:seed_founder4"
+  desc "Seed founder4 monthly metrics (idempotent). Usage: RAILS_ENV=production FOUNDER4_EMAIL=email bin/rails db:seed_founder4"
   task seed_founder4: :environment do
-    slug = ENV.fetch("FOUNDER4_SLUG", "founder4-test-nailab-app")
-    user = User.find_by(slug: slug)
+    email = ENV.fetch("FOUNDER4_EMAIL", "founder4@test.nailab.app")
+    user = User.find_by(email: email)
     unless user
-      puts "founder4 user not found (slug: #{slug}) - aborting"
+      puts "founder4 user not found (email: #{email}) - aborting"
       next
     end
 
