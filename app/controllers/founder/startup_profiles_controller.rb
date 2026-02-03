@@ -2,6 +2,8 @@ class Founder::StartupProfilesController < Founder::BaseController
   before_action :set_startup_profile
 
   def show
+    @startup = current_user.startup
+    @team_members_count = @startup&.team_members&.count || 0
   end
 
   def edit
