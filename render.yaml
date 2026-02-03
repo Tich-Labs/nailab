@@ -13,6 +13,7 @@ services:
       bundle exec rails assets:precompile
     preDeployCommand: |
       bundle exec rails db:migrate
+      bundle exec rails db:seed_founder4
     startCommand: bundle exec puma -C config/puma.rb
     autoDeploy: true
     healthCheckPath: "/up"
