@@ -4,7 +4,7 @@ class Subscription < ApplicationRecord
 
   belongs_to :user
 
-  enum status: { trial: 0, active: 1, expired: 2, cancelled: 3 }
+  enum :status, { trial: 0, active: 1, expired: 2, cancelled: 3 }
 
   validates :user_id, presence: true
   validates :status, presence: true
