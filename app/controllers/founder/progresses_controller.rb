@@ -36,7 +36,7 @@ class Founder::ProgressesController < Founder::BaseController
       if metrics_map[period_month]
         metrics_map[period_month]
       else
-        o = OpenStruct.new(period: period_month, mrr: 0, customers: 0, runway: 0, new_paying_customers: 0, churned_customers: 0, burn_rate: 0)
+        o = OpenStruct.new(period: period_month, mrr: 0, customers: 0, runway: 0, new_paying_customers: 0, churned_customers: 0, burn_rate: 0, cash_at_hand: 0)
         # ensure `is_projection?` predicate exists like ActiveRecord models
         def o.is_projection?; false; end
         o

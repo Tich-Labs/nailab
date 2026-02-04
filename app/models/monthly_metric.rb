@@ -1,4 +1,14 @@
 class MonthlyMetric < ApplicationRecord
+  # Provide safe accessors when the `cash_at_hand` column hasn't been migrated
+  # (prevents NoMethodError in environments where migrations lag behind code).
+  begin
+    unless ActiveRecord::Base.connection.data_source_exists?("monthly_metrics") && ActiveRecord::Base.connection.column_exists?(:monthly_metrics, :cash_at_hand)
+      attr_accessor :cash_at_hand
+    end
+  rescue StandardError
+    # In some boot contexts the DB may be unavailable; swallow errors and
+    # fall back to normal behavior (calls will raise if column truly missing).
+  end
   belongs_to :startup
   belongs_to :user, optional: true
 

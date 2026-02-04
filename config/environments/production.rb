@@ -71,17 +71,22 @@ Rails.application.configure do
 
   # Set host/protocol for links generated in mailers (Devise confirmation, resets, etc.)
   # Render: set APP_HOST to your public domain, e.g. "nailab.app".
-  config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST", "nailab.app"),
-    protocol: "https"
+  config.action_mailer.raise_delivery_errors = true  # Logs email failures
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    address:              "smtp-relay.brevo.com",          # Hardcoded (was SMTP_ADDRESS)
+    port:                 587,                             # Hardcoded (was SMTP_PORT)
+    domain:               "nailab-xron.onrender.com",      # Optional HELO domain; use your app domain (was SMTP_DOMAIN)
+    user_name:            ENV["SMTP_USERNAME"] || ENV["BREVO_SMTP_USER"],  # Use your kept var
+    password:             ENV["SMTP_PASSWORD"] || ENV["BREVO_SMTP_PASSWORD"],  # Use your kept var
+    authentication:       :login,                          # Hardcoded for Brevo (was SMTP_AUTHENTICATION)
+    enable_starttls_auto: true                             # Hardcoded (was SMTP_ENABLE_STARTTLS_AUTO)
   }
 
-  # Email delivery is configured in config/initializers/sendgrid.rb
-  # Required environment variables on Render:
-  # - SENDGRID_API_KEY: Your SendGrid API key
-  # - SENDGRID_DOMAIN: Your verified sender domain (e.g., nailab.app)
-  # - APP_HOST: Your app's public domain (e.g., nailab.app)
-  # - DEVISE_MAILER_SENDER: The from address for emails (e.g., noreply@nailab.app)
+  # Fixes confirmation/password reset links in emails
+  config.action_mailer.default_url_options = { host: "nailab-xron.onrender.com", protocol: "https" }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
