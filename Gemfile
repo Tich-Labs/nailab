@@ -47,7 +47,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Redis for Action Cable pubsub and notifications
-gem "redis", "~> 4.0"
+gem "redis", "~> 5.4"
 
 gem "rack-cors"
 
