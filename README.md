@@ -18,9 +18,9 @@ If you see a `package-lock.json`, delete it. Only `yarn.lock` should be present.
 
 # Nailab - Startup Mentorship Platform
 
-Documentation: [Documentation](https://tich-labs.github.io/nailab/)
+**Nailab is for startup founders seeking mentorship to succeed.** It connects founders with experienced mentors through structured programs, resources, and support systems.
 
-A comprehensive Rails application connecting startups with experienced mentors through structured mentorship programs, resources, and support systems.
+Documentation: [Documentation](https://tich-labs.github.io/nailab/)
 
 ## Features
 
